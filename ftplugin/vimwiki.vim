@@ -64,7 +64,8 @@ function! Complete_wikifiles(findstart, base) abort
       return []
     elseif s:line_context ==# 'tag'
       " Look Tags: completion
-      let tags = vimwiki#tags#get_tags()
+      " let tags = vimwiki#tags#get_tags()
+      let tags = deepcopy(g:current_tags)
       if a:base !=? ''
         call filter(tags,
             \ 'v:val[:' . (len(a:base)-1) . "] == '" . substitute(a:base, "'", "''", '') . "'" )
