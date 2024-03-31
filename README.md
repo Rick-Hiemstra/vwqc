@@ -37,9 +37,9 @@ __     ___                   _ _    _
 
 ## Introduction ##
 
-Vimwiki Qualitative Code (VWQC), a fork of Vimwiki, is a linewise qualitative coding plugin for working with text. VWQC allows you to code, annotate and generate reports for interviews. It adds functionality to VIM and Vimwiki. See https://github.com/vimwiki/vimwiki for documentation on Vimwiki.
+Vimwiki Qualitative Code (VWQC), a fork of Vimwiki, is a line-wise qualitative coding plugin for working with text. VWQC allows you to code, annotate and generate reports for interviews. It adds functionality to VIM and Vimwiki. See https://github.com/vimwiki/vimwiki for documentation on Vimwiki.
 
-Linewise means the basic coding units are lines of text rather that exact text blocks selected with a mouse. By default, lines are formatted to 80 characters which in practice will usually correspond to about one sentence. Each qualitative coding project is a Vimwiki wiki with some additional key-value pairs added to the Vimwiki configuration dictionary.
+Line-wise means the basic coding units are lines of text rather that exact text blocks selected with a mouse. By default, lines are formatted to 80 characters which in practice will usually correspond to about one sentence. Each qualitative coding project is a Vimwiki wiki with some additional key-value pairs added to the Vimwiki configuration dictionary.
 
 VWQC uses popup windows which are best displayed in a GUI implementation of Vim or Neovim.
 
@@ -121,7 +121,6 @@ The following keybindings and commands are set in the plugin.
 - `<leader>da`                         Delete annotation
 - `<leader>df`                         Get/define tag definition
 - `<leader>tc`                         Double-colon omni-complete toggle
-- `:call TagLinter`                    Remove duplicate tags from lines
 
 **REPORTS**
 - `:call FullReport("<tag>")`           Create full tag summary

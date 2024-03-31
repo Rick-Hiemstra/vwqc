@@ -15,19 +15,17 @@
 " -----------------------------------------------------------------
 " Vimwiki Qualitative Code (VWQC)
 " Written by Rick Hiemstra and Lindsay Callaway
-" Version 0.4.7 - 
-" 2024-02-10 
+" Version 0.4.8 - 
+" 2024-03-31 
 "
 " Updated help menus to reflect recent coding changes
 "
-" Added an autogroup that checks to see if the current vwqc wiki's tags are
-" loaded.
+" Removed TagLinter() function because its redundant. This functionality is 
+" now in the TagStats() function.
 "
 " -----------------------------------------------------------------
 " ------------------------ TO DO ------------------------------
 " -----------------------------------------------------------------
-" Update page help
-" Could the TagLinter() be generalized to run against all interview files?
 " Modify the file names when reports are created by AllSummaries() so that the
 " name reflects the function origin.
 " Could you do this with ripgrep to get more speed? Then you process the lines
@@ -41,8 +39,6 @@
 "
 " Change the Gather() function so that it will give you an error message if
 " you try to use it in a non-quotes report (or other kind of buffer).
-"
-" Add the .vwqc key-value pair to the wiki definitions.
 " 
 " DELETE THIS LINE LATER
 " -----------------------------------------------------------------
@@ -149,7 +145,6 @@
 "
 " ---- Other ----
 " UpdateSubcode
-" TagLinter
 
 
 
@@ -176,7 +171,6 @@ function! HelpMenu() abort
 				\	 "<leader>da                          Delete annotation",
 				\	 "<leader>df                          Get/define tag definition",
 				\	 "<leader>tc                          Double-colon omni-complete toggle",
-				\	 ":call TagLinter                     Remove duplicate tags from lines",
 				\        " ",
 				\	 "REPORTS",
 				\	 ":call FullReport(\"<tag>\")           Create full tag summary",
@@ -3292,54 +3286,6 @@ function! UpdateSubcode() abort
 	execute "normal! :sort u\<CR>dd"
 	execute "normal! :w! "  . g:subcode_dictionary_path . "\<CR>"
 	execute "normal! \<C-w>k:lclose\<CR>\<C-w>j:q!\<CR>"
-endfunction
-
-function! TagLinter() abort
-	call TagLinterFunction(2, '$')
-endfunction
-
-function! TagLinterFunction(start_line, end_line) abort
-	if (a:end_line == "$")
-		let l:end_line = line('$')
-	endif
-	let l:start_line = a:start_line
-	
-	" Start on second line
-	"execute "normal! 2G"
-	let g:tags_on_line = []
-	" move through each line testing for tags and removing duplicate tags
-	" on each line
-	for line in range(l:start_line, l:end_line)
-		" search() returns 0 if match not found
-		let g:tag_test = search(':\a.\{-}:', '', line("."))
-		if (g:tag_test != 0)
-			" Copy found tag
-			execute "normal! viWy"
-			let g:tags_on_line = g:tags_on_line + [@@]
-			let g:tag_test = search(':\a.\{-}:', '', line("."))
-			while (g:tag_test != 0)
-				execute "normal! viWy"
-				let l:tag_being_considered = @@
-				let g:have_tag = 0
-				" loop to see if we already have this tag
-				for l:tag in range(0, len(g:tags_on_line) - 1 )
-					if (l:tag_being_considered == g:tags_on_line[l:tag])
-						let g:have_tag = 1
-					endif
-				endfor
-				" if we have the tag, delete it
-				if g:have_tag 
-					execute "normal! gvx"
-				else
-					let g:tags_on_line = g:tags_on_line + [@@]
-				endif
-				let g:tag_test = search(':\a.\{-}:', '', line("."))
-			endwhile
-		endif
-		" Go to start of next line
-		execute "normal! j0"
-		let g:tags_on_line = []
-	endfor	
 endfunction
 
 function! CorrectAttributeLines() abort
