@@ -249,7 +249,7 @@ def g:ProjectSetup()
 		confirm(tag_summaries_path_creation_message,  "OK", 1)
 
 		CreateDefaultInterviewHeader()
-	       	var template_message       = "A default interview header template has been created here:\n\n" .. g:int_header_template . "\n\nModify it to your project's specifications before formatting interviews."
+	       	var template_message       = "A default interview header template has been created here:\n\n" .. g:int_header_template .. "\n\nModify it to your project's specifications before formatting interviews."
 		confirm(template_message,  "OK", 1)
 	endif
 enddef
