@@ -423,20 +423,20 @@ def DoesFileNameMatchLabelRegex(test_value: string): number
 enddef
 
 def g:FormatInterview(label = "default") 
-	var valid_label    = ""
-	var proposed_label = ""
+	var valid_label_test    = 0
+	var proposed_label      = ""
 	var file_label_mismatch_warning = "Warning not set"
 	var bad_label_error_message = "Warning not set"
 
 	if (label == "default")
-		valid_label    = DoesFileNameMatchLabelRegex(expand('%:t:r'))
-		proposed_label = expand('%:t:r')
+		valid_label_test    = DoesFileNameMatchLabelRegex(expand('%:t:r'))
+		proposed_label      = expand('%:t:r')
 	else
 		valid_label = DoesFileNameMatchLabelRegex(label)
 		proposed_label = label
 	endif
 
-	if (valid_label)
+	if (valid_label_test)
 		if (proposed_label != expand('%:t:r'))
 			file_label_mismatch_warning = proposed_label .. " does not match the " .. expand('%:t:r') .. " file name."
 			confirm(file_label_mismatch_warning, "Got it", 1)
