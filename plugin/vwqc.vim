@@ -218,61 +218,11 @@ def HelpMenu()
 				 })
 enddef
 
-#function HelpMenu() 
-#	let g:help_list = [              "NAVIGATION", 
-#		                \        "<leader>gt                          Go to",
-#				\	 "<leader>gb                          Go back", 
-#				\ 	 "<F7>                                Annotation Toggle", 
-#				\        " " , 
-#				\     	 "CODING", 
-#				\	 "<F2>                                Update tags", 
-#				\	 "<F8>                                Tag omni-complete, same as <F9>",
-#				\	 "<F9>                                Tag omni-complete, same as <F8>",
-#				\	 "<F5>                                Complete tag block",
-#				\	 "<F4>                                Toggle tag block completion mode",
-#				\	 "<leader>tf                          Tag fill",
-#				\	 "<leader>da                          Delete annotation",
-#				\	 "<leader>df                          Get/define tag definition",
-#				\	 "<leader>tc                          Double-colon omni-complete toggle",
-#				\        " ",
-#				\	 "REPORTS",
-#				\	 ":call FullReport(\"<tag>\")           Create full tag summary",
-#				\	 ":call AnnotationsReport(\"<tag>\")    Create tag annotations summary",
-#				\	 ":call QuotesReport(\"<tag>\")         Create tag report for coded interview lines",
-#				\	 ":call MetaReport(\"<tag>\")           Create tag report for with line metadata",
-#				\	 ":call VWSReport(\"<string>\")         Create custom search report", 
-#				\	 ":call Gather(\"<tag>\")               Create secondary tag sub-report", 
-#				\	 ":call AllSummariesFull()            Create FullReport summaries for all tags in tag glossary", 
-#				\	 ":call AllSummariesQuotes()          Create QuotesReport summaries for all tags in tag glossary", 
-#				\	 ":call TagStats()                    Create tables and graphs by tag and interview", 
-#				\        " ",
-#				\	 "WORKING WITH REPORTS",
-#				\	 "<leader>th                          Trim head",
-#				\	 "<leader>tt                          Trim tail",
-#				\	 "<leader>ta                          Trim head and tail", 
-#				\        " ",
-#				\ 	 "APPARATUS",
-#				\	 ":call Attributes(<sort col number>) Create attribute table and sort by column number",
-#				\	 ":call SortTagDefs()                 Sort tag definition list inside Tag Glossary page",
-#				\	 ":call FormatInterview(\"<label>\")    Format interview page",
-#				\	 "<leader>rs                          Resize windows",
-#				\	 "<leader>bk                          Create project backup",
-#				\	 "<leader>hm                          Help menu",
-#				\	 "<leader>ph                          Page help",
-#				\        "<leader>lp                          List project parameters"]
-#	call popup_menu(g:help_list , 
-#				\ #{ minwidth: 50,
-#				\ maxwidth: 100,
-#				\ pos: 'center',
-#				\ border: [],
-#				\ close: 'click',
-#				\ })
-#endfunction
 # ------------------------------------------------------
 # This sets up a project from a blank Vimwiki index page
 # ------------------------------------------------------
 
-def ProjectSetup() 
+def g:ProjectSetup() 
 	execute "normal! gg"
 	var g:index_page_content_test = search('\S', 'W')
 	if (g:index_page_content_test != 0)
@@ -329,7 +279,7 @@ enddef
 # -----------------------------------------------------------------
 # This function finds the current VWQC project parameters
 # -----------------------------------------------------------------
-def GetVWQCProjectParameters() 
+def g:GetVWQCProjectParameters() 
 	# Add non-vimwiki wiki definition variables to g:vimwiki_wikilocal_vars
 	if !exists("g:vwqc_config_vars_added")
 		g:vwqc_config_vars_added = AugmentVimwikiLocalVars()
@@ -422,7 +372,7 @@ enddef
 # -----------------------------------------------------------------
 # This function creates a pop-up window with the current project's parameters
 # -----------------------------------------------------------------
-def ListProjectParameters() 
+def g:ListProjectParameters() 
 
 	ParmCheck()
 			
