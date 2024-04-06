@@ -552,10 +552,10 @@ def g:PageHelp()
 	
 	g:current_buffer_name = expand('%:t')
 	g:is_interview        = match(g:current_buffer_name, g:interview_label_regex)
-	g:is_annotation       = match(g:current_buffer_name, g:interview_label_regex . ': \d\d\d\d')
+	g:is_annotation       = match(g:current_buffer_name, g:interview_label_regex .. ': \d\d\d\d')
 	g:is_summary          = match(g:current_buffer_name, 'Summary ')
 
-	if g:current_buffer_name == "index" . g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+	if g:current_buffer_name == "index" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
 		g:page_help_list = [              
 			        "INDEX HELP PAGE", 
 		                "The index page is your project home page. You can return to this page by typing <leader>ww in normal mode.",
@@ -567,7 +567,7 @@ def g:PageHelp()
 		                " ",
 			        "Click on this window to close it"]
 		DisplayPageHelp()
-	elseif g:current_buffer_name == "Attributes" . g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+	elseif g:current_buffer_name == "Attributes" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
 		g:page_help_list = [              
 			        "ATTRIBUTES HELP PAGE", 
 		                "The \"Attributes\" page lists the interview attributes which are the tags that appear on the first line of",
@@ -584,14 +584,14 @@ def g:PageHelp()
 		                " ",
 			        "Click on this window to close it"]
 		DisplayPageHelp()
-	elseif g:current_buffer_name == "Tag List Current" . g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+	elseif g:current_buffer_name == "Tag List Current" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
 		g:page_help_list = [              
 			        "TAG LIST CURRENT HELP PAGE", 
 		                "This lists current project tags. It is generated or updated by pressing F2",
 		                " ",
 			        "Click on this window to close it"]
 		DisplayPageHelp()
-	elseif g:current_buffer_name == "Tag Glossary" . g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+	elseif g:current_buffer_name == "Tag Glossary" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
 		g:page_help_list = [              
 			        "TAG GLOSSARY HELP PAGE", 
 		                "Tag definitions can be added here manually, but they are best added by placing the cursor over a valid tag in an ", 
