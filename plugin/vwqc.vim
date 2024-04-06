@@ -539,7 +539,7 @@ enddef
 # Provide page specific help based on the buffer nameProvide page specific
 # help based on the buffer name
 # -----------------------------------------------------------------
-def PageHelp() 
+def g:PageHelp() 
 
 	ParmCheck()
 
