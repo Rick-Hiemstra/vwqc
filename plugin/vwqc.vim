@@ -733,8 +733,7 @@ def g:CreateBackupQuery()
 		 highlight: 'Question',
 		 border:     [],
 		 close:      'click', 
-		 padding:    [0,1,0,1],
-		 })
+		 padding:    [0,1,0,1] })
 enddef
 
 # -----------------------------------------------------------------
