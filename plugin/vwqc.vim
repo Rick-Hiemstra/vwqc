@@ -404,12 +404,12 @@ def g:ListProjectParameters()
 					 list_subcode,
 					 list_glossary,
 					 list_coder]
-	popup_menu(g:vwqc_proj_parm_list , 
-				 { minwidth: 50 ,
-				 maxwidth: 250 ,
-				 pos: 'center' ,
-				 border: [] ,
-				 close: 'click' , })
+	popup_menu(g:vwqc_proj_parm_list, 
+				 { minwidth: 50,
+				 maxwidth: 250,
+				 pos: 'center',
+				 border: [],
+				 close: 'click', })
 
 enddef
 
