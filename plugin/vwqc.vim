@@ -419,7 +419,7 @@ def DoesFileNameMatchLabelRegex(test_value: string): number
 		return 1
 	else
 		return 0
-	end
+	endif
 enddef
 
 def g:FormatInterview(label = "default") 
