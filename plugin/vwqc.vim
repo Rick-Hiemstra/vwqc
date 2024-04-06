@@ -222,7 +222,7 @@ enddef
 # This sets up a project from a blank Vimwiki index page
 # ------------------------------------------------------
 
-def ProjectSetup() 
+def g:ProjectSetup() 
 	execute "normal! gg"
 	var g:index_page_content_test = search('\S', 'W')
 	if (g:index_page_content_test != 0)
@@ -421,40 +421,38 @@ def DoesFileNameMatchLabelRegex(test_value: string): number
 	end
 enddef
 
-function FormatInterview(label = "default") 
+def g:FormatInterview(label = "default") 
+	var valid_label    = ""
+	var proposed_label = ""
+	var file_label_mismatch_warning = "Warning not set"
+	var bad_label_error_message = "Warning not set"
 
-	if (a:label == "default")
-		let l:valid_label    = DoesFileNameMatchLabelRegex(expand('%:t:r'))
-		let l:proposed_label = expand('%:t:r')
+	if (label == "default")
+		valid_label    = DoesFileNameMatchLabelRegex(expand('%:t:r'))
+		proposed_label = expand('%:t:r')
 	else
-		let l:valid_label = DoesFileNameMatchLabelRegex(a:label)
-		let l:proposed_label = a:label
+		valid_label = DoesFileNameMatchLabelRegex(label)
+		proposed_label = label
 	endif
 
-	if (l:valid_label)
-		if (l:proposed_label != expand('%:t:r'))
-			let l:file_label_mismatch_warning = l:proposed_label .
-				        \ " does not match the " . 
-					\ expand('%:t:r') .
-					\ " file name."
-			call confirm(l:file_label_mismatch_warning, "Got it", 1)
+	if (valid_label)
+		if (proposed_label != expand('%:t:r'))
+			file_label_mismatch_warning = proposed_label .. " does not match the " .. expand('%:t:r') .. " file name."
+			confirm(file_label_mismatch_warning, "Got it", 1)
 		endif
-		call FormatInterviewB(l:proposed_label)
+		FormatInterviewB(proposed_label)
 	else
-		let l:bad_label_error_message = l:proposed_label . " does not conform to the " .
-					\  g:vimwiki_wikilocal_vars[g:wiki_number]['interview_label_regex'] .
-					\  " label regular expression from the VWQC configuration. " .
-					\  "Interview formatting aborted."	
-		call confirm(l:bad_label_error_message, "Got it", 1)
+		bad_label_error_message = proposed_label .. " does not conform to the " .. g:vimwiki_wikilocal_vars[g:wiki_number]['interview_label_regex'] .. " label regular expression from the VWQC configuration. " .. "Interview formatting aborted."	
+		confirm(bad_label_error_message, "Got it", 1)
 	endif
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # This function formats interview text to use in for Vimwiki interview coding. 
 # -----------------------------------------------------------------
-function FormatInterviewB(interview_label) 
+def FormatInterviewB(interview_label: string) 
 
-	call ParmCheck()
+	ParmCheck()
 
 	# -----------------------------------------------------------------
 	# Add interview header template
@@ -477,7 +475,7 @@ function FormatInterviewB(interview_label)
 	# parentheses.
 	# -----------------------------------------------------------------
 	for line in range(1, line('$'))
-		call setline(line, substitute(getline(line), '\[\(\d:\d\d:\d\d\)\]', '\(\1\)', 'g'))
+		setline(line, substitute(getline(line), '\[\(\d:\d\d:\d\d\)\]', '\(\1\)', 'g'))
         endfor
 	# -----------------------------------------------------------------
 	# These next few lines add a fixed end of line at the column specified in the 
@@ -487,8 +485,8 @@ function FormatInterviewB(interview_label)
 	# pipe symbols. The final line turns virtualedit mode off.
 	# -----------------------------------------------------------------
 	set virtualedit=all
-	execute "normal! gg\<C-v>Gy" . g:border_offset_less_one . "|p"
-	execute "normal! gg" . g:border_offset . "|\<C-v>G" . g:border_offset . "|r│"
+	execute "normal! gg\<C-v>Gy" .. g:border_offset_less_one .. "|p"
+	execute "normal! gg" .. g:border_offset .. "|\<C-v>G" .. g:border_offset .. "|r│"
 	set virtualedit=""
 	# -----------------------------------------------------------------
 	# Reposition cursor at the top of the buffer
@@ -499,23 +497,23 @@ function FormatInterviewB(interview_label)
 	# function as an argument.
 	# -----------------------------------------------------------------
 	for line in range(1, line('$'))
-		call cursor(line, 0)
-		execute "normal! A " . a:interview_label . "\: \<ESC>"
+		cursor(line, 0)
+		execute "normal! A " .. interview_label .. "\: \<ESC>"
 	endfor
 	# -----------------------------------------------------------------
 	# Add line numbers to the end of each line and the second
 	# column of double pipe symbols
 	# -----------------------------------------------------------------
 	for line in range(1, line('$'))
-		let g:line_number_to_add = printf("%04d │ ", line)
-		call setline(line, substitute(getline(line), '$', g:line_number_to_add, 'g'))
+		g:line_number_to_add = printf("%04d │ ", line)
+		setline(line, substitute(getline(line), '$', g:line_number_to_add, 'g'))
         endfor
 	# -----------------------------------------------------------------
 	# Reposition cursor at the top of the buffer and add header template.
 	# -----------------------------------------------------------------
 	execute "normal! gg"
-	execute "normal! :.-1read " . g:int_header_template . "\<CR>gg"
-endfunction
+	execute "normal! :.-1read " .. g:int_header_template .. "\<CR>gg"
+enddef
 
 # ------------------------------------------------------------------------------
 # Vimwiki creates a list of user wiki config dictionaries in
