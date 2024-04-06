@@ -389,12 +389,13 @@ def g:ListProjectParameters()
 	var list_glossary        = "Tag glossary:        " .. g:glossary_path
 	var list_coder           = "Coder initials:      " .. g:coder_initials
  	
-	g:vwqc_proj_parm_list =    ["CURRENT PROJECT CONFIGURATION", " ", 
+	g:vwqc_proj_parm_list =    ["CURRENT PROJECT CONFIGURATION" , 
+		                         " "                   , 
 					 base0                 ,
 					 base1                 ,
-					 " "                     ,
+					 " "                   ,
 					 list_path             ,
-					 list_ext		  ,
+					 list_ext	       ,
 					 list_regex            ,
 					 list_text_width       ,
 					 list_border_offset    ,
@@ -404,12 +405,11 @@ def g:ListProjectParameters()
 					 list_glossary         ,
 					 list_coder            ]
 	popup_menu(g:vwqc_proj_parm_list , 
-				 { minwidth: 50,
-				 maxwidth: 250,
-				 pos: 'center',
-				 border: [],
-				 close: 'click',
-				 })
+				 { minwidth: 50 ,
+				 maxwidth: 250 ,
+				 pos: 'center' ,
+				 border: [] ,
+				 close: 'click' , })
 
 enddef
 
