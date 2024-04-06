@@ -167,57 +167,107 @@ endif
 # ------------------------------------------------------
 # Displays a popup help menu
 # ------------------------------------------------------
-function! HelpMenu() abort
-	let g:help_list = [              "NAVIGATION", 
-		                \        "<leader>gt                          Go to",
-				\	 "<leader>gb                          Go back", 
-				\ 	 "<F7>                                Annotation Toggle", 
-				\        " " , 
-				\     	 "CODING", 
-				\	 "<F2>                                Update tags", 
-				\	 "<F8>                                Tag omni-complete, same as <F9>",
-				\	 "<F9>                                Tag omni-complete, same as <F8>",
-				\	 "<F5>                                Complete tag block",
-				\	 "<F4>                                Toggle tag block completion mode",
-				\	 "<leader>tf                          Tag fill",
-				\	 "<leader>da                          Delete annotation",
-				\	 "<leader>df                          Get/define tag definition",
-				\	 "<leader>tc                          Double-colon omni-complete toggle",
-				\        " ",
-				\	 "REPORTS",
-				\	 ":call FullReport(\"<tag>\")           Create full tag summary",
-				\	 ":call AnnotationsReport(\"<tag>\")    Create tag annotations summary",
-				\	 ":call QuotesReport(\"<tag>\")         Create tag report for coded interview lines",
-				\	 ":call MetaReport(\"<tag>\")           Create tag report for with line metadata",
-				\	 ":call VWSReport(\"<string>\")         Create custom search report", 
-				\	 ":call Gather(\"<tag>\")               Create secondary tag sub-report", 
-				\	 ":call AllSummariesFull()            Create FullReport summaries for all tags in tag glossary", 
-				\	 ":call AllSummariesQuotes()          Create QuotesReport summaries for all tags in tag glossary", 
-				\	 ":call TagStats()                    Create tables and graphs by tag and interview", 
-				\        " ",
-				\	 "WORKING WITH REPORTS",
-				\	 "<leader>th                          Trim head",
-				\	 "<leader>tt                          Trim tail",
-				\	 "<leader>ta                          Trim head and tail", 
-				\        " ",
-				\ 	 "APPARATUS",
-				\	 ":call Attributes(<sort col number>) Create attribute table and sort by column number",
-				\	 ":call SortTagDefs()                 Sort tag definition list inside Tag Glossary page",
-				\	 ":call FormatInterview(\"<label>\")    Format interview page",
-				\	 "<leader>rs                          Resize windows",
-				\	 "<leader>bk                          Create project backup",
-				\	 "<leader>hm                          Help menu",
-				\	 "<leader>ph                          Page help",
-				\        "<leader>lp                          List project parameters"]
-	call popup_menu(g:help_list , 
-				\ #{ minwidth: 50,
-				\ maxwidth: 100,
-				\ pos: 'center',
-				\ border: [],
-				\ close: 'click',
-				\ })
-endfunction
+def HelpMenu() abort
+	var g:help_list = [             "NAVIGATION", 
+		                        "<leader>gt                          Go to",
+					"<leader>gb                          Go back", 
+				 	"<F7>                                Annotation Toggle", 
+				        " " , 
+				     	"CODING", 
+					"<F2>                                Update tags", 
+					"<F8>                                Tag omni-complete, same as <F9>",
+					"<F9>                                Tag omni-complete, same as <F8>",
+					"<F5>                                Complete tag block",
+					"<F4>                                Toggle tag block completion mode",
+					"<leader>tf                          Tag fill",
+					"<leader>da                          Delete annotation",
+					"<leader>df                          Get/define tag definition",
+					"<leader>tc                          Double-colon omni-complete toggle",
+				        " ",
+					"REPORTS",
+					":call FullReport(\"<tag>\")           Create full tag summary",
+					":call AnnotationsReport(\"<tag>\")    Create tag annotations summary",
+					":call QuotesReport(\"<tag>\")         Create tag report for coded interview lines",
+					":call MetaReport(\"<tag>\")           Create tag report for with line metadata",
+					":call VWSReport(\"<string>\")         Create custom search report", 
+					":call Gather(\"<tag>\")               Create secondary tag sub-report", 
+					":call AllSummariesFull()            Create FullReport summaries for all tags in tag glossary", 
+					":call AllSummariesQuotes()          Create QuotesReport summaries for all tags in tag glossary", 
+					":call TagStats()                    Create tables and graphs by tag and interview", 
+				        " ",
+					"WORKING WITH REPORTS",
+					"<leader>th                          Trim head",
+					"<leader>tt                          Trim tail",
+					"<leader>ta                          Trim head and tail", 
+				        " ",
+				 	"APPARATUS",
+					":call Attributes(<sort col number>) Create attribute table and sort by column number",
+					":call SortTagDefs()                 Sort tag definition list inside Tag Glossary page",
+					":call FormatInterview(\"<label>\")    Format interview page",
+					"<leader>rs                          Resize windows",
+					"<leader>bk                          Create project backup",
+					"<leader>hm                          Help menu",
+					"<leader>ph                          Page help",
+				        "<leader>lp                          List project parameters"]
+	popup_menu(g:help_list , 
+				 { minwidth: 50,
+				 maxwidth: 100,
+				 pos: 'center',
+				 border: [],
+				 close: 'click',
+				 })
+enddef
 
+#function! HelpMenu() abort
+#	let g:help_list = [              "NAVIGATION", 
+#		                \        "<leader>gt                          Go to",
+#				\	 "<leader>gb                          Go back", 
+#				\ 	 "<F7>                                Annotation Toggle", 
+#				\        " " , 
+#				\     	 "CODING", 
+#				\	 "<F2>                                Update tags", 
+#				\	 "<F8>                                Tag omni-complete, same as <F9>",
+#				\	 "<F9>                                Tag omni-complete, same as <F8>",
+#				\	 "<F5>                                Complete tag block",
+#				\	 "<F4>                                Toggle tag block completion mode",
+#				\	 "<leader>tf                          Tag fill",
+#				\	 "<leader>da                          Delete annotation",
+#				\	 "<leader>df                          Get/define tag definition",
+#				\	 "<leader>tc                          Double-colon omni-complete toggle",
+#				\        " ",
+#				\	 "REPORTS",
+#				\	 ":call FullReport(\"<tag>\")           Create full tag summary",
+#				\	 ":call AnnotationsReport(\"<tag>\")    Create tag annotations summary",
+#				\	 ":call QuotesReport(\"<tag>\")         Create tag report for coded interview lines",
+#				\	 ":call MetaReport(\"<tag>\")           Create tag report for with line metadata",
+#				\	 ":call VWSReport(\"<string>\")         Create custom search report", 
+#				\	 ":call Gather(\"<tag>\")               Create secondary tag sub-report", 
+#				\	 ":call AllSummariesFull()            Create FullReport summaries for all tags in tag glossary", 
+#				\	 ":call AllSummariesQuotes()          Create QuotesReport summaries for all tags in tag glossary", 
+#				\	 ":call TagStats()                    Create tables and graphs by tag and interview", 
+#				\        " ",
+#				\	 "WORKING WITH REPORTS",
+#				\	 "<leader>th                          Trim head",
+#				\	 "<leader>tt                          Trim tail",
+#				\	 "<leader>ta                          Trim head and tail", 
+#				\        " ",
+#				\ 	 "APPARATUS",
+#				\	 ":call Attributes(<sort col number>) Create attribute table and sort by column number",
+#				\	 ":call SortTagDefs()                 Sort tag definition list inside Tag Glossary page",
+#				\	 ":call FormatInterview(\"<label>\")    Format interview page",
+#				\	 "<leader>rs                          Resize windows",
+#				\	 "<leader>bk                          Create project backup",
+#				\	 "<leader>hm                          Help menu",
+#				\	 "<leader>ph                          Page help",
+#				\        "<leader>lp                          List project parameters"]
+#	call popup_menu(g:help_list , 
+#				\ #{ minwidth: 50,
+#				\ maxwidth: 100,
+#				\ pos: 'center',
+#				\ border: [],
+#				\ close: 'click',
+#				\ })
+#endfunction
 # ------------------------------------------------------
 # This sets up a project from a blank Vimwiki index page
 # ------------------------------------------------------
@@ -351,90 +401,18 @@ def GetVWQCProjectParameters() abort
 	
 enddef
 
-# -----------------------------------------------------------------
-# This function finds the current VWQC project parameters
-# -----------------------------------------------------------------
-#function! GetVWQCProjectParameters() abort
-#	# Add non-vimwiki wiki definition variables to g:vimwiki_wikilocal_vars
-#	if !exists("g:vwqc_config_vars_added")
-#		call AugmentVimwikiLocalVars()
-#	endif
-#
-#	let g:wiki_number                    = vimwiki#vars#get_bufferlocal('wiki_nr') 
-#	let g:wiki_number_base_one           = g:wiki_number + 1
-#	let g:current_wiki_name              = "wiki_" . g:wiki_number_base_one
-#
-#	# Get interview column width
-#	let g:text_col_width                 = g:vimwiki_wikilocal_vars[g:wiki_number]['text_col_width']
-#	let g:text_col_width_expression      = "set formatprg=par\\ w" . g:text_col_width
-#	
-#	let g:border_offset                  = g:text_col_width + 3
-#	let g:border_offset_less_one	     = g:border_offset - 1
-#	let g:label_offset                   = g:border_offset + 2
-#
-#	# Get the label regular expression for this wiki
-#	let g:interview_label_regex  = g:vimwiki_wikilocal_vars[g:wiki_number]['interview_label_regex']
-#	let g:tag_search_regex       = g:interview_label_regex . '\: \d\{4}'
-#	
-#	let g:project_name           = g:vimwiki_wikilocal_vars[g:wiki_number]['name']
-#
-#	let g:extras_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") . g:project_name . "_extras/"
-#
-#	let g:backup_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") . "Backups/"
-#
-#	# If header template location is explicitly defined then use it, otherwise use default file.
-#	execute "normal! :let l:has_template = has_key(g:" .  g:current_wiki_name . ", 'interview_header_template')\<CR>"
-#	if (l:has_template == 1) 
-#		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'] = g:" . g:current_wiki_name . ".interview_header_template\<CR>" 
-#		let g:int_header_template    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'])
-#	else
-#		let g:int_header_template    = expand(g:extras_path . "interview_header_template.txt")
-#	endif
-#	
-#	# If subcode dictionary location is explicitly defined then use it, otherwise use default file.
-#	execute "normal! :let l:has_sub_code_dict = has_key(g:" . g:current_wiki_name . ", 'subcode_dictionary')\<CR>"
-#	if (l:has_sub_code_dict == 1)
-#		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['subcode_dictionary'] = g:" . g:current_wiki_name . ".subcode_dictionary\<CR>" 
-#		let g:subcode_dictionary_path    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['subcode_dictionary'])
-#	else
-#		let g:subcode_dictionary_path    = expand(g:extras_path . "subcode_dictionary.txt")
-#	endif
-#
-#	# If tag summaries directory is explicitly defined use it, otherwise use the default directory
-#	execute "normal! :let l:has_tag_sum_path = has_key(g:" .  g:current_wiki_name . ", 'tag_summaries')\<CR>"
-#	if (l:has_tag_sum_path == 1)
-#		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'] = g:" . g:current_wiki_name . ".tag_summaries\<CR>" 
-#		let g:tag_summaries_path       = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'])
-#	else
-#		let g:tag_summaries_path       = expand(g:extras_path . "tag_summaries/")
-#	endif
-#
-#	let g:glossary_path                  = g:vimwiki_wikilocal_vars[g:wiki_number]['path'] . "Tag Glossary.md"
-#
-#	execute "normal! :let l:has_coder = has_key(g:" . g:current_wiki_name . ", 'coder_initials')\<CR>"
-#	if (l:has_coder)
-#		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials'] = g:" . g:current_wiki_name . ".coder_initials\<CR>" 
-#       		let g:coder_initials                 = g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials']
-#	else
-#       		let g:coder_initials                 = "Unknown coder"
-#	endif
-#
-#	let g:wiki_extension   	   = g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-#	let g:target_file_ext  	   = g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-#	let g:ext_len          	   = len(g:wiki_extension) + 1
-#
-#	let g:last_wiki = g:wiki_number
-#	
-#endfunction
 
-function! ParmCheck() abort
-if (!exists('g:last_wiki'))
-		call GetVWQCProjectParameters()
+# -----------------------------------------------------------------
+# 
+# -----------------------------------------------------------------
+def ParmCheck() 
+	if (!exists('g:last_wiki'))
+		GetVWQCProjectParameters()
 	elseif (vimwiki#vars#get_bufferlocal('wiki_nr') != g:last_wiki)	
-		call GetVWQCProjectParameters()
+		GetVWQCProjectParameters()
 	endif
+enddef
 
-endfunction
 # -----------------------------------------------------------------
 # This function creates a pop-up window with the current project's parameters
 # -----------------------------------------------------------------
