@@ -332,7 +332,7 @@ endfunction
 def GetVWQCProjectParameters() 
 	# Add non-vimwiki wiki definition variables to g:vimwiki_wikilocal_vars
 	if !exists("g:vwqc_config_vars_added")
-		AugmentVimwikiLocalVars()
+		var g:vwqc_config_vars_added = AugmentVimwikiLocalVars()
 	endif
 
 	var g:wiki_number                    = vimwiki#vars#get_bufferlocal('wiki_nr') 
@@ -570,7 +570,7 @@ endfunction
 # g:vimwiki_wikilocal_vars will have one extra dictionary for temporary wikis.
 # So run this and then set a g:vwqc_config_vars_added flag 
 # ------------------------------------------------------------------------------
-def AugmentVimwikiLocalVars() 
+def AugmentVimwikiLocalVars(): number
 	for wiki in range(0, (len(g:vimwiki_list) - 1))
 		for key in keys(g:vimwiki_list[wiki])
 			if !has_key(g:vimwiki_wikilocal_vars[wiki], key)
@@ -578,7 +578,7 @@ def AugmentVimwikiLocalVars()
 			endif
 		endfor
 	endfor
-	var g:vwqc_config_vars_added = 1
+	return 1
 enddef
 
 # -----------------------------------------------------------------
