@@ -426,18 +426,18 @@ def ListProjectParameters()
 
 	ParmCheck()
 			
-	var base0                = "Base 0 wiki #        " . g:wiki_number
-	var base1                = "Base 1 wiki #        " . g:wiki_number + 1
-	var list_path            = "Path:                " . g:vimwiki_wikilocal_vars[g:wiki_number]['path']
-        var list_ext		   = "Ext:                 " . g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-	var list_regex           = "Label regex:         " . g:interview_label_regex
-	var list_text_width      = "Text col width:      " . g:text_col_width
-	var list_border_offset   = "Label border col:    " . g:border_offset
-	var list_header_template = "Header template:     " . g:int_header_template
-	var list_tag_summaries   = "Tag summaries:       " . g:tag_summaries_path
-	var list_subcode         = "Sub-code dictionary: " . g:subcode_dictionary_path
-	var list_glossary        = "Tag glossary:        " . g:glossary_path
-	var list_coder           = "Coder initials:      " . g:coder_initials
+	var base0                = "Base 0 wiki #        " .. g:wiki_number
+	var base1                = "Base 1 wiki #        " .. g:wiki_number + 1
+	var list_path            = "Path:                " .. g:vimwiki_wikilocal_vars[g:wiki_number]['path']
+        var list_ext		 = "Ext:                 " .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+	var list_regex           = "Label regex:         " .. g:interview_label_regex
+	var list_text_width      = "Text col width:      " .. g:text_col_width
+	var list_border_offset   = "Label border col:    " .. g:border_offset
+	var list_header_template = "Header template:     " .. g:int_header_template
+	var list_tag_summaries   = "Tag summaries:       " .. g:tag_summaries_path
+	var list_subcode         = "Sub-code dictionary: " .. g:subcode_dictionary_path
+	var list_glossary        = "Tag glossary:        " .. g:glossary_path
+	var list_coder           = "Coder initials:      " .. g:coder_initials
  	
 	var g:vwqc_proj_parm_list =    ["CURRENT PROJECT CONFIGURATION", " ", 
 					 base0                 ,
