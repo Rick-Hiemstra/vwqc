@@ -360,7 +360,7 @@ def GetVWQCProjectParameters()
 	# If header template location is explicitly defined then use it, otherwise use default file.
 	var has_template = 0
 	#has_template = has_key("g:" ..  g:current_wiki_name .. ", 'interview_header_template')\<CR>"
-	#execute "normal! :has_template = has_key(g:" ..  g:current_wiki_name .. ", 'interview_header_template')\<CR>"
+	execute "normal! :let has_template = has_key(g:" ..  g:current_wiki_name .. ", 'interview_header_template')\<CR>"
 	if (has_template == 1) 
 		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'] = g:" .. g:current_wiki_name .. ".interview_header_template\<CR>" 
 		g:int_header_template    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'])
@@ -370,7 +370,7 @@ def GetVWQCProjectParameters()
 	
 	# If subcode dictionary location is explicitly defined then use it, otherwise use default file.
 	var has_sub_code_dict = 0
-	execute "normal! :has_sub_code_dict = has_key(g:" .. g:current_wiki_name .. ", 'subcode_dictionary')\<CR>"
+	execute "normal! :let has_sub_code_dict = has_key(g:" .. g:current_wiki_name .. ", 'subcode_dictionary')\<CR>"
 	if (has_sub_code_dict == 1)
 		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['subcode_dictionary'] = g:" .. g:current_wiki_name .. ".subcode_dictionary\<CR>" 
 		g:subcode_dictionary_path    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['subcode_dictionary'])
@@ -391,7 +391,7 @@ def GetVWQCProjectParameters()
 	g:glossary_path                    = g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag Glossary.md"
 
 	var has_coder = 0
-	execute "normal! :var has_coder = has_key(g:" .. g:current_wiki_name .. ", 'coder_initials')\<CR>"
+	execute "normal! :has_coder = has_key(g:" .. g:current_wiki_name .. ", 'coder_initials')\<CR>"
 	if (has_coder)
 		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials'] = g:" .. g:current_wiki_name .. ".coder_initials\<CR>" 
        		g:coder_initials                 = g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials']
