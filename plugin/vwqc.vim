@@ -488,7 +488,7 @@ def FormatInterviewB(interview_label: string)
 	set virtualedit=all
 	execute "normal! gg\<C-v>Gy" .. g:border_offset_less_one .. "|p"
 	execute "normal! gg" .. g:border_offset .. "|\<C-v>G" .. g:border_offset .. "|r│"
-	set virtualedit=""
+	set virtualedit = ""
 	# -----------------------------------------------------------------
 	# Reposition cursor at the top of the buffer
 	# -----------------------------------------------------------------
