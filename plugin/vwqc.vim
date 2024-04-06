@@ -747,10 +747,10 @@ def g:CreateBackup(id, result)
 		#swap files.
 		execute "normal! :w\<CR>"
 		mkdir(g:new_backup_path, "p")
-		let g:copy_command  = 'cp -R "' .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. '" "' .. g:new_backup_path .. '"'
-		let g:clean_up_swo = 'rm -f "' .. g:new_backup_path .. '"' .. '.*.swo'
-		let g:clean_up_swp = 'rm -f "' .. g:new_backup_path .. '"' .. '.*.swp'
-		let g:clean_up_swn = 'rm -f "' .. g:new_backup_path .. '"' .. '.*.swn'
+		g:copy_command  = 'cp -R "' .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. '" "' .. g:new_backup_path .. '"'
+		g:clean_up_swo = 'rm -f "' .. g:new_backup_path .. '"' .. '.*.swo'
+		g:clean_up_swp = 'rm -f "' .. g:new_backup_path .. '"' .. '.*.swp'
+		g:clean_up_swn = 'rm -f "' .. g:new_backup_path .. '"' .. '.*.swn'
 		call system(g:copy_command)
 		call system(g:clean_up_swo)
 		call system(g:clean_up_swp)
