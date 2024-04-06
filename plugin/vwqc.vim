@@ -571,7 +571,7 @@ endfunction
 # So run this and then set a g:vwqc_config_vars_added flag 
 # ------------------------------------------------------------------------------
 def AugmentVimwikiLocalVars() 
-	for l:wiki in range(0, (len(g:vimwiki_list) -1))
+	for l:wiki in range(0, (len(g:vimwiki_list) - 1))
 		for l:key in keys(g:vimwiki_list[l:wiki])
 			if !has_key(g:vimwiki_wikilocal_vars[l:wiki], l:key)
 				var g:vimwiki_wikilocal_vars[l:wiki][l:key] = g:vimwiki_list[l:wiki][l:key]
@@ -1333,7 +1333,7 @@ endfunction
 function GenSummaryLists(type) 
 	let g:summary_file_list = []
 	let g:summary_link_list = []
-	for l:tag_index in range(0, (len(g:in_both_lists)-1))
+	for l:tag_index in range(0, (len(g:in_both_lists) - 1))
 		let l:file_name = "Summary " . g:in_both_lists[l:tag_index] . " " . a:type . " batch" . g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
 		let l:link_name = "[Summary " . g:in_both_lists[l:tag_index] . " " . a:type . " batch](Summary " . g:in_both_lists[l:tag_index] . " " . a:type . " batch)"
 		let g:summary_file_list = g:summary_file_list + [l:file_name]
@@ -1462,7 +1462,7 @@ function Report(search_term, report_type = "full", function_name = "FullReport",
 
 	let l:combined_list_len = len(g:int_and_anno_keys)
 
-	let g:unique_keys = filter(copy(g:int_and_anno_keys), 'index(g:int_and_anno_keys, v:val, v:key+1)==-1')
+	let g:unique_keys = filter(copy(g:int_and_anno_keys), 'index(g:int_and_anno_keys, v:val, v:key+1) == -1')
 	
 	if (a:report_type == "full") || (a:report_type == "meta") || (a:report_type == "VWS")
 		let g:interview_list = g:unique_keys
@@ -1530,7 +1530,7 @@ function GetInterviewFileList()
 	#  match is at position 2 because the globpath function prefixes
 	#  filenames with ./ which occupies positions 0 and 1.
 	let g:interview_list = []
-	for list_item in range(0, (len(l:file_list_all)-1))
+	for list_item in range(0, (len(l:file_list_all) - 1))
 		if (match(l:file_list_all[list_item], l:file_regex) == 2) 
 			# strip off the leading ./
 			let l:file_to_add = l:file_list_all[list_item][2:]
@@ -1598,7 +1598,7 @@ function CalcInterviewTagCrosstabs(tags_list, unique_tags, interview_list, ext_l
 	let g:tag_count_dict       = {}
 	let g:initial_tag_dict     = {}
 
-	for index in range(0, (len(a:interview_list)-1)) 
+	for index in range(0, (len(a:interview_list) - 1)) 
 		let a:interview_list[index] = a:interview_list[index][:a:ext_length]
 	endfor
 	# The initial_tag_dict is a dictionary the unique tags with values of four-element lists. Where
@@ -1614,16 +1614,16 @@ function CalcInterviewTagCrosstabs(tags_list, unique_tags, interview_list, ext_l
 	#for tag_key in sort(keys(a:unique_tags))
 	# The problem is that the tag names are not being assigned as keys.
 	# Rather the key is a number.
-	for index in range(0, (len(a:unique_tags)-1)) 
+	for index in range(0, (len(a:unique_tags) - 1)) 
 		let g:initial_tag_dict[a:unique_tags[index]] = [0,0,0,0]
 	endfor
 	#For create an interview dict with a the values for each key being a
 	# copy of the initial_tag_dict
-	for interview in range(0, (len(a:interview_list)-1))
+	for interview in range(0, (len(a:interview_list) - 1))
 		let g:tag_count_dict[a:interview_list[interview]] = deepcopy(g:initial_tag_dict)
 	endfor
 
-	for index in range(0, len(g:tags_list)-1)
+	for index in range(0, len(g:tags_list) - 1)
 		# Increment the tag count for this tag
 		let g:tag_count_dict[a:tags_list[index][0]][a:tags_list[index][2]][0] = g:tag_count_dict[a:tags_list[index][0]][a:tags_list[index][2]][0] + 1
 		# if tags_list row number minus row number minus the
@@ -1652,8 +1652,8 @@ function FindLargestTagAndBlockCounts(tag_cross, unique_tags, interview_list, ex
 	let l:largest_tag_count   = 0
 	let l:largest_block_count = 0
 
-	for interview_index in range(0, (len(a:interview_list)-1))
-		for tag_index in range(0, (len(a:unique_tags)-1)) 
+	for interview_index in range(0, (len(a:interview_list) - 1))
+		for tag_index in range(0, (len(a:unique_tags) - 1)) 
 			if (a:tag_cross[a:interview_list[interview_index]][a:unique_tags[tag_index]][0] > l:largest_tag_count)
 				let l:largest_tag_count = a:tag_cross[a:interview_list[interview_index]][a:unique_tags[tag_index]][0]
 			endif
@@ -1679,7 +1679,7 @@ function PrintInterviewTagSummary(tag_cross, interview, unique_tags)
 	execute "normal! i|:---|---:|---:|---:|\n"
 	execute "normal! ki\<ESC>j"
 
-	for tag_index in range(0, (len(a:unique_tags)-1))
+	for tag_index in range(0, (len(a:unique_tags) - 1))
 		let l:ave_block_size = printf("%.1f", str2float(a:tag_cross[a:interview][a:unique_tags[tag_index]][0]) / str2float(a:tag_cross[a:interview][a:unique_tags[tag_index]][1]))
 		execute "normal! i|" . a:unique_tags[tag_index] . "|" . 
 					\ a:tag_cross[a:interview][a:unique_tags[tag_index]][0] . "|" . 
@@ -1715,7 +1715,7 @@ function PrintTagInterviewSummary(tag_cross, tag, interview_list)
 	execute "normal! i|:---|---:|---:|---:|\n"
 	execute "normal! ki\<ESC>j"
 
-	for interview_index in range(0, (len(a:interview_list)-1))
+	for interview_index in range(0, (len(a:interview_list) - 1))
 		let l:ave_block_size = printf("%.1f", str2float(a:tag_cross[a:interview_list[interview_index]][a:tag][0]) / str2float(a:tag_cross[a:interview_list[interview_index]][a:tag][1]))
 		execute "normal! i|" . a:interview_list[interview_index] . "|" . 
 					\ a:tag_cross[a:interview_list[interview_index]][a:tag][0] . "|" . 
@@ -1746,7 +1746,7 @@ function GraphInterviewTagSummary(tag_cross, interview, unique_tags, longest_tag
 	let l:report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
 	execute "normal! Gi**Graph: Interview " . a:interview . "** (Updated: " . l:report_update_time . ")\n"
 
-	for tag_index in range(0, (len(a:unique_tags)-1))
+	for tag_index in range(0, (len(a:unique_tags) - 1))
 		let l:offset       = a:longest_tag_length - len(a:unique_tags[tag_index])
 		let l:block_amount = a:tag_cross[a:interview][a:unique_tags[tag_index]][1]
 		let l:tag_amount   = a:tag_cross[a:interview][a:unique_tags[tag_index]][0] - l:block_amount
@@ -1774,7 +1774,7 @@ function GraphTagInterviewSummary(tag_cross, tag, interviews, longest_tag_length
 	let l:report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
 	execute "normal! Gi**Graph: Tag " . a:tag . "** (Updated: " . l:report_update_time . ")\n"
 
-	for interview_index in range(0, (len(a:interviews)-1))
+	for interview_index in range(0, (len(a:interviews) - 1))
 		let l:offset       = a:longest_tag_length - len(a:interviews[interview_index])
 		let l:block_amount = a:tag_cross[a:interviews[interview_index]][a:tag][1]
 		let l:tag_amount   = a:tag_cross[a:interviews[interview_index]][a:tag][0] - l:block_amount
@@ -1811,7 +1811,7 @@ endfunction
 # -----------------------------------------------------------------
 function FindLengthOfLongestTag(tag_list) 
 	let l:longest_tag_length = 0
-	for index in range(0, len(a:tag_list)-1)
+	for index in range(0, len(a:tag_list) - 1)
 		let l:test_length = len(a:tag_list[index])
 		if l:test_length > l:longest_tag_length
 			let l:longest_tag_length = l:test_length
@@ -1838,7 +1838,7 @@ function TagStats()
 	let g:tags_list = []
 	
 	# Go through each interview file building up a list of tags
-	for interview in range(0, (len(g:interview_list)-1))
+	for interview in range(0, (len(g:interview_list) - 1))
 		# go to interview file
 		execute "normal :e " . g:interview_list[interview] . "\<CR>"
 		let g:interview_to_crawl = expand('%:t:r')
@@ -1875,7 +1875,7 @@ function TagStats()
 	execute "normal! ggVGd"
 
 	# Print interview tag summary tables
-	for interview in range(0, (len(g:interview_list)-1))
+	for interview in range(0, (len(g:interview_list) - 1))
 		call PrintInterviewTagSummary(g:tag_cross, g:interview_list[interview], g:unique_tags)	
 	endfor
 	#Print tag interview summary tables
@@ -1883,11 +1883,11 @@ function TagStats()
 		call PrintTagInterviewSummary(g:tag_cross, g:unique_tags[tag_index], g:interview_list)
 	endfor
 	# Print interview tag summary graphs
-	for interview in range(0, (len(g:interview_list)-1))
+	for interview in range(0, (len(g:interview_list) - 1))
 		call GraphInterviewTagSummary(g:tag_cross, g:interview_list[interview], g:unique_tags, l:len_longest_tag, l:bar_scale)	
 	endfor
 	# Print interview tag summary graphs
-	for tag_index in range(0, (len(g:unique_tags)-1))
+	for tag_index in range(0, (len(g:unique_tags) - 1))
 		call GraphTagInterviewSummary(g:tag_cross, g:unique_tags[tag_index], g:interview_list, l:len_longest_tag, l:bar_scale)	
 	endfor
 	
@@ -2097,7 +2097,7 @@ endfunction
 # ------------------------------------------------------
 function GetAnnoInterview(buffer_name) 
 	let l:line_num_loc  = match(a:buffer_name, ':')
-	let l:cropped_name  = a:buffer_name[0:l:line_num_loc-1]
+	let l:cropped_name  = a:buffer_name[0:l:line_num_loc - 1]
 	return l:cropped_name
 endfunction
 
@@ -2402,7 +2402,7 @@ function UpdateCurrentTagsList()
 	let g:just_in_dict_list		= []
 	let g:just_in_current_tag_list	= []
 
-	for l:tag_dict_tag in range(0, (len(g:tag_dict_keys)-1))
+	for l:tag_dict_tag in range(0, (len(g:tag_dict_keys) - 1))
 		let l:is_in_list = index(g:current_tags, g:tag_dict_keys[l:tag_dict_tag])
 		if l:is_in_list >= 0
 			let l:print_list_item = g:tag_dict_keys[l:tag_dict_tag]
@@ -2413,7 +2413,7 @@ function UpdateCurrentTagsList()
 		endif
 	endfor
 
-	for l:current_tag in range(0, (len(g:current_tags)-1))
+	for l:current_tag in range(0, (len(g:current_tags) - 1))
 		let l:is_in_list = index(g:tag_dict_keys, g:current_tags[l:current_tag])
 		if l:is_in_list < 0
 			let l:print_list_item = g:current_tags[l:current_tag]
@@ -2485,7 +2485,7 @@ endfunction
 # ------------------------------------------------------
 def GenDictTagList() 
 	var g:dict_tags = []
-	for tag_index in range(0, (len(g:current_tags)-1))
+	for tag_index in range(0, (len(g:current_tags) - 1))
  		if has_key(g:tag_dict, g:current_tags[tag_index])
 			g:dict_tags = g:dict_tags + [g:current_tags[tag_index]]
 		endif
@@ -2898,7 +2898,7 @@ function CreateFillLine(line)
 			endif
 		endif			
 	endfor
-	if (has_key(g:block_tag_list) = -1) and (a:line >= g:top_fill_line)
+	if (has_key(g:block_tag_list) == -1) and (a:line >= g:top_fill_line)
 		let g:meta_fill_line = g:meta_fill_line . " :" . g:block_tags_list[l:tags] . ":"
 	let g:meta_fill_line = g:meta_fill_line . " " . g:tag_block_dict[a:line][1]
 endfunction
@@ -3237,7 +3237,7 @@ function Attributes(sort_col = 1)
 	# tags. We're going to build our output in two reg
 	let g:attrib_chart = ""
 	let g:attrib_csv   = ""
-	for interview in range(0, (len(g:interview_list)-1))
+	for interview in range(0, (len(g:interview_list) - 1))
 		# go to interview file
 		execute "normal :e " . g:interview_list[interview] . "\<CR>"
 		# copy first row which should be the attribute tags.
@@ -3346,7 +3346,7 @@ function CorrectAttributeLines()
 	#  match is at position 2 because the globpath function prefixes
 	#  filenames with ./ which occupies positions 0 and 1.
 	let g:interview_list = []
-	for list_item in range(0, (len(g:file_list_all)-1))
+	for list_item in range(0, (len(g:file_list_all) - 1))
 		if (match(g:file_list_all[list_item], g:file_regex) == 2) 
 			# strip off the leading ./
 			let g:file_to_add = g:file_list_all[list_item][2:]
@@ -3356,7 +3356,7 @@ function CorrectAttributeLines()
 	# save buffer number of current file to register 'a' so you can return here
 	let @a = bufnr('%')
 	# go through the list of files copying modifying the attribute line.
-	for interview in range(0, (len(g:interview_list)-1))
+	for interview in range(0, (len(g:interview_list) - 1))
 		# go to interview file
 		execute "normal :e " . g:interview_list[interview] . "\<CR>"
 		# copy first row which should be the attribute tags.
