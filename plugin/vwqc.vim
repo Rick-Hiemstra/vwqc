@@ -336,8 +336,7 @@ def GetVWQCProjectParameters()
 	endif
 
 	g:wiki_number                        = vimwiki#vars#get_bufferlocal('wiki_nr') 
-	g:wiki_number_base_one               = g:wiki_number + 1
-	g:current_wiki_name                  = "wiki_" . g:wiki_number_base_one
+	g:current_wiki_name                  = "wiki_" . g:wiki_number + 1
 
 	# Get interview column width
 	var g:text_col_width                 = g:vimwiki_wikilocal_vars[g:wiki_number]['text_col_width']
@@ -422,7 +421,7 @@ def ListProjectParameters()
 	ParmCheck()
 			
 	var base0                = "Base 0 wiki #        " . g:wiki_number
-	var base1                = "Base 1 wiki #        " . g:wiki_number_base_one
+	var base1                = "Base 1 wiki #        " . g:wiki_number + 1
 	var list_path            = "Path:                " . g:vimwiki_wikilocal_vars[g:wiki_number]['path']
         var list_ext		   = "Ext:                 " . g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
 	var list_regex           = "Label regex:         " . g:interview_label_regex
