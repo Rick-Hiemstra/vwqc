@@ -359,8 +359,8 @@ def GetVWQCProjectParameters()
 
 	# If header template location is explicitly defined then use it, otherwise use default file.
 	var has_template = 0
-	has_template = has_key("g:" ..  g:current_wiki_name .. ", 'interview_header_template')\<CR>"
-	#execute "normal! :var has_template = has_key(g:" ..  g:current_wiki_name .. ", 'interview_header_template')\<CR>"
+	#has_template = has_key("g:" ..  g:current_wiki_name .. ", 'interview_header_template')\<CR>"
+	#execute "normal! :has_template = has_key(g:" ..  g:current_wiki_name .. ", 'interview_header_template')\<CR>"
 	if (has_template == 1) 
 		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'] = g:" . g:current_wiki_name . ".interview_header_template\<CR>" 
 		var g:int_header_template    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'])
