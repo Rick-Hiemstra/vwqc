@@ -224,7 +224,7 @@ enddef
 
 def g:ProjectSetup() 
 	execute "normal! gg"
-	var g:index_page_content_test = search('\S', 'W')
+	g:index_page_content_test = search('\S', 'W')
 	if (g:index_page_content_test != 0)
 		var index_already_created = "The index page already has content.\n\nSetup not performed."
 		confirm(index_already_created,  "OK", 1)
