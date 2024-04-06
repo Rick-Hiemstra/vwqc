@@ -390,7 +390,7 @@ def GetVWQCProjectParameters()
 
 	g:glossary_path                    = g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag Glossary.md"
 
-	var has_code = 0
+	var has_coder = 0
 	execute "normal! :var has_coder = has_key(g:" .. g:current_wiki_name .. ", 'coder_initials')\<CR>"
 	if (has_coder)
 		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials'] = g:" .. g:current_wiki_name .. ".coder_initials\<CR>" 
