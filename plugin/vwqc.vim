@@ -363,27 +363,27 @@ def GetVWQCProjectParameters()
 	#execute "normal! :has_template = has_key(g:" ..  g:current_wiki_name .. ", 'interview_header_template')\<CR>"
 	if (has_template == 1) 
 		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'] = g:" .. g:current_wiki_name .. ".interview_header_template\<CR>" 
-		var g:int_header_template    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'])
+		g:int_header_template    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'])
 	else
-		var g:int_header_template    = expand(g:extras_path .. "interview_header_template.txt")
+		g:int_header_template    = expand(g:extras_path .. "interview_header_template.txt")
 	endif
 	
 	# If subcode dictionary location is explicitly defined then use it, otherwise use default file.
 	execute "normal! :var has_sub_code_dict = has_key(g:" .. g:current_wiki_name .. ", 'subcode_dictionary')\<CR>"
 	if (has_sub_code_dict == 1)
 		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['subcode_dictionary'] = g:" .. g:current_wiki_name .. ".subcode_dictionary\<CR>" 
-		var g:subcode_dictionary_path    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['subcode_dictionary'])
+		g:subcode_dictionary_path    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['subcode_dictionary'])
 	else
-		var g:subcode_dictionary_path    = expand(g:extras_path .. "subcode_dictionary.txt")
+		g:subcode_dictionary_path    = expand(g:extras_path .. "subcode_dictionary.txt")
 	endif
 
 	# If tag summaries directory is explicitly defined use it, otherwise use the default directory
 	execute "normal! :var has_tag_sum_path = has_key(g:" ..  g:current_wiki_name .. ", 'tag_summaries')\<CR>"
 	if (has_tag_sum_path == 1)
 		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'] = g:" .. g:current_wiki_name .. ".tag_summaries\<CR>" 
-		var g:tag_summaries_path       = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'])
+		g:tag_summaries_path       = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'])
 	else
-		var g:tag_summaries_path       = expand(g:extras_path .. "tag_summaries/")
+		g:tag_summaries_path       = expand(g:extras_path .. "tag_summaries/")
 	endif
 
 	var g:glossary_path                    = g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag Glossary.md"
@@ -391,16 +391,16 @@ def GetVWQCProjectParameters()
 	execute "normal! :var has_coder = has_key(g:" .. g:current_wiki_name .. ", 'coder_initials')\<CR>"
 	if (has_coder)
 		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials'] = g:" .. g:current_wiki_name .. ".coder_initials\<CR>" 
-       		var g:coder_initials                 = g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials']
+       		g:coder_initials                 = g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials']
 	else
-       		var g:coder_initials                 = "Unknown coder"
+       		g:coder_initials                 = "Unknown coder"
 	endif
 
-	var g:wiki_extension   	   = g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-	var g:target_file_ext  	   = g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-	var g:ext_len          	   = len(g:wiki_extension) + 1
+	g:wiki_extension   	   = g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+	g:target_file_ext  	   = g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+	g:ext_len          	   = len(g:wiki_extension) + 1
 
-	var g:last_wiki = g:wiki_number
+	g:last_wiki = g:wiki_number
 	
 enddef
 
