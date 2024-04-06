@@ -432,7 +432,7 @@ def g:FormatInterview(label = "default")
 		valid_label_test    = DoesFileNameMatchLabelRegex(expand('%:t:r'))
 		proposed_label      = expand('%:t:r')
 	else
-		valid_label = DoesFileNameMatchLabelRegex(label)
+		valid_label_test = DoesFileNameMatchLabelRegex(label)
 		proposed_label = label
 	endif
 
