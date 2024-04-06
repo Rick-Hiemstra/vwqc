@@ -362,7 +362,7 @@ def GetVWQCProjectParameters()
 	#has_template = has_key("g:" ..  g:current_wiki_name .. ", 'interview_header_template')\<CR>"
 	execute "normal! :let has_template = has_key(g:" ..  g:current_wiki_name .. ", 'interview_header_template')\<CR>"
 	if (has_template == 1) 
-		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'] = g:" .. g:current_wiki_name .. ".interview_header_template\<CR>" 
+		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'] = g:" .. g:current_wiki_name .. ".interview_header_template\<CR>" 
 		g:int_header_template    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'])
 	else
 		g:int_header_template    = expand(g:extras_path .. "interview_header_template.txt")
@@ -380,9 +380,9 @@ def GetVWQCProjectParameters()
 
 	# If tag summaries directory is explicitly defined use it, otherwise use the default directory
 	var has_tag_sum_path = 0
-	execute "normal! :has_tag_sum_path = has_key(g:" ..  g:current_wiki_name .. ", 'tag_summaries')\<CR>"
+	execute "normal! :let has_tag_sum_path = has_key(g:" ..  g:current_wiki_name .. ", 'tag_summaries')\<CR>"
 	if (has_tag_sum_path == 1)
-		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'] = g:" .. g:current_wiki_name .. ".tag_summaries\<CR>" 
+		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'] = g:" .. g:current_wiki_name .. ".tag_summaries\<CR>" 
 		g:tag_summaries_path       = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'])
 	else
 		g:tag_summaries_path       = expand(g:extras_path .. "tag_summaries/")
@@ -391,9 +391,9 @@ def GetVWQCProjectParameters()
 	g:glossary_path                    = g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag Glossary.md"
 
 	var has_coder = 0
-	execute "normal! :has_coder = has_key(g:" .. g:current_wiki_name .. ", 'coder_initials')\<CR>"
+	execute "normal! :let has_coder = has_key(g:" .. g:current_wiki_name .. ", 'coder_initials')\<CR>"
 	if (has_coder)
-		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials'] = g:" .. g:current_wiki_name .. ".coder_initials\<CR>" 
+		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials'] = g:" .. g:current_wiki_name .. ".coder_initials\<CR>" 
        		g:coder_initials                 = g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials']
 	else
        		g:coder_initials                 = "Unknown coder"
