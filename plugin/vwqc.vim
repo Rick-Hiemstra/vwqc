@@ -167,7 +167,7 @@ endif
 # ------------------------------------------------------
 # Displays a popup help menu
 # ------------------------------------------------------
-def HelpMenu() abort
+def HelpMenu()
 	var g:help_list = [             "NAVIGATION", 
 		                        "<leader>gt                          Go to",
 					"<leader>gb                          Go back", 
