@@ -2549,7 +2549,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def NoTagListNotice(tag_message: integer) 
+def NoTagListNotice(tag_message: number) 
 	if (tag_message == 1)
 		var popup_message = "Press <F2> to populate the current tag list."
 	elseif (a:tag_message == 2)
