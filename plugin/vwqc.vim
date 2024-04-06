@@ -539,9 +539,9 @@ enddef
 # Provide page specific help based on the buffer nameProvide page specific
 # help based on the buffer name
 # -----------------------------------------------------------------
-function PageHelp() 
+def PageHelp() 
 
-	call ParmCheck()
+	ParmCheck()
 
 	# -----------------------------------------------------------------
 	# Change the pwd to that of the current wiki.
@@ -550,161 +550,161 @@ function PageHelp()
 	# -----------------------------------------------------------------
 	# Find the current file name
 	
-	let g:current_buffer_name = expand('%:t')
-	let g:is_interview        = match(g:current_buffer_name, g:interview_label_regex)
-	let g:is_annotation       = match(g:current_buffer_name, g:interview_label_regex . ': \d\d\d\d')
-	let g:is_summary          = match(g:current_buffer_name, 'Summary ')
+	g:current_buffer_name = expand('%:t')
+	g:is_interview        = match(g:current_buffer_name, g:interview_label_regex)
+	g:is_annotation       = match(g:current_buffer_name, g:interview_label_regex . ': \d\d\d\d')
+	g:is_summary          = match(g:current_buffer_name, 'Summary ')
 
 	if g:current_buffer_name == "index" . g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-		let g:page_help_list = [              
-			\        "INDEX HELP PAGE", 
-		        \        "The index page is your project home page. You can return to this page by typing <leader>ww in normal mode.",
-		        \        "From here you can create new pages for interviews or summary pages.",
-		        \        " ",
-		        \        "Summary pages, pages that summarize specific tags, must begin with the word \"Summary\". ",
-		        \        "Interview pages must be named according to the regular expression (regex) defined in your project parameters. ",
-		        \        "Press <leader>lp in normal mode to list project parameters. ",
-		        \        " ",
-			\        "Click on this window to close it"]
-		call DisplayPageHelp()
+		g:page_help_list = [              
+			        "INDEX HELP PAGE", 
+		                "The index page is your project home page. You can return to this page by typing <leader>ww in normal mode.",
+		                "From here you can create new pages for interviews or summary pages.",
+		                " ",
+		                "Summary pages, pages that summarize specific tags, must begin with the word \"Summary\". ",
+		                "Interview pages must be named according to the regular expression (regex) defined in your project parameters. ",
+		                "Press <leader>lp in normal mode to list project parameters. ",
+		                " ",
+			        "Click on this window to close it"]
+		DisplayPageHelp()
 	elseif g:current_buffer_name == "Attributes" . g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-		let g:page_help_list = [              
-			\        "ATTRIBUTES HELP PAGE", 
-		        \        "The \"Attributes\" page lists the interview attributes which are the tags that appear on the first line of",
-		        \        "each interview page. ",
-		        \        " ",
-		        \        "You can update this page by running the following command in normal mode: ",
-		        \        " ",
-		        \        ":call Attributes() ",
-		        \        " ",
-		        \        "These attributes can be sorted by running the Attributes() command with the column number to sort on.",
-		        \        "For example, the following command sorts on the third column:",
-		        \        " ",
-		        \        ":call Attributes(3) ",
-		        \        " ",
-			\        "Click on this window to close it"]
-		call DisplayPageHelp()
+		g:page_help_list = [              
+			        "ATTRIBUTES HELP PAGE", 
+		                "The \"Attributes\" page lists the interview attributes which are the tags that appear on the first line of",
+		                "each interview page. ",
+		                " ",
+		                "You can update this page by running the following command in normal mode: ",
+		                " ",
+		                ":call Attributes() ",
+		                " ",
+		                "These attributes can be sorted by running the Attributes() command with the column number to sort on.",
+		                "For example, the following command sorts on the third column:",
+		                " ",
+		                ":call Attributes(3) ",
+		                " ",
+			        "Click on this window to close it"]
+		DisplayPageHelp()
 	elseif g:current_buffer_name == "Tag List Current" . g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-		let g:page_help_list = [              
-			\        "TAG LIST CURRENT HELP PAGE", 
-		        \        "This lists current project tags. It is generated or updated by pressing F2",
-		        \        " ",
-			\        "Click on this window to close it"]
-		call DisplayPageHelp()
+		g:page_help_list = [              
+			        "TAG LIST CURRENT HELP PAGE", 
+		                "This lists current project tags. It is generated or updated by pressing F2",
+		                " ",
+			        "Click on this window to close it"]
+		DisplayPageHelp()
 	elseif g:current_buffer_name == "Tag Glossary" . g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-		let g:page_help_list = [              
-			\        "TAG GLOSSARY HELP PAGE", 
-		        \        "Tag definitions can be added here manually, but they are best added by placing the cursor over a valid tag in an ", 
-			\        "interview page in normal mode and pressing <leader>df. This will start a dialogue that will allow you to add a tag", 
-			\        "definition. When you are finished defining your tag you can press F2 to update the tag list and <leader>gb to ", 
-			\	 "return to where you were coding.",
-		        \        " ",
-			\        "Tag definitions must be inside brace brackets {} and the tag name must be the last word on the first line inside the",
-		        \        "brace brackets. The format is flexible but it is recommended that you use the form that is pre-populated when you use",
-		        \        "the dialogue that is initiated when you press <leader>df while your cursor is on a tag and you are in normal mode.",
-		        \        " ",
-			\        "Click on this window to close it"]
-		call DisplayPageHelp()
+		g:page_help_list = [              
+			        "TAG GLOSSARY HELP PAGE", 
+		                "Tag definitions can be added here manually, but they are best added by placing the cursor over a valid tag in an ", 
+			        "interview page in normal mode and pressing <leader>df. This will start a dialogue that will allow you to add a tag", 
+			        "definition. When you are finished defining your tag you can press F2 to update the tag list and <leader>gb to ", 
+				 "return to where you were coding.",
+		                " ",
+			        "Tag definitions must be inside brace brackets {} and the tag name must be the last word on the first line inside the",
+		                "brace brackets. The format is flexible but it is recommended that you use the form that is pre-populated when you use",
+		                "the dialogue that is initiated when you press <leader>df while your cursor is on a tag and you are in normal mode.",
+		                " ",
+			        "Click on this window to close it"]
+		DisplayPageHelp()
 	elseif g:is_annotation == 0
-		let g:page_help_list = [              
-			\        "ANNOTATION HELP PAGE", 
-		        \        "Use F7 to toggle an annotation page open and closed",
-		        \        " ",
-			\        "Click on this window to close it"]
-		call DisplayPageHelp()
+		g:page_help_list = [              
+			        "ANNOTATION HELP PAGE", 
+		                "Use F7 to toggle an annotation page open and closed",
+		                " ",
+			        "Click on this window to close it"]
+		DisplayPageHelp()
 	elseif g:is_interview == 0
-		let g:page_help_list = [              
-			\        "INTERVIEW HELP PAGE", 
-		        \        "",
-			\        "Interview pages are split into four parts or panes:",
-			\        "",
-			\        "1) The header",
-			\        "2) The interview pane",
-			\        "3) The line-label pane",
-			\        "4) The coding pane",
-			\        "",
-			\        "Interview pages are populated by initally pasting the interview text into a blank page ",
-			\        "that has been named according to the label regular expression (regex) you used for the",
-			\        "project configuration (i.e. /d/d-/w-/w/w/w/w). The pasted interview text is formatted ",
-			\        "with the FormatInterview() function. i.e.",
-			\        "",
-			\        ":call FormatInterview()",
-			\        "",
-			\        "Annotations are added by pressing F7 on the line where you want to add an annotation.",
-			\        "This will open an annotation window on the right-hand side of your screen placing you",
-			\        "directly in insert mode. Annotation windows can be closed by pressing F7 again.",
-			\        "",
-			\        "Tags (codes) are contiguous words beginning with a letter and surrounded by colons.",
-			\        "For example :family: or :child:. Each line can have multiple tags, but tags must",
-			\        "be separated by a space.",
-			\        "",
-			\        "Interviews are coded line-wise. This means that each line in a block of code must ",
-			\        "be coded, not just the starting and ending lines. Usually, an interview will be ",
-			\        "coded from top to bottom. ",
-			\        "",
-			\        "There are several ways VWQC helps facilitated coding. First, it provides tag ",
-			\        "omni-completion. Second, it provides keybindings to fill tags from the bottom of ",
-			\        "code block up to the top.",
-		        \        "",
-		        \        "If you start typing a tag (i.e. a colon followed by one or more characters) and press",
-		        \        "F8 (or F9) an omni-completion menu will pop up with a list of tags that begin with the",
-		        \        "prefix you just typed. You can use the arrow keys to make your selection and then finish",
-		        \        "the tag entry with your closing colon character.",
-		        \        "",
-		        \        "Block completion looks above the cursor for tag completion candidates. VWQC tries to ",
-		        \        "anticipate which tag you want to fill up from your cursor position to make a code block.",
-		        \        "If there is only one tag in the contiguous code block above your cursor then VWQC will fill",
-		        \        "in that tag. Otherwise you are presented with a menu of tag choices pulled from the first",
-		        \        "contiguous code block above the cursor. This menu is generated in one of two modes. The first",
-		        \        "mode presents the last tag added to the buffer as the default tag. The default tag can be ",
-		        \        "selected by simply pressing enter. The second mode presents the first tag above the cursor as",
-		        \        "the default tag. The current tag-fill mode will be indicated in the pop-up menu title. The mode",
-		        \        "can be changed with the F4 toggle.",
-		        \        "",
-		        \        "An annotation associated with a line can be created with the F7 key. This will open an annotation",
-		        \        "window to the right of your screen. This annotation window can be closed by pressing F7 again.",
-		        \        "If you want to remove an annotation, place your cursor on the line in an interview page where it",
-		        \        "is called (not in the annotation page itself) and, in normal mode, press <leader>da and this will",
-		        \        "initiate a dialogue that will allow you to delete the annotation.",
-		        \        "",
-			\        "Click on this window to close it"]
-		call DisplayPageHelp()
+		g:page_help_list = [              
+			        "INTERVIEW HELP PAGE", 
+		                "",
+			        "Interview pages are split into four parts or panes:",
+			        "",
+			        "1) The header",
+			        "2) The interview pane",
+			        "3) The line-label pane",
+			        "4) The coding pane",
+			        "",
+			        "Interview pages are populated by initally pasting the interview text into a blank page ",
+			        "that has been named according to the label regular expression (regex) you used for the",
+			        "project configuration (i.e. /d/d-/w-/w/w/w/w). The pasted interview text is formatted ",
+			        "with the FormatInterview() function. i.e.",
+			        "",
+			        ":call FormatInterview()",
+			        "",
+			        "Annotations are added by pressing F7 on the line where you want to add an annotation.",
+			        "This will open an annotation window on the right-hand side of your screen placing you",
+			        "directly in insert mode. Annotation windows can be closed by pressing F7 again.",
+			        "",
+			        "Tags (codes) are contiguous words beginning with a letter and surrounded by colons.",
+			        "For example :family: or :child:. Each line can have multiple tags, but tags must",
+			        "be separated by a space.",
+			        "",
+			        "Interviews are coded line-wise. This means that each line in a block of code must ",
+			        "be coded, not just the starting and ending lines. Usually, an interview will be ",
+			        "coded from top to bottom. ",
+			        "",
+			        "There are several ways VWQC helps facilitated coding. First, it provides tag ",
+			        "omni-completion. Second, it provides keybindings to fill tags from the bottom of ",
+			        "code block up to the top.",
+		                "",
+		                "If you start typing a tag (i.e. a colon followed by one or more characters) and press",
+		                "F8 (or F9) an omni-completion menu will pop up with a list of tags that begin with the",
+		                "prefix you just typed. You can use the arrow keys to make your selection and then finish",
+		                "the tag entry with your closing colon character.",
+		                "",
+		                "Block completion looks above the cursor for tag completion candidates. VWQC tries to ",
+		                "anticipate which tag you want to fill up from your cursor position to make a code block.",
+		                "If there is only one tag in the contiguous code block above your cursor then VWQC will fill",
+		                "in that tag. Otherwise you are presented with a menu of tag choices pulled from the first",
+		                "contiguous code block above the cursor. This menu is generated in one of two modes. The first",
+		                "mode presents the last tag added to the buffer as the default tag. The default tag can be ",
+		                "selected by simply pressing enter. The second mode presents the first tag above the cursor as",
+		                "the default tag. The current tag-fill mode will be indicated in the pop-up menu title. The mode",
+		                "can be changed with the F4 toggle.",
+		                "",
+		                "An annotation associated with a line can be created with the F7 key. This will open an annotation",
+		                "window to the right of your screen. This annotation window can be closed by pressing F7 again.",
+		                "If you want to remove an annotation, place your cursor on the line in an interview page where it",
+		                "is called (not in the annotation page itself) and, in normal mode, press <leader>da and this will",
+		                "initiate a dialogue that will allow you to delete the annotation.",
+		                "",
+			        "Click on this window to close it"]
+		DisplayPageHelp()
 	elseif g:is_summary == 0
-		let g:page_help_list = [              
-			\        "SUMMARY HELP PAGE", 
-			\	 ":call FullReport(\"<tag>\")           Create report with tagged and annotation content",
-			\	 ":call QuotesReport(\"<tag>\")         Create report with just tagged content",
-			\	 ":call MetaReport(\"<tag>\")           Create the FullReport with all line metadata",
-			\	 ":call VWSReport(\"<string>\")         Create custom search report", 
-		        \        " ",
-		        \        "Quoted lines can also be recoded within a report. These re-codings",
-		        \        "can then be \"gathered\" into a sub-report. Add new codes to the end",
-		        \        "of lines. Then place your cursor below the count table near the top of",
-		        \        "the report. Run the following command to create the re-coded report.",
-		        \        "",
-		        \        ":call Gather(\"<tag>\")",
-		        \        "",
-		        \        "Line-wise coding means that there are usually residual tails and heads",
-		        \        "from sentences before and after the text you meant to code or tag. In a ",
-		        \        "summary report, you can place your cursor on an interview line and press",
-		        \        "<leader>tt to trim the tail of your quote, and <leader>th to trim the head.",
-		        \        "If you want to trim both the head and tail you can use <leader>ta.",
-		        \        "",
-			\        "Click on this window to close it"]
-		call DisplayPageHelp()
+		g:page_help_list = [              
+			        "SUMMARY HELP PAGE", 
+				 ":call FullReport(\"<tag>\")           Create report with tagged and annotation content",
+				 ":call QuotesReport(\"<tag>\")         Create report with just tagged content",
+				 ":call MetaReport(\"<tag>\")           Create the FullReport with all line metadata",
+				 ":call VWSReport(\"<string>\")         Create custom search report", 
+		                " ",
+		                "Quoted lines can also be recoded within a report. These re-codings",
+		                "can then be \"gathered\" into a sub-report. Add new codes to the end",
+		                "of lines. Then place your cursor below the count table near the top of",
+		                "the report. Run the following command to create the re-coded report.",
+		                "",
+		                ":call Gather(\"<tag>\")",
+		                "",
+		                "Line-wise coding means that there are usually residual tails and heads",
+		                "from sentences before and after the text you meant to code or tag. In a ",
+		                "summary report, you can place your cursor on an interview line and press",
+		                "<leader>tt to trim the tail of your quote, and <leader>th to trim the head.",
+		                "If you want to trim both the head and tail you can use <leader>ta.",
+		                "",
+			        "Click on this window to close it"]
+		DisplayPageHelp()
 	endif
 
-endfunction
+enddef
 
-function DisplayPageHelp() 
-	call popup_menu(g:page_help_list , 
-			\ #{ minwidth: 50,
-			\ maxwidth: 150,
-			\ pos: 'center',
-			\ border: [],
-			\ close: 'click',
-			\ })
-endfunction
+def DisplayPageHelp() 
+	popup_menu(g:page_help_list , 
+			 { minwidth: 50,
+			 maxwidth: 150,
+			 pos: 'center',
+			 border: [],
+			 close: 'click',
+			 })
+enddef
 
 # -----------------------------------------------------------------
 #
