@@ -238,6 +238,7 @@ def g:ProjectSetup()
 
 		mkdir(g:extras_path, "p")
 		mkdir(g:tag_summaries_path, "p")
+		mkdir(g:backup_path, "p")
 
 		var extras_path_creation_message = "A directory for additional project files has been created at:\n\n" .. g:extras_path
 		confirm(extras_path_creation_message,  "OK", 1)
@@ -305,7 +306,7 @@ def GetVWQCProjectParameters()
 
 	g:extras_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") .. g:project_name .. "_extras/"
 
-	g:backup_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") .. "Backups/"
+	g:backup_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") .. g:project_name .. " Backups/"
 
 	# If header template location is explicitly defined then use it, otherwise use default file.
 	var has_template = 0
