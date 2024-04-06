@@ -336,7 +336,8 @@ def GetVWQCProjectParameters()
 	endif
 
 	g:wiki_number                        = vimwiki#vars#get_bufferlocal('wiki_nr') 
-	g:current_wiki_name                  = "wiki_" .. g:wiki_number + 1
+	g:wiki_number_plus_1                 = g:wiki_number + 1
+	g:current_wiki_name                  = "wiki_" .. g:wiki_number_plus_1
 
 	# Get interview column width
 	var g:text_col_width                 = g:vimwiki_wikilocal_vars[g:wiki_number]['text_col_width']
