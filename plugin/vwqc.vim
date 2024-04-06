@@ -358,7 +358,9 @@ def GetVWQCProjectParameters()
 	g:backup_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") .. "Backups/"
 
 	# If header template location is explicitly defined then use it, otherwise use default file.
-	execute "normal! :var has_template = has_key(g:" ..  g:current_wiki_name .. ", 'interview_header_template')\<CR>"
+	var has_template = 0
+	has_template = has_key("g:" ..  g:current_wiki_name .. ", 'interview_header_template')\<CR>"
+	#execute "normal! :var has_template = has_key(g:" ..  g:current_wiki_name .. ", 'interview_header_template')\<CR>"
 	if (has_template == 1) 
 		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'] = g:" . g:current_wiki_name . ".interview_header_template\<CR>" 
 		var g:int_header_template    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'])
@@ -2244,21 +2246,21 @@ augroup END
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def TagsLoadedCheck() 
+def TagsLoadedCheck()
+	var last_wiki_warning = ""
 	if has_key(g:vimwiki_list[vimwiki#vars#get_bufferlocal('wiki_nr')], 'vwqc')
 		if (!exists("g:last_wiki"))
 			ParmCheck()
-			var last_wiki_warning = "No VWQC wiki tags have been populated this session. " .
-						 "Press <F2> to update tags."
+			last_wiki_warning = "No VWQC wiki tags have been populated this session. " ..
+				"Press <F2> to update tags."
 			confirm(last_wiki_warning, "OK", 1)
 		elseif (g:last_wiki != vimwiki#vars#get_bufferlocal('wiki_nr'))
 			ParmCheck()
-			var last_wiki_warning = "The currently-loaded VWQC tags are for another project. " .
-						 "Press <F2> to load tags for this project."
-			call confirm(last_wiki_warning, "OK", 1)
+			last_wiki_warning = "The currently-loaded VWQC tags are for another project. " ..
+				"Press <F2> to load tags for this project."
+			confirm(last_wiki_warning, "OK", 1)
 		endif
 	endif	
-
 enddef
 
 # ------------------------------------------------------
