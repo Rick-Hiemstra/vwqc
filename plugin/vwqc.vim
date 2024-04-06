@@ -739,7 +739,7 @@ enddef
 # -----------------------------------------------------------------
 #
 # -----------------------------------------------------------------
-def g:CreateBackup(id, result) 
+def g:CreateBackup(id: number, result: number) 
 	var backup_message = "Backup message not set."
 
 	if result == 1
@@ -757,7 +757,7 @@ def g:CreateBackup(id, result)
 		call system(g:clean_up_swn)
 		backup_message 	   = "A new back up has been created at: " .. g:new_backup_path
 	else
-		backup_message       = "Backup not created."		
+		backup_message     = "Backup not created."		
 	endif
 	
 	confirm(backup_message,  "OK", 1)
