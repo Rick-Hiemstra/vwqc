@@ -571,7 +571,7 @@ endfunction
 # So run this and then set a g:vwqc_config_vars_added flag 
 # ------------------------------------------------------------------------------
 def AugmentVimwikiLocalVars() 
-	for l:wiki in range(0, (len(g:vimwiki_list)-1))
+	for l:wiki in range(0, (len(g:vimwiki_list) -1))
 		for l:key in keys(g:vimwiki_list[l:wiki])
 			if !has_key(g:vimwiki_wikilocal_vars[l:wiki], l:key)
 				var g:vimwiki_wikilocal_vars[l:wiki][l:key] = g:vimwiki_list[l:wiki][l:key]
@@ -2430,9 +2430,9 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function TagsGenThisSession() 
+def TagsGenThisSession() 
 	
-	call ParmCheck()
+	ParmCheck()
 
 	# -----------------------------------------------------------------
 	# Change the pwd to that of the current wiki.
@@ -2442,30 +2442,30 @@ function TagsGenThisSession()
 	# See if the wiki config dictionary has had a
 	# tags_generated_this_session key added.
 	# ------------------------------------------------------
-	let g:tags_gen_this_wiki_this_session = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
+	var g:tags_gen_this_wiki_this_session = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	# ------------------------------------------------------
 	# Checks to see if we have the proper current tag list for our tag
 	# omnicompletion.
 	# ------------------------------------------------------
 	if !exists("g:current_tags_set_this_session")
-		call NoTagListNotice(1)
+		NoTagListNotice(1)
 	else
 		if g:tags_gen_this_wiki_this_session != 1 
-			call NoTagListNotice(2)
+			NoTagListNotice(2)
 		else
 			if g:last_wiki_tags_generated_for != g:wiki_number
-				call NoTagListNotice(3)
+				NoTagListNotice(3)
 			else
 				# ------------------------------------------------------
 				# The ! after startinsert makes it insert after (like A). If
 				# you don't have the ! it inserts before (like i)
 				# ------------------------------------------------------
 				startinsert!
-				call feedkeys("\<c-x>\<c-o>")
+				feedkeys("\<c-x>\<c-o>")
 			endif
 		endif
 	endif
-endfunction
+enddef
 
 # ------------------------------------------------------
 #
@@ -2483,19 +2483,19 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function GenDictTagList() 
-	let g:dict_tags = []
-	for l:tag_index in range(0, (len(g:current_tags)-1))
- 		if has_key(g:tag_dict, g:current_tags[l:tag_index])
-			let g:dict_tags = g:dict_tags + [g:current_tags[l:tag_index]]
+def GenDictTagList() 
+	var g:dict_tags = []
+	for tag_index in range(0, (len(g:current_tags)-1))
+ 		if has_key(g:tag_dict, g:current_tags[tag_index])
+			g:dict_tags = g:dict_tags + [g:current_tags[tag_index]]
 		endif
 	endfor
-endfunction
+enddef
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function CreateTagDict() 
+def CreateTagDict() 
 	# -----------------------------------------------------------------
 	# Change the pwd to that of the current wiki.
 	# -----------------------------------------------------------------
@@ -2512,45 +2512,44 @@ function CreateTagDict()
 	# -----------------------------------------------------------------
 	# Define an empty tag dictionary
 	# -----------------------------------------------------------------
-	let g:tag_dict = {}
+	var g:tag_dict = {}
 	# -----------------------------------------------------------------
 	# Build the tag dictionary. 
 	# -----------------------------------------------------------------
 	while search('{', "W")
 		execute "normal! j$bviWy0"
-		let l:tag_key = @@
-		let l:tag_def_list = []
+		var tag_key = @@
+		var tag_def_list = []
 		while (getline(".") != "}") && (line(".") <= line("$"))
-			let l:tag_def_list = l:tag_def_list + [getline(".")]
+			tag_def_list = tag_def_list + [getline(".")]
 			execute "normal! j0"
 		endwhile
 		#execute "normal! jvi\{y"
-		let g:tag_dict[l:tag_key] = l:tag_def_list
+		g:tag_dict[tag_key] = tag_def_list
 	endwhile
 	# -----------------------------------------------------------------
 	# Return to the buffer you called this function from
 	# -----------------------------------------------------------------
 	execute "normal! `Y"
-endfunction
+enddef
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function CurrentTagsPopUpMenu() 
-	call popup_menu(g:tag_list_output , 
-				\ #{ minwidth: 50,
-				\ maxwidth: 50,
-				\ pos: 'center',
-				\ border: [],
-				\ close: 'click',
-				\ })
-endfunction
+def CurrentTagsPopUpMenu() 
+	popup_menu(g:tag_list_output , 
+				 { minwidth: 50,
+				 maxwidth: 50,
+				 pos: 'center',
+				 border: [],
+				 close: 'click',
+				 })
+enddef
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
 def NoTagListNotice(tag_message) 
-	
 	if (tag_message == 1)
 		var popup_message = "Press <F2> to populate the current tag list."
 	elseif (a:tag_message == 2)
