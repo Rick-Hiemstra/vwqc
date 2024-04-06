@@ -340,12 +340,12 @@ def GetVWQCProjectParameters()
 	g:current_wiki_name                  = "wiki_" .. g:wiki_number_plus_1
 
 	# Get interview column width
-	var g:text_col_width                 = g:vimwiki_wikilocal_vars[g:wiki_number]['text_col_width']
-	var g:text_col_width_expression      = "set formatprg=par\\ w" . g:text_col_width
+	g:text_col_width                     = g:vimwiki_wikilocal_vars[g:wiki_number]['text_col_width']
+	g:text_col_width_expression          = "set formatprg=par\\ w" . g:text_col_width
 	
-	var g:border_offset                  = g:text_col_width + 3
-	var g:border_offset_less_one	     = g:border_offset - 1
-	var g:label_offset                   = g:border_offset + 2
+	g:border_offset                      = g:text_col_width + 3
+	g:border_offset_less_one	     = g:border_offset - 1
+	g:label_offset                       = g:border_offset + 2
 
 	# Get the label regular expression for this wiki
 	var g:interview_label_regex  = g:vimwiki_wikilocal_vars[g:wiki_number]['interview_label_regex']
@@ -2248,15 +2248,14 @@ def TagsLoadedCheck()
 	if has_key(g:vimwiki_list[vimwiki#vars#get_bufferlocal('wiki_nr')], 'vwqc')
 		if (!exists("g:last_wiki"))
 			ParmCheck()
-			var l:last_wiki_warning = "No VWQC wiki tags have been populated this session. " .
+			var last_wiki_warning = "No VWQC wiki tags have been populated this session. " .
 						 "Press <F2> to update tags."
-			confirm(l:last_wiki_warning, "OK", 1)
+			confirm(last_wiki_warning, "OK", 1)
 		elseif (g:last_wiki != vimwiki#vars#get_bufferlocal('wiki_nr'))
-			var l:last_wiki = g:last_wiki
-			call ParmCheck()
-			var l:last_wiki_warning = "The currently-loaded VWQC tags are for another project. " .
+			ParmCheck()
+			var last_wiki_warning = "The currently-loaded VWQC tags are for another project. " .
 						 "Press <F2> to load tags for this project."
-			call confirm(l:last_wiki_warning, "OK", 1)
+			call confirm(last_wiki_warning, "OK", 1)
 		endif
 	endif	
 
