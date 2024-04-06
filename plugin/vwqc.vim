@@ -697,7 +697,7 @@ def g:PageHelp()
 enddef
 
 def DisplayPageHelp() 
-	popup_menu(g:page_help_list , 
+	popup_menu(g:page_help_list, 
 			 { minwidth: 50,
 			 maxwidth: 150,
 			 pos: 'center',
