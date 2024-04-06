@@ -348,18 +348,18 @@ def GetVWQCProjectParameters()
 	g:label_offset                       = g:border_offset + 2
 
 	# Get the label regular expression for this wiki
-	var g:interview_label_regex  = g:vimwiki_wikilocal_vars[g:wiki_number]['interview_label_regex']
-	var g:tag_search_regex       = g:interview_label_regex . '\: \d\{4}'
+	g:interview_label_regex  = g:vimwiki_wikilocal_vars[g:wiki_number]['interview_label_regex']
+	g:tag_search_regex       = g:interview_label_regex . '\: \d\{4}'
 	
-	var g:project_name           = g:vimwiki_wikilocal_vars[g:wiki_number]['name']
+	g:project_name           = g:vimwiki_wikilocal_vars[g:wiki_number]['name']
 
-	var g:extras_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") . g:project_name . "_extras/"
+	g:extras_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") . g:project_name . "_extras/"
 
-	var g:backup_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") . "Backups/"
+	g:backup_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") . "Backups/"
 
 	# If header template location is explicitly defined then use it, otherwise use default file.
-	execute "normal! :var l:has_template = has_key(g:" .  g:current_wiki_name . ", 'interview_header_template')\<CR>"
-	if (l:has_template == 1) 
+	execute "normal! :var has_template = has_key(g:" .  g:current_wiki_name . ", 'interview_header_template')\<CR>"
+	if (has_template == 1) 
 		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'] = g:" . g:current_wiki_name . ".interview_header_template\<CR>" 
 		var g:int_header_template    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'])
 	else
@@ -367,8 +367,8 @@ def GetVWQCProjectParameters()
 	endif
 	
 	# If subcode dictionary location is explicitly defined then use it, otherwise use default file.
-	execute "normal! :var l:has_sub_code_dict = has_key(g:" . g:current_wiki_name . ", 'subcode_dictionary')\<CR>"
-	if (l:has_sub_code_dict == 1)
+	execute "normal! :var has_sub_code_dict = has_key(g:" . g:current_wiki_name . ", 'subcode_dictionary')\<CR>"
+	if (has_sub_code_dict == 1)
 		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['subcode_dictionary'] = g:" . g:current_wiki_name . ".subcode_dictionary\<CR>" 
 		var g:subcode_dictionary_path    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['subcode_dictionary'])
 	else
@@ -376,8 +376,8 @@ def GetVWQCProjectParameters()
 	endif
 
 	# If tag summaries directory is explicitly defined use it, otherwise use the default directory
-	execute "normal! :var l:has_tag_sum_path = has_key(g:" .  g:current_wiki_name . ", 'tag_summaries')\<CR>"
-	if (l:has_tag_sum_path == 1)
+	execute "normal! :var has_tag_sum_path = has_key(g:" .  g:current_wiki_name . ", 'tag_summaries')\<CR>"
+	if (has_tag_sum_path == 1)
 		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'] = g:" . g:current_wiki_name . ".tag_summaries\<CR>" 
 		var g:tag_summaries_path       = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'])
 	else
@@ -386,8 +386,8 @@ def GetVWQCProjectParameters()
 
 	var g:glossary_path                    = g:vimwiki_wikilocal_vars[g:wiki_number]['path'] . "Tag Glossary.md"
 
-	execute "normal! :var l:has_coder = has_key(g:" . g:current_wiki_name . ", 'coder_initials')\<CR>"
-	if (l:has_coder)
+	execute "normal! :var has_coder = has_key(g:" . g:current_wiki_name . ", 'coder_initials')\<CR>"
+	if (has_coder)
 		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials'] = g:" . g:current_wiki_name . ".coder_initials\<CR>" 
        		var g:coder_initials                 = g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials']
 	else
