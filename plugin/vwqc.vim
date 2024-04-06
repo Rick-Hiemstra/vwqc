@@ -272,59 +272,59 @@ enddef
 # This sets up a project from a blank Vimwiki index page
 # ------------------------------------------------------
 
-function ProjectSetup() 
+def ProjectSetup() 
 	execute "normal! gg"
-	let g:index_page_content_test = search('\S', 'W')
+	var g:index_page_content_test = search('\S', 'W')
 	if (g:index_page_content_test != 0)
-		let l:index_already_created = "The index page already has content.\n\nSetup not performed."
-		call confirm(l:index_already_created,  "OK", 1)
+		var index_already_created = "The index page already has content.\n\nSetup not performed."
+		confirm(index_already_created,  "OK", 1)
 	else
 		execute "normal! O## <Project Title> ##\n\n[Tag Glossary](Tag Glossary)\n[Tag List Current](Tag List Current)\n"
 		execute "normal! i[Attributes](Attributes)\n[Style Guide](Style Guide)\n\n## Interviews ##\n"
 		execute "normal! i\no = Needs to be coded; p = in process; x = first pass done; z = second pass done\n\n"
 		execute "normal! i[o] \n[o] \n[o] \n[o] \n\n## Tag Summaries ##\n\n"
 
-		call GetVWQCProjectParameters()
+		GetVWQCProjectParameters()
 
-		call mkdir(g:extras_path, "p")
-		call mkdir(g:tag_summaries_path, "p")
+		mkdir(g:extras_path, "p")
+		mkdir(g:tag_summaries_path, "p")
 
-		let l:extras_path_creation_message = "A directory for additional project files has been created at:\n\n" . g:extras_path
-		call confirm(l:extras_path_creation_message,  "OK", 1)
+		var extras_path_creation_message = "A directory for additional project files has been created at:\n\n" .. g:extras_path
+		confirm(extras_path_creation_message,  "OK", 1)
 
-		let l:backup_path_creation_message = "A directory for project backups has been created at:\n\n" . g:backup_path
-		call confirm(l:backup_path_creation_message,  "OK", 1)
+		var backup_path_creation_message = "A directory for project backups has been created at:\n\n" .. g:backup_path
+		confirm(backup_path_creation_message,  "OK", 1)
 
-		let l:tag_summaries_path_creation_message = "A directory for CSV tag summaries has been created at:\n\n" . g:tag_summaries_path . "\n\nFiles will appear here after you create summary reports"
-		call confirm(l:tag_summaries_path_creation_message,  "OK", 1)
+		var tag_summaries_path_creation_message = "A directory for CSV tag summaries has been created at:\n\n" .. g:tag_summaries_path .. "\n\nFiles will appear here after you create summary reports"
+		confirm(tag_summaries_path_creation_message,  "OK", 1)
 
-		call CreateDefaultInterviewHeader()
-	       	let l:template_message       = "A default interview header template has been created here:\n\n" . g:int_header_template . "\n\nModify it to your project's specifications before formatting interviews."
-		call confirm(l:template_message,  "OK", 1)
+		CreateDefaultInterviewHeader()
+	       	var template_message       = "A default interview header template has been created here:\n\n" .. g:int_header_template . "\n\nModify it to your project's specifications before formatting interviews."
+		confirm(template_message,  "OK", 1)
 	endif
-endfunction                        
+enddef
 
 # -----------------------------------------------------------------
 # This function creates a simple default interview header
 # -----------------------------------------------------------------
-function CreateDefaultInterviewHeader() 
+def CreateDefaultInterviewHeader() 
 	if (filereadable(g:int_header_template) == 0) 
                 # leave a space at the beginning of the list of attributes. It
 		# affects how the first attribute tag is found.
-		let l:template_content = " :<attribute_1>: :<attribute_2>: :<attribute_3>:\n" .
-					\ "\n" .
-					\ "First pass:  \n" .
-       				        \ "Second pass: \n" .
-       				        \ "Review: \n" .
-       				        \ "Handwritten interview notes: [[file:]]\n" . 
-       				        \ "Audio Recording: [[file:]]\n" .
-       				        \ "\n" .  
-       				        \ "====================\n" . 
-					\ "\n" 
+		var template_content = " :<attribute_1>: :<attribute_2>: :<attribute_3>:\n" ..
+					 "\n" ..
+					 "First pass:  \n" ..
+       				         "Second pass: \n" ..
+       				         "Review: \n" ..
+       				         "Handwritten interview notes: [[file:]]\n" .. 
+       				         "Audio Recording: [[file:]]\n" ..
+       				         "\n" ..  
+       				         "====================\n" .. 
+					 "\n" 
  		
-		call writefile(split(l:template_content, "\n", 1), g:int_header_template) 
+		writefile(split(template_content, "\n", 1), g:int_header_template) 
 	endif
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # This function finds the current VWQC project parameters
@@ -463,13 +463,13 @@ def ListProjectParameters()
 
 enddef
 
-function DoesFileNameMatchLabelRegex(test_value) 
-	if (match(a:test_value, g:interview_label_regex) == 0)
+def DoesFileNameMatchLabelRegex(test_value: string): number
+	if (match(test_value, g:interview_label_regex) == 0)
 		return 1
 	else
 		return 0
 	end
-endfunction
+enddef
 
 function FormatInterview(label = "default") 
 
