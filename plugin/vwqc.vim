@@ -389,7 +389,7 @@ def g:ListProjectParameters()
 	var list_glossary        = "Tag glossary:        " .. g:glossary_path
 	var list_coder           = "Coder initials:      " .. g:coder_initials
  	
-	var g:vwqc_proj_parm_list =    ["CURRENT PROJECT CONFIGURATION", " ", 
+	g:vwqc_proj_parm_list =    ["CURRENT PROJECT CONFIGURATION", " ", 
 					 base0                 ,
 					 base1                 ,
 					 " "                     ,
