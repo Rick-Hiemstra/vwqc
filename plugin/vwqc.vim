@@ -574,7 +574,7 @@ def AugmentVimwikiLocalVars()
 	for wiki in range(0, (len(g:vimwiki_list) - 1))
 		for key in keys(g:vimwiki_list[wiki])
 			if !has_key(g:vimwiki_wikilocal_vars[wiki], key)
-				var g:vimwiki_wikilocal_vars[wiki][key] = g:vimwiki_list[wiki][key]
+				g:vimwiki_wikilocal_vars[wiki][key] = g:vimwiki_list[wiki][key]
 			endif
 		endfor
 	endfor
