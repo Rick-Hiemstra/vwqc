@@ -278,78 +278,154 @@ endfunction
 # -----------------------------------------------------------------
 # This function finds the current VWQC project parameters
 # -----------------------------------------------------------------
-function! GetVWQCProjectParameters() abort
+def GetVWQCProjectParameters() abort
 	# Add non-vimwiki wiki definition variables to g:vimwiki_wikilocal_vars
 	if !exists("g:vwqc_config_vars_added")
-		call AugmentVimwikiLocalVars()
+		AugmentVimwikiLocalVars()
 	endif
 
-	let g:wiki_number                    = vimwiki#vars#get_bufferlocal('wiki_nr') 
-	let g:wiki_number_base_one           = g:wiki_number + 1
-	let g:current_wiki_name              = "wiki_" . g:wiki_number_base_one
+	var g:wiki_number                    = vimwiki#vars#get_bufferlocal('wiki_nr') 
+	var g:wiki_number_base_one           = g:wiki_number + 1
+	var g:current_wiki_name              = "wiki_" . g:wiki_number_base_one
 
 	# Get interview column width
-	let g:text_col_width                 = g:vimwiki_wikilocal_vars[g:wiki_number]['text_col_width']
-	let g:text_col_width_expression      = "set formatprg=par\\ w" . g:text_col_width
+	var g:text_col_width                 = g:vimwiki_wikilocal_vars[g:wiki_number]['text_col_width']
+	var g:text_col_width_expression      = "set formatprg=par\\ w" . g:text_col_width
 	
-	let g:border_offset                  = g:text_col_width + 3
-	let g:border_offset_less_one	     = g:border_offset - 1
-	let g:label_offset                   = g:border_offset + 2
+	var g:border_offset                  = g:text_col_width + 3
+	var g:border_offset_less_one	     = g:border_offset - 1
+	var g:label_offset                   = g:border_offset + 2
 
 	# Get the label regular expression for this wiki
-	let g:interview_label_regex  = g:vimwiki_wikilocal_vars[g:wiki_number]['interview_label_regex']
-	let g:tag_search_regex       = g:interview_label_regex . '\: \d\{4}'
+	var g:interview_label_regex  = g:vimwiki_wikilocal_vars[g:wiki_number]['interview_label_regex']
+	var g:tag_search_regex       = g:interview_label_regex . '\: \d\{4}'
 	
-	let g:project_name           = g:vimwiki_wikilocal_vars[g:wiki_number]['name']
+	var g:project_name           = g:vimwiki_wikilocal_vars[g:wiki_number]['name']
 
-	let g:extras_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") . g:project_name . "_extras/"
+	var g:extras_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") . g:project_name . "_extras/"
 
-	let g:backup_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") . "Backups/"
+	var g:backup_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") . "Backups/"
 
 	# If header template location is explicitly defined then use it, otherwise use default file.
-	execute "normal! :let l:has_template = has_key(g:" .  g:current_wiki_name . ", 'interview_header_template')\<CR>"
+	execute "normal! :var l:has_template = has_key(g:" .  g:current_wiki_name . ", 'interview_header_template')\<CR>"
 	if (l:has_template == 1) 
-		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'] = g:" . g:current_wiki_name . ".interview_header_template\<CR>" 
-		let g:int_header_template    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'])
+		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'] = g:" . g:current_wiki_name . ".interview_header_template\<CR>" 
+		var g:int_header_template    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'])
 	else
-		let g:int_header_template    = expand(g:extras_path . "interview_header_template.txt")
+		var g:int_header_template    = expand(g:extras_path . "interview_header_template.txt")
 	endif
 	
 	# If subcode dictionary location is explicitly defined then use it, otherwise use default file.
-	execute "normal! :let l:has_sub_code_dict = has_key(g:" . g:current_wiki_name . ", 'subcode_dictionary')\<CR>"
+	execute "normal! :var l:has_sub_code_dict = has_key(g:" . g:current_wiki_name . ", 'subcode_dictionary')\<CR>"
 	if (l:has_sub_code_dict == 1)
 		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['subcode_dictionary'] = g:" . g:current_wiki_name . ".subcode_dictionary\<CR>" 
-		let g:subcode_dictionary_path    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['subcode_dictionary'])
+		var g:subcode_dictionary_path    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['subcode_dictionary'])
 	else
-		let g:subcode_dictionary_path    = expand(g:extras_path . "subcode_dictionary.txt")
+		var g:subcode_dictionary_path    = expand(g:extras_path . "subcode_dictionary.txt")
 	endif
 
 	# If tag summaries directory is explicitly defined use it, otherwise use the default directory
-	execute "normal! :let l:has_tag_sum_path = has_key(g:" .  g:current_wiki_name . ", 'tag_summaries')\<CR>"
+	execute "normal! :var l:has_tag_sum_path = has_key(g:" .  g:current_wiki_name . ", 'tag_summaries')\<CR>"
 	if (l:has_tag_sum_path == 1)
-		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'] = g:" . g:current_wiki_name . ".tag_summaries\<CR>" 
-		let g:tag_summaries_path       = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'])
+		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'] = g:" . g:current_wiki_name . ".tag_summaries\<CR>" 
+		var g:tag_summaries_path       = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'])
 	else
-		let g:tag_summaries_path       = expand(g:extras_path . "tag_summaries/")
+		var g:tag_summaries_path       = expand(g:extras_path . "tag_summaries/")
 	endif
 
-	let g:glossary_path                  = g:vimwiki_wikilocal_vars[g:wiki_number]['path'] . "Tag Glossary.md"
+	var g:glossary_path                    = g:vimwiki_wikilocal_vars[g:wiki_number]['path'] . "Tag Glossary.md"
 
-	execute "normal! :let l:has_coder = has_key(g:" . g:current_wiki_name . ", 'coder_initials')\<CR>"
+	execute "normal! :var l:has_coder = has_key(g:" . g:current_wiki_name . ", 'coder_initials')\<CR>"
 	if (l:has_coder)
-		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials'] = g:" . g:current_wiki_name . ".coder_initials\<CR>" 
-       		let g:coder_initials                 = g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials']
+		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials'] = g:" . g:current_wiki_name . ".coder_initials\<CR>" 
+       		var g:coder_initials                 = g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials']
 	else
-       		let g:coder_initials                 = "Unknown coder"
+       		var g:coder_initials                 = "Unknown coder"
 	endif
 
-	let g:wiki_extension   	   = g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-	let g:target_file_ext  	   = g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-	let g:ext_len          	   = len(g:wiki_extension) + 1
+	var g:wiki_extension   	   = g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+	var g:target_file_ext  	   = g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+	var g:ext_len          	   = len(g:wiki_extension) + 1
 
-	let g:last_wiki = g:wiki_number
+	var g:last_wiki = g:wiki_number
 	
-endfunction
+enddef
+
+# -----------------------------------------------------------------
+# This function finds the current VWQC project parameters
+# -----------------------------------------------------------------
+#function! GetVWQCProjectParameters() abort
+#	# Add non-vimwiki wiki definition variables to g:vimwiki_wikilocal_vars
+#	if !exists("g:vwqc_config_vars_added")
+#		call AugmentVimwikiLocalVars()
+#	endif
+#
+#	let g:wiki_number                    = vimwiki#vars#get_bufferlocal('wiki_nr') 
+#	let g:wiki_number_base_one           = g:wiki_number + 1
+#	let g:current_wiki_name              = "wiki_" . g:wiki_number_base_one
+#
+#	# Get interview column width
+#	let g:text_col_width                 = g:vimwiki_wikilocal_vars[g:wiki_number]['text_col_width']
+#	let g:text_col_width_expression      = "set formatprg=par\\ w" . g:text_col_width
+#	
+#	let g:border_offset                  = g:text_col_width + 3
+#	let g:border_offset_less_one	     = g:border_offset - 1
+#	let g:label_offset                   = g:border_offset + 2
+#
+#	# Get the label regular expression for this wiki
+#	let g:interview_label_regex  = g:vimwiki_wikilocal_vars[g:wiki_number]['interview_label_regex']
+#	let g:tag_search_regex       = g:interview_label_regex . '\: \d\{4}'
+#	
+#	let g:project_name           = g:vimwiki_wikilocal_vars[g:wiki_number]['name']
+#
+#	let g:extras_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") . g:project_name . "_extras/"
+#
+#	let g:backup_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") . "Backups/"
+#
+#	# If header template location is explicitly defined then use it, otherwise use default file.
+#	execute "normal! :let l:has_template = has_key(g:" .  g:current_wiki_name . ", 'interview_header_template')\<CR>"
+#	if (l:has_template == 1) 
+#		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'] = g:" . g:current_wiki_name . ".interview_header_template\<CR>" 
+#		let g:int_header_template    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'])
+#	else
+#		let g:int_header_template    = expand(g:extras_path . "interview_header_template.txt")
+#	endif
+#	
+#	# If subcode dictionary location is explicitly defined then use it, otherwise use default file.
+#	execute "normal! :let l:has_sub_code_dict = has_key(g:" . g:current_wiki_name . ", 'subcode_dictionary')\<CR>"
+#	if (l:has_sub_code_dict == 1)
+#		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['subcode_dictionary'] = g:" . g:current_wiki_name . ".subcode_dictionary\<CR>" 
+#		let g:subcode_dictionary_path    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['subcode_dictionary'])
+#	else
+#		let g:subcode_dictionary_path    = expand(g:extras_path . "subcode_dictionary.txt")
+#	endif
+#
+#	# If tag summaries directory is explicitly defined use it, otherwise use the default directory
+#	execute "normal! :let l:has_tag_sum_path = has_key(g:" .  g:current_wiki_name . ", 'tag_summaries')\<CR>"
+#	if (l:has_tag_sum_path == 1)
+#		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'] = g:" . g:current_wiki_name . ".tag_summaries\<CR>" 
+#		let g:tag_summaries_path       = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'])
+#	else
+#		let g:tag_summaries_path       = expand(g:extras_path . "tag_summaries/")
+#	endif
+#
+#	let g:glossary_path                  = g:vimwiki_wikilocal_vars[g:wiki_number]['path'] . "Tag Glossary.md"
+#
+#	execute "normal! :let l:has_coder = has_key(g:" . g:current_wiki_name . ", 'coder_initials')\<CR>"
+#	if (l:has_coder)
+#		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials'] = g:" . g:current_wiki_name . ".coder_initials\<CR>" 
+#       		let g:coder_initials                 = g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials']
+#	else
+#       		let g:coder_initials                 = "Unknown coder"
+#	endif
+#
+#	let g:wiki_extension   	   = g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+#	let g:target_file_ext  	   = g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+#	let g:ext_len          	   = len(g:wiki_extension) + 1
+#
+#	let g:last_wiki = g:wiki_number
+#	
+#endfunction
 
 function! ParmCheck() abort
 if (!exists('g:last_wiki'))
@@ -515,16 +591,16 @@ endfunction
 # g:vimwiki_wikilocal_vars will have one extra dictionary for temporary wikis.
 # So run this and then set a g:vwqc_config_vars_added flag 
 # ------------------------------------------------------------------------------
-function! AugmentVimwikiLocalVars() abort
+def AugmentVimwikiLocalVars() 
 	for l:wiki in range(0, (len(g:vimwiki_list)-1))
 		for l:key in keys(g:vimwiki_list[l:wiki])
 			if !has_key(g:vimwiki_wikilocal_vars[l:wiki], l:key)
-				let g:vimwiki_wikilocal_vars[l:wiki][l:key] = g:vimwiki_list[l:wiki][l:key]
+				var g:vimwiki_wikilocal_vars[l:wiki][l:key] = g:vimwiki_list[l:wiki][l:key]
 			endif
 		endfor
 	endfor
-	let g:vwqc_config_vars_added = 1
-endfunction
+	var g:vwqc_config_vars_added = 1
+enddef
 
 # -----------------------------------------------------------------
 # Provide page specific help based on the buffer nameProvide page specific
