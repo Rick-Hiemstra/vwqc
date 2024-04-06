@@ -218,7 +218,7 @@ def HelpMenu()
 				 })
 enddef
 
-#function! HelpMenu() abort
+#function HelpMenu() 
 #	let g:help_list = [              "NAVIGATION", 
 #		                \        "<leader>gt                          Go to",
 #				\	 "<leader>gb                          Go back", 
@@ -271,7 +271,8 @@ enddef
 # ------------------------------------------------------
 # This sets up a project from a blank Vimwiki index page
 # ------------------------------------------------------
-function! ProjectSetup() abort
+
+function ProjectSetup() 
 	execute "normal! gg"
 	let g:index_page_content_test = search('\S', 'W')
 	if (g:index_page_content_test != 0)
@@ -306,7 +307,7 @@ endfunction
 # -----------------------------------------------------------------
 # This function creates a simple default interview header
 # -----------------------------------------------------------------
-function! CreateDefaultInterviewHeader() abort
+function CreateDefaultInterviewHeader() 
 	if (filereadable(g:int_header_template) == 0) 
                 # leave a space at the beginning of the list of attributes. It
 		# affects how the first attribute tag is found.
@@ -328,7 +329,7 @@ endfunction
 # -----------------------------------------------------------------
 # This function finds the current VWQC project parameters
 # -----------------------------------------------------------------
-def GetVWQCProjectParameters() abort
+def GetVWQCProjectParameters() 
 	# Add non-vimwiki wiki definition variables to g:vimwiki_wikilocal_vars
 	if !exists("g:vwqc_config_vars_added")
 		AugmentVimwikiLocalVars()
@@ -416,7 +417,7 @@ enddef
 # -----------------------------------------------------------------
 # This function creates a pop-up window with the current project's parameters
 # -----------------------------------------------------------------
-function! ListProjectParameters() abort
+function ListProjectParameters() 
 
 	call ParmCheck()
 			
@@ -457,7 +458,7 @@ function! ListProjectParameters() abort
 
 endfunction
 
-function! DoesFileNameMatchLabelRegex(test_value) abort
+function DoesFileNameMatchLabelRegex(test_value) 
 	if (match(a:test_value, g:interview_label_regex) == 0)
 		return 1
 	else
@@ -465,7 +466,7 @@ function! DoesFileNameMatchLabelRegex(test_value) abort
 	end
 endfunction
 
-function! FormatInterview(label = "default") abort
+function FormatInterview(label = "default") 
 
 	if (a:label == "default")
 		let l:valid_label    = DoesFileNameMatchLabelRegex(expand('%:t:r'))
@@ -496,7 +497,7 @@ endfunction
 # -----------------------------------------------------------------
 # This function formats interview text to use in for Vimwiki interview coding. 
 # -----------------------------------------------------------------
-function! FormatInterviewB(interview_label) abort
+function FormatInterviewB(interview_label) 
 
 	call ParmCheck()
 
@@ -584,7 +585,7 @@ enddef
 # Provide page specific help based on the buffer nameProvide page specific
 # help based on the buffer name
 # -----------------------------------------------------------------
-function! PageHelp() abort
+function PageHelp() 
 
 	call ParmCheck()
 
@@ -741,7 +742,7 @@ function! PageHelp() abort
 
 endfunction
 
-function! DisplayPageHelp() abort
+function DisplayPageHelp() 
 	call popup_menu(g:page_help_list , 
 			\ #{ minwidth: 50,
 			\ maxwidth: 150,
@@ -754,7 +755,7 @@ endfunction
 # -----------------------------------------------------------------
 #
 # -----------------------------------------------------------------
-function! CreateBackupQuery() abort
+function CreateBackupQuery() 
 
 	call ParmCheck()
 	let l:today              = strftime("%Y-%m-%d")
@@ -784,7 +785,7 @@ endfunction
 # -----------------------------------------------------------------
 #
 # -----------------------------------------------------------------
-function! CreateBackup(id, result) abort
+function CreateBackup(id, result) 
 	if a:result == 1
 		#Save current buffer so it doesn't matter if we delete copied
 		#swap files.
@@ -816,7 +817,7 @@ endfunction
 # If it is a new window it names it using the label from line from which it is
 # called, adds a title label and the coders initials.
 # -----------------------------------------------------------------
-function! Annotation() abort
+function Annotation() 
 	
 	call ParmCheck()
 
@@ -974,7 +975,7 @@ endfunction
 # -----------------------------------------------------------------
 # This function exits an annotation window and resizes remaining windows
 # -----------------------------------------------------------------
-function! ExitAnnotation() abort
+function ExitAnnotation() 
 	
 	call ParmCheck()
 
@@ -1010,7 +1011,7 @@ endfunction
 # This function determines what kind of buffer the cursor is in (annotation or
 # interview) and decides whether to call Annotation() or ExitAnnotation()
 # -----------------------------------------------------------------
-function! AnnotationToggle() abort
+function AnnotationToggle() 
 
 	call ParmCheck()
 
@@ -1059,7 +1060,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! DeleteAnnotation() abort
+function DeleteAnnotation() 
 	
 	call ParmCheck()
 
@@ -1159,7 +1160,7 @@ endfunction
 # Finds a label-line number pair in a Summary buffer and uses that to to to
 # that location in an interview buffer.
 # -----------------------------------------------------------------
-function! GoToReference() abort
+function GoToReference() 
 	
 	call ParmCheck()
 
@@ -1200,7 +1201,7 @@ endfunction
 # -----------------------------------------------------------------
 # Returns to the place called by GoToReference().
 # -----------------------------------------------------------------
-function! GoBackFromReference() abort
+function GoBackFromReference() 
 	execute "normal! `Zzz"
 endfunction
 
@@ -1208,23 +1209,23 @@ endfunction
 # ---------------------------- REPORTS ----------------------------
 # -----------------------------------------------------------------
 
-function! FullReport(search_term)
+function FullReport(search_term)
 	call Report(a:search_term, "full", "FullReport", "no meta")
 endfunction
 
-function! AnnotationsReport(search_term)
+function AnnotationsReport(search_term)
 	call Report(a:search_term, "annotations", "AnnotationReport", "no meta") 
 endfunction
 
-function! QuotesReport(search_term)
+function QuotesReport(search_term)
 	call Report(a:search_term,  "quotes", "QuotesReport", "no meta") 
 endfunction
 
-function! MetaReport(search_term)
+function MetaReport(search_term)
 	call Report(a:search_term,  "meta", "MetaReport", "meta") 
 endfunction
 
-function! VWSReport(search_term)
+function VWSReport(search_term)
 	call Report(a:search_term, "VWS", "VWSReport", "meta") 
 endfunction
 
@@ -1232,7 +1233,7 @@ endfunction
 # This function produces summary reports for all tags defined in the 
 # tag glossary.
 # -----------------------------------------------------------------
-function! AllSummariesFull() abort
+function AllSummariesFull() 
 
 	call ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
@@ -1263,7 +1264,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! AllSummariesGenReportsFull(id, result)
+function AllSummariesGenReportsFull(id, result)
 	if a:result == 2
 		execute "normal! :delmarks Q\<CR>mQ"
 		call confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
@@ -1281,7 +1282,7 @@ endfunction
 # This function produces summary reports for all tags defined in the 
 # tag glossary.
 # -----------------------------------------------------------------
-function! AllSummariesQuotes() abort
+function AllSummariesQuotes() 
 
 	call ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
@@ -1312,7 +1313,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! AllSummariesGenReportsQuotes(id, result)
+function AllSummariesGenReportsQuotes(id, result)
 	if a:result == 2
 		execute "normal! :delmarks Q\<CR>mQ"
 		call confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
@@ -1329,7 +1330,7 @@ endfunction
 # -----------------------------------------------------------------
 # Generated list of file names from the g:in_both_lists list.
 # -----------------------------------------------------------------
-function! GenSummaryLists(type) abort
+function GenSummaryLists(type) 
 	let g:summary_file_list = []
 	let g:summary_link_list = []
 	for l:tag_index in range(0, (len(g:in_both_lists)-1))
@@ -1344,7 +1345,7 @@ endfunction
 # This builds a formatted report for the tag specified as the search_term
 # argument.
 # -----------------------------------------------------------------
-function! Gather(search_term) abort
+function Gather(search_term) 
 	
 	call ParmCheck()
 
@@ -1381,7 +1382,7 @@ function! Gather(search_term) abort
 	execute "normal! `R\"sp"
 endfunction
 
-function! Report(search_term, report_type = "full", function_name = "FullReport", meta = "no meta") abort
+function Report(search_term, report_type = "full", function_name = "FullReport", meta = "no meta") 
 	call ParmCheck()
 	
 	let g:tag_summary_file = g:tag_summaries_path . a:search_term . ".csv"
@@ -1516,7 +1517,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! GetInterviewFileList() abort
+function GetInterviewFileList() 
 	execute "normal! :cd %:p:h\<CR>"
 	# get a list of all the files and directories in the pwd. Note the
 	# fourth argument that is 1 makes it return a list. The first argument
@@ -1542,7 +1543,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! CrawlBufferTags(interview, interview_name) abort
+function CrawlBufferTags(interview, interview_name) 
 	# This is essentially the TagLinterFunction that copies the results to
 	# g:tags_list
 	let l:start_line = 2
@@ -1592,7 +1593,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! CalcInterviewTagCrosstabs(tags_list, unique_tags, interview_list, ext_length) abort
+function CalcInterviewTagCrosstabs(tags_list, unique_tags, interview_list, ext_length) 
 	#build the data structure that will hold the interview-tag crosstabs
 	let g:tag_count_dict       = {}
 	let g:initial_tag_dict     = {}
@@ -1647,7 +1648,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! FindLargestTagAndBlockCounts(tag_cross, unique_tags, interview_list, ext_length) abort
+function FindLargestTagAndBlockCounts(tag_cross, unique_tags, interview_list, ext_length) 
 	let l:largest_tag_count   = 0
 	let l:largest_block_count = 0
 
@@ -1667,7 +1668,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! PrintInterviewTagSummary(tag_cross, interview, unique_tags) abort
+function PrintInterviewTagSummary(tag_cross, interview, unique_tags) 
 	let l:total_tags   = 0
 	let l:total_blocks = 0
 
@@ -1703,7 +1704,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! PrintTagInterviewSummary(tag_cross, tag, interview_list) abort
+function PrintTagInterviewSummary(tag_cross, tag, interview_list) 
 	let l:total_tags   = 0
 	let l:total_blocks = 0
 
@@ -1739,7 +1740,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! GraphInterviewTagSummary(tag_cross, interview, unique_tags, longest_tag_length, bar_scale) abort
+function GraphInterviewTagSummary(tag_cross, interview, unique_tags, longest_tag_length, bar_scale) 
 	let l:bar_scale_print = printf("%.1f", a:bar_scale)
 
 	let l:report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
@@ -1767,7 +1768,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! GraphTagInterviewSummary(tag_cross, tag, interviews, longest_tag_length, bar_scale) abort
+function GraphTagInterviewSummary(tag_cross, tag, interviews, longest_tag_length, bar_scale) 
 	let l:bar_scale_print = printf("%.1f", a:bar_scale)
 
 	let l:report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
@@ -1795,7 +1796,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! CreateUniqueTagList(tags_desc) abort
+function CreateUniqueTagList(tags_desc) 
 	let l:unique_tags = []
 	for index in range(0, len(a:tags_desc) - 1)
 		if (index(l:unique_tags, a:tags_desc[index][2]) == -1)
@@ -1808,7 +1809,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! FindLengthOfLongestTag(tag_list) abort
+function FindLengthOfLongestTag(tag_list) 
 	let l:longest_tag_length = 0
 	for index in range(0, len(a:tag_list)-1)
 		let l:test_length = len(a:tag_list[index])
@@ -1822,7 +1823,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! TagStats() abort
+function TagStats() 
 
 	call ParmCheck()
 	
@@ -1898,7 +1899,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! PopulateQuoteLineList() abort
+function PopulateQuoteLineList() 
 	let g:current_line_dict   = {}
 	let g:current_line_dict = { "int_name"    : g:current_buf_name,
 				\   "bufnr"       : g:ll_bufnr,
@@ -1922,7 +1923,7 @@ function! PopulateQuoteLineList() abort
 	endif
 endfunction
 
-function! BuildListOfCrossCodes(text_w_meta) abort
+function BuildListOfCrossCodes(text_w_meta) 
 	let l:tag_test = matchstrpos(a:text_w_meta, ':\a.\{-}:', 0)
 	while (l:tag_test[1] != -1)
 		if (index(g:cross_codes, l:tag_test[0]) == -1)
@@ -1935,7 +1936,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! ProcessInterviewLines(meta, report_type, search_term) abort
+function ProcessInterviewLines(meta, report_type, search_term) 
 	if has_key(g:quote_dict, g:interview_list[g:int_index])
 		if a:report_type != "VWS"
 			let @s = @s . "**TAGGED LINES:**\n\n"
@@ -1989,7 +1990,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! ProcessInterviewTitle(interview) abort
+function ProcessInterviewTitle(interview) 
 	let g:attribute_line = GetAttributeLine(a:interview)
 
 	let g:interview_title = "\n# ======================================\n# INTERVIEW: "
@@ -2003,7 +2004,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! GetInterviewLineInfo(line_text) abort
+function GetInterviewLineInfo(line_text) 
 	let l:interview_label_position      = match(a:line_text, g:tag_search_regex)
 	let l:interview_line_num_pos        = match(a:line_text, ' \d\{4}', l:interview_label_position)
 	let l:current_interview_line_number = str2nr(a:line_text[(l:interview_line_num_pos + 1):(l:interview_line_num_pos + 4)])
@@ -2013,7 +2014,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! CreateSummaryCountTableLine() abort
+function CreateSummaryCountTableLine() 
 	
 	let l:number_of_blocks = 0
 	let l:number_of_lines  = 0
@@ -2051,7 +2052,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! ProcessAnnotationLines() abort
+function ProcessAnnotationLines() 
 	if has_key(g:anno_dict, g:interview_list[g:int_index])
 		let l:annos = len(g:anno_dict[g:interview_list[g:int_index]])
 		let g:int_annos = ""
@@ -2071,7 +2072,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! PopulateAnnoLineList(buf_type) abort
+function PopulateAnnoLineList(buf_type) 
 	let g:current_anno_dict           = {}
 	let g:current_anno_int_name       = GetAnnoInterview(g:current_buf_name)
 	let g:anno_text                   = GetAnnoText(g:ll_bufnr)
@@ -2094,7 +2095,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! GetAnnoInterview(buffer_name) abort
+function GetAnnoInterview(buffer_name) 
 	let l:line_num_loc  = match(a:buffer_name, ':')
 	let l:cropped_name  = a:buffer_name[0:l:line_num_loc-1]
 	return l:cropped_name
@@ -2103,7 +2104,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! GetAnnoText(bufnr) abort
+function GetAnnoText(bufnr) 
 	# Go to the Location List result under the cursor.
 	execute "normal! :buffer " . a:bufnr . "\<CR>"
 	# Copy the annotation text.
@@ -2114,7 +2115,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! CreateCSVRecord(search_term, block_index, line_index) abort
+function CreateCSVRecord(search_term, block_index, line_index) 
 	# -----------------------------------------------------------------
 	# Build output record
 	# -----------------------------------------------------------------
@@ -2136,7 +2137,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! FindBufferType(current_buf_name) abort
+function FindBufferType(current_buf_name) 
 	if match(a:current_buf_name, "Summary") != -1
 		return "Summary"
 	elseif match(a:current_buf_name, ': \d\{4}') != -1
@@ -2151,7 +2152,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! RemoveMetadata(line_text) abort
+function RemoveMetadata(line_text) 
 	# -----------------------------------------------------------------
 	#  There is something strange going on here. You shouldn't
 	#  have to go back 6 columns from the match. If you don't you
@@ -2168,7 +2169,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! AddReportHeader(report_type, search_term) abort
+function AddReportHeader(report_type, search_term) 
 	let l:report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
 	let l:report_header = "\n# *********************************************************************************\n"
 	let l:report_header = l:report_header . "# *********************************************************************************\n"
@@ -2182,7 +2183,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! GetAttributeLine(interview) abort
+function GetAttributeLine(interview) 
 	# -----------------------------------------------------------------
 	# Go to the Location List result under the cursor.
 	# -----------------------------------------------------------------
@@ -2200,7 +2201,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! TrimLeadingPartialSentence() abort
+function TrimLeadingPartialSentence() 
 	#execute "normal! vip\"by"
 	#execute "normal! `<v)hx"
 	execute "normal! 0v)hx"
@@ -2209,7 +2210,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! TrimTrailingPartialSentence() abort
+function TrimTrailingPartialSentence() 
 	execute "normal! $"
 	let g:trim_tail_regex = '**' . g:tag_search_regex
 	let g:tag_test = search(g:trim_tail_regex, 'b', line("."))
@@ -2222,7 +2223,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! TrimLeadingAndTrailingPartialSentence() abort
+function TrimLeadingAndTrailingPartialSentence() 
 	call TrimLeadingPartialSentence()
 	call TrimTrailingPartialSentence()
 endfunction
@@ -2243,7 +2244,7 @@ augroup END
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! TagsLoadedCheck() abort
+function TagsLoadedCheck() 
 	if has_key(g:vimwiki_list[vimwiki#vars#get_bufferlocal('wiki_nr')], 'vwqc')
 		if (!exists("g:last_wiki"))
 			call ParmCheck()
@@ -2264,7 +2265,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! GetTagUpdate() abort
+function GetTagUpdate() 
 
 	call ParmCheck()
 
@@ -2327,7 +2328,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! GenTagsWithLocationList() abort
+function GenTagsWithLocationList() 
 	call ParmCheck()
 	# Change the pwd to that of the current wiki.
 	execute "normal! :cd %:p:h\<CR>"
@@ -2363,7 +2364,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! UpdateCurrentTagsPage() abort
+function UpdateCurrentTagsPage() 
 	# -----------------------------------------------------------------
 	# Use R mark to know how to get back
 	# -----------------------------------------------------------------
@@ -2392,7 +2393,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! UpdateCurrentTagsList() abort
+function UpdateCurrentTagsList() 
 	let g:tag_dict_keys 		= keys(g:tag_dict)
 	let g:tag_dict_keys 		= sort(g:tag_dict_keys, 'i')
 	
@@ -2429,7 +2430,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! TagsGenThisSession() abort
+function TagsGenThisSession() 
 	
 	call ParmCheck()
 
@@ -2469,7 +2470,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! ToggleDoubleColonOmniComplete() abort
+function ToggleDoubleColonOmniComplete() 
 	if maparg("::", "i") == ""
 		inoremap :: <ESC>a:<ESC>:call TagsGenThisSession()<CR>
 		call confirm("Double colon (::) omni-completion on.", "Got it", 1)
@@ -2482,7 +2483,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! GenDictTagList() abort
+function GenDictTagList() 
 	let g:dict_tags = []
 	for l:tag_index in range(0, (len(g:current_tags)-1))
  		if has_key(g:tag_dict, g:current_tags[l:tag_index])
@@ -2494,7 +2495,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! CreateTagDict() abort
+function CreateTagDict() 
 	# -----------------------------------------------------------------
 	# Change the pwd to that of the current wiki.
 	# -----------------------------------------------------------------
@@ -2535,7 +2536,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! CurrentTagsPopUpMenu() abort
+function CurrentTagsPopUpMenu() 
 	call popup_menu(g:tag_list_output , 
 				\ #{ minwidth: 50,
 				\ maxwidth: 50,
@@ -2548,7 +2549,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! NoTagListNotice(tag_message) abort
+function NoTagListNotice(tag_message) 
 	if (a:tag_message == 1)
 		let s:popup_message = "Press <F2> to populate the current tag list."
 	elseif (a:tag_message == 2)
@@ -2562,7 +2563,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! TagFillWithChoiceOLD() abort
+function TagFillWithChoiceOLD() 
 	# ---------------------------------------------
 	# Create an empty matched-tag-list
 	# ---------------------------------------------
@@ -2721,7 +2722,7 @@ endfunction
 # :changes into register c and then searching it for the
 # first tag. 
 # ------------------------------------------------------------
-function! FindLastTagAddedToBuffer() abort
+function FindLastTagAddedToBuffer() 
 	# ------------------------------------------------------------
 	#  Redirect output to register changes variable
 	# ------------------------------------------------------------
@@ -2764,7 +2765,7 @@ function! FindLastTagAddedToBuffer() abort
 	endif
 endfunction
 
-function! FillChosenTag(id, result) abort
+function FillChosenTag(id, result) 
 	# ------------------------------------------------------------
 	# When ESC is press the a:result value will be -1. So take no action.
 	# ------------------------------------------------------------
@@ -2805,7 +2806,7 @@ function! FillChosenTag(id, result) abort
 	endif
 endfunction
 	
-function! TagFillWithChoice() abort
+function TagFillWithChoice() 
 	# ---------------------------------------------
 	# Set tag fill mode
 	# ---------------------------------------------
@@ -2848,7 +2849,7 @@ function! TagFillWithChoice() abort
 	execute "normal! zzA "
 endfunction
 
-function! FillTagBlock(id, result) abort
+function FillTagBlock(id, result) 
 	# ------------------------------------------------------------
 	# When ESC is press the a:result value will be -1. So take no action.
 	# ------------------------------------------------------------
@@ -2882,7 +2883,7 @@ function! FillTagBlock(id, result) abort
 	endif
 endfunction
 
-function! CreateFillLine(line) abort
+function CreateFillLine(line) 
 	let g:meta_fill_line = ""
 	for l:tags in range(0, len(g:block_tags_list) - 1)
 		if has_key(g:tag_block_dict, a:line)
@@ -2902,7 +2903,7 @@ function! CreateFillLine(line) abort
 	let g:meta_fill_line = g:meta_fill_line . " " . g:tag_block_dict[a:line][1]
 endfunction
 
-function! FindFirstInterviewLine()
+function FindFirstInterviewLine()
 	execute "normal! gg"
 	let g:tag_search_regex = g:interview_label_regex . '\: \d\{4}'
 	let g:first_interview_line = search(g:tag_search_regex, "W")
@@ -2910,7 +2911,7 @@ function! FindFirstInterviewLine()
 endfunction
 	
 
-function! CreateBlockMetadataDict() abort
+function CreateBlockMetadataDict() 
 
 	let g:block_metadata             = {}
 	let g:tags_on_line               = []
@@ -2972,7 +2973,7 @@ function! CreateBlockMetadataDict() abort
 	let g:block_tags_list = sort(g:block_tags_list)
 endfunction
 
-function! CreateSubBlocksLists() abort
+function CreateSubBlocksLists() 
 	let g:sub_blocks_tags_lists = []
 	let l:found_block = 0
 	for l:line_index in range(str2nr(g:block_lines[0]), str2nr(g:block_lines[-1]))
@@ -2999,7 +3000,7 @@ function! CreateSubBlocksLists() abort
 	endfor
 endfunction
 
-function! BuildMetadataBlockFill(id, result) abort
+function BuildMetadataBlockFill(id, result) 
 
 	let g:fill_tag = g:block_tags_list[a:result - 1]
 
@@ -3037,14 +3038,14 @@ function! BuildMetadataBlockFill(id, result) abort
 	call WriteInFormattedTagMetadata()
 endfunction
 
-function! AddFillTags() abort
+function AddFillTags() 
 	for l:line_index in range(g:upper_fill_line + 1, str2nr(g:block_lines[-1]))
 		let g:block_metadata[l:line_index][2] = g:block_metadata[l:line_index][2] + [ g:fill_tag ]
 		let g:block_metadata[l:line_index][2] = sort(g:block_metadata[l:line_index][2]) 
 	endfor
 endfunction
 
-function! FindUpperTagFillLine() abort
+function FindUpperTagFillLine() 
 	for l:line_index in range(str2nr(g:block_lines[0]), str2nr(g:block_lines[-1]))
 		if (index(g:block_metadata[l:line_index][2], g:fill_tag) != -1)
 			let g:upper_fill_line = l:line_index
@@ -3052,7 +3053,7 @@ function! FindUpperTagFillLine() abort
 	endfor
 endfunction
 
-function! WriteInFormattedTagMetadata() abort
+function WriteInFormattedTagMetadata() 
 	set virtualedit=all
 	for l:line_index in range(str2nr(g:block_lines[0]), str2nr(g:block_lines[-1]))
 		call cursor(l:line_index, 0)
@@ -3066,7 +3067,7 @@ function! WriteInFormattedTagMetadata() abort
 	execute "normal! zzA "
 endfunction
 
-function! ProcessLineMetadata() abort
+function ProcessLineMetadata() 
 	let g:tags_on_line            = []
 	let g:non_tag_metadata        = ""
 
@@ -3098,7 +3099,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! ChangeTagFillOption() abort
+function ChangeTagFillOption() 
 	if (!exists("g:tag_fill_option"))
 		let g:tag_fill_option = "last tag added"
 		call confirm("Default tag presented when F5 is pressed will be the last tag added to the buffer.",  "OK", 1)
@@ -3115,7 +3116,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! SortTagDefs() abort
+function SortTagDefs() 
 	execute "normal! :%s/}/}\\r/g\<CR>"
 	execute "normal! :g/{/,/}/s/\\n/TTT\<CR>"
 	execute "normal! :3,$sort \i\<CR>"
@@ -3127,7 +3128,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! GetTagDef() abort
+function GetTagDef() 
 	
 	call ParmCheck()
 
@@ -3170,7 +3171,7 @@ endfunction
 # See if word under cursor is a tag. ie. a word surrounded by colons
 # Test case where the cursor is on white space.
 # -----------------------------------------------------------------
-function! GetTagUnderCursor() abort        
+function GetTagUnderCursor() abort        
 	execute "normal! viWy"        
 	let l:word_under_cursor             = @@ 
 	# Want tag_test to be 0
@@ -3189,7 +3190,7 @@ endfunction
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function! AddNewTagDef(id, result) abort
+function AddNewTagDef(id, result) 
 	if a:result == 1
 		# -----------------------------------------------------------------
 		# Save buffer number of current file to register 'a' so you can return here
@@ -3216,7 +3217,7 @@ endfunction
 # Generates a list of interview files in the wiki. This includes the file
 # extension which is likely .md
 # ------------------------------------------------------
-function! GetInterviewFileList() abort
+function GetInterviewFileList() 
 	execute "normal! :cd %:p:h\<CR>"
 	# get a list of all the files and directories in the pwd. Note the
 	# fourth argument that is 1 makes it return a list. The first argument
@@ -3241,7 +3242,7 @@ endfunction
 # ------------------------------------------------------
 
 # ------------------------------------------------------
-function! Attributes(sort_col = 1) abort
+function Attributes(sort_col = 1) 
 	
 	call ParmCheck()
 
@@ -3290,7 +3291,7 @@ endfunction
 # ------------------------------------------------------
 # Sort the Attribute table by column number
 # ------------------------------------------------------
-function! ColSort(column) abort
+function ColSort(column) 
 	let g:sort_regex = "/\\(.\\{-}\\zs|\\)\\{" . a:column . "}/"
 	execute "normal! :sort " . g:sort_regex . "\<CR>"
 endfunction
@@ -3302,7 +3303,7 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function! UpdateSubcode() abort
+function UpdateSubcode() 
 	
 	call ParmCheck()
 
@@ -3354,7 +3355,7 @@ function! UpdateSubcode() abort
 	execute "normal! \<C-w>k:lclose\<CR>\<C-w>j:q!\<CR>"
 endfunction
 
-function! CorrectAttributeLines() abort
+function CorrectAttributeLines() 
 	
 	call ParmCheck()
 
@@ -3391,13 +3392,13 @@ function! CorrectAttributeLines() abort
 	endfor
 endfunction
 
-function! Fix() abort
+function Fix() 
 		execute "normal! :1,1s/:/: :/g\<CR>"
 		execute "normal! :1,1s/^: :/:/\<CR>"
 		execute "normal! :1,1s/: :$/:/\<CR>"
 endfunction
 
-function! CreateBlockMetadataDictOLD() abort
+function CreateBlockMetadataDictOLD() 
 	# Read back from where the tag is and copy the tags you find into a
 	# list (one for each line in the block). Sort each line's tags and add
 	# create a tag list for the whole block. You have this code. Also add
