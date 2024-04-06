@@ -2244,30 +2244,30 @@ augroup END
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function TagsLoadedCheck() 
+def TagsLoadedCheck() 
 	if has_key(g:vimwiki_list[vimwiki#vars#get_bufferlocal('wiki_nr')], 'vwqc')
 		if (!exists("g:last_wiki"))
-			call ParmCheck()
-			let l:last_wiki_warning = "No VWQC wiki tags have been populated this session. " .
-						\ "Press <F2> to update tags."
-			call confirm(l:last_wiki_warning, "OK", 1)
+			ParmCheck()
+			var l:last_wiki_warning = "No VWQC wiki tags have been populated this session. " .
+						 "Press <F2> to update tags."
+			confirm(l:last_wiki_warning, "OK", 1)
 		elseif (g:last_wiki != vimwiki#vars#get_bufferlocal('wiki_nr'))
-			let l:last_wiki = g:last_wiki
+			var l:last_wiki = g:last_wiki
 			call ParmCheck()
-			let l:last_wiki_warning = "The currently-loaded VWQC tags are for another project. " .
-						\ "Press <F2> to load tags for this project."
+			var l:last_wiki_warning = "The currently-loaded VWQC tags are for another project. " .
+						 "Press <F2> to load tags for this project."
 			call confirm(l:last_wiki_warning, "OK", 1)
 		endif
 	endif	
 
-endfunction
+enddef
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
 function GetTagUpdate() 
 
-	call ParmCheck()
+	ParmCheck()
 
 	call confirm("Populating tags. This may take a while.", "Got it", 1)
 	call CreateTagDict()
@@ -2328,8 +2328,8 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function GenTagsWithLocationList() 
-	call ParmCheck()
+def GenTagsWithLocationList() 
+	ParmCheck()
 	# Change the pwd to that of the current wiki.
 	execute "normal! :cd %:p:h\<CR>"
 	# Call VimwikiSearchTags against the a:search_term argument.
@@ -2337,29 +2337,29 @@ function GenTagsWithLocationList()
 	# dictionaries that we'll process.
 	silent execute "normal! :VimwikiSearch /" . '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' . "/g\<CR>"
 
-	let g:loc_list = getloclist(0)
-	let g:tag_list = []
+	var g:loc_list = getloclist(0)
+	var g:tag_list = []
 
-	let g:num_search_results = len(g:loc_list)
+	var g:num_search_results = len(g:loc_list)
 
-	let l:first_col = g:loc_list[0]['col'] 
-	let l:last_col  = g:loc_list[0]['end_col'] - 3
-	let g:test_tag  = g:loc_list[0]['text'][l:first_col:l:last_col]
+	var first_col = g:loc_list[0]['col'] 
+	var last_col  = g:loc_list[0]['end_col'] - 3
+	var g:test_tag  = g:loc_list[0]['text'][first_col:last_col]
 
 	if g:loc_list[0]['lnum'] > 1
-		let g:tag_list = g:tag_list + [ g:test_tag ]
+		g:tag_list = g:tag_list + [ g:test_tag ]
 	endif
 
 	for g:line_index in range(1, g:num_search_results - 1)
-		let l:first_col = g:loc_list[g:line_index]['col'] 
-		let l:last_col  = g:loc_list[g:line_index]['end_col'] - 3
-		let g:test_tag = g:loc_list[g:line_index]['text'][l:first_col:l:last_col]
+		first_col = g:loc_list[g:line_index]['col'] 
+		last_col  = g:loc_list[g:line_index]['end_col'] - 3
+		g:test_tag = g:loc_list[g:line_index]['text'][first_col:last_col]
 		if (index(g:tag_list, g:test_tag) == -1)
 			let g:tag_list = g:tag_list + [ g:test_tag ]
 		endif
 	endfor	
-	let g:current_tags = deepcopy(g:tag_list)
-endfunction
+	var g:current_tags = deepcopy(g:tag_list)
+enddef
 
 # ------------------------------------------------------
 #
@@ -2549,16 +2549,17 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function NoTagListNotice(tag_message) 
-	if (a:tag_message == 1)
-		let s:popup_message = "Press <F2> to populate the current tag list."
+def NoTagListNotice(tag_message) 
+	
+	if (tag_message == 1)
+		var popup_message = "Press <F2> to populate the current tag list."
 	elseif (a:tag_message == 2)
-		let s:popup_message = "A tag list for this wiki has not been generated yet this session. Press <F2> to populate the current tag list with this wiki\'s tags."
+		var popup_message = "A tag list for this wiki has not been generated yet this session. Press <F2> to populate the current tag list with this wiki\'s tags."
 	else 
-		let s:popup_message = "Update the tag list with this wiki\'s tags by pressing <F2>."
+		var popup_message = "Update the tag list with this wiki\'s tags by pressing <F2>."
 	endif
-	call confirm(s:popup_message, "Got it", 1)
-endfunction
+	confirm(popup_message, "Got it", 1)
+enddef
 
 # ------------------------------------------------------
 #
