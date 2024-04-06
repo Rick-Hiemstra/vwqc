@@ -3214,32 +3214,6 @@ endfunction
 # -----------------------------------------------------------------
 
 # ------------------------------------------------------
-# Generates a list of interview files in the wiki. This includes the file
-# extension which is likely .md
-# ------------------------------------------------------
-function GetInterviewFileList() 
-	execute "normal! :cd %:p:h\<CR>"
-	# get a list of all the files and directories in the pwd. Note the
-	# fourth argument that is 1 makes it return a list. The first argument
-	# '.' means the current directory and the second argument '*' means
-	# all.
-	let g:file_list_all = globpath('.', '*', 0, 1)
-	# build regex we'll use just to find our interview files. 
-	let g:file_regex = g:interview_label_regex . '.md'
-	#  cull the list for just those files that are interview files. the
-	#  match is at position 2 because the globpath function prefixes
-	#  filenames with ./ which occupies positions 0 and 1.
-	let g:interview_list = []
-	for list_item in range(0, (len(g:file_list_all)-1))
-		if (match(g:file_list_all[list_item], g:file_regex) == 2) 
-			# strip off the leading ./
-			let g:file_to_add = g:file_list_all[list_item][2:]
-			let g:interview_list = g:interview_list + [g:file_to_add]
-		endif
-	endfor
-endfunction
-
-# ------------------------------------------------------
 
 # ------------------------------------------------------
 function Attributes(sort_col = 1) 
