@@ -709,58 +709,61 @@ enddef
 # -----------------------------------------------------------------
 #
 # -----------------------------------------------------------------
-function CreateBackupQuery() 
+def CreateBackupQuery() 
 
-	call ParmCheck()
-	let l:today              = strftime("%Y-%m-%d")
-	let l:time_now           = strftime("%H-%M-%S")
-	let g:backup_path        = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") . "Backups/"
-	let g:backup_folder_name = l:today . " at " . l:time_now . " Backup by " . g:coder_initials . "/"
-	let g:new_backup_path    = g:backup_path . g:backup_folder_name
-	let g:backup_list        = globpath(g:backup_path, '*', 0, 1)
+	ParmCheck()
+
+	var today              = strftime("%Y-%m-%d")
+	var time_now           = strftime("%H-%M-%S")
+	g:backup_path          = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") .. "Backups/"
+	g:backup_folder_name   = today .. " at " .. time_now .. " Backup by " .. g:coder_initials . "/"
+	g:new_backup_path      = g:backup_path .. g:backup_folder_name
+	g:backup_list          = globpath(g:backup_path, '*', 0, 1)
 
 	if len(g:backup_list) > 0
-		let g:last_backup        = substitute(g:backup_list[-1], g:backup_path, "", "g")
-		let g:backup_message     = "The last backup was: " . g:last_backup . ". Make a new backup now?"
+		g:last_backup        = substitute(g:backup_list[-1], g:backup_path, "", "g")
+		g:backup_message     = "The last backup was: " .. g:last_backup .. ". Make a new backup now?"
 	else
-		let g:backup_message     = "No backups found. Make a backup now?"
+		g:backup_message     = "No backups found. Make a backup now?"
 	endif
 			
-	call popup_menu(["Yes", "No"], #{
-		\ title:    g:backup_message   ,
-		\ callback: 'CreateBackup'  , 
-		\ highlight: 'Question'       ,
-		\ border:     []              ,
-		\ close:      'click'         , 
-		\ padding:    [0,1,0,1],
-		\ })
-endfunction
+	popup_menu(["Yes", "No"], {
+		 title:    g:backup_message,
+		 callback: 'CreateBackup', 
+		 highlight: 'Question',
+		 border:     [],
+		 close:      'click', 
+		 padding:    [0,1,0,1],
+		 })
+enddef
 
 # -----------------------------------------------------------------
 #
 # -----------------------------------------------------------------
-function CreateBackup(id, result) 
-	if a:result == 1
+def CreateBackup(id, result) 
+	var backup_message = "Backup message not set."
+
+	if result == 1
 		#Save current buffer so it doesn't matter if we delete copied
 		#swap files.
 		execute "normal! :w\<CR>"
-		call mkdir(g:new_backup_path, "p")
-		let g:copy_command  = 'cp -R "' . g:vimwiki_wikilocal_vars[g:wiki_number]['path'] . '" "' . g:new_backup_path . '"'
-		let g:clean_up_swo = 'rm -f "' . g:new_backup_path . '"' . '.*.swo'
-		let g:clean_up_swp = 'rm -f "' . g:new_backup_path . '"' . '.*.swp'
-		let g:clean_up_swn = 'rm -f "' . g:new_backup_path . '"' . '.*.swn'
+		mkdir(g:new_backup_path, "p")
+		let g:copy_command  = 'cp -R "' .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. '" "' .. g:new_backup_path .. '"'
+		let g:clean_up_swo = 'rm -f "' .. g:new_backup_path .. '"' .. '.*.swo'
+		let g:clean_up_swp = 'rm -f "' .. g:new_backup_path .. '"' .. '.*.swp'
+		let g:clean_up_swn = 'rm -f "' .. g:new_backup_path .. '"' .. '.*.swn'
 		call system(g:copy_command)
 		call system(g:clean_up_swo)
 		call system(g:clean_up_swp)
 		call system(g:clean_up_swn)
-		let l:backup_message 	   = "A new back up has been created at: " . g:new_backup_path
+		backup_message 	   = "A new back up has been created at: " .. g:new_backup_path
 	else
-		let l:backup_message       = "Backup not created."		
+		backup_message       = "Backup not created."		
 	endif
 	
-	call confirm(l:backup_message,  "OK", 1)
+	confirm(backup_message,  "OK", 1)
 	
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # --------------------------- NAVIGATION  -------------------------
