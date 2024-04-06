@@ -335,7 +335,7 @@ def GetVWQCProjectParameters()
 		g:vwqc_config_vars_added = AugmentVimwikiLocalVars()
 	endif
 
-	var g:wiki_number                    = vimwiki#vars#get_bufferlocal('wiki_nr') 
+	g:wiki_number                        = vimwiki#vars#get_bufferlocal('wiki_nr') 
 	var g:wiki_number_base_one           = g:wiki_number + 1
 	var g:current_wiki_name              = "wiki_" . g:wiki_number_base_one
 
@@ -417,46 +417,46 @@ enddef
 # -----------------------------------------------------------------
 # This function creates a pop-up window with the current project's parameters
 # -----------------------------------------------------------------
-function ListProjectParameters() 
+def ListProjectParameters() 
 
-	call ParmCheck()
+	ParmCheck()
 			
-	let l:base0                = "Base 0 wiki #        " . g:wiki_number
-	let l:base1                = "Base 1 wiki #        " . g:wiki_number_base_one
-	let l:list_path            = "Path:                " . g:vimwiki_wikilocal_vars[g:wiki_number]['path']
-        let l:list_ext		   = "Ext:                 " . g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-	let l:list_regex           = "Label regex:         " . g:interview_label_regex
-	let l:list_text_width      = "Text col width:      " . g:text_col_width
-	let l:list_border_offset   = "Label border col:    " . g:border_offset
-	let l:list_header_template = "Header template:     " . g:int_header_template
-	let l:list_tag_summaries   = "Tag summaries:       " . g:tag_summaries_path
-	let l:list_subcode         = "Sub-code dictionary: " . g:subcode_dictionary_path
-	let l:list_glossary        = "Tag glossary:        " . g:glossary_path
-	let l:list_coder           = "Coder initials:      " . g:coder_initials
+	var base0                = "Base 0 wiki #        " . g:wiki_number
+	var base1                = "Base 1 wiki #        " . g:wiki_number_base_one
+	var list_path            = "Path:                " . g:vimwiki_wikilocal_vars[g:wiki_number]['path']
+        var list_ext		   = "Ext:                 " . g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+	var list_regex           = "Label regex:         " . g:interview_label_regex
+	var list_text_width      = "Text col width:      " . g:text_col_width
+	var list_border_offset   = "Label border col:    " . g:border_offset
+	var list_header_template = "Header template:     " . g:int_header_template
+	var list_tag_summaries   = "Tag summaries:       " . g:tag_summaries_path
+	var list_subcode         = "Sub-code dictionary: " . g:subcode_dictionary_path
+	var list_glossary        = "Tag glossary:        " . g:glossary_path
+	var list_coder           = "Coder initials:      " . g:coder_initials
  	
-	let g:vwqc_proj_parm_list =    ["CURRENT PROJECT CONFIGURATION", " ", 
-					\ l:base0                 ,
-					\ l:base1                 ,
-					\ " "                     ,
-					\ l:list_path             ,
-					\ l:list_ext		  ,
-					\ l:list_regex            ,
-					\ l:list_text_width       ,
-					\ l:list_border_offset    ,
-					\ l:list_header_template  ,
-					\ l:list_tag_summaries    ,
-					\ l:list_subcode          ,
-					\ l:list_glossary         ,
-					\ l:list_coder            ]
-	call popup_menu(g:vwqc_proj_parm_list , 
-				\ #{ minwidth: 50,
-				\ maxwidth: 250,
-				\ pos: 'center',
-				\ border: [],
-				\ close: 'click',
-				\ })
+	var g:vwqc_proj_parm_list =    ["CURRENT PROJECT CONFIGURATION", " ", 
+					 base0                 ,
+					 base1                 ,
+					 " "                     ,
+					 list_path             ,
+					 list_ext		  ,
+					 list_regex            ,
+					 list_text_width       ,
+					 list_border_offset    ,
+					 list_header_template  ,
+					 list_tag_summaries    ,
+					 list_subcode          ,
+					 list_glossary         ,
+					 list_coder            ]
+	popup_menu(g:vwqc_proj_parm_list , 
+				 { minwidth: 50,
+				 maxwidth: 250,
+				 pos: 'center',
+				 border: [],
+				 close: 'click',
+				 })
 
-endfunction
+enddef
 
 function DoesFileNameMatchLabelRegex(test_value) 
 	if (match(a:test_value, g:interview_label_regex) == 0)
