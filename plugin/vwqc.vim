@@ -332,7 +332,7 @@ endfunction
 def GetVWQCProjectParameters() 
 	# Add non-vimwiki wiki definition variables to g:vimwiki_wikilocal_vars
 	if !exists("g:vwqc_config_vars_added")
-		var g:vwqc_config_vars_added = AugmentVimwikiLocalVars()
+		g:vwqc_config_vars_added = AugmentVimwikiLocalVars()
 	endif
 
 	var g:wiki_number                    = vimwiki#vars#get_bufferlocal('wiki_nr') 
