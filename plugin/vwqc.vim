@@ -571,10 +571,10 @@ endfunction
 # So run this and then set a g:vwqc_config_vars_added flag 
 # ------------------------------------------------------------------------------
 def AugmentVimwikiLocalVars() 
-	for l:wiki in range(0, (len(g:vimwiki_list) - 1))
-		for l:key in keys(g:vimwiki_list[l:wiki])
-			if !has_key(g:vimwiki_wikilocal_vars[l:wiki], l:key)
-				var g:vimwiki_wikilocal_vars[l:wiki][l:key] = g:vimwiki_list[l:wiki][l:key]
+	for wiki in range(0, (len(g:vimwiki_list) - 1))
+		for key in keys(g:vimwiki_list[wiki])
+			if !has_key(g:vimwiki_wikilocal_vars[wiki], key)
+				var g:vimwiki_wikilocal_vars[wiki][key] = g:vimwiki_list[wiki][key]
 			endif
 		endfor
 	endfor
