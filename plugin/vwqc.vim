@@ -739,7 +739,7 @@ enddef
 # -----------------------------------------------------------------
 #
 # -----------------------------------------------------------------
-def CreateBackup(id, result) 
+def g:CreateBackup(id, result) 
 	var backup_message = "Backup message not set."
 
 	if result == 1
