@@ -222,7 +222,7 @@ enddef
 # This sets up a project from a blank Vimwiki index page
 # ------------------------------------------------------
 
-def g:ProjectSetup() 
+def ProjectSetup() 
 	execute "normal! gg"
 	var g:index_page_content_test = search('\S', 'W')
 	if (g:index_page_content_test != 0)
@@ -279,7 +279,7 @@ enddef
 # -----------------------------------------------------------------
 # This function finds the current VWQC project parameters
 # -----------------------------------------------------------------
-def g:GetVWQCProjectParameters() 
+def GetVWQCProjectParameters() 
 	# Add non-vimwiki wiki definition variables to g:vimwiki_wikilocal_vars
 	if !exists("g:vwqc_config_vars_added")
 		g:vwqc_config_vars_added = AugmentVimwikiLocalVars()
