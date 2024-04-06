@@ -362,7 +362,7 @@ def GetVWQCProjectParameters()
 	#has_template = has_key("g:" ..  g:current_wiki_name .. ", 'interview_header_template')\<CR>"
 	#execute "normal! :has_template = has_key(g:" ..  g:current_wiki_name .. ", 'interview_header_template')\<CR>"
 	if (has_template == 1) 
-		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'] = g:" . g:current_wiki_name . ".interview_header_template\<CR>" 
+		execute "normal! :var g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'] = g:" .. g:current_wiki_name .. ".interview_header_template\<CR>" 
 		var g:int_header_template    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'])
 	else
 		var g:int_header_template    = expand(g:extras_path .. "interview_header_template.txt")
