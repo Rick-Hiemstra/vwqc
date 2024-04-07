@@ -1552,7 +1552,7 @@ enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-def CalcInterviewTagCrosstabs(tags_list: list<string>, unique_tags: list<string>, interview_list: list<string>, ext_length: number): dict
+def CalcInterviewTagCrosstabs(tags_list: list<string>, unique_tags: list<string>, interview_list: list<string>, ext_length: number): dict<any>
 	#build the data structure that will hold the interview-tag crosstabs
 	g:tag_count_dict       = {}
 	g:initial_tag_dict     = {}
