@@ -51,7 +51,7 @@ endif
 # Change the Gather() function so that it will give you an error message if
 # you try to use it in a non-quotes report (or other kind of buffer).
 #
-# Add the .vwqc key-value pair to the wiki definitions.
+# Add thevwqc key-value pair to the wiki definitions.
 # 
 
 # -----------------------------------------------------------------
@@ -267,7 +267,7 @@ def CreateDefaultInterviewHeader()
 					 "First pass:  \n" ..
        				         "Second pass: \n" ..
        				         "Review: \n" ..
-       				         "Handwritten interview notes: [[file:]]\n" .. 
+       				         "Handwritten interview notes: [[file:]]\n" ..
        				         "Audio Recording: [[file:]]\n" ..
        				         "\n" ..  
        				         "====================\n" .. 
@@ -304,9 +304,9 @@ def GetVWQCProjectParameters()
 	
 	g:project_name           = g:vimwiki_wikilocal_vars[g:wiki_number]['name']
 
-	g:extras_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") .. g:project_name .. "_extras/"
+	g:extras_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g"). g:project_name .. "_extras/"
 
-	g:backup_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") .. g:project_name .. " Backups/"
+	g:backup_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g"). g:project_name .. " Backups/"
 
 	# If header template location is explicitly defined then use it, otherwise use default file.
 	var has_template = 0
@@ -339,7 +339,7 @@ def GetVWQCProjectParameters()
 		g:tag_summaries_path       = expand(g:extras_path .. "tag_summaries/")
 	endif
 
-	g:glossary_path                    = g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag Glossary.md"
+	g:glossary_path                    = g:vimwiki_wikilocal_vars[g:wiki_number]['path']. "Tag Glossary.md"
 
 	var has_coder = 0
 	execute "normal! :let has_coder = has_key(g:" .. g:current_wiki_name .. ", 'coder_initials')\<CR>"
@@ -561,7 +561,7 @@ def g:PageHelp()
 		                "The index page is your project home page. You can return to this page by typing <leader>ww in normal mode.",
 		                "From here you can create new pages for interviews or summary pages.",
 		                " ",
-		                "Summary pages, pages that summarize specific tags, must begin with the word \"Summary\". ",
+		                "Summary pages, pages that summarize specific tags, must begin with the word \"Summary\" .. ",
 		                "Interview pages must be named according to the regular expression (regex) defined in your project parameters. ",
 		                "Press <leader>lp in normal mode to list project parameters. ",
 		                " ",
@@ -715,7 +715,7 @@ def g:CreateBackupQuery()
 
 	var today              = strftime("%Y-%m-%d")
 	var time_now           = strftime("%H-%M-%S")
-	g:backup_path          = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") .. g:project_name .. " Backups/"
+	g:backup_path          = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g"). g:project_name .. " Backups/"
 	g:backup_folder_name   = today .. " at " .. time_now .. " Backup by " .. g:coder_initials .. "/"
 	g:new_backup_path      = g:backup_path .. g:backup_folder_name
 	g:backup_list          = globpath(g:backup_path, '*', 0, 1)
@@ -747,14 +747,14 @@ def g:CreateBackup(id: number, result: number)
 		#swap files.
 		execute "normal! :w\<CR>"
 		mkdir(g:new_backup_path, "p")
-		g:copy_command  = 'cp -R "' .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. '" "' .. g:new_backup_path .. '"'
-		g:clean_up_swo = 'rm -f "' .. g:new_backup_path .. '"' .. '.*.swo'
-		g:clean_up_swp = 'rm -f "' .. g:new_backup_path .. '"' .. '.*.swp'
-		g:clean_up_swn = 'rm -f "' .. g:new_backup_path .. '"' .. '.*.swn'
-		call system(g:copy_command)
-		call system(g:clean_up_swo)
-		call system(g:clean_up_swp)
-		call system(g:clean_up_swn)
+		g:copy_command  = 'cp -R "'. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. '" "' .. g:new_backup_path .. '"'
+		g:clean_up_swo = 'rm -f "'. g:new_backup_path .. '"' .. '.*.swo'
+		g:clean_up_swp = 'rm -f "'. g:new_backup_path .. '"' .. '.*.swp'
+		g:clean_up_swn = 'rm -f "'. g:new_backup_path .. '"' .. '.*.swn'
+		system(g:copy_command)
+		system(g:clean_up_swo)
+		system(g:clean_up_swp)
+		system(g:clean_up_swn)
 		backup_message 	   = "A new back up has been created at: " .. g:new_backup_path
 	else
 		backup_message     = "Backup not created."		
@@ -773,16 +773,16 @@ enddef
 # If it is a new window it names it using the label from line from which it is
 # called, adds a title label and the coders initials.
 # -----------------------------------------------------------------
-function Annotation() 
+def Annotation() 
 	
-	call ParmCheck()
+	ParmCheck()
 
 	# -----------------------------------------------------------------
 	#  Find the tags on the line this function is called from.
 	# -----------------------------------------------------------------
-	let g:list_of_tags_on_line = ""
-	let g:is_tag_on_line = 1
-	let g:current_line = line(".")
+	g:list_of_tags_on_line = ""
+	g:is_tag_on_line = 1
+	g:current_line = line(".")
 	execute "normal! 0"
 	# -----------------------------------------------------------------
 	# Loop until no more tags are found on the line.
@@ -791,7 +791,7 @@ function Annotation()
 		# --------------------------------------------------
 		# Search for a tag without going past the end of the file.
 		# --------------------------------------------------
-		let g:match_line = search(':\a.\{-}:', "W")
+		g:match_line = search(':\a.\{-}:', "W")
 		# --------------------------------------------------
 		# If we found a tag (ie. The search function doesn't
 		# return a zero) and that tag is found on the current line
@@ -805,24 +805,24 @@ function Annotation()
 			# list of tags we're building.
 			# -------------------------------------------
 			execute "normal! vf:yeel"
-			let g:this_tag = @@
-			let g:list_of_tags_on_line = g:list_of_tags_on_line . g:this_tag . " "
+			g:this_tag = @@
+			g:list_of_tags_on_line = g:list_of_tags_on_line .. g:this_tag .. " "
 		else
 			# No more tags
-			let g:is_tag_on_line = 0
+			g:is_tag_on_line = 0
 		endif 
 	endwhile	
 	# -----------------------------------------------------------------
 	# Move cursor back to the start of current_line because the search
 	# function may have moved the cursor beyond current_line
 	# -----------------------------------------------------------------
-	call cursor(g:current_line, 0)
+	cursor(g:current_line, 0)
 	execute "normal! 0"
 	# -----------------------------------------------------------------
 	# Initialize variables and move cursor to the beginning of the line.
 	# -----------------------------------------------------------------
-	let g:match_line = 0
-	let g:match_col = 0
+	g:match_line = 0
+	g:match_col = 0
 	# -----------------------------------------------------------------
 	# Search for the label - number pair on the line. searchpos() 
 	# returns a list with the line and column numbers of the cursor
@@ -831,10 +831,10 @@ function Annotation()
 	# character of match we found. So because we started in column 1
 	# if the column remains at 1 we know we didn't find a match.
 	# -----------------------------------------------------------------
-	let g:tag_search_regex = g:interview_label_regex . '\: \d\{4}'
-	let g:tag_search = searchpos(g:tag_search_regex)
-	let g:match_line = g:tag_search[0]
-	let g:match_col  = virtcol('.')
+	g:tag_search_regex = g:interview_label_regex .. '\: \d\{4}'
+	g:tag_search = searchpos(g:tag_search_regex)
+	g:match_line = g:tag_search[0]
+	g:match_col  = virtcol('.')
 	# -----------------------------------------------------------------
 	# Now we have to decide what to do with the result based on where
 	# the cursor ended up. The first thing we test is whether the match
@@ -848,12 +848,12 @@ function Annotation()
 		# ------------------------------------------------------------------
 		#  Figure out how wide we can make the annotation window
 		# ------------------------------------------------------------------
-		let g:current_window_width = winwidth('%')
-		let g:annotation_window_width = g:current_window_width - g:border_offset - 45
+		g:current_window_width = winwidth('%')
+		g:annotation_window_width = g:current_window_width - g:border_offset - 45
 		if g:annotation_window_width < 30
-			let g:annotation_window_width = 30
+			g:annotation_window_width = 30
 		elseif g:annotation_window_width > 80
-			let g:annotation_window_width = 80
+			g:annotation_window_width = 80
 		endif
 		# ------------------------------------------------------------------
 		#  Figure out which version of Vim or NeoVim we're running.
@@ -862,11 +862,11 @@ function Annotation()
 		#  1 for true or 0 for false.
 		# ------------------------------------------------------------------
 		if has('nvim') && has('patch-0-6-0')
-			let g:new_vsplit_behaviour = 1
+			g:new_vsplit_behaviour = 1
 		elseif has('patch-8.2.3832')
-			let g:new_vsplit_behaviour = 1
+			g:new_vsplit_behaviour = 1
 		else
-			let g:new_vsplit_behaviour = 0
+			g:new_vsplit_behaviour = 0
 		endif
 		# -----------------------------------------------------------------
 		# Test to see if the match starts at g:label_offset or 
@@ -887,18 +887,18 @@ function Annotation()
 			# two lines add the title to the new page and position 
 			# the cursor at the bottom of the page.
 			# -----------------------------------------------------------------
-			execute "normal! " . '0/' . g:interview_label_regex . '\:\s\{1}\d\{4}' . "\<CR>" . 'vf│hhy'
+			execute "normal! " .. '0/' .. g:interview_label_regex .. '\:\s\{1}\d\{4}' .. "\<CR>" .. 'vf│hhy'
 			execute "normal! gvc[]\<ESC>F[plli()\<ESC>\"\"P\<ESC>" 
 			execute "normal \<Plug>VimwikiVSplitLink"
 			if g:new_vsplit_behaviour 
-				execute "normal! \<C-W>x\<C-W>l:vertical resize " . g:annotation_window_width . "\<CR>"
+				execute "normal! \<C-W>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>"
 			else
-				execute "normal! \<C-W>x\<C-W>l:vertical resize " . g:annotation_window_width . "\<CR>"
+				execute "normal! \<C-W>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>"
 			endif
 			put =expand('%:t')
 			execute "normal! 0kdd/.md\<CR>xxxI:\<ESC>2o\<ESC>"
-			let g:current_time = strftime("%Y-%m-%d %H\:%M")
-		        execute "normal! i[" . g:current_time . "] " . g:list_of_tags_on_line . "// \:" . g:coder_initials . "\:  \<ESC>"
+			g:current_time = strftime("%Y-%m-%d %H\:%M")
+		        execute "normal! i[" .. g:current_time .. "] " .. g:list_of_tags_on_line .. "// \:" .. g:coder_initials .. "\:  \<ESC>"
 			startinsert 
 		elseif g:match_col == (g:label_offset + 1)
 			# -----------------------------------------------------------------
@@ -908,45 +908,45 @@ function Annotation()
 			# places the cursor at the bottom of the annotation 
 			# page.
 			# -----------------------------------------------------------------
-			execute "normal! " . '0/' . g:interview_label_regex . '\:\s\{1}\d\{4}' . "\<CR>"
+			execute "normal! " .. '0/' .. g:interview_label_regex .. '\:\s\{1}\d\{4}' .. "\<CR>"
 			execute "normal \<Plug>VimwikiVSplitLink"
 			if g:new_vsplit_behaviour 
-				execute "normal! \<C-w>x\<C-W>l:vertical resize " . g:annotation_window_width . "\<CR>"
+				execute "normal! \<C-w>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>"
 			else
-				execute "normal! \<C-W>x\<C-W>l:vertical resize " . g:annotation_window_width . "\<CR>"
+				execute "normal! \<C-W>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>"
 			endif
 			execute "normal! Go\<ESC>V?.\<CR>jd2o\<ESC>"
-			let g:current_time = strftime("%Y-%m-%d %H\:%M")
-		        execute "normal! i[" . g:current_time . "] " . g:list_of_tags_on_line . "// \:" . g:coder_initials . "\:  \<ESC>"
+			g:current_time = strftime("%Y-%m-%d %H\:%M")
+		        execute "normal! i[" .. g:current_time .. "] " .. g:list_of_tags_on_line .. "// \:" .. g:coder_initials .. "\:  \<ESC>"
 			startinsert
 		else
 			echo "Something is not right here."		
 		endif
 	else
 		echo "No match found on this line"
-		call cursor(g:current_line, 0)
+		cursor(g:current_line, 0)
 	endif
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # This function exits an annotation window and resizes remaining windows
 # -----------------------------------------------------------------
-function ExitAnnotation() 
+def ExitAnnotation() 
 	
-	call ParmCheck()
+	ParmCheck()
 
 	# -----------------------------------------------------------------
 	# Remove blank lines from the bottom of the annotation, and copy the
 	# remaining bottom line to test_line 
 	# -----------------------------------------------------------------
 	execute "normal! Go\<ESC>V?.\<CR>jdVy\<ESC>"
-	let g:test_line = @@
+	g:test_line = @@
 	# -----------------------------------------------------------------
 	# Build a regex that looks for the coder tag at the beginning of the line and
 	# then only white space to the carriage return character.
 	# -----------------------------------------------------------------
-	let g:find_coder_tag_regex = '\v:' . g:coder_initials . ':\s*\n'
-	let g:is_orphaned_tag = match(g:test_line, g:find_coder_tag_regex) 
+	g:find_coder_tag_regex = '\v:' .. g:coder_initials .. ':\s*\n'
+	g:is_orphaned_tag = match(g:test_line, g:find_coder_tag_regex) 
 	# -----------------------------------------------------------------
 	# If you don't find anything following the coder tag, ie there is no
 	# annotation following, delete the label info generated for this
@@ -960,65 +960,65 @@ function ExitAnnotation()
 	# cursor at the end of the line it returns to.
 	# -----------------------------------------------------------------
 	execute "normal! :wq\<CR>\<C-W>h\<C-W>h:vertical resize 60\<CR>\<C-W>l"
-	execute "normal! " . ':s/\s*$//' . "\<CR>A \<ESC>"
-endfunction
+	execute "normal! " .. ':s/\s*$//' .. "\<CR>A \<ESC>"
+enddef
 
 # -----------------------------------------------------------------
 # This function determines what kind of buffer the cursor is in (annotation or
 # interview) and decides whether to call Annotation() or ExitAnnotation()
 # -----------------------------------------------------------------
-function AnnotationToggle() 
+def AnnotationToggle() 
 
-	call ParmCheck()
+	ParmCheck()
 
 	# -----------------------------------------------------------------
 	# Initialize buffer type variables
 	# -----------------------------------------------------------------
-	let g:is_interview  = 0
-	let g:is_annotation = 0
-	let g:is_summary    = 0
+	g:is_interview  = 0
+	g:is_annotation = 0
+	g:is_summary    = 0
 
-	let g:buffer_name      = expand('%:t')
-	let g:where_ext_starts = strridx(g:buffer_name, g:wiki_extension)
-	let g:buffer_name      = g:buffer_name[0 :(g:where_ext_starts - 1)]
+	g:buffer_name      = expand('%:t')
+	g:where_ext_starts = strridx(g:buffer_name, g:wiki_extension)
+	g:buffer_name      = g:buffer_name[0 :(g:where_ext_starts - 1)]
 	# -----------------------------------------------------------------
 	# Check to see if it is a Summary file. It it is nothing happens.
 	# -----------------------------------------------------------------
-	let g:summary_search_match_loc = match(g:buffer_name, "Summary")
+	g:summary_search_match_loc = match(g:buffer_name, "Summary")
 	if (g:summary_search_match_loc == -1)	# not found
-		let g:is_summary = 0		# FALSE
+		g:is_summary = 0		# FALSE
 	else
-		let g:is_summary = 1		# TRUE
+		g:is_summary = 1		# TRUE
 	endif
 	# -----------------------------------------------------------------
 	# Check to see if the current search result buffer is
 	# an annotation file. If it is ExitAnnotation() is called.
 	# -----------------------------------------------------------------
-	let g:pos_of_4_digit_number = match(g:buffer_name, ' \d\{4}')
+	g:pos_of_4_digit_number = match(g:buffer_name, ' \d\{4}')
 	if (g:pos_of_4_digit_number == -1)      " not found
-		let g:is_annotation = 0		# FALSE
+		g:is_annotation = 0		# FALSE
 	else
-		let g:is_annotation = 1		# TRUE
-		call ExitAnnotation()		
+		g:is_annotation = 1		# TRUE
+		ExitAnnotation()		
 	endif
 	# -----------------------------------------------------------------
 	# Check to see if the current search result buffer is
 	# from an interview file. If it is Annotation() is called.
 	# -----------------------------------------------------------------
 	if (g:is_annotation == 1) || (g:is_summary == 1)
-		let g:is_interview = 0		# FALSE
+		g:is_interview = 0		# FALSE
 	else
-		let g:is_interview = 1		# TRUE
-		call Annotation()
+		g:is_interview = 1		# TRUE
+		Annotation()
 	endif
-endfunction
+enddef
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function DeleteAnnotation() 
+def DeleteAnnotation() 
 	
-	call ParmCheck()
+	ParmCheck()
 
 	# ------------------------------------------------------------------
 	#  Figure out which version of Vim or NeoVim we're running.
@@ -1027,17 +1027,17 @@ function DeleteAnnotation()
 	#  1 for true or 0 for false.
 	# ------------------------------------------------------------------
 	if has('nvim') && has('patch-0-6-0')
-		let g:new_vsplit_behaviour = 1
+		g:new_vsplit_behaviour = 1
 	elseif has('patch-8.2.3832')
-		let g:new_vsplit_behaviour = 1
+		g:new_vsplit_behaviour = 1
 	else
-		let g:new_vsplit_behaviour = 0
+		g:new_vsplit_behaviour = 0
 	endif
 	# -----------------------------------------------------------------
 	#  Find the tags on the line this function is called from.
 	# -----------------------------------------------------------------
-	let g:is_tag_on_line = 1
-	let g:current_line = line(".")
+	g:is_tag_on_line = 1
+	g:current_line = line(".")
 	execute "normal! 0"
 	# -----------------------------------------------------------------
 	# Search for the label - number pair on the line. searchpos() 
@@ -1047,10 +1047,10 @@ function DeleteAnnotation()
 	# character of match we found. So because we started in column 1
 	# if the column remains at 1 we know we didn't find a match.
 	# -----------------------------------------------------------------
-	let g:tag_search_regex = g:interview_label_regex . '\: \d\{4}'
-	let g:tag_search = searchpos(g:tag_search_regex)
-	let g:match_line = g:tag_search[0]
-	let g:match_col  = virtcol('.')
+	g:tag_search_regex = g:interview_label_regex .. '\: \d\{4}'
+	g:tag_search = searchpos(g:tag_search_regex)
+	g:match_line = g:tag_search[0]
+	g:match_col  = virtcol('.')
 	# -----------------------------------------------------------------
 	# Now we have to decide what to do with the result based on where
 	# the cursor ended up. The first thing we test is whether the match
@@ -1072,53 +1072,53 @@ function DeleteAnnotation()
 		# will start at g:label_offset + 1.
 		# -----------------------------------------------------------------
 		if g:match_col == g:label_offset		
-			call confirm("No annotation link found on this line.", "OK", 1)
+			confirm("No annotation link found on this line.", "OK", 1)
 		elseif g:match_col == (g:label_offset + 1)
 			# -----------------------------------------------------------------
 			# Re-find the link, but don't yank it. This places the 
 			# cursor on the first character of the match. The next
 			# line follows the link to the page.
 			# -----------------------------------------------------------------
-			execute "normal! " . '0/' . g:interview_label_regex . '\:\s\{1}\d\{4}' . "\<CR>"
+			execute "normal! " .. '0/' .. g:interview_label_regex .. '\:\s\{1}\d\{4}' .. "\<CR>"
 			execute "normal \<Plug>VimwikiVSplitLink"
 			if g:new_vsplit_behaviour 
-				execute "normal! \<C-W>x\<C-W>l:vertical resize " . g:annotation_window_width . "\<CR>"
+				execute "normal! \<C-W>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>"
 			else
-				execute "normal! \<C-W>x\<C-W>l:vertical resize " . g:annotation_window_width . "\<CR>" 
+				execute "normal! \<C-W>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>" 
 			endif
-			let g:candidate_delete_buffer = bufnr("%")
+			g:candidate_delete_buffer = bufnr("%")
 			execute "normal \<Plug>VimwikiDeleteFile"
 			# if bufwinnr() < 0 then the buffer doesn't exist.
 			if (bufwinnr(g:candidate_delete_buffer) < 0)
 				execute "normal! :q\<CR>"
-				execute "normal! " . g:match_line . "G"
-				let g:col_to_jump_to = g:match_col - 1
+				execute "normal! " .. g:match_line .. "G"
+				g:col_to_jump_to = g:match_col - 1
 				set virtualedit=all
 				# the lh at the end should probably be \|
-				execute "normal! 0" . g:col_to_jump_to . "lh"
-				set virtualedit=""
+				execute "normal! 0" .. g:col_to_jump_to .. "lh"
+				set virtualedit=none
 				execute "normal! xf]vf)d"
-				call confirm("Annotation deleted.", "Got it", 1)
+				confirm("Annotation deleted.", "Got it", 1)
 			else
 				execute "normal! :q\<CR>"
-				call confirm("Annotation retained.", "Got it", 1)
+				confirm("Annotation retained.", "Got it", 1)
 			endif
 		else
 			echo "Something is not right here."		
 		endif
 	else
 		echo "No match found on this line"
-		call cursor(g:current_line, 0)
+		cursor(g:current_line, 0)
 	endif
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # Finds a label-line number pair in a Summary buffer and uses that to to to
 # that location in an interview buffer.
 # -----------------------------------------------------------------
-function GoToReference() 
+def GoToReference() 
 	
-	call ParmCheck()
+	ParmCheck()
 
 	# -----------------------------------------------------------------
 	# Change the pwd to that of the current wiki.
@@ -1127,16 +1127,16 @@ function GoToReference()
 	# -----------------------------------------------------------------
 	# Find target file name.
 	# -----------------------------------------------------------------
-	execute "normal! 0/" . g:interview_label_regex . ':\s\d\{4}' . "\<CR>" . 'vf:hy'
-	let g:target_file = @@
-	let g:target_file = g:target_file . g:target_file_ext
+	execute "normal! 0/" .. g:interview_label_regex .. ':\s\d\{4}' .. "\<CR>" .. 'vf:hy'
+	g:target_file = @@
+	g:target_file = g:target_file .. g:target_file_ext
 	# -----------------------------------------------------------------
 	# Find target line number "
 	# -----------------------------------------------------------------
 	execute "normal! `<"
-	execute "normal! " . '/\d\{4}' . "\<CR>"
+	execute "normal! " .. '/\d\{4}' .. "\<CR>"
 	execute "normal! viwy"
-	let g:target_line = @@
+	g:target_line = @@
 	# -----------------------------------------------------------------
 	# Use Z mark to know how to get back
 	# -----------------------------------------------------------------
@@ -1144,172 +1144,172 @@ function GoToReference()
 	# -----------------------------------------------------------------
 	# Go to target file
 	# -----------------------------------------------------------------
-	execute "normal :e " . g:target_file . "\<CR>"
+	execute "normal :e " .. g:target_file .. "\<CR>"
 	execute "normal! gg"
 	# -----------------------------------------------------------------
 	# Find line number and center on page
 	# -----------------------------------------------------------------
 	execute "normal! gg"
-	call search(g:target_line)
+	search(g:target_line)
 	execute "normal! zz"
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # Returns to the place called by GoToReference().
 # -----------------------------------------------------------------
-function GoBackFromReference() 
+def GoBackFromReference() 
 	execute "normal! `Zzz"
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # ---------------------------- REPORTS ----------------------------
 # -----------------------------------------------------------------
 
-function FullReport(search_term)
-	call Report(a:search_term, "full", "FullReport", "no meta")
-endfunction
+def FullReport(search_term: string)
+	Report(search_term, "full", "FullReport", "no meta")
+enddef
 
-function AnnotationsReport(search_term)
-	call Report(a:search_term, "annotations", "AnnotationReport", "no meta") 
-endfunction
+def AnnotationsReport(search_term: string)
+	Report(search_term, "annotations", "AnnotationReport", "no meta") 
+enddef
 
-function QuotesReport(search_term)
-	call Report(a:search_term,  "quotes", "QuotesReport", "no meta") 
-endfunction
+def QuotesReport(search_term: string)
+	Report(search_term,  "quotes", "QuotesReport", "no meta") 
+enddef
 
-function MetaReport(search_term)
-	call Report(a:search_term,  "meta", "MetaReport", "meta") 
-endfunction
+def MetaReport(search_term: string)
+	Report(search_term,  "meta", "MetaReport", "meta") 
+enddef
 
-function VWSReport(search_term)
-	call Report(a:search_term, "VWS", "VWSReport", "meta") 
-endfunction
-
-# -----------------------------------------------------------------
-# This function produces summary reports for all tags defined in the 
-# tag glossary.
-# -----------------------------------------------------------------
-function AllSummariesFull() 
-
-	call ParmCheck()
-	execute "normal! :cd %:p:h\<CR>"
-	
-	let g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
-	let g:tags_list_length = len(g:in_both_lists)
-
-	if g:tags_list_length > 0
-		call GenSummaryLists("full")
-	endif
-	
-	if (g:tags_generated == 1) && (g:tags_list_length > 0)
-		call popup_menu(["No, abort", "Yes, generate summary reports"], #{
-			\ title:    "Running this function will erase older \"Full\" versions of these reports. Do you want to continue?"   ,
-			\ callback: 'AllSummariesGenReportsFull'  , 
-			\ highlight: 'Question'       ,
-			\ border:     []              ,
-			\ close:      'click'         , 
-			\ padding:    [0,1,0,1],
-			\ })
-	else
-		call confirm("Either tags have not been generate for this session or there are no tags to create reports for.",  "OK", 1)
-
-	endif
-	
-endfunction
-
-# -----------------------------------------------------------------
-# 
-# -----------------------------------------------------------------
-function AllSummariesGenReportsFull(id, result)
-	if a:result == 2
-		execute "normal! :delmarks Q\<CR>mQ"
-		call confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
-		for l:index in range(0, g:tags_list_length - 1)
-			execute "normal! :e " . g:summary_file_list[l:index] . "\<CR>"
-			call FullReport(g:in_both_lists[l:index])
-		endfor
-		execute "normal! `Q"
-		put =g:summary_link_list
-		execute "normal! `Q"
-	endif
-endfunction
+def VWSReport(search_term: string)
+	Report(search_term, "VWS", "VWSReport", "meta") 
+enddef
 
 # -----------------------------------------------------------------
 # This function produces summary reports for all tags defined in the 
 # tag glossary.
 # -----------------------------------------------------------------
-function AllSummariesQuotes() 
+def AllSummariesFull() 
 
-	call ParmCheck()
+	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
 	
-	let g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
-	let g:tags_list_length = len(g:in_both_lists)
+	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
+	g:tags_list_length = len(g:in_both_lists)
 
 	if g:tags_list_length > 0
-		call GenSummaryLists("quotes")
+		GenSummaryLists("full")
 	endif
 	
 	if (g:tags_generated == 1) && (g:tags_list_length > 0)
-		call popup_menu(["No, abort", "Yes, generate summary reports"], #{
-			\ title:    "Running this function will erase older \"Quotes\" versions of these reports. Do you want to continue?"   ,
-			\ callback: 'AllSummariesGenReportsQuotes'  , 
-			\ highlight: 'Question'       ,
-			\ border:     []              ,
-			\ close:      'click'         , 
-			\ padding:    [0,1,0,1],
-			\ })
+		popup_menu(["No, abort", "Yes, generate summary reports"], {
+			 title:    "Running this function will erase older \"Full\" versions of these reports. Do you want to continue?",
+			 callback: 'AllSummariesGenReportsFull', 
+			 highlight: 'Question',
+			 border:     [],
+			 close:      'click', 
+			 padding:    [0, 1, 0, 1], })
 	else
-		call confirm("Either tags have not been generate for this session or there are no tags to create reports for.",  "OK", 1)
+		confirm("Either tags have not been generate for this session or there are no tags to create reports for.",  "OK", 1)
 
 	endif
 	
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function AllSummariesGenReportsQuotes(id, result)
-	if a:result == 2
+def AllSummariesGenReportsFull(id: number, result: number)
+	if result == 2
 		execute "normal! :delmarks Q\<CR>mQ"
-		call confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
-		for l:index in range(0, g:tags_list_length - 1)
-			execute "normal! :e " . g:summary_file_list[l:index] . "\<CR>"
-			call QuotesReport(g:in_both_lists[l:index])
+		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
+		for index in range(0, g:tags_list_length - 1)
+			execute "normal! :e " .. g:summary_file_list[index] .. "\<CR>"
+			FullReport(g:in_both_lists[index])
 		endfor
 		execute "normal! `Q"
 		put =g:summary_link_list
 		execute "normal! `Q"
 	endif
-endfunction
+enddef
+
+# -----------------------------------------------------------------
+# This function produces summary reports for all tags defined in the 
+# tag glossary.
+# -----------------------------------------------------------------
+def AllSummariesQuotes() 
+
+	ParmCheck()
+	execute "normal! :cd %:p:h\<CR>"
+	
+	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
+	g:tags_list_length = len(g:in_both_lists)
+
+	if g:tags_list_length > 0
+		GenSummaryLists("quotes")
+	endif
+	
+	if (g:tags_generated == 1) && (g:tags_list_length > 0)
+		popup_menu(["No, abort", "Yes, generate summary reports"], {
+			 title:    "Running this function will erase older \"Quotes\" versions of these reports. Do you want to continue?",
+			 callback: 'AllSummariesGenReportsQuotes', 
+			 highlight: 'Question',
+			 border:     [],
+			 close:      'click', 
+			 padding:    [0, 1, 0, 1], })
+	else
+		confirm("Either tags have not been generate for this session or there are no tags to create reports for.",  "OK", 1)
+
+	endif
+	
+enddef
+
+# -----------------------------------------------------------------
+# 
+# -----------------------------------------------------------------
+def AllSummariesGenReportsQuotes(id: number, result: number)
+	if result == 2
+		execute "normal! :delmarks Q\<CR>mQ"
+		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
+		for index in range(0, g:tags_list_length - 1)
+			execute "normal! :e " g:summary_file_list[index] .. "\<CR>"
+			QuotesReport(g:in_both_lists[index])
+		endfor
+		execute "normal! `Q"
+		put =g:summary_link_list
+		execute "normal! `Q"
+	endif
+enddef
 
 # -----------------------------------------------------------------
 # Generated list of file names from the g:in_both_lists list.
 # -----------------------------------------------------------------
-function GenSummaryLists(type) 
-	let g:summary_file_list = []
-	let g:summary_link_list = []
-	for l:tag_index in range(0, (len(g:in_both_lists) - 1))
-		let l:file_name = "Summary " . g:in_both_lists[l:tag_index] . " " . a:type . " batch" . g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-		let l:link_name = "[Summary " . g:in_both_lists[l:tag_index] . " " . a:type . " batch](Summary " . g:in_both_lists[l:tag_index] . " " . a:type . " batch)"
-		let g:summary_file_list = g:summary_file_list + [l:file_name]
-		let g:summary_link_list = g:summary_link_list + [l:link_name]
+def GenSummaryLists(summary_type: string) 
+	var file_name = "undefined"
+	var link_name = "undefined"
+	g:summary_file_list = []
+	g:summary_link_list = []
+	for tag_index in range(0, (len(g:in_both_lists) - 1))
+		file_name = "Summary " .. g:in_both_lists[tag_index] .. " " .. summary_type .. " batch" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+		link_name = "[Summary " .. g:in_both_lists[tag_index] .. " " .. summary_type .. " batch](Summary " .. g:in_both_lists[tag_index] .. " " .. summary_type .. " batch)"
+		g:summary_file_list = g:summary_file_list + [file_name]
+		g:summary_link_list = g:summary_link_list + [link_name]
 	endfor
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # This builds a formatted report for the tag specified as the search_term
 # argument.
 # -----------------------------------------------------------------
-function Gather(search_term) 
+def Gather(search_term: string) 
 	
-	call ParmCheck()
+	ParmCheck()
 
 	# -----------------------------------------------------------------
 	# Change the pwd to that of the current wiki.
 	# -----------------------------------------------------------------
 	execute "normal! :cd %:p:h\<CR>"
-	let g:tag_search_regex      = g:interview_label_regex . '\: \d\{4}'
+	g:tag_search_regex      = g:interview_label_regex .. '\: \d\{4}'
 	# -----------------------------------------------------------------
 	# Change the pwd to that of the current wiki.
 	# -----------------------------------------------------------------
@@ -1320,28 +1320,28 @@ function Gather(search_term)
 	# -----------------------------------------------------------------
 	execute "normal! :delmarks R\<CR>"
 	execute "normal! mR"
-	let g:search_term = ":" . a:search_term . ":"
+	g:search_term = ":" .. search_term .. ":"
 
-	let @s = "# BEGIN THEME: " . a:search_term .  "\n\n"
+	@s = "# BEGIN THEME: " .. search_term ..  "\n\n"
 
 	while search(g:search_term, "W")
 		if match(getline("."), g:tag_search_regex) > 0
-			let @s = @s . getline(".") . "\n\n"
+			@s = @s .. getline(".") .. "\n\n"
 		else
 			execute "normal! ?{\<CR>V/}\<CR>y"
-			let @s = @s . @@ . "\n"
+			@s = @s .. @@ .. "\n"
 			execute "normal! `>"
 		endif	
 	endwhile
 
-	let @s = @s . "# END THEME: " . a:search_term .  "\n\n"
+	@s = @s "# END THEME: " .. search_term ..  "\n\n"
 	execute "normal! `R\"sp"
-endfunction
+enddef
 
-function Report(search_term, report_type = "full", function_name = "FullReport", meta = "no meta") 
-	call ParmCheck()
+def Report(search_term: string, report_type = "full", function_name = "FullReport", meta = "no meta") 
+	ParmCheck()
 	
-	let g:tag_summary_file = g:tag_summaries_path . a:search_term . ".csv"
+	g:tag_summary_file = g:tag_summaries_path .. search_term .. ".csv"
 	# Change the pwd to that of the current wiki.
 	execute "normal! :cd %:p:h\<CR>"
 
@@ -1351,111 +1351,112 @@ function Report(search_term, report_type = "full", function_name = "FullReport",
 	execute "normal! ggmR"
 
 	# Set tag summary file path
-	let g:tag_summary_file      = g:tag_summaries_path . a:search_term . ".csv"
+	g:tag_summary_file      = g:tag_summaries_path .. search_term .. ".csv"
 
 	# Call VimwikiSearchTags against the a:search_term argument.
 	# Put the result in loc_list which is a list of location list
 	# dictionaries that we'll process.
-	if (a:report_type == "VWS")
-		let g:escaped_search_term = escape(a:search_term, ' \')
-		execute "normal! :VimwikiSearch /" . a:search_term . "/\<CR>"
+	if (report_type == "VWS")
+		g:escaped_search_term = escape(search_term, ' \')
+		execute "normal! :VimwikiSearch /" .. search_term .. "/\<CR>"
 	else
-		execute "normal! :VimwikiSearchTags " . a:search_term . "\<CR>"
+		execute "normal! :VimwikiSearchTags " .. search_term .. "\<CR>"
 	endif
 
-	let g:loc_list = getloclist(0)
+	g:loc_list = getloclist(0)
 
-	let g:escaped_search_term = escape(a:search_term, ' \')
-	execute "normal! :VimwikiSearch /" . a:search_term . "/\<CR>"
+	g:escaped_search_term = escape(search_term, ' \')
+	execute "normal! :VimwikiSearch /" .. search_term .. "/\<CR>"
 
 	# Initialize values the will be used in the for loop below. The
 	# summary is going to be aggregated in the s register.
-	let @s                               = "\n"
-	let @t				     = "| No. | Interview | Blocks | Lines | Annos |\n|-------:|-------|------:|------:|------:|\n"
-	let @u                               = ""
+	@s                               = "\n"
+	@t				 = "| No. | Interview | Blocks | Lines | Annos |\n|-------:|-------|------:|------:|------:|\n"
+	@u                               = ""
 
-	let g:quote_dict =  {}
-	let g:anno_dict = {}
+	g:quote_dict =  {}
+	g:anno_dict = {}
 
-	let g:last_line              = 0
-	let g:last_int_line 	     = 0
-	let g:last_int_name 	     = 0
-	let g:last_block_num         = 0
-	let g:anno_int_name          = ""
-	let g:last_anno_int_name     = ""
-	let g:current_anno_int_name  = ""
-	let g:block_count            = 0
-	let g:block_line_count       = 0
-	let g:cross_codes            = []
+	g:last_line              = 0
+	g:last_int_line 	     = 0
+	g:last_int_name 	     = 0
+	g:last_block_num         = 0
+	g:anno_int_name          = ""
+	g:last_anno_int_name     = ""
+	g:current_anno_int_name  = ""
+	g:block_count            = 0
+	g:block_line_count       = 0
+	g:cross_codes            = []
 	
 	# Get the number of search results.
-	let g:num_search_results = len(g:loc_list)
+	g:num_search_results = len(g:loc_list)
 	
 	# Go through all the location list search results and build the
 	# interview line and annotation dictionaries. 
 	for g:ll_num in range(0, g:num_search_results - 1)
-		let g:current_buf_name    = bufname(g:loc_list[g:ll_num]['bufnr'])[0:-g:ext_len]
-		let g:ll_bufnr            = g:loc_list[g:ll_num]['bufnr']
-		let g:line_text           = g:loc_list[g:ll_num]['text']
-		let g:line_text_less_meta = RemoveMetadata(g:line_text)
-		let g:current_buf_type    = FindBufferType(g:current_buf_name)
+		g:current_buf_name    = bufname(g:loc_list[g:ll_num]['bufnr'])[0:-g:ext_len]
+		g:ll_bufnr            = g:loc_list[g:ll_num]['bufnr']
+		g:line_text           = g:loc_list[g:ll_num]['text']
+		g:line_text_less_meta = RemoveMetadata(g:line_text)
+		g:current_buf_type    = FindBufferType(g:current_buf_name)
 		if (g:current_buf_type == "Interview")
-			let g:current_int_line_num = GetInterviewLineInfo(g:line_text)
-			call PopulateQuoteLineList()
-			let g:last_int_line_num  = g:current_int_line_num
-			let g:last_int_name      = g:current_buf_name
+			g:current_int_line_num = GetInterviewLineInfo(g:line_text)
+			PopulateQuoteLineList()
+			g:last_int_line_num  = g:current_int_line_num
+			g:last_int_name      = g:current_buf_name
 		elseif (g:current_buf_type == "Annotation")
-			call PopulateAnnoLineList(g:current_buf_type)
-			let g:last_anno_int_name  = g:current_anno_int_name
-			let g:last_anno_buf_name  = g:current_buf_name
+			PopulateAnnoLineList(g:current_buf_type)
+			g:last_anno_int_name  = g:current_anno_int_name
+			g:last_anno_buf_name  = g:current_buf_name
 		endif
 	endfor
 
-	let g:int_keys          = sort(keys(g:quote_dict))
-	let g:anno_keys         = sort(keys(g:anno_dict))
-	let g:int_and_anno_keys = sort(g:int_keys + g:anno_keys)
+	g:int_keys          = sort(keys(g:quote_dict))
+	g:anno_keys         = sort(keys(g:anno_dict))
+	g:int_and_anno_keys = sort(g:int_keys + g:anno_keys)
 	
 
-	let l:combined_list_len = len(g:int_and_anno_keys)
+	combined_list_len = len(g:int_and_anno_keys)
 
-	let g:unique_keys = filter(copy(g:int_and_anno_keys), 'index(g:int_and_anno_keys, v:val, v:key+1) == -1')
+	g:unique_keys = filter(copy(g:int_and_anno_keys), 'index(g:int_and_anno_keys, v:val, v:key+1) == -1')
 	
-	if (a:report_type == "full") || (a:report_type == "meta") || (a:report_type == "VWS")
-		let g:interview_list = g:unique_keys
+	if (report_type == "full") || (report_type == "meta") || (report_type == "VWS")
+		g:interview_list = g:unique_keys
 		for g:int_index in range(0, len(g:interview_list) - 1)
-			call ProcessInterviewTitle(g:interview_list[g:int_index])
-			call ProcessInterviewLines(a:meta, a:report_type, a:search_term)
-			call ProcessAnnotationLines()
+			ProcessInterviewTitle(g:interview_list[g:int_index])
+			ProcessInterviewLines(meta, report_type, search_term)
+			ProcessAnnotationLines()
 		endfor
-		call writefile(split(@u, "\n", 1), g:tag_summary_file)
-	elseif (a:report_type == "annotations")
-		let g:interview_list = g:anno_keys
+		writefile(split(@u, "\n", 1), g:tag_summary_file)
+	elseif (report_type == "annotations")
+		g:interview_list = g:anno_keys
 		for g:int_index in range(0, len(g:interview_list) - 1)
-			call ProcessInterviewTitle(g:interview_list[g:int_index])
-			call ProcessAnnotationLines()
+			ProcessInterviewTitle(g:interview_list[g:int_index])
+			ProcessAnnotationLines()
 		endfor
-	elseif (a:report_type == "quotes")
-		let g:interview_list = g:int_keys
+	elseif (report_type == "quotes")
+		g:interview_list = g:int_keys
 		for g:int_index in range(0, len(g:interview_list) - 1)
-			call ProcessInterviewTitle(g:int_keys[g:int_index])
-			call ProcessInterviewLines(a:meta,  a:report_type, a:search_term )
+			ProcessInterviewTitle(g:int_keys[g:int_index])
+			ProcessInterviewLines(meta, report_type, search_term )
 		endfor
-		call writefile([@u], g:tag_summary_file)
+		writefile([@u], g:tag_summary_file)
 	endif
 
-	let @t = "| No. | Interview | Blocks | Lines | Lines/Block | Annos |\n|-------:|-------|------:|------:|------:|\n"
-	let g:total_blocks      = 0
-	let g:total_lines       = 0
-	let g:total_annos       = 0
+	@t = "| No. | Interview | Blocks | Lines | Lines/Block | Annos |\n|-------:|-------|------:|------:|------:|\n"
+	g:total_blocks      = 0
+	g:total_lines       = 0
+	g:total_annos       = 0
+
 	for g:int_index in range(0, len(g:unique_keys) - 1)
-		call CreateSummaryCountTableLine()
+		CreateSummaryCountTableLine()
 	endfor 
-	let g:total_lines_per_block = printf("%.1f", str2float(g:total_lines) / str2float(g:total_blocks))
-	let @t = @t . "|-------:|-------|------:|------:|------:|------:|\n"
-	let @t = @t . "| Totals: |  | " . g:total_blocks .  " | " . g:total_lines . " | " . g:total_lines_per_block . " | " . g:total_annos . " |\n"
+	g:total_lines_per_block = printf("%.1f", str2float(g:total_lines) / str2float(g:total_blocks))
+	@t = @t .. "|-------:|-------|------:|------:|------:|------:|\n"
+	@t = @t .. "| Totals: |  | " .. g:total_blocks ..  " | " .. g:total_lines .. " | " .. g:total_lines_per_block .. " | " .. g:total_annos .. " |\n"
 	 
 	#  Write summary line to t register for last interview
-	call AddReportHeader(a:function_name, a:search_term)
+	AddReportHeader(function_name, search_term)
 
 	# Clear old material from the buffer
 	execute "normal! `RggVGd"
@@ -1466,96 +1467,98 @@ function Report(search_term, report_type = "full", function_name = "FullReport",
 	execute "normal! gg\"qPGo"
 	execute "normal! \"sp"
 	execute "normal! ggdd"
-endfunction
+enddef
 
 #this code is in Attributes(). Need substitute a call to this function
 #instead.
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function GetInterviewFileList() 
+def GetInterviewFileList() 
+	var file_to_add = "undefined"
 	execute "normal! :cd %:p:h\<CR>"
 	# get a list of all the files and directories in the pwd. Note the
 	# fourth argument that is 1 makes it return a list. The first argument
 	# '.' means the current directory and the second argument '*' means
 	# all.
-	let l:file_list_all = globpath('.', '*', 0, 1)
+	var file_list_all = globpath('.', '*', 0, 1)
 	# build regex we'll use just to find our interview files. 
-	let l:file_regex = g:interview_label_regex . '.md'
+	var file_regex = g:interview_label_regex .. '.md'
 	#  cull the list for just those files that are interview files. the
 	#  match is at position 2 because the globpath function prefixes
-	#  filenames with ./ which occupies positions 0 and 1.
-	let g:interview_list = []
-	for list_item in range(0, (len(l:file_list_all) - 1))
-		if (match(l:file_list_all[list_item], l:file_regex) == 2) 
-			# strip off the leading ./
-			let l:file_to_add = l:file_list_all[list_item][2:]
-			let g:interview_list = g:interview_list + [l:file_to_add]
+	#  filenames with/ which occupies positions 0 and 1.
+	g:interview_list = []
+	for list_item in range(0, (len(file_list_all) - 1))
+		if (match(file_list_all[list_item], file_regex) == 2) 
+			# strip off the leading/
+			file_to_add = file_list_all[list_item][2:]
+			g:interview_list = g:interview_list + [file_to_add]
 		endif
 	endfor
 	#return l:interview_list
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function CrawlBufferTags(interview, interview_name) 
+def CrawlBufferTags(interview: number, interview_name: string) 
 	# This is essentially the TagLinterFunction that copies the results to
 	# g:tags_list
-	let l:start_line = 2
-	let l:end_line   = line('$')
+	var start_line = 2
+	var end_line   = line('$')
+	var tag_being_considered = "undefined"
 	# move through each line testing for tags and removing duplicate tags
 	# on each line
 	execute "normal 2G"
 	
-	let g:tags_on_line = []
-	for line in range(l:start_line, l:end_line)
+	g:tags_on_line = []
+	for line in range(start_line, end_line)
 		# search() returns 0 if match not found
-		let g:tag_test = search(':\a.\{-}:', '', line("."))
+		g:tag_test = search(':\a.\{-}:', '', line("."))
 		if (g:tag_test != 0)
 			# Copy found tag
 			execute "normal! viWy"
-			let g:tags_on_line = g:tags_on_line + [@@]
-			let g:tag_test = search(':\a.\{-}:', '', line("."))
+			g:tags_on_line = g:tags_on_line + [@@]
+			g:tag_test = search(':\a.\{-}:', '', line("."))
 			while (g:tag_test != 0)
 				execute "normal! viWy"
-				let l:tag_being_considered = @@
-				let g:have_tag = 0
+				tag_being_considered = @@
+				g:have_tag = 0
 				# loop to see if we already have this tag
-				for l:tag in range(0, len(g:tags_on_line) - 1 )
-					if (l:tag_being_considered == g:tags_on_line[l:tag])
-						let g:have_tag = 1
+				for tag_index in range(0, len(g:tags_on_line) - 1 )
+					if (tag_being_considered == g:tags_on_line[tag_index])
+						g:have_tag = 1
 					endif
 				endfor
 				# if we have the tag, delete it
 				if g:have_tag 
 					execute "normal! gvx"
 				else
-					let g:tags_on_line = g:tags_on_line + [@@]
+					g:tags_on_line = g:tags_on_line + [@@]
 				endif
-				let g:tag_test = search(':\a.\{-}:', '', line("."))
+				g:tag_test = search(':\a.\{-}:', '', line("."))
 			endwhile
 		endif
 		# Add tags found on line to g:tags_list
 		for tag_index in range(0, len(g:tags_on_line) - 1)
-			let g:tags_list = g:tags_list + [[a:interview_name, line, g:tags_on_line[tag_index]]]
+			g:tags_list = g:tags_list + [[interview_name, line, g:tags_on_line[tag_index]]]
 		endfor
 		# Go to start of next line
 		execute "normal! j0"
-		let g:tags_on_line = []
+		g:tags_on_line = []
 	endfor	
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function CalcInterviewTagCrosstabs(tags_list, unique_tags, interview_list, ext_length) 
+def CalcInterviewTagCrosstabs(tags_list: list<string>, unique_tags: list<string>, interview_list: list<string>, ext_length: number): dict
 	#build the data structure that will hold the interview-tag crosstabs
-	let g:tag_count_dict       = {}
-	let g:initial_tag_dict     = {}
+	g:tag_count_dict       = {}
+	g:initial_tag_dict     = {}
 
-	for index in range(0, (len(a:interview_list) - 1)) 
-		let a:interview_list[index] = a:interview_list[index][:a:ext_length]
+	for index in range(0, (len(interview_list) - 1)) 
+		interview_list[index] = interview_list[index][:ext_length]
 	endfor
 	# The initial_tag_dict is a dictionary the unique tags with values of four-element lists. Where
 	# element 
@@ -1570,260 +1573,269 @@ function CalcInterviewTagCrosstabs(tags_list, unique_tags, interview_list, ext_l
 	#for tag_key in sort(keys(a:unique_tags))
 	# The problem is that the tag names are not being assigned as keys.
 	# Rather the key is a number.
-	for index in range(0, (len(a:unique_tags) - 1)) 
-		let g:initial_tag_dict[a:unique_tags[index]] = [0,0,0,0]
+	for index in range(0, (len(unique_tags) - 1)) 
+		g:initial_tag_dict[unique_tags[index]] = [0, 0, 0, 0]
 	endfor
 	#For create an interview dict with a the values for each key being a
 	# copy of the initial_tag_dict
-	for interview in range(0, (len(a:interview_list) - 1))
-		let g:tag_count_dict[a:interview_list[interview]] = deepcopy(g:initial_tag_dict)
+	for interview in range(0, (len(interview_list) - 1))
+		g:tag_count_dict[interview_list[interview]] = deepcopy(g:initial_tag_dict)
 	endfor
 
 	for index in range(0, len(g:tags_list) - 1)
 		# Increment the tag count for this tag
-		let g:tag_count_dict[a:tags_list[index][0]][a:tags_list[index][2]][0] = g:tag_count_dict[a:tags_list[index][0]][a:tags_list[index][2]][0] + 1
+		g:tag_count_dict[tags_list[index][0]][tags_list[index][2]][0] = g:tag_count_dict[tags_list[index][0]][tags_list[index][2]][0] + 1
 		# if tags_list row number minus row number minus the
 		# correspondent tag tracking number isn't 1, i.e. contiguous
-		if ((a:tags_list[index][1] - g:tag_count_dict[a:tags_list[index][0]][a:tags_list[index][2]][2]) != 1)
+		if ((tags_list[index][1] - g:tag_count_dict[tags_list[index][0]][tags_list[index][2]][2]) != 1)
 			#Mark that you've entered a block 
-			let g:tag_count_dict[a:tags_list[index][0]][a:tags_list[index][2]][3] = 1
+			g:tag_count_dict[tags_list[index][0]][tags_list[index][2]][3] = 1
 			#Increment the block counter for this tag
-			let g:tag_count_dict[a:tags_list[index][0]][a:tags_list[index][2]][1] = g:tag_count_dict[a:tags_list[index][0]][a:tags_list[index][2]][1] + 1
+			g:tag_count_dict[tags_list[index][0]][tags_list[index][2]][1] = g:tag_count_dict[tags_list[index][0]][tags_list[index][2]][1] + 1
 		else
 			# Reset the block counter because you're
 			# inside a block now. There is no need to
 			# increment the block counter.
-			let g:tag_count_dict[a:tags_list[index][0]][a:tags_list[index][2]][3] = 0
+			g:tag_count_dict[tags_list[index][0]][tags_list[index][2]][3] = 0
 		endif
 		# Set the last line for this kind of tag equal to the line of the tag we've been considering in this loop.
-		let g:tag_count_dict[a:tags_list[index][0]][a:tags_list[index][2]][2] = a:tags_list[index][1]
+		g:tag_count_dict[tags_list[index][0]][tags_list[index][2]][2] = tags_list[index][1]
 	endfor
 	return g:tag_count_dict
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function FindLargestTagAndBlockCounts(tag_cross, unique_tags, interview_list, ext_length) 
-	let l:largest_tag_count   = 0
-	let l:largest_block_count = 0
+def FindLargestTagAndBlockCounts(tag_cross: dict<any>, unique_tags: list<string>, interview_list: list<string>, ext_length: number): list<number>
+	var largest_tag_count   = 0
+	var largest_block_count = 0
 
-	for interview_index in range(0, (len(a:interview_list) - 1))
-		for tag_index in range(0, (len(a:unique_tags) - 1)) 
-			if (a:tag_cross[a:interview_list[interview_index]][a:unique_tags[tag_index]][0] > l:largest_tag_count)
-				let l:largest_tag_count = a:tag_cross[a:interview_list[interview_index]][a:unique_tags[tag_index]][0]
+	for interview_index in range(0, (len(interview_list) - 1))
+		for tag_index in range(0, (len(unique_tags) - 1)) 
+			if (tag_cross[interview_list[interview_index]][unique_tags[tag_index]][0] > largest_tag_count)
+				largest_tag_count = tag_cross[interview_list[interview_index]][unique_tags[tag_index]][0]
 			endif
-			if (a:tag_cross[a:interview_list[interview_index]][a:unique_tags[tag_index]][1]  > l:largest_block_count)
-				let l:largest_block_count =a:tag_cross[a:interview_list[interview_index]][a:unique_tags[tag_index]][1]
+			if (tag_cross[interview_list[interview_index]][unique_tags[tag_index]][1]  > largest_block_count)
+				largest_block_count = tag_cross[interview_list[interview_index]][unique_tags[tag_index]][1]
 			endif
 		endfor
 	endfor
-	return [l:largest_tag_count, l:largest_block_count]
-endfunction
+	return [largest_tag_count, largest_block_count]
+enddef
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function PrintInterviewTagSummary(tag_cross, interview, unique_tags) 
-	let l:total_tags   = 0
-	let l:total_blocks = 0
+def PrintInterviewTagSummary(tag_cross: dict<any>, interview: string, unique_tags: list<string>) 
+	var total_tags     = 0
+	var total_blocks   = 0
+	var ave_block_size = 0
 
-	let l:report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
-	execute "normal! Gi**Interview " . a:interview . " tag summary last updated at " . l:report_update_time . "**\n\n"
+	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
+	execute "normal! Gi**Interview " .. interview .. " tag summary last updated at " .. report_update_time .. "**\n\n"
 	execute "normal! i|Tag|Tag Count|Block Count|Average Block Size| \n"
 	execute "normal! ki\<ESC>j"
 	execute "normal! i|:---|---:|---:|---:|\n"
 	execute "normal! ki\<ESC>j"
 
-	for tag_index in range(0, (len(a:unique_tags) - 1))
-		let l:ave_block_size = printf("%.1f", str2float(a:tag_cross[a:interview][a:unique_tags[tag_index]][0]) / str2float(a:tag_cross[a:interview][a:unique_tags[tag_index]][1]))
-		execute "normal! i|" . a:unique_tags[tag_index] . "|" . 
-					\ a:tag_cross[a:interview][a:unique_tags[tag_index]][0] . "|" . 
-					\ a:tag_cross[a:interview][a:unique_tags[tag_index]][1] . "|" .
-					\ l:ave_block_size         . "|\n"
+	for tag_index in range(0, (len(unique_tags) - 1))
+		ave_block_size = printf("%.1f", str2float(tag_cross[interview][unique_tags[tag_index]][0]) / str2float(tag_cross[interview][unique_tags[tag_index]][1]))
+		execute "normal! i|" .. unique_tags[tag_index] .. "|" .. 
+					 tag_cross[interview][unique_tags[tag_index]][0]. "|" .. 
+					 tag_cross[interview][unique_tags[tag_index]][1]. "|" ..
+					 ave_block_size        .. "|\n"
 		execute "normal! ki\<ESC>j"
-		let l:total_tags   = l:total_tags   + a:tag_cross[a:interview][a:unique_tags[tag_index]][0]
-		let l:total_blocks = l:total_blocks + a:tag_cross[a:interview][a:unique_tags[tag_index]][1]
+		total_tags   = total_tags   + tag_cross[interview][unique_tags[tag_index]][0]
+		total_blocks = total_blocks + tag_cross[interview][unique_tags[tag_index]][1]
 	endfor
 
 	execute "normal! i|:---|---:|---:|---:|\n"
 	execute "normal! ki\<ESC>j"
-	let l:ave_total_blocks_size = printf("%.1f", str2float(l:total_tags) / str2float(l:total_blocks))
-	execute "normal! i| Totals |" . 
-				\ l:total_tags             . "|" . 
-				\ l:total_blocks           . "|" .
-				\ l:ave_total_blocks_size  . "|\n\n"
+	var ave_total_blocks_size = printf("%.1f", str2float(total_tags) / str2float(total_blocks))
+	execute "normal! i| Totals |" .. 
+				 total_tags            .. "|" .. 
+				 total_blocks          .. "|" ..
+				 ave_total_blocks_size .. "|\n\n"
 	#execute "normal! 2ki\<ESC>2j"
 	execute "normal! 2ki\<ESC>2j"
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function PrintTagInterviewSummary(tag_cross, tag, interview_list) 
-	let l:total_tags   = 0
-	let l:total_blocks = 0
+def PrintTagInterviewSummary(tag_cross, tag_, interview_list) 
+	var total_tags   = 0
+	var total_blocks = 0
+	var ave_block_size = 1.0
 
-	let l:report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
-	execute "normal! Gi**Tag " . a:tag . " tag summary last updated at " . l:report_update_time . "**\n\n"
+	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
+	execute "normal! Gi**Tag " tag_ .. " tag summary last updated at " .. report_update_time .. "**\n\n"
 	execute "normal! i|Interview|Tag Count|Block Count|Average Block Size| \n"
 	execute "normal! ki\<ESC>j"
 	execute "normal! i|:---|---:|---:|---:|\n"
 	execute "normal! ki\<ESC>j"
 
-	for interview_index in range(0, (len(a:interview_list) - 1))
-		let l:ave_block_size = printf("%.1f", str2float(a:tag_cross[a:interview_list[interview_index]][a:tag][0]) / str2float(a:tag_cross[a:interview_list[interview_index]][a:tag][1]))
-		execute "normal! i|" . a:interview_list[interview_index] . "|" . 
-					\ a:tag_cross[a:interview_list[interview_index]][a:tag][0] . "|" . 
-					\ a:tag_cross[a:interview_list[interview_index]][a:tag][1] . "|" .
-					\ l:ave_block_size         . "|\n"
+	for interview_index in range(0, (len(interview_list) - 1))
+		ave_block_size = printf("%.1f", str2float(tag_cross[interview_list[interview_index]][tag_][0]) / str2float(tag_cross[interview_list[interview_index]][tag_][1]))
+		execute "normal! i|" interview_list[interview_index] .. "|" .. 
+					\ tag_cross[interview_list[interview_index]][tag_][0] "|" .. 
+					\ tag_cross[interview_list[interview_index]][tag_][1] "|" ..
+					\ ave_block_size         "|\n"
 		execute "normal! ki\<ESC>j"
-		let l:total_tags   = l:total_tags   + a:tag_cross[a:interview_list[interview_index]][a:tag][0]
-		let l:total_blocks = l:total_blocks + a:tag_cross[a:interview_list[interview_index]][a:tag][1]
+		total_tags   = total_tags   + tag_cross[interview_list[interview_index]][tag_][0]
+		total_blocks = total_blocks + tag_cross[interview_list[interview_index]][tag_][1]
 	endfor
 
 	execute "normal! i|:---|---:|---:|---:|\n"
 	execute "normal! ki\<ESC>j"
-	let l:ave_total_blocks_size = printf("%.1f", str2float(l:total_tags) / str2float(l:total_blocks))
-	execute "normal! i| Totals |" . 
-				\ l:total_tags             . "|" . 
-				\ l:total_blocks           . "|" .
-				\ l:ave_total_blocks_size  . "|\n\n"
+	var ave_total_blocks_size = printf("%.1f", str2float(total_tags) / str2float(total_blocks))
+	execute "normal! i| Totals |" 
+				\ total_tags             "|" .. 
+				\ total_blocks           "|" ..
+				\ ave_total_blocks_size  "|\n\n"
 	#execute "normal! 2ki\<ESC>2j"
 	execute "normal! 2ki\<ESC>2j"
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function GraphInterviewTagSummary(tag_cross, interview, unique_tags, longest_tag_length, bar_scale) 
-	let l:bar_scale_print = printf("%.1f", a:bar_scale)
+def GraphInterviewTagSummary(tag_cross: dict<any>, interview: string, unique_tags: list<string>, longest_tag_length: number, bar_scale: float) 
+	var bar_scale_print = printf("%.1f", bar_scale)
+	var offset          = 0
+	var block_amount    = 0
+	var tag_amount      = 0
 
-	let l:report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
-	execute "normal! Gi**Graph: Interview " . a:interview . "** (Updated: " . l:report_update_time . ")\n"
+	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
+	execute "normal! Gi**Graph: Interview " interview .. "** (Updated: " .. report_update_time .. ")\n"
 
-	for tag_index in range(0, (len(a:unique_tags) - 1))
-		let l:offset       = a:longest_tag_length - len(a:unique_tags[tag_index])
-		let l:block_amount = a:tag_cross[a:interview][a:unique_tags[tag_index]][1]
-		let l:tag_amount   = a:tag_cross[a:interview][a:unique_tags[tag_index]][0] - l:block_amount
-		if a:tag_cross[a:interview][a:unique_tags[tag_index]][0] != 0
-			execute "normal! i" . a:unique_tags[tag_index] . " " . repeat(" ", l:offset) .
-						\	"|" . repeat('□', str2nr(string(round(l:block_amount * a:bar_scale)))) . 
-						\	repeat('▤', str2nr(string(round(l:tag_amount * a:bar_scale)))) . 
-						\ 	" " . a:tag_cross[a:interview][a:unique_tags[tag_index]][0] . 
-						\	"(" . a:tag_cross[a:interview][a:unique_tags[tag_index]][1] . ")\n"
+	for tag_index in range(0, (len(unique_tags) - 1))
+		offset       = longest_tag_length - len(unique_tags[tag_index])
+		block_amount = tag_cross[interview][unique_tags[tag_index]][1]
+		tag_amount   = tag_cross[interview][unique_tags[tag_index]][0] - block_amount
+		if tag_cross[interview][unique_tags[tag_index]][0] != 0
+			execute "normal! i" unique_tags[tag_index] .. " " .. repeat(" ", offset) ..
+						\	"|" repeat('□', str2nr(string(round(block_amount * bar_scale)))) .. 
+						\	repeat('▤', str2nr(string(round(tag_amount * bar_scale)))) 
+						\ 	" " tag_cross[interview][unique_tags[tag_index]][0] .. 
+						\	"(" tag_cross[interview][unique_tags[tag_index]][1] .. ")\n"
 		else
-			execute "normal! i" . a:unique_tags[tag_index] . " " . repeat(" ", l:offset) .
+			execute "normal! i" unique_tags[tag_index] .. " " .. repeat(" ", offset) ..
 						\	"|\n"
 		endif
 	endfor
 	execute "normal! iLegend: □ = coding block bar over top of tag bar. ▤ = tag bar.\n"
-	execute "normal! iScale: " . l:bar_scale_print . " square characters represent 1 observation.\n\n"
-endfunction
+	execute "normal! iScale: " bar_scale_print .. " square characters represent 1 observation.\n\n"
+enddef
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function GraphTagInterviewSummary(tag_cross, tag, interviews, longest_tag_length, bar_scale) 
-	let l:bar_scale_print = printf("%.1f", a:bar_scale)
+def GraphTagInterviewSummary(tag_cross: dict<any>, tag_: string, interviews: list<string>, longest_tag_length: number, bar_scale: float) 
+	var bar_scale_print = printf("%.1f", bar_scale)
+	var offset          = 0
+	var block_amount    = 0
+	var tag_amount      = 0
 
-	let l:report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
-	execute "normal! Gi**Graph: Tag " . a:tag . "** (Updated: " . l:report_update_time . ")\n"
+	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
+	execute "normal! Gi**Graph: Tag " tag .. "** (Updated: " .. report_update_time .. ")\n"
 
-	for interview_index in range(0, (len(a:interviews) - 1))
-		let l:offset       = a:longest_tag_length - len(a:interviews[interview_index])
-		let l:block_amount = a:tag_cross[a:interviews[interview_index]][a:tag][1]
-		let l:tag_amount   = a:tag_cross[a:interviews[interview_index]][a:tag][0] - l:block_amount
-		if a:tag_cross[a:interviews[interview_index]][a:tag][0] != 0
-			execute "normal! i" . a:interviews[interview_index] . " " . repeat(" ", l:offset) .
-						\	"|" . repeat('□', str2nr(string(round(l:block_amount * a:bar_scale)))) . 
-						\	repeat('▤', str2nr(string(round(l:tag_amount * a:bar_scale)))) . 
-						\ 	" " . a:tag_cross[a:interviews[interview_index]][a:tag][0] . 
-						\	"(" . a:tag_cross[a:interviews[interview_index]][a:tag][1] . ")\n"
+	for interview_index in range(0, (len(interviews) - 1))
+		offset       = longest_tag_length - len(interviews[interview_index])
+		block_amount = tag_cross[interviews[interview_index]][tag_][1]
+		tag_amount   = tag_cross[interviews[interview_index]][tag_][0] - block_amount
+		if tag_cross[interviews[interview_index]][tag_][0] != 0
+			execute "normal! i" interviews[interview_index] .. " " .. repeat(" ", offset) ..
+						\	"|" repeat('□', str2nr(string(round(block_amount * bar_scale)))) .. 
+						\	repeat('▤', str2nr(string(round(tag_amount * bar_scale)))) 
+						\ 	" " tag_cross[interviews[interview_index]][tag_][0] .. 
+						\	"(" tag_cross[interviews[interview_index]][tag_][1] .. ")\n"
 		else
-			execute "normal! i" . a:interviews[interview_index] . " " . repeat(" ", l:offset) .
+			execute "normal! i" interviews[interview_index] .. " " .. repeat(" ", offset) ..
 						\	"|\n"
 		endif
 	endfor
 	execute "normal! iLegend: □ = coding block bar over top of tag bar. ▤ = tag bar.\n"
-	execute "normal! iScale: " . l:bar_scale_print . " square characters represent 1 observation.\n\n"
-endfunction
+	execute "normal! iScale: " bar_scale_print .. " square characters represent 1 observation.\n\n"
+enddef
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function CreateUniqueTagList(tags_desc) 
-	let l:unique_tags = []
-	for index in range(0, len(a:tags_desc) - 1)
-		if (index(l:unique_tags, a:tags_desc[index][2]) == -1)
-			let l:unique_tags = l:unique_tags + [a:tags_desc[index][2]]
+def CreateUniqueTagList(tags_desc): list<string>
+	var unique_tags = []
+	for index in range(0, len(tags_desc) - 1)
+		if (index(unique_tags, tags_desc[index][2]) == -1)
+			unique_tags = unique_tags + [tags_desc[index][2]]
 		endif
 	endfor
-	return l:unique_tags
-endfunction 
+	return unique_tags
+enddef 
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function FindLengthOfLongestTag(tag_list) 
-	let l:longest_tag_length = 0
-	for index in range(0, len(a:tag_list) - 1)
-		let l:test_length = len(a:tag_list[index])
-		if l:test_length > l:longest_tag_length
-			let l:longest_tag_length = l:test_length
+def FindLengthOfLongestTag(tag_list: list<string>): number 
+	var longest_tag_length = 0
+	var test_length        = 0
+	for index in range(0, len(tag_list) - 1)
+		test_length = len(tag_list[index])
+		if test_length > longest_tag_length
+			longest_tag_length = test_length
 		endif
 	endfor
-	return l:longest_tag_length
-endfunction
+	return longest_tag_length
+enddef
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function TagStats() 
+def TagStats() 
 
-	call ParmCheck()
+	ParmCheck()
 	
-	let l:ext_length = (len(g:vimwiki_wikilocal_vars[g:wiki_number]['ext']) + 1) * -1
+	var ext_length = (len(g:vimwiki_wikilocal_vars[g:wiki_number]['ext']) + 1) * -1
 
 	# save buffer number of current file to register 'a' so you can return here
-	let @a = bufnr('%')
+	@a = bufnr('%')
 	
-	let g:interview_list = []
-	call GetInterviewFileList()
+	g:interview_list = []
+	GetInterviewFileList()
 
-	let g:tags_list = []
+	g:tags_list = []
 	
 	# Go through each interview file building up a list of tags
 	for interview in range(0, (len(g:interview_list) - 1))
 		# go to interview file
-		execute "normal :e " . g:interview_list[interview] . "\<CR>"
-		let g:interview_to_crawl = expand('%:t:r')
-		call CrawlBufferTags(interview, g:interview_to_crawl)	
+		execute "normal :e " .. g:interview_list[interview] .. "\<CR>"
+		g:interview_to_crawl = expand('%:t:r')
+		CrawlBufferTags(interview, g:interview_to_crawl)	
 	endfor
 
-	let g:unique_tags = sort(CreateUniqueTagList(g:tags_list))
+	g:unique_tags = sort(CreateUniqueTagList(g:tags_list))
 
-	let g:tag_cross   = CalcInterviewTagCrosstabs(g:tags_list, g:unique_tags, g:interview_list, l:ext_length)
+	g:tag_cross   = CalcInterviewTagCrosstabs(g:tags_list, g:unique_tags, g:interview_list, ext_length)
 	
 	# Find the longest tag in terms of the number of characters in the tag.
-	let l:len_longest_tag = FindLengthOfLongestTag(g:unique_tags)
+	var len_longest_tag = FindLengthOfLongestTag(g:unique_tags)
 
-	let l:window_width = winwidth('%')
+	var window_width = winwidth('%')
 
 	# Find the largest tag and block tallies. This will be used in the scale calculation for graphs.
 	# Multiplying by 1.0 is done to coerce integers to floats.
-	let l:largest_tag_and_block_counts = FindLargestTagAndBlockCounts(g:tag_cross, g:unique_tags, g:interview_list, l:ext_length)
-	let l:largest_tag_count           = l:largest_tag_and_block_counts[0] * 1.0
-	let l:largest_block_count         = l:largest_tag_and_block_counts[1] * 1.0
+	var largest_tag_and_block_counts = FindLargestTagAndBlockCounts(g:tag_cross, g:unique_tags, g:interview_list, ext_length)
+	var largest_tag_count            = largest_tag_and_block_counts[0] * 1.0
+	var largest_block_count          = largest_tag_and_block_counts[1] * 1.0
 
 	# find the number of digits in the following counts. Used for
 	# calculating the graph scale. The nested functions are mostly to
 	# convert the float to an lint. Vimscript doesn't have a direct way to do this.
-	let l:largest_tag_count_digits    = str2nr(string(trunc(log10(l:largest_tag_count) + 1)))
-	let l:largest_block_count_digits  = str2nr(string(trunc(log10(l:largest_block_count) + 1)))
+	var largest_tag_count_digits    = str2nr(string(trunc(log10(largest_tag_count) + 1)))
+	var largest_block_count_digits  = str2nr(string(trunc(log10(largest_block_count) + 1)))
 
-	let l:max_bar_width = l:window_width - l:len_longest_tag - l:largest_tag_count - l:largest_tag_count_digits - l:largest_block_count_digits - 8
-	let l:bar_scale     = l:max_bar_width / l:largest_tag_count
+	var max_bar_width = window_width - len_longest_tag - largest_tag_count - largest_tag_count_digits - largest_block_count_digits - 8
+	var bar_scale     = max_bar_width / largest_tag_count
 
 	# Return to the buffer where these charts and graphs are going to be
 	# produced and clear out the buffer.
@@ -1832,283 +1844,289 @@ function TagStats()
 
 	# Print interview tag summary tables
 	for interview in range(0, (len(g:interview_list) - 1))
-		call PrintInterviewTagSummary(g:tag_cross, g:interview_list[interview], g:unique_tags)	
+		PrintInterviewTagSummary(g:tag_cross, g:interview_list[interview], g:unique_tags)	
 	endfor
 	#Print tag interview summary tables
 	for tag_index in range(0, (len(g:unique_tags) - 1))
-		call PrintTagInterviewSummary(g:tag_cross, g:unique_tags[tag_index], g:interview_list)
+		PrintTagInterviewSummary(g:tag_cross, g:unique_tags[tag_index], g:interview_list)
 	endfor
 	# Print interview tag summary graphs
 	for interview in range(0, (len(g:interview_list) - 1))
-		call GraphInterviewTagSummary(g:tag_cross, g:interview_list[interview], g:unique_tags, l:len_longest_tag, l:bar_scale)	
+		GraphInterviewTagSummary(g:tag_cross, g:interview_list[interview], g:unique_tags, len_longest_tag, bar_scale)	
 	endfor
 	# Print interview tag summary graphs
 	for tag_index in range(0, (len(g:unique_tags) - 1))
-		call GraphTagInterviewSummary(g:tag_cross, g:unique_tags[tag_index], g:interview_list, l:len_longest_tag, l:bar_scale)	
+		GraphTagInterviewSummary(g:tag_cross, g:unique_tags[tag_index], g:interview_list, len_longest_tag, bar_scale)	
 	endfor
 	
-	#execute "normal! iLongest tag " . l:len_longest_tag . "\n"
-	#execute "normal! iMax bar width " . l:max_bar_width . "\n"
-	#execute "normal! ilargest_tag_count " . l:largest_tag_count . "\n"
-endfunction
+	#execute "normal! iLongest tag " l:len_longest_tag .. "\n"
+	#execute "normal! iMax bar width " l:max_bar_width .. "\n"
+	#execute "normal! ilargest_tag_count " l:largest_tag_count .. "\n"
+enddef
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function PopulateQuoteLineList() 
-	let g:current_line_dict   = {}
-	let g:current_line_dict = { "int_name"    : g:current_buf_name,
-				\   "bufnr"       : g:ll_bufnr,
-				\   "text_w_meta" : g:line_text,
-				\   "text"        : g:line_text_less_meta,
-				\   "line_num"    : g:current_int_line_num}
+def PopulateQuoteLineList() 
+	g:current_line_dict   = {}
+	g:current_line_dict = { "int_name"    : g:current_buf_name,
+				"bufnr"       : g:ll_bufnr,
+				"text_w_meta" : g:line_text,
+				"text"        : g:line_text_less_meta,
+				"line_num"    : g:current_int_line_num}
 	
 	if len(g:quote_dict) == 0
 
-		let g:quote_dict[g:current_buf_name] = [[ g:current_line_dict ]]
+		g:quote_dict[g:current_buf_name] = [[ g:current_line_dict ]]
 	elseif (g:current_buf_name == g:last_int_name)
 		if g:current_int_line_num - g:last_int_line_num == 1 
-			let g:quote_dict[g:current_buf_name][g:block_count] = g:quote_dict[g:current_buf_name][g:block_count] + [ g:current_line_dict ]
+			g:quote_dict[g:current_buf_name][g:block_count] = g:quote_dict[g:current_buf_name][g:block_count] + [ g:current_line_dict ]
 		else
-			let g:quote_dict[g:current_buf_name]                = g:quote_dict[g:current_buf_name] + [[ g:current_line_dict ]]
-			let g:block_count = g:block_count + 1 
+			g:quote_dict[g:current_buf_name]                = g:quote_dict[g:current_buf_name] + [[ g:current_line_dict ]]
+			g:block_count = g:block_count + 1 
 		endif
 	elseif (g:current_buf_name != g:last_int_name)
-		let g:block_count = 0
-		let g:quote_dict[g:current_buf_name] = [[ g:current_line_dict ]]
+		g:block_count = 0
+		g:quote_dict[g:current_buf_name] = [[ g:current_line_dict ]]
 	endif
-endfunction
+enddef
 
-function BuildListOfCrossCodes(text_w_meta) 
-	let l:tag_test = matchstrpos(a:text_w_meta, ':\a.\{-}:', 0)
-	while (l:tag_test[1] != -1)
-		if (index(g:cross_codes, l:tag_test[0]) == -1)
-			let g:cross_codes = g:cross_codes + [ l:tag_test[0] ]
+def BuildListOfCrossCodes(text_w_meta: string) 
+	var tag_test = matchstrpos(text_w_meta, ':\a.\{-}:', 0)
+	while (tag_test[1] != -1)
+		if (index(g:cross_codes, tag_test[0]) == -1)
+			g:cross_codes = g:cross_codes + [ tag_test[0] ]
 		endif
-		let l:tag_test = matchstrpos(a:text_w_meta, ':\a.\{-}:', l:tag_test[2])
+		tag_test = matchstrpos(text_w_meta, ':\a.\{-}:', tag_test[2])
 	endwhile
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function ProcessInterviewLines(meta, report_type, search_term) 
-	if has_key(g:quote_dict, g:interview_list[g:int_index])
-		if a:report_type != "VWS"
-			let @s = @s . "**TAGGED LINES:**\n\n"
-		else
-			let @s = @s . "**MATCHED LINES:**\n\n"
-		endif
-		if a:meta == "meta"
-			let l:line_type = "text_w_meta"
-		else
-			let l:line_type = "text"
-		endif
-		let l:blocks = len(g:quote_dict[g:interview_list[g:int_index]])
-		for l:block_index in range(0, l:blocks - 1)
-			let g:csv_block = ""
-			let l:first_line_num = printf("%04d", g:quote_dict[g:interview_list[g:int_index]][l:block_index][0]["line_num"])
-			let l:last_line_num  = printf("%04d", g:quote_dict[g:interview_list[g:int_index]][l:block_index][-1]["line_num"])
-			let l:lines = len(g:quote_dict[g:interview_list[g:int_index]][l:block_index])
-			let g:block = ""
-			let g:cross_codes = []
-			for l:line_index in range(0, l:lines - 1)
-				if (a:meta == "meta")
-					let g:block = g:block . g:quote_dict[g:interview_list[g:int_index]][l:block_index][l:line_index]["text_w_meta"] . "\n"
-				else
-					let g:block = g:block . g:quote_dict[g:interview_list[g:int_index]][l:block_index][l:line_index]["text"]
-					call BuildListOfCrossCodes(g:quote_dict[g:interview_list[g:int_index]][l:block_index][l:line_index]["text_w_meta"])
-				endif
-				let l:csv_line = CreateCSVRecord(a:search_term, l:block_index, l:line_index)
-				let g:csv_block = g:csv_block . l:csv_line . "\n"
-			endfor
-			if (a:meta != "meta")
-				let g:block = substitute(g:block, '\s\+', ' ', "g")
-				let g:block = substitute(g:block, '(\d:\d\d:\d\d)\sspk_\d:\s', '', "g") 
-				let g:cross_codes_string = string(g:cross_codes)
-				let g:cross_codes_string = substitute(g:cross_codes_string, "\'", ' ', "g")
-				let g:cross_codes_string = substitute(g:cross_codes_string, ',', '', "g")
-				let g:cross_codes_string = substitute(g:cross_codes_string, '\s\+', ' ', "g")
+def ProcessInterviewLines(meta: string, report_type: string, search_term: string) 
 
-				let g:block = g:block . " **" . g:interview_list[g:int_index] . ": " . l:first_line_num . " - " . l:last_line_num . "** " . g:cross_codes_string . "\n\n"
+	var csv_line          = "undefined"
+	var lines             = 0
+	var last_line_number  = "undefined"
+	var first_line_number = "undefined"
+	var line_type         = "undefined"
+	var blocks            = 0
+
+	if has_key(g:quote_dict, g:interview_list[g:int_index])
+		if report_type != "VWS"
+			@s = @s .. "**TAGGED LINES:**\n\n"
+		else
+			@s = @s .. "**MATCHED LINES:**\n\n"
+		endif
+		if meta == "meta"
+			line_type = "text_w_meta"
+		else
+			line_type = "text"
+		endif
+		blocks = len(g:quote_dict[g:interview_list[g:int_index]])
+		for block_index in range(0, blocks - 1)
+			g:csv_block = ""
+			first_line_num = printf("%04d", g:quote_dict[g:interview_list[g:int_index]][block_index][0]["line_num"])
+			last_line_num  = printf("%04d", g:quote_dict[g:interview_list[g:int_index]][block_index][-1]["line_num"])
+			lines = len(g:quote_dict[g:interview_list[g:int_index]][block_index])
+			g:block = ""
+			g:cross_codes = []
+			for line_index in range(0, lines - 1)
+				if (meta == "meta")
+					g:block = g:block .. g:quote_dict[g:interview_list[g:int_index]][block_index][line_index]["text_w_meta"] .. "\n"
+				else
+					g:block = g:block .. g:quote_dict[g:interview_list[g:int_index]][block_index][line_index]["text"]
+					BuildListOfCrossCodes(g:quote_dict[g:interview_list[g:int_index]][block_index][line_index]["text_w_meta"])
+				endif
+				csv_line = CreateCSVRecord(search_term, block_index, line_index)
+				g:csv_block = g:csv_block .. csv_line .. "\n"
+			endfor
+			if (meta != "meta")
+				g:block = substitute(g:block, '\s\+', ' ', "g")
+				g:block = substitute(g:block, '(\d:\d\d:\d\d)\sspk_\d:\s', '', "g") 
+				g:cross_codes_string = string(g:cross_codes)
+				g:cross_codes_string = substitute(g:cross_codes_string, "\'", ' ', "g")
+				g:cross_codes_string = substitute(g:cross_codes_string, ',', '', "g")
+				g:cross_codes_string = substitute(g:cross_codes_string, '\s\+', ' ', "g")
+
+				g:block = g:block .. " **" .. g:interview_list[g:int_index] .. ": " .. first_line_num .. " - " .. last_line_num .. "** " .. g:cross_codes_string .. "\n\n"
 			endif
 
-			let @s = @s . g:block
-			let @u = @u . g:csv_block
+			@s = @s .. g:block
+			@u = @u .. g:csv_block
 
-			if (a:meta == "meta")
-				let @s = @s . "\n"
+			if (meta == "meta")
+				@s = @s .. "\n"
 			endif
 		endfor
 	endif
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function ProcessInterviewTitle(interview) 
-	let g:attribute_line = GetAttributeLine(a:interview)
+def ProcessInterviewTitle(interview: string) 
+	g:attribute_line = GetAttributeLine(interview)
 
-	let g:interview_title = "\n# ======================================\n# INTERVIEW: "
-				\	. a:interview .
-				\	#\n# ======================================\n**ATTRIBUTES:** "
-				\	. g:attribute_line . "\n"
+	g:interview_title = "\n# ======================================\n# INTERVIEW: "
+					.. interview.
+					#\n# ======================================\n**ATTRIBUTES:** "
+					.. g:attribute_line .. "\n"
 
-	let @s = @s . g:interview_title
-endfunction
+	@s = @s .. g:interview_title
+enddef
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function GetInterviewLineInfo(line_text) 
-	let l:interview_label_position      = match(a:line_text, g:tag_search_regex)
-	let l:interview_line_num_pos        = match(a:line_text, ' \d\{4}', l:interview_label_position)
-	let l:current_interview_line_number = str2nr(a:line_text[(l:interview_line_num_pos + 1):(l:interview_line_num_pos + 4)])
-	return l:current_interview_line_number
-endfunction
+def GetInterviewLineInfo(line_text: string): number 
+	var interview_label_position      = match(line_text, g:tag_search_regex)
+	var interview_line_num_pos        = match(line_text, ' \d\{4}', interview_label_position)
+	var current_interview_line_number = str2nr(line_text[(interview_line_num_pos + 1):(interview_line_num_pos + 4)])
+	return current_interview_line_number
+enddef
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function CreateSummaryCountTableLine() 
+def CreateSummaryCountTableLine() 
 	
-	let l:number_of_blocks = 0
-	let l:number_of_lines  = 0
+	var number_of_blocks = 0
+	var number_of_lines  = 0
 	if has_key(g:quote_dict, g:unique_keys[g:int_index])
-		let l:number_of_blocks = len(g:quote_dict[g:unique_keys[g:int_index]])
-		for l:block_index in range(0, l:number_of_blocks - 1)
-			let l:number_of_lines = l:number_of_lines + len(g:quote_dict[g:unique_keys[g:int_index]][l:block_index])
+		number_of_blocks = len(g:quote_dict[g:unique_keys[g:int_index]])
+		for block_index in range(0, number_of_blocks - 1)
+			number_of_lines = number_of_lines + len(g:quote_dict[g:unique_keys[g:int_index]][block_index])
 		endfor
 	endif 
 
-	let l:lines_per_block = str2float(l:number_of_lines) / str2float(l:number_of_blocks)
-	let l:lines_per_block = printf("%.1f", l:lines_per_block)
+	var lines_per_block = str2float(number_of_lines) / str2float(number_of_blocks)
+	lines_per_block = printf("%.1f", lines_per_block)
 
-	let l:number_of_annos = 0
+	var number_of_annos = 0
 	if has_key(g:anno_dict, g:unique_keys[g:int_index])
-		let l:number_of_annos = len(g:anno_dict[g:unique_keys[g:int_index]])
+		number_of_annos = len(g:anno_dict[g:unique_keys[g:int_index]])
 	endif 
 
-	let g:total_blocks = g:total_blocks + l:number_of_blocks
-	let g:total_lines  = g:total_lines  + l:number_of_lines
-	let g:total_annos  = g:total_annos  + l:number_of_annos
+	g:total_blocks = g:total_blocks + number_of_blocks
+	g:total_lines  = g:total_lines  + number_of_lines
+	g:total_annos  = g:total_annos  + number_of_annos
 
-	let l:interview_number = g:int_index + 1
-	let @t = @t . 
-				\ "| " . l:interview_number .
-				\ "| [" . g:unique_keys[g:int_index] . "](" .
-				\ g:unique_keys[g:int_index] . ") | " . 
-				\ l:number_of_blocks .  " | " .
-				\ l:number_of_lines . " | " . 
-				\ l:lines_per_block . " | " . 
-				\l:number_of_annos . " |\n"
+	var interview_number = g:int_index + 1
+	@t = @t ..  "| " .. l:interview_number ..  "| [" .. g:unique_keys[g:int_index] .. "](" ..
+				 g:unique_keys[g:int_index] .. ") | " ..
+				 number_of_blocks ..  " | " ..
+				 number_of_lines .. " | " .. 
+				 lines_per_block .. " | " .. 
+				 number_of_annos .. " |\n"
 
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function ProcessAnnotationLines() 
+def ProcessAnnotationLines() 
+	var annos    = 0
+	var anno_num = 0
 	if has_key(g:anno_dict, g:interview_list[g:int_index])
-		let l:annos = len(g:anno_dict[g:interview_list[g:int_index]])
-		let g:int_annos = ""
-		for l:anno_index in range(0, l:annos - 1)
-			let l:anno_num = l:anno_index + 1
-			let g:int_annos = g:int_annos . 
-						\ "**ANNOTATION " . 
-						\ l:anno_num  .
-						\ ":**\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n" .
-						\ g:anno_dict[g:interview_list[g:int_index]][l:anno_index]["text"] .
-						\ ">>>>>>>>>>>>>>>>>>>>>>>>>>>>\n\n"
+		annos = len(g:anno_dict[g:interview_list[g:int_index]])
+		g:int_annos = ""
+		for anno_index in range(0, annos - 1)
+			anno_num = anno_index + 1
+			g:int_annos = g:int_annos .. "**ANNOTATION " .. 
+						 anno_num ..  ":**\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n" ..
+						 g:anno_dict[g:interview_list[g:int_index]][anno_index]["text"] ..
+						 ">>>>>>>>>>>>>>>>>>>>>>>>>>>>\n\n"
 		endfor
-		let @s = @s . g:int_annos
+		@s = @s .. g:int_annos
 	endif
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function PopulateAnnoLineList(buf_type) 
-	let g:current_anno_dict           = {}
-	let g:current_anno_int_name       = GetAnnoInterview(g:current_buf_name)
-	let g:anno_text                   = GetAnnoText(g:ll_bufnr)
-	let g:current_anno_dict = { "int_name"    : g:current_anno_int_name,
-				\   "anno_name"   : g:current_buf_name,
-				\   "bufnr"       : g:ll_bufnr,
-				\   "text"        : g:anno_text }
+def PopulateAnnoLineList(buf_type: string) 
+	g:current_anno_dict           = {}
+	g:current_anno_int_name       = GetAnnoInterview(g:current_buf_name)
+	g:anno_text                   = GetAnnoText(g:ll_bufnr)
+	g:current_anno_dict = { "int_name"    : g:current_anno_int_name,
+				   "anno_name"   : g:current_buf_name,
+				   "bufnr"       : g:ll_bufnr,
+				   "text"        : g:anno_text }
 	
 	if len(g:anno_dict) == 0
-		let g:anno_dict[g:current_anno_dict.int_name] = [ g:current_anno_dict ]
+		g:anno_dict[g:current_anno_dict.int_name] = [ g:current_anno_dict ]
 	elseif (g:current_anno_dict.int_name == g:last_anno_int_name)
 		if (g:current_buf_name != g:last_anno_buf_name)
-			let g:anno_dict[g:current_anno_dict.int_name] = g:anno_dict[g:current_anno_dict.int_name] + [ g:current_anno_dict ]
+			g:anno_dict[g:current_anno_dict.int_name] = g:anno_dict[g:current_anno_dict.int_name] + [ g:current_anno_dict ]
 		endif
 	elseif (g:current_anno_dict.int_name != g:last_anno_int_name)
-		let g:anno_dict[g:current_anno_dict.int_name] = [ g:current_anno_dict ]
+		g:anno_dict[g:current_anno_dict.int_name] = [ g:current_anno_dict ]
 	endif
-endfunction
+enddef
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function GetAnnoInterview(buffer_name) 
-	let l:line_num_loc  = match(a:buffer_name, ':')
-	let l:cropped_name  = a:buffer_name[0:l:line_num_loc - 1]
-	return l:cropped_name
-endfunction
+def GetAnnoInterview(buffer_name: string): string
+	var line_num_loc  = match(buffer_name, ':')
+	var cropped_name  = buffer_name[0:line_num_loc - 1]
+	return cropped_name
+enddef
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function GetAnnoText(bufnr) 
+def GetAnnoText(bufnr: number): string 
 	# Go to the Location List result under the cursor.
-	execute "normal! :buffer " . a:bufnr . "\<CR>"
+	execute "normal! :buffer " .. bufnr .. "\<CR>"
 	# Copy the annotation text.
 	execute "normal! G$?.\<CR>Vggy"
 	return @@
-endfunction
+enddef
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function CreateCSVRecord(search_term, block_index, line_index) 
+def CreateCSVRecord(search_term: string, block_index: number, line_index: number): string
 	# -----------------------------------------------------------------
 	# Build output record
 	# -----------------------------------------------------------------
-	let l:attributes = substitute(g:attribute_line, '\s\+', '', "g")
-	let l:attributes = substitute(l:attributes , ":", ",", "g")
-	let l:attributes = l:attributes[:-3]
-	let l:block = a:block_index + 1
-	let l:outline =           a:search_term . "," .
-				\ g:interview_list[g:int_index] . "," .
-				\ l:block . "," .
-				\ g:quote_dict[g:interview_list[g:int_index]][a:block_index][a:line_index]["line_num"] . "," .
-				\ "\"" . g:quote_dict[g:interview_list[g:int_index]][a:block_index][a:line_index]["text"] . "\"," .
-				\ g:current_buf_length . 
-				\ l:attributes 
+	var attributes = substitute(g:attribute_line, '\s\+', '', "g")
+	attributes = substitute(attributes , ":", ",", "g")
+	attributes = attributes[:-3]
+	var block = block_index + 1
+	var outline =           search_term .. "," ..
+				 g:interview_list[g:int_index]. "," ..
+				 block .. "," ..
+				 g:quote_dict[g:interview_list[g:int_index]][block_index][line_index]["line_num"]. "," ..
+				 "\"" .. g:quote_dict[g:interview_list[g:int_index]][block_index][line_index]["text"] .. "\"," ..
+				 g:current_buf_length.
+				 attributes 
 
-	return l:outline
-endfunction
+	return outline
+enddef
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function FindBufferType(current_buf_name) 
-	if match(a:current_buf_name, "Summary") != -1
+def FindBufferType(current_buf_name: string): string
+	if match(current_buf_name, "Summary") != -1
 		return "Summary"
-	elseif match(a:current_buf_name, ': \d\{4}') != -1
+	elseif match(current_buf_name, ': \d\{4}') != -1
 		return  "Annotation"
-	elseif match(a:current_buf_name, g:interview_label_regex) != -1
+	elseif match(current_buf_name, g:interview_label_regex) != -1
 		return "Interview"
 	else
 		return "Other"
 	endif
-endfunction
+enddef
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function RemoveMetadata(line_text) 
+def RemoveMetadata(line_text): string
 	# -----------------------------------------------------------------
 	#  There is something strange going on here. You shouldn't
 	#  have to go back 6 columns from the match. If you don't you
@@ -2116,73 +2134,73 @@ function RemoveMetadata(line_text)
 	#  figure out what these are but if you chop them off the
 	#  function works.
 	# -----------------------------------------------------------------
-	let g:border_location = match(a:line_text, g:tag_search_regex) - 6
-	return a:line_text[:g:border_location]
-endfunction
+	g:border_location = match(line_text, g:tag_search_regex) - 6
+	return line_text[:g:border_location]
+enddef
 
 
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function AddReportHeader(report_type, search_term) 
-	let l:report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
-	let l:report_header = "\n# *********************************************************************************\n"
-	let l:report_header = l:report_header . "# *********************************************************************************\n"
-	let l:report_header = l:report_header . "  **" . a:report_type . "(\"" . a:search_term . "\")**\n  Created by **" . g:coder_initials . "**\n  on **" . l:report_update_time . "**"
-	let l:report_header = l:report_header . "\n# *********************************************************************************"
-	let l:report_header = l:report_header . "\n# *********************************************************************************"
-	let @q = l:report_header . "\n\n**SUMMARY TABLE:**\n\n" 
-endfunction
+def AddReportHeader(report_type: string, search_term: string) 
+	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
+	var report_header = "\n# *********************************************************************************\n"
+	report_header = report_header .. "# *********************************************************************************\n"
+	report_header = report_header .. "  **" .. report_type .. "(\"" .. search_term .. "\")**\n  Created by **" .. g:coder_initials .. "**\n  on **" .. report_update_time .. "**"
+	report_header = report_header .. "\n# *********************************************************************************"
+	report_header = report_header .. "\n# *********************************************************************************"
+	@q = report_header .. "\n\n**SUMMARY TABLE:**\n\n" 
+enddef
 
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function GetAttributeLine(interview) 
+def GetAttributeLine(interview): number 
 	# -----------------------------------------------------------------
 	# Go to the Location List result under the cursor.
 	# -----------------------------------------------------------------
-	execute "normal! :e " . a:interview . "\.md\<CR>"
+	execute "normal! :e " .. interview .. "\.md\<CR>"
 	# -----------------------------------------------------------------
 	# Get the first line and the length of the buffer in lines.
 	# -----------------------------------------------------------------
 	execute "normal! ggVy"
-	let g:attribute_row = @@
-	let g:current_buf_length = line('$')
+	g:attribute_row = @@
+	g:current_buf_length = line('$')
 	execute "normal! \<C-o>"
 	return g:attribute_row
-endfunction
+enddef
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function TrimLeadingPartialSentence() 
+def TrimLeadingPartialSentence() 
 	#execute "normal! vip\"by"
 	#execute "normal! `<v)hx"
 	execute "normal! 0v)hx"
-endfunction
+enddef
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function TrimTrailingPartialSentence() 
+def TrimTrailingPartialSentence() 
 	execute "normal! $"
-	let g:trim_tail_regex = '**' . g:tag_search_regex
-	let g:tag_test = search(g:trim_tail_regex, 'b', line("."))
+	g:trim_tail_regex = '**'. g:tag_search_regex
+	g:tag_test = search(g:trim_tail_regex, 'b', line("."))
 	execute "normal! hv(d0"
-	#execute "normal! $" . '?**' . g:tag_search_regex . "\<CR>hv(d"
+	#execute "normal! $" '?**' .. g:tag_search_regex .. "\<CR>hv(d"
 	#execute "normal! vip\"by"
 	#execute "normal! `>(v)di\r\r\<ESC>kk"
-endfunction
+enddef
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function TrimLeadingAndTrailingPartialSentence() 
-	call TrimLeadingPartialSentence()
-	call TrimTrailingPartialSentence()
-endfunction
+def TrimLeadingAndTrailingPartialSentence() 
+	TrimLeadingPartialSentence()
+	TrimTrailingPartialSentence()
+enddef
 
 
 # -----------------------------------------------------------------
@@ -2220,12 +2238,12 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function GetTagUpdate() 
+def GetTagUpdate() 
 
 	ParmCheck()
 
-	call confirm("Populating tags. This may take a while.", "Got it", 1)
-	call CreateTagDict()
+	confirm("Populating tags. This may take a while.", "Got it", 1)
+	CreateTagDict()
 
 	execute "normal! :delmarks Y\<CR>"
 	execute "normal! mY"
@@ -2236,49 +2254,49 @@ function GetTagUpdate()
 	# ------------------------------------------------------
 	# Find the vimwiki that the current buffer is in.
 	# ------------------------------------------------------
-	let g:wiki_number = vimwiki#vars#get_bufferlocal('wiki_nr') 
+	g:wiki_number = vimwiki#vars#get_bufferlocal('wiki_nr') 
 	# -----------------------------------------------------------------
 	# Save the current buffer so any new tags are found by
 	# VimwikiRebuildTags
 	# -----------------------------------------------------------------
 	execute "normal :w\<CR>"
-	call GenTagsWithLocationList()
+	GenTagsWithLocationList()
 	# -----------------------------------------------------------------
 	# g:current_tags is used in vimwiki's omnicomplete function. At this
 	# point this is a modifcation to ftplugin#vimwikimwiki#Complete_wikifiles
 	# where
-	#    let tags = vimwiki#tags#get_tags()
+	#    tags = vimwiki#tags#get_tags()
 	# has been replaced by
-	#    let tags = deepcopy(g:current_tags)
+	#    tags = deepcopy(g:current_tags)
 	# This was done because as the number of tags grows in a project
 	# vimwiki#tags#get_tags() slows down.
 	# -----------------------------------------------------------------
-	let g:current_tags = sort(g:current_tags, 'i')
+	g:current_tags = sort(g:current_tags, 'i')
 	# ------------------------------------------------------
 	# Set the current wiki as the wiki that g:current_tags were last
 	# generated for. Also mark that a set of current tags has been
 	# generated to true.
 	# ------------------------------------------------------
-	let g:last_wiki_tags_generated_for = g:wiki_number
-	let g:current_tags_set_this_session = 1
+	g:last_wiki_tags_generated_for = g:wiki_number
+	g:current_tags_set_this_session = 1
 	# ------------------------------------------------------
 	# Popup menu to display the list of current tags sorted in
 	# case-insenstive alphabetical order
 	# ------------------------------------------------------
-	call GenDictTagList()
-	call UpdateCurrentTagsList()
-	call UpdateCurrentTagsPage()
-	call CurrentTagsPopUpMenu()
+	GenDictTagList()
+	UpdateCurrentTagsList()
+	UpdateCurrentTagsPage()
+	CurrentTagsPopUpMenu()
 
-	let g:current_tags = sort(g:just_in_dict_list + g:just_in_current_tag_list + g:in_both_lists)
+	g:current_tags = sort(g:just_in_dict_list + g:just_in_current_tag_list + g:in_both_lists)
 
 	# ------------------------------------------------------
 	# Add an element to the current wiki's configuration dictionary that
 	# marks it as having had its tags generated in this vim session.
 	# ------------------------------------------------------
-	let g:vimwiki_wikilocal_vars[g:wiki_number]['tags_generated_this_session'] = 1
+	g:vimwiki_wikilocal_vars[g:wiki_number]['tags_generated_this_session'] = 1
 	execute "normal! `Yzz"
-endfunction
+enddef
 
 # ------------------------------------------------------
 #
@@ -2290,7 +2308,7 @@ def GenTagsWithLocationList()
 	# Call VimwikiSearchTags against the a:search_term argument.
 	# Put the result in loc_list which is a list of location list
 	# dictionaries that we'll process.
-	silent execute "normal! :VimwikiSearch /" . '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' . "/g\<CR>"
+	silent execute "normal! :VimwikiSearch /" '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' .. "/g\<CR>"
 
 	var g:loc_list = getloclist(0)
 	var g:tag_list = []
@@ -2310,7 +2328,7 @@ def GenTagsWithLocationList()
 		last_col  = g:loc_list[g:line_index]['end_col'] - 3
 		g:test_tag = g:loc_list[g:line_index]['text'][first_col:last_col]
 		if (index(g:tag_list, g:test_tag) == -1)
-			let g:tag_list = g:tag_list + [ g:test_tag ]
+			g:tag_list = g:tag_list + [ g:test_tag ]
 		endif
 	endfor	
 	var g:current_tags = deepcopy(g:tag_list)
@@ -2319,68 +2337,68 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function UpdateCurrentTagsPage() 
+def UpdateCurrentTagsPage() 
 	# -----------------------------------------------------------------
 	# Use R mark to know how to get back
 	# -----------------------------------------------------------------
 	execute "normal! :delmarks R\<CR>"
 	execute "normal! mR"
 	# Open the Tag List Current Page
-	execute "normal! :e " . g:vimwiki_wikilocal_vars[g:wiki_number]['path'] . "Tag List Current" . g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] . "\<CR>"
+	execute "normal! :e " .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag List Current" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
 	# Delete what is there
 	execute "normal! ggVGd"
-	let l:tag_update_time = strftime("%Y-%m-%d %a %H:%M:%S")
-	execute "normal! i**Tag list last updated at: " . l:tag_update_time . "**\n\<CR>"
-	execute "normal! i- **There are " . len(g:in_both_lists) . " tag(s) defined in the Tag Glossary and included in the current tags list.**\n"
+	var tag_update_time = strftime("%Y-%m-%d %a %H:%M:%S")
+	execute "normal! i**Tag list last updated at: " .. tag_update_time .. "**\n\<CR>"
+	execute "normal! i- **There are " .. len(g:in_both_lists) .. " tag(s) defined in the Tag Glossary and included in the current tags list.**\n"
 	put =g:in_both_lists
 	execute "normal! Go"
-	execute "normal! i\n- **There are " . len(g:just_in_current_tag_list) . " tag(s) included in the current tags list, but not defined in the Tag Glossary.**\n"
+	execute "normal! i\n- **There are " .. len(g:just_in_current_tag_list) .. " tag(s) included in the current tags list, but not defined in the Tag Glossary.**\n"
 	put =g:just_in_current_tag_list
 	execute "normal! Go"
-	execute "normal! i\n- **There are " . len(g:just_in_dict_list) . " tag(s) defined in the Tag Glossary but not used in coding.**\n"
+	execute "normal! i\n- **There are " .. len(g:just_in_dict_list) .. " tag(s) defined in the Tag Glossary but not used in coding.**\n"
 	put =g:just_in_dict_list
 	execute "normal! ggj"
 	# Return to where you were
 	execute "normal! `Rzz"
 	
-endfunction
+enddef
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function UpdateCurrentTagsList() 
-	let g:tag_dict_keys 		= keys(g:tag_dict)
-	let g:tag_dict_keys 		= sort(g:tag_dict_keys, 'i')
+def UpdateCurrentTagsList() 
+	var is_in_list = 0
+	var print_list_item = "undefined"
+	g:tag_dict_keys 		= keys(g:tag_dict)
+	g:tag_dict_keys 		= sort(g:tag_dict_keys, 'i')
 	
-	let g:tag_list_output           = []
-	let g:in_both_lists  		= []
-	let g:just_in_dict_list		= []
-	let g:just_in_current_tag_list	= []
+	g:tag_list_output               = []
+	g:in_both_lists  		= []
+	g:just_in_dict_list		= []
+	g:just_in_current_tag_list	= []
 
-	for l:tag_dict_tag in range(0, (len(g:tag_dict_keys) - 1))
-		let l:is_in_list = index(g:current_tags, g:tag_dict_keys[l:tag_dict_tag])
-		if l:is_in_list >= 0
-			let l:print_list_item = g:tag_dict_keys[l:tag_dict_tag]
-			let g:in_both_lists = g:in_both_lists + [l:print_list_item]
-		elseif l:is_in_list < 0
-			let l:print_list_item = g:tag_dict_keys[l:tag_dict_tag]
-			let g:just_in_dict_list = g:just_in_dict_list + [l:print_list_item]
+	for tag_dict_tag in range(0, (len(g:tag_dict_keys) - 1))
+		is_in_list = index(g:current_tags, g:tag_dict_keys[tag_dict_tag])
+		if is_in_list >= 0
+			print_list_item = g:tag_dict_keys[tag_dict_tag]
+			g:in_both_lists = g:in_both_lists + [ print_list_item ]
+		elseif is_in_list < 0
+			print_list_item = g:tag_dict_keys[tag_dict_tag]
+			g:just_in_dict_list = g:just_in_dict_list + [ print_list_item ]
 		endif
 	endfor
 
-	for l:current_tag in range(0, (len(g:current_tags) - 1))
-		let l:is_in_list = index(g:tag_dict_keys, g:current_tags[l:current_tag])
-		if l:is_in_list < 0
-			let l:print_list_item = g:current_tags[l:current_tag]
-			let g:just_in_current_tag_list = g:just_in_current_tag_list + [l:print_list_item]
+	for current_tag in range(0, (len(g:current_tags) - 1))
+		is_in_list = index(g:tag_dict_keys, g:current_tags[current_tag])
+		if is_in_list < 0
+			print_list_item = g:current_tags[current_tag]
+			g:just_in_current_tag_list = g:just_in_current_tag_list + [ print_list_item ]
 		endif
 	endfor
 
-	let g:tag_list_output = ["DEFINED:", " "] + g:in_both_lists + [" ", "UNDEFINED:", " "] + g:just_in_current_tag_list + [" ", "DEFINED BUT NOT USED:", " "] + g:just_in_dict_list 
-	#let g:tag_list_output = sort(g:tag_list_output)
-
-
-endfunction
+	g:tag_list_output = ["DEFINED:", " "] + g:in_both_lists + [" ", "UNDEFINED:", " "] + g:just_in_current_tag_list + [" ", "DEFINED BUT NOT USED:", " "] + g:just_in_dict_list 
+	#g:tag_list_output = sort(g:tag_list_output)
+enddef
 
 # ------------------------------------------------------
 #
@@ -2425,15 +2443,15 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function ToggleDoubleColonOmniComplete() 
+def ToggleDoubleColonOmniComplete() 
 	if maparg("::", "i") == ""
 		inoremap :: <ESC>a:<ESC>:call TagsGenThisSession()<CR>
-		call confirm("Double colon (::) omni-completion on.", "Got it", 1)
+		confirm("Double colon (::) omni-completion on.", "Got it", 1)
 	else
 		iunmap ::
-		call confirm("Double colon (::) omni-completion off.", "Got it", 1)
+		confirm("Double colon (::) omni-completion off.", "Got it", 1)
 	endif
-endfunction
+enddef
 
 # ------------------------------------------------------
 #
@@ -2462,7 +2480,7 @@ def CreateTagDict()
 	# -----------------------------------------------------------------
 	# Go to the tag glossary
 	# -----------------------------------------------------------------
-	execute "normal! :e Tag Glossary" . g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] . "\<CR>"
+	execute "normal! :e Tag Glossary" g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
 	execute "normal! gg"
 	# -----------------------------------------------------------------
 	# Define an empty tag dictionary
@@ -2507,7 +2525,7 @@ enddef
 def NoTagListNotice(tag_message: number) 
 	if (tag_message == 1)
 		var popup_message = "Press <F2> to populate the current tag list."
-	elseif (a:tag_message == 2)
+	elseif (tag_message == 2)
 		var popup_message = "A tag list for this wiki has not been generated yet this session. Press <F2> to populate the current tag list with this wiki\'s tags."
 	else 
 		var popup_message = "Update the tag list with this wiki\'s tags by pressing <F2>."
@@ -2518,60 +2536,60 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function TagFillWithChoiceOLD() 
+def TagFillWithChoiceOLD() 
 	# ---------------------------------------------
 	# Create an empty matched-tag-list
 	# ---------------------------------------------
-	let g:matched_tag_list = []
+	g:matched_tag_list = []
 	# ---------------------------------------------
 	# Set tag fill mode
 	# ---------------------------------------------
 	if !exists("g:tag_fill_option") 
-		let g:tag_fill_option = "last tag added"
+		g:tag_fill_option = "last tag added"
 	endif
 	if (g:tag_fill_option == "last tag added")
-		call FindLastTagAddedToBuffer()
+		FindLastTagAddedToBuffer()
 	endif
 	# ----------------------------------------------------
 	# Mark the line and column number where you want the bottom of the tag block to be.
 	# -----------------------------------------------------
-	let g:bottom_line = line('.')
-	let g:bottom_col = virtcol('.')
+	g:bottom_line = line('.')
+	g:bottom_col = virtcol('.')
 	# -----------------------------------------------------
 	# Find tags in lines above and add them to a list until the there is a gap between the lines with tags
 	# Search for first match the bW means search backwards and don't wrap around the end of the file.
 	# -----------------------------------------------------
-	let g:match_line = search(':\a.\{-}:', 'bW')
+	g:match_line = search(':\a.\{-}:', 'bW')
 	# -----------------------------------------------------
 	#  As long as we find a match (ie the result of the search function is not equal to zero) that is not the attribute line (1) continue.
 	#  ----------------------------------------------------
 	if (g:match_line <= 1)
-		call cursor(g:bottom_line, g:bottom_col)
-		call confirm("No tags found above the cursor",  "OK", 1)
+		cursor(g:bottom_line, g:bottom_col)
+		confirm("No tags found above the cursor",  "OK", 1)
 	else
 		# ----------------------------------------------
 		# Set the last-matched-line equal to the matched-line. This is the first case situation.
 		# ----------------------------------------------
-		let g:last_match_line = g:match_line
+		g:last_match_line = g:match_line
 		# ----------------------------------------------
 		# Copy the first found tag and add it to the matched-tag-list. Note the hh at the end of the execute statement moves the
 		# cursor to the left of the tag we just matched. This is so it doesn't get selected again when we look for more tags.
 		# ----------------------------------------------
 		execute "normal! lviWylvt:yhh"
-		let g:first_tag_in_block = [@@]
+		g:first_tag_in_block = [@@]
 		if (g:tag_fill_option == "last tag added") 
 			if (len(g:matched_tag_list) == 0)
-				let g:matched_tag_list = g:first_tag_in_block
+				g:matched_tag_list = g:first_tag_in_block
 			elseif (g:first_tag_in_block[0] != g:matched_tag_list[0])
-				let g:matched_tag_list = g:matched_tag_list + g:first_tag_in_block
+				g:matched_tag_list = g:matched_tag_list + g:first_tag_in_block
 			endif
 		elseif (g:tag_fill_option == "bottom of contiguous block")
-			let g:matched_tag_list = g:first_tag_in_block
+			g:matched_tag_list = g:first_tag_in_block
 		endif
 		# -----------------------------------------------------------
 		# Set an is-contiguous-tag-block boolean to true (1).
 		# -----------------------------------------------------------
-		let g:is_contiguous_tagged_block = 1
+		g:is_contiguous_tagged_block = 1
 		# ----------------------------------------------------------
 		# Now we're going to look for the rest of the tags in a
 		# contiguously tagged block above where the cursor is.
@@ -2580,7 +2598,7 @@ function TagFillWithChoiceOLD()
 			# --------------------------------------------------
 			# Search backwards ('b') for another tag.
 			# --------------------------------------------------
-			let g:match_line = search(':\a.\{-}:', 'bW')
+			g:match_line = search(':\a.\{-}:', 'bW')
 			# --------------------------------------------------
 			# If we found a tag (ie. The search function doesn't return a zero) decide if we need to add it to our list.
 			# --------------------------------------------------
@@ -2589,11 +2607,11 @@ function TagFillWithChoiceOLD()
 				# Copy the tag we found. 
 				# -------------------------------------------
 				execute "normal! lviWylvt:yhh"
-				let g:this_tag = @@
+				g:this_tag = @@
 				# -------------------------------------------
 				# We're setting up the have-tag variable as a boolean. So have-tag is set to 0 or false.
 				# -------------------------------------------
-				let g:have_tag = 0
+				g:have_tag = 0
 				# -------------------------------------------
 				# Test to see if we already have this tag in our list. If we don't then add it to our tag
 				# list. This next if-block will only run if the most recently found tag is no more than
@@ -2604,9 +2622,9 @@ function TagFillWithChoiceOLD()
 					#  Search through the matched-tag-list to see if we already have the tag
 					#  we're considering on this iteration of the while loop
 					#  ----------------------------------
-					for l:tag in g:matched_tag_list
-						if (l:tag == g:this_tag)
-							let g:have_tag = 1
+					for tag_index in g:matched_tag_list
+						if (tag_index == g:this_tag)
+							g:have_tag = 1
 						endif
 					endfor
 					# -----------------------------------
@@ -2615,22 +2633,22 @@ function TagFillWithChoiceOLD()
 					# the order they are found as we search backwards.
 					# -----------------------------------
 					if (g:have_tag == 0)
-						let g:matched_tag_list = g:matched_tag_list + [g:this_tag]
+						g:matched_tag_list = g:matched_tag_list + [g:this_tag]
 					endif
 					# -----------------------------------
 					# Before we iterate again we have to make the last-match-line equal to
 					# our current match-line.
 					# ----------------------------------
-					let g:last_match_line = g:match_line
+					g:last_match_line = g:match_line
 				else
 					# -----------------------------------
 					# If the most recently found tag is on a line more than one line above the
 					# previously found tag then we found a tag outside of the tag block.
 					# -----------------------------------
-					let g:is_contiguous_tagged_block = 0
+					g:is_contiguous_tagged_block = 0
 				endif
 			else
-				let g:is_contiguous_tagged_block = 0
+				g:is_contiguous_tagged_block = 0
 			endif 
 
 		endwhile	
@@ -2638,46 +2656,46 @@ function TagFillWithChoiceOLD()
 		# The choice number is the matched tag list index number. So 0 is the first element in the list. This will be the first tag
 		# we found when we searched backwards. 
 		# ------------------------------------------------------------
-		call cursor(g:bottom_line, g:bottom_col)
-		let g:choice = 0
+		cursor(g:bottom_line, g:bottom_col)
+		g:choice = 0
 		# ------------------------------------------------------------
 		#  If the list has more than one element you want the user to choose the proper tag. Hitting enter chooses the first item in the list.
 		# ------------------------------------------------------------
 		if (len(g:matched_tag_list) > 1)
-			call popup_menu(g:matched_tag_list, #{
-				\ title:    "Choose tag (Mode = " . g:tag_fill_option . "; F4 to change mode)"   ,
-				\ callback: 'FillChosenTag'  , 
-				\ highlight: 'Question'       ,
-				\ border:     []              ,
-				\ close:      'click'         , 
-				\ padding:    [0,1,0,1],
-				\ })
+			popup_menu(g:matched_tag_list, {
+				 title:    "Choose tag (Mode = " .. g:tag_fill_option .. "; F4 to change mode)"   ,
+				 callback: 'FillChosenTag'  , 
+				 highlight: 'Question'       ,
+				 border:     []              ,
+				 close:      'click'         , 
+				 padding:    [0, 1, 0, 1],
+				 })
 		elseif (len(g:matched_tag_list) == 1)
-			let g:tag_to_fill = ":" . g:matched_tag_list[0] . ":"
+			g:tag_to_fill = ":" .. g:matched_tag_list[0] .. ":"
 			# ------------------------------------------------------------
 			# Now we have to find the range to fill
 			# ------------------------------------------------------------
-			call cursor(g:bottom_line, g:bottom_col)
-			let g:line_of_tag_to_fill = search(g:tag_to_fill, 'bW')
+			cursor(g:bottom_line, g:bottom_col)
+			g:line_of_tag_to_fill = search(g:tag_to_fill, 'bW')
 			if (g:line_of_tag_to_fill != 0)
-				let g:lines_to_fill = g:bottom_line - g:line_of_tag_to_fill
-				call cursor(g:bottom_line, g:bottom_col)
-				execute "normal! V" . g:lines_to_fill . "k\<CR>:s/$/ " . g:tag_to_fill . "/\<CR>A \<ESC>"
+				g:lines_to_fill = g:bottom_line - g:line_of_tag_to_fill
+				cursor(g:bottom_line, g:bottom_col)
+				execute "normal! V" .. g:lines_to_fill .. "k\<CR>:s/$/ " .. g:tag_to_fill .. "/\<CR>A \<ESC>"
 			else
-				call confirm("Tag not found above the cursor",  "OK", 1)
+				confirm("Tag not found above the cursor",  "OK", 1)
 			endif
 		endif
 
 		
 	endif	
-endfunction
+enddef
 
 # ------------------------------------------------------------
 # Find the last tag entered on the page. Do this by putting
 # :changes into register c and then searching it for the
 # first tag. 
 # ------------------------------------------------------------
-function FindLastTagAddedToBuffer() 
+def FindLastTagAddedToBuffer() 
 	# ------------------------------------------------------------
 	#  Redirect output to register changes variable
 	# ------------------------------------------------------------
@@ -2697,18 +2715,18 @@ function FindLastTagAddedToBuffer()
 	# called a negative lookahead. First you need to take out the
 	# line breaks in what is sent to the changes variable register.
 	# ------------------------------------------------------------
-	let g:changes = substitute(g:changes, '\n', '', "g")
+	g:changes = substitute(g:changes, '\n', '', "g")
 
-	let g:most_recent_tag_in_changes       = ""
-	let g:is_tag_on_page                   = 0
-	let g:most_recent_tag_in_changes_start = match(g:changes, ':\a\w\{1,}:\(.*:\a\w\{1,}:\)\@!')
+	g:most_recent_tag_in_changes       = ""
+	g:is_tag_on_page                   = 0
+	g:most_recent_tag_in_changes_start = match(g:changes, ':\a\w\{1,}:\(.*:\a\w\{1,}:\)\@!')
 	# ------------------------------------------------------------
 	# If there is a tag on the page, find what it is.
 	# ------------------------------------------------------------
 	if g:most_recent_tag_in_changes_start != -1
-		let g:most_recent_tag_in_changes_end = match(g:changes, ':', g:most_recent_tag_in_changes_start + 1)
-		let g:most_recent_tag_in_changes = g:changes[(g:most_recent_tag_in_changes_start + 1):(g:most_recent_tag_in_changes_end - 1)]
-		let g:is_tag_on_page = 1
+		g:most_recent_tag_in_changes_end = match(g:changes, ':', g:most_recent_tag_in_changes_start + 1)
+		g:most_recent_tag_in_changes = g:changes[(g:most_recent_tag_in_changes_start + 1):(g:most_recent_tag_in_changes_end - 1)]
+		g:is_tag_on_page = 1
 	endif
 	# ------------------------------------------------------------
 	# Next we have to take g:most_recent_tag_in_changes and make it the
@@ -2716,376 +2734,379 @@ function FindLastTagAddedToBuffer()
 	# that it doesn't appear in matched tag list twice.
 	# ------------------------------------------------------------
 	if g:is_tag_on_page == 1
-		let g:matched_tag_list = [g:most_recent_tag_in_changes] 
+		g:matched_tag_list = [g:most_recent_tag_in_changes] 
 	endif
-endfunction
+enddef
 
-function FillChosenTag(id, result) 
+def FillChosenTag(id: number, result: number) 
 	# ------------------------------------------------------------
 	# When ESC is press the a:result value will be -1. So take no action.
 	# ------------------------------------------------------------
-	if (a:result > 0)
+	if (result > 0)
 		# ------------------------------------------------------------
 		# Now we have our choice which corresponds to the matched-tag-
 		# list element. All that remains is to fill the tag.
 		# ------------------------------------------------------------
-		let g:tag_to_fill = ":" . g:matched_tag_list[a:result - 1] . ":"
+		g:tag_to_fill = ":" .. g:matched_tag_list[result - 1] .. ":"
 		# ------------------------------------------------------------
 		# Now we have to find the range to fill
 		# ------------------------------------------------------------
-		call cursor(g:bottom_line, g:bottom_col)
-		let g:line_of_tag_to_fill = search(g:tag_to_fill, 'bW')
+		cursor(g:bottom_line, g:bottom_col)
+		g:line_of_tag_to_fill = search(g:tag_to_fill, 'bW')
 		# ------------------------------------------------------------
 		# If the tag_to_fill is found above the cursor position, and
 		# its not more than 20 lines above the contiguously tagged
 		# block above the cursor position.
 		# ------------------------------------------------------------
-		let g:proceed_to_fill = 0
+		g:proceed_to_fill = 0
 		if (g:tag_fill_option == "bottom of contiguous block")
-			let g:lines_to_fill = g:bottom_line - g:line_of_tag_to_fill
-			let g:proceed_to_fill = 1
+			g:lines_to_fill = g:bottom_line - g:line_of_tag_to_fill
+			g:proceed_to_fill = 1
 		elseif (g:line_of_tag_to_fill != 0)
-			#execute "normal! ?" . g:tag_to_fill . "\<CR>"
-			let g:lines_to_fill = g:bottom_line - g:line_of_tag_to_fill
-			let g:proceed_to_fill = 1
+			#execute "normal! ?" g:tag_to_fill .. "\<CR>"
+			g:lines_to_fill = g:bottom_line - g:line_of_tag_to_fill
+			g:proceed_to_fill = 1
 		endif
 		# ------------------------------------------------------------
 		# This actually fills the tag.
 		# ------------------------------------------------------------
-		call cursor(g:bottom_line, g:bottom_col)
+		cursor(g:bottom_line, g:bottom_col)
 		if (g:proceed_to_fill)
-			execute "normal! V" . g:lines_to_fill . "k\<CR>:s/$/ " . g:tag_to_fill . "/\<CR>A \<ESC>"
+			execute "normal! V" .. g:lines_to_fill .. "k\<CR>:s/$/ " .. g:tag_to_fill .. "/\<CR>A \<ESC>"
 		else
-			call confirm("Tag not found above the cursor. No action taken.",  "OK", 1)
+			confirm("Tag not found above the cursor. No action taken.",  "OK", 1)
 		endif
 	endif
-endfunction
+enddef
 	
-function TagFillWithChoice() 
+def TagFillWithChoice() 
 	# ---------------------------------------------
 	# Set tag fill mode
 	# ---------------------------------------------
 	if !exists("g:tag_fill_option") 
-		let g:tag_fill_option = "last tag added"
+		g:tag_fill_option = "last tag added"
 	endif
 	if (g:tag_fill_option == "last tag added")
-		call FindLastTagAddedToBuffer()
+		FindLastTagAddedToBuffer()
 	endif
 	# ----------------------------------------------------
 	# Mark the line and column number where you want the bottom of the tag block to be.
 	# -----------------------------------------------------
-	let g:bottom_line = line('.')
-	let g:bottom_col = virtcol('.')
+	g:bottom_line = line('.')
+	g:bottom_col = virtcol('.')
 	
-	let g:block_tags_list = []
-	let g:tag_block_dict  = {}
+	g:block_tags_list = []
+	g:tag_block_dict  = {}
 
-	call CreateBlockMetadataDict()
+	CreateBlockMetadataDict()
 
-	call cursor(g:bottom_line, g:bottom_col)
+	cursor(g:bottom_line, g:bottom_col)
 	# ------------------------------------------------------------
 	#  If the list has more than one element you want the user to 
 	#  choose the proper tag. Hitting enter chooses the first item in the list.
 	# ------------------------------------------------------------
 	if (len(g:block_tags_list) >= 1)
-		call popup_menu(g:block_tags_list, #{
-			\ title:    "Choose tag (Mode = " . g:tag_fill_option . "; F4 to change mode)"   ,
-			\ callback: 'BuildMetadataBlockFill'  , 
-			\ highlight: 'Question'       ,
-			\ border:     []              ,
-			\ close:      'click'         , 
-			\ padding:    [0,1,0,1],
-			\ })
+		popup_menu(g:block_tags_list, {
+			 title:    "Choose tag (Mode = " .. g:tag_fill_option .. "; F4 to change mode)",
+			 callback: 'BuildMetadataBlockFill', 
+			 highlight: 'Question',
+			 border:     [],
+			 close:      'click', 
+			 padding:    [0, 1, 0, 1],
+			 })
 	else	
-		call confirm("Tag not found above the cursor",  "OK", 1)
+		confirm("Tag not found above the cursor",  "OK", 1)
 	endif
 
-	call cursor(g:bottom_line, g:bottom_col)
+	cursor(g:bottom_line, g:bottom_col)
 	execute "normal! zzA "
-endfunction
+enddef
 
-function FillTagBlock(id, result) 
+def FillTagBlock(id: number, result: number) 
 	# ------------------------------------------------------------
 	# When ESC is press the a:result value will be -1. So take no action.
 	# ------------------------------------------------------------
-	if (a:result > 0)
+	if (result > 0)
 
-		let g:block_range_as_char = keys(g:tag_block_dict)
-		let g:block_range         = []
+		g:block_range_as_char = keys(g:tag_block_dict)
+		g:block_range         = []
 
-		for l:index in range(0, len(g:block_range_as_char) - 1)
-			let g:block_range = g:block_range + [ str2nr(g:block_range_as_char[l:index]) ]
+		for index in range(0, len(g:block_range_as_char) - 1)
+			g:block_range = g:block_range + [ str2nr(g:block_range_as_char[index]) ]
 		endfor
 
-		let g:block_range     = sort(g:block_range)
+		g:block_range     = sort(g:block_range)
 		
-		let g:block_range_max = g:bottom_line
-		let g:block_range_min = min(g:block_range)
+		g:block_range_max = g:bottom_line
+		g:block_range_min = min(g:block_range)
 
-		for l:index_2 in range(g:block_range_min, g:block_range_max)
-			if has_key(g:tag_block_dict, l:index_2)
-				if (index(g:tag_block_dict[l:index_2][0], g:tag_list_to_present[a:result - 1]) != -1)
-					let g:top_fill_line = l:index_2
+		for index_2 in range(g:block_range_min, g:block_range_max)
+			if has_key(g:tag_block_dict, index_2)
+				if (index(g:tag_block_dict[index_2][0], g:tag_list_to_present[result - 1]) != -1)
+					g:top_fill_line = index_2
 				endif
 			endif
 		endfor
 
-		for l:index_3 in range(g:block_range_min, g:block_range_max)
-			call CreateFillLine(l:index_3)
-			call cursor(l:index_3, g:tag_block_dict[l:index_3][2])
-			execute "normal! i" . g:meta_fill_line . "\<CR>"
+		for index_3 in range(g:block_range_min, g:block_range_max)
+			CreateFillLine(index_3)
+			cursor(index_3, g:tag_block_dict[index_3][2])
+			execute "normal! i" g:meta_fill_line .. "\<CR>"
 		endfor
 	endif
-endfunction
+enddef
 
-function CreateFillLine(line) 
-	let g:meta_fill_line = ""
-	for l:tags in range(0, len(g:block_tags_list) - 1)
-		if has_key(g:tag_block_dict, a:line)
+def CreateFillLine(line: number) 
+	g:meta_fill_line = ""
+	var spacer = "undefined"
+	for tags_index in range(0, len(g:block_tags_list) - 1)
+		if has_key(g:tag_block_dict, line)
 			# if this line has the block
-			if (index(g:tag_block_dict[a:line][0], g:block_tags_list[l:tags] != -1))
-				let g:meta_fill_line = g:meta_fill_line . " :" . g:block_tags_list[l:tags] . ":"
-			elseif (a:line >= g:top_fill_line)
-				let g:meta_fill_line = g:meta_fill_line . " :" . g:block_tags_list[l:tags] . ":"
+			if (index(g:tag_block_dict[line][0], g:block_tags_list[tags_index] != -1))
+				g:meta_fill_line = g:meta_fill_line .. " :" .. g:block_tags_list[tags_index] .. ":"
+			elseif (line >= g:top_fill_line)
+				g:meta_fill_line = g:meta_fill_line .. " :" .. g:block_tags_list[tags_index] .. ":"
 			else
-				let l:spacer = repeat(" ", len(g:block_tags_list[l:tags])) + 3 
-				let g:meta_fill_line = g:meta_fill_line . l:spacer
+				spacer = repeat(" ", len(g:block_tags_list[tags_index])) + 3 
+				g:meta_fill_line = g:meta_fill_line .. spacer
 			endif
 		endif			
 	endfor
-	if (has_key(g:block_tag_list) == -1) and (a:line >= g:top_fill_line)
-		let g:meta_fill_line = g:meta_fill_line . " :" . g:block_tags_list[l:tags] . ":"
-	let g:meta_fill_line = g:meta_fill_line . " " . g:tag_block_dict[a:line][1]
-endfunction
+	if (has_key(g:block_tag_list) == -1) && (line >= g:top_fill_line)
+		g:meta_fill_line = g:meta_fill_line .. " :" .. g:block_tags_list[tags_index] .. ":"
+		#g:meta_fill_line = g:meta_fill_line .. " " .. g:tag_block_dict[line][1]
+		#This may need to be fixed
+	endif
+enddef
 
-function FindFirstInterviewLine()
+def FindFirstInterviewLine()
 	execute "normal! gg"
-	let g:tag_search_regex = g:interview_label_regex . '\: \d\{4}'
-	let g:first_interview_line = search(g:tag_search_regex, "W")
-	call cursor(g:bottom_line, g:bottom_col)
-endfunction
+	g:tag_search_regex = g:interview_label_regex .. '\: \d\{4}'
+	g:first_interview_line = search(g:tag_search_regex, "W")
+	cursor(g:bottom_line, g:bottom_col)
+enddef
 	
 
-function CreateBlockMetadataDict() 
+def CreateBlockMetadataDict() 
 
-	let g:block_metadata             = {}
-	let g:tags_on_line               = []
-	let g:block_tags_list            = []
-	let g:sub_blocks_tags_lists      = []
-	#let g:last_match_line = g:match_line
-	let g:contiguous_block           = 1
-	let g:found_block                = 0
-	let g:block_switch               = 0
-	let g:continue_searching         = 1
-	let g:while_counter              = 0
+	g:block_metadata             = {}
+	g:tags_on_line               = []
+	g:block_tags_list            = []
+	g:sub_blocks_tags_lists      = []
+	#g:last_match_line = g:match_line
+	g:contiguous_block           = 1
+	g:found_block                = 0
+	g:block_switch               = 0
+	g:continue_searching         = 1
+	g:while_counter              = 0
 
-	call FindFirstInterviewLine()
+	FindFirstInterviewLine()
 
 	#if there are interview lines in the buffer
 	if g:first_interview_line > 0
 		# find the block range
 		while (line('.') >= g:first_interview_line) && (g:continue_searching == 1) && (line('.') > 1)
-			call ProcessLineMetadata()
+			ProcessLineMetadata()
 			# Searching to see if we found any tags on line('.')
 			# No tags on line, and haven't found block
 			if (len(g:block_metadata[line('.')][2]) == 0) && (g:found_block == 0)
-				let g:continue_searching = 1
+				g:continue_searching = 1
 			# Found tags (start of sub-block) and the found_block flag still false
 			elseif (len(g:block_metadata[line('.')][2]) != 0) && (g:found_block == 0)
-				let g:found_block        = 1
-				let g:continue_searching = 1
+				g:found_block        = 1
+				g:continue_searching = 1
 			# Inside a sub-block
 			elseif (len(g:block_metadata[line('.')][2]) != 0) && (g:found_block == 1)
-				let g:found_block        = 1
-				let g:continue_searching = 1
+				g:found_block        = 1
+				g:continue_searching = 1
 			# Moved past the found block
 			elseif (len(g:block_metadata[line('.')][2]) == 0) && (g:found_block == 1)
 				# See if you have the last tag added in the
 				# block_tags_list
 				if (g:tag_fill_option == "last tag added")
 					if (index(g:block_tags_list, g:most_recent_tag_in_changes) != -1)
-						let g:continue_searching = 0
-						let g:found_block        = 0
+						g:continue_searching = 0
+						g:found_block        = 0
 					elseif (index(g:block_tags_list, g:most_recent_tag_in_changes) == -1)
-						let g:continue_searching = 1
-						let g:found_block        = 0
+						g:continue_searching = 1
+						g:found_block        = 0
 					endif
 				else
-					let g:continue_searching         = 0 
+					g:continue_searching         = 0 
 				endif
 			endif
 			if g:continue_searching == 1
 				execute "normal! k"
 			else
-				call remove(g:block_metadata, line('.'))
+				remove(g:block_metadata, line('.'))
 			endif
 		endwhile
 	else
-		call confirm("No interview lines in this buffer",  "OK", 1)
-		let g:block_tags_list = []
+		confirm("No interview lines in this buffer",  "OK", 1)
+		g:block_tags_list = []
 	endif
 
-	let g:block_tags_list = sort(g:block_tags_list)
-endfunction
+	g:block_tags_list = sort(g:block_tags_list)
+enddef
 
-function CreateSubBlocksLists() 
-	let g:sub_blocks_tags_lists = []
-	let l:found_block = 0
-	for l:line_index in range(str2nr(g:block_lines[0]), str2nr(g:block_lines[-1]))
-		if (len(g:block_metadata[l:line_index][2]) != 0) && (l:found_block == 0)
-			let g:sub_blocks_tags_lists = g:sub_blocks_tags_lists + [ [ g:block_metadata[l:line_index][2] , [ l:line_index ] ] ]
-			let l:found_block        = 1
+def CreateSubBlocksLists() 
+	g:sub_blocks_tags_lists = []
+	var found_block = 0
+	for line_index in range(str2nr(g:block_lines[0]), str2nr(g:block_lines[-1]))
+		if (len(g:block_metadata[line_index][2]) != 0) && (found_block == 0)
+			g:sub_blocks_tags_lists = g:sub_blocks_tags_lists + [ [ g:block_metadata[line_index][2] , [ line_index ] ] ]
+			found_block        = 1
 		# Inside a sub-block
-		elseif (len(g:block_metadata[l:line_index][2]) != 0) && (l:found_block == 1)
+		elseif (len(g:block_metadata[line_index][2]) != 0) && (found_block == 1)
 			# add new tages
-			for l:tag_index in range(0, len(g:block_metadata[l:line_index][2]) - 1)
-				if (index(g:sub_blocks_tags_lists[-1][0], g:block_metadata[l:line_index][2][l:tag_index]) == -1)
-					let g:sub_blocks_tags_lists[-1][0] = g:sub_blocks_tags_lists[-1][0] + [ g:block_metadata[l:line_index][2][l:tag_index] ]
+			for tag_index in range(0, len(g:block_metadata[line_index][2]) - 1)
+				if (index(g:sub_blocks_tags_lists[-1][0], g:block_metadata[line_index][2][tag_index]) == -1)
+					g:sub_blocks_tags_lists[-1][0] = g:sub_blocks_tags_lists[-1][0] + [ g:block_metadata[line_index][2][tag_index] ]
 				endif
 			endfor
 			# add line number
-			let g:sub_blocks_tags_lists[-1][1] = g:sub_blocks_tags_lists[-1][1] + [ l:line_index ]
-			let l:found_block        = 1
-			let g:continue_searching = 1
+			g:sub_blocks_tags_lists[-1][1] = g:sub_blocks_tags_lists[-1][1] + [ line_index ]
+			found_block          = 1
+			g:continue_searching = 1
 		# Moved past the found block
-		elseif (len(g:block_metadata[l:line_index][2]) == 0) && (l:found_block == 1)
+		elseif (len(g:block_metadata[line_index][2]) == 0) && (found_block == 1)
 			# See if you have the last tag added in the block_tags_list
-			let l:found_block = 0
+			found_block = 0
 		endif
 	endfor
-endfunction
+enddef
 
-function BuildMetadataBlockFill(id, result) 
+def BuildMetadataBlockFill(id: number, result:number) 
 
-	let g:fill_tag = g:block_tags_list[a:result - 1]
+	g:fill_tag = g:block_tags_list[result - 1]
 
-	let g:block_lines = sort(keys(g:block_metadata))
+	g:block_lines = sort(keys(g:block_metadata))
 
-	call FindUpperTagFillLine()
-	call AddFillTags()
-	call CreateSubBlocksLists()
+	FindUpperTagFillLine()
+	AddFillTags()
+	CreateSubBlocksLists()
 
-	for l:line_index in range(str2nr(g:block_lines[0]), str2nr(g:block_lines[-1]))
-		let g:formatted_metadata = ""
+	for line_index in range(str2nr(g:block_lines[0]), str2nr(g:block_lines[-1]))
+		g:formatted_metadata = ""
 
 		#Find sub-block and its associated tag list
-		for l:sub_block_index in range(0, len(g:sub_blocks_tags_lists) - 1)
-			if (index(g:sub_blocks_tags_lists[l:sub_block_index][1], l:line_index) != -1)
-				let g:sub_block_tag_list = sort(g:sub_blocks_tags_lists[l:sub_block_index][0])
+		for sub_block_index in range(0, len(g:sub_blocks_tags_lists) - 1)
+			if (index(g:sub_blocks_tags_lists[sub_block_index][1], line_index) != -1)
+				g:sub_block_tag_list = sort(g:sub_blocks_tags_lists[sub_block_index][0])
 			endif
 		endfor
 
-		for l:tag_index in range(0, len(g:sub_block_tag_list) - 1)
-			if (index(g:block_metadata[l:line_index][2], g:sub_block_tag_list[l:tag_index]) != -1)
-				let g:formatted_metadata = g:formatted_metadata . " :" . g:sub_block_tag_list[l:tag_index] . ":"
+		for tag_index in range(0, len(g:sub_block_tag_list) - 1)
+			if (index(g:block_metadata[line_index][2], g:sub_block_tag_list[tag_index]) != -1)
+				g:formatted_metadata = g:formatted_metadata .. " :" .. g:sub_block_tag_list[tag_index] .. ":"
 			else
-				let g:formatted_metadata = g:formatted_metadata . repeat(' ', len(g:sub_block_tag_list[l:tag_index]) + 3)
+				g:formatted_metadata = g:formatted_metadata repeat(' ', len(g:sub_block_tag_list[tag_index]) + 3)
 			endif
 		endfor
 
-		let g:block_metadata[l:line_index] = g:block_metadata[l:line_index] + [ g:formatted_metadata . g:block_metadata[l:line_index][3] ]
+		g:block_metadata[line_index] = g:block_metadata[line_index] + [ g:formatted_metadata g:block_metadata[line_index][3] ]
 		
-		let g:block_metadata[l:line_index][4] = substitute(g:block_metadata[l:line_index][4], '\s\+$', '', 'g')
-		if g:block_metadata[l:line_index][4] == ""
-			let g:block_metadata[l:line_index][4] = "  "
+		g:block_metadata[line_index][4] = substitute(g:block_metadata[line_index][4], '\s\+$', '', 'g')
+		if g:block_metadata[line_index][4] == ""
+			g:block_metadata[line_index][4] = "  "
 		endif
 	endfor
-	call WriteInFormattedTagMetadata()
-endfunction
+	WriteInFormattedTagMetadata()
+enddef
 
-function AddFillTags() 
-	for l:line_index in range(g:upper_fill_line + 1, str2nr(g:block_lines[-1]))
-		let g:block_metadata[l:line_index][2] = g:block_metadata[l:line_index][2] + [ g:fill_tag ]
-		let g:block_metadata[l:line_index][2] = sort(g:block_metadata[l:line_index][2]) 
+def AddFillTags() 
+	for line_index in range(g:upper_fill_line + 1, str2nr(g:block_lines[-1]))
+		g:block_metadata[line_index][2] = g:block_metadata[line_index][2] + [ g:fill_tag ]
+		g:block_metadata[line_index][2] = sort(g:block_metadata[line_index][2]) 
 	endfor
-endfunction
+enddef
 
-function FindUpperTagFillLine() 
-	for l:line_index in range(str2nr(g:block_lines[0]), str2nr(g:block_lines[-1]))
-		if (index(g:block_metadata[l:line_index][2], g:fill_tag) != -1)
-			let g:upper_fill_line = l:line_index
+def FindUpperTagFillLine() 
+	for line_index in range(str2nr(g:block_lines[0]), str2nr(g:block_lines[-1]))
+		if (index(g:block_metadata[line_index][2], g:fill_tag) != -1)
+			g:upper_fill_line = line_index
 		endif
 	endfor
-endfunction
+enddef
 
-function WriteInFormattedTagMetadata() 
+def WriteInFormattedTagMetadata() 
 	set virtualedit=all
-	for l:line_index in range(str2nr(g:block_lines[0]), str2nr(g:block_lines[-1]))
-		call cursor(l:line_index, 0)
-		execute "normal! " . g:block_metadata[l:line_index][1] . "|lv$dh"
-		execute "normal! a" . g:block_metadata[l:line_index][4] . "\<ESC>"
+	for line_index in range(str2nr(g:block_lines[0]), str2nr(g:block_lines[-1]))
+		cursor(line_index, 0)
+		execute "normal! " .. g:block_metadata[line_index][1] .. "|lv$dh"
+		execute "normal! a" .. g:block_metadata[line_index][4] .. "\<ESC>"
 
 	endfor
-	set virtualedit=""
+	set virtualedit=none
 
-	call cursor(g:bottom_line, g:bottom_col)
+	cursor(g:bottom_line, g:bottom_col)
 	execute "normal! zzA "
-endfunction
+enddef
 
-function ProcessLineMetadata() 
-	let g:tags_on_line            = []
-	let g:non_tag_metadata        = ""
+def ProcessLineMetadata() 
+	g:tags_on_line            = []
+	g:non_tag_metadata        = ""
 
 	set virtualedit=all
 	execute "normal! 0Vygv/│\<CR>/│\<CR>\<ESC>"
-	let g:right_border_col     = col('.')
-	let g:right_border_virtcol = virtcol('.')
-	set virtualedit=""
-	let g:block_metadata[line('.')] = [ g:right_border_col , g:right_border_virtcol ]
+	g:right_border_col     = col('.')
+	g:right_border_virtcol = virtcol('.')
+	set virtualedit=none
+	g:block_metadata[line('.')] = [ g:right_border_col , g:right_border_virtcol ]
 	
 	# copy everything beyond the right of the right label pane border.
 	execute "normal! lv$y"
 	#execute "normal! lvg_y"
 	# Tokenize what got copied into a list called g:line_meta_data
-	let g:line_metadata = split(@@)
-	for l:index in range(0, len(g:line_metadata) - 1)
-		if (match(g:line_metadata[l:index], ':\a.\{-}:') != -1)
-			let g:tags_on_line = g:tags_on_line + [ g:line_metadata[l:index][1:-2] ]
-			if (index(g:block_tags_list, g:line_metadata[l:index][1:-2]) == -1)
-				let g:block_tags_list = g:block_tags_list + [ g:line_metadata[l:index][1:-2] ]
+	g:line_metadata = split(@@)
+	for index in range(0, len(g:line_metadata) - 1)
+		if (match(g:line_metadata[index], ':\a.\{-}:') != -1)
+			g:tags_on_line = g:tags_on_line + [ g:line_metadata[index][1:-2] ]
+			if (index(g:block_tags_list, g:line_metadata[index][1:-2]) == -1)
+				g:block_tags_list = g:block_tags_list + [ g:line_metadata[index][1:-2] ]
 			endif
 		else
-			let g:non_tag_metadata = g:non_tag_metadata . " " . g:line_metadata[l:index]
+			g:non_tag_metadata = g:non_tag_metadata .. " " .. g:line_metadata[index]
 		endif
 	endfor
-	let g:block_metadata[line('.')] = g:block_metadata[line('.')] + [ g:tags_on_line , g:non_tag_metadata ]
-endfunction
+	g:block_metadata[line('.')] = g:block_metadata[line('.')] + [ g:tags_on_line , g:non_tag_metadata ]
+enddef
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function ChangeTagFillOption() 
+def ChangeTagFillOption() 
 	if (!exists("g:tag_fill_option"))
-		let g:tag_fill_option = "last tag added"
-		call confirm("Default tag presented when F5 is pressed will be the last tag added to the buffer.",  "OK", 1)
+		g:tag_fill_option = "last tag added"
+		confirm("Default tag presented when F5 is pressed will be the last tag added to the buffer.",  "OK", 1)
 	elseif (g:tag_fill_option == "last tag added")
-		let g:tag_fill_option = "bottom of contiguous block"
-		call confirm("Default tag presented when F5 is pressed will be the last tag in the contiguous block above the cursor.",  "OK", 1)
+		g:tag_fill_option = "bottom of contiguous block"
+		confirm("Default tag presented when F5 is pressed will be the last tag in the contiguous block above the cursor.",  "OK", 1)
 	elseif (g:tag_fill_option == "bottom of contiguous block")
-		let g:tag_fill_option = "last tag added"
-		call confirm("Default tag presented when F5 is pressed will be the last tag added to the buffer.",  "OK", 1)
+		g:tag_fill_option = "last tag added"
+		confirm("Default tag presented when F5 is pressed will be the last tag added to the buffer.",  "OK", 1)
 	endif
-endfunction
+enddef
 
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function SortTagDefs() 
+def SortTagDefs() 
 	execute "normal! :%s/}/}\\r/g\<CR>"
 	execute "normal! :g/{/,/}/s/\\n/TTT\<CR>"
 	execute "normal! :3,$sort \i\<CR>"
-	execute "normal!" .':3,$g/^$/d' . "\<CR>"
+	execute "normal!" .. ':3,$g/^$/d' .. "\<CR>"
 	execute "normal! :%s/TTT/\\r/g\<CR>"
-endfunction
+enddef
 
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function GetTagDef() 
+def GetTagDef() 
 	
-	call ParmCheck()
+	ParmCheck()
 
 	# -----------------------------------------------------------------
 	# Change the pwd to that of the current wiki.
@@ -3096,57 +3117,57 @@ function GetTagDef()
 	# the definition in a popup window, else offer to add the tag to the
 	# Tag Glossary page.
 	# -----------------------------------------------------------------
-	let g:tag_to_test = GetTagUnderCursor()
+	g:tag_to_test = GetTagUnderCursor()
  	if (g:tag_to_test != "") 
 		if (has_key(g:tag_dict, g:tag_to_test))
- 			call popup_atcursor(get(g:tag_dict, g:tag_to_test), {
- 				\ 'border': [],
- 				\ 'close' : 'click',
- 				\ })
+ 			popup_atcursor(get(g:tag_dict, g:tag_to_test), {
+ 				 'border': [],
+ 				 'close' : 'click',
+ 				 })
  		else
- 			call popup_menu(["Yes", "No"], #{
-			        \ title: "\"" . g:tag_to_test . "\" is not defined in the Tag Glossary. Would you like to add it now?", 
-				\ callback: 'AddNewTagDef' ,
-				\ highlight: 'Question'    ,
- 				\ border: [],
- 				\ close : 'click',
-				\ padding: [0,1,0,1],
- 				\ })
+ 			popup_menu(["Yes", "No"], {
+			         title: "\"" .. g:tag_to_test .. "\" is not defined in the Tag Glossary. Would you like to add it now?", 
+				 callback: 'AddNewTagDef',
+				 highlight: 'Question',
+ 				 border: [],
+ 				 close : 'click',
+				 padding: [0, 1, 0, 1],
+ 				 })
 		endif
 	else
- 		call popup_atcursor("There is no valid tag under the cursor.", {
- 			\ 'border': [],
- 			\ 'close' : 'click',
- 			\ })
+ 		popup_atcursor("There is no valid tag under the cursor.", {
+ 			 'border': [],
+ 			 'close' : 'click',
+ 			 })
  	endif
-endfunction
+enddef
 
 
 # -----------------------------------------------------------------
 # See if word under cursor is a tag. ie. a word surrounded by colons
 # Test case where the cursor is on white space.
 # -----------------------------------------------------------------
-function GetTagUnderCursor() abort        
+def GetTagUnderCursor(): string       
 	execute "normal! viWy"        
-	let l:word_under_cursor             = @@ 
+	var word_under_cursor             = @@ 
 	# Want tag_test to be 0
-	let l:tag_test                      = matchstr(l:word_under_cursor, ':.\{-}:')
+	var tag_test                      = matchstr(word_under_cursor, ':.\{-}:')
 	# -----------------------------------------------------------------
 	# Test to see if g:word_under_cursor is just white space. If not,
 	# test to see if the word_under_cursor is surrounded by colons.
 	# -----------------------------------------------------------------
-	if l:word_under_cursor == l:tag_test
-		return l:word_under_cursor[1:-2]
+	if word_under_cursor == tag_test
+		return word_under_cursor[1:-2]
 	else
 		return ""
 	endif
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-function AddNewTagDef(id, result) 
-	if a:result == 1
+def AddNewTagDef(id: number, result: number) 
+	if result == 1
 		# -----------------------------------------------------------------
 		# Save buffer number of current file to register 'a' so you can return here
 		# -----------------------------------------------------------------
@@ -3156,13 +3177,13 @@ function AddNewTagDef(id, result)
 		# Go to Tag Glossary and create a new tag template populated with the 
 		# g:tag_to_test value
 		# -----------------------------------------------------------------
-		execute "normal! :e Tag Glossary" . g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] . "\<CR>"
-		execute "normal! Go{\n## Name: " . g:tag_to_test . "\n**Detailed Description:** \n**Incl. Criteria:** \n**Excl. Criteria:** \n**Example:** \n}\<ESC>4kA"
-		call SortTagDefs()
-		execute "normal! /Name: " . g:tag_to_test . "\<CR>jA"
-		call confirm("Add your tag description.\n\nWhen you are finished press <F2> to update the tag list.\n\n", "OK", 1)
+		execute "normal! :e Tag Glossary" g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+		execute "normal! Go{\n## Name: " .. g:tag_to_test .. "\n**Detailed Description:** \n**Incl. Criteria:** \n**Excl. Criteria:** \n**Example:** \n}\<ESC>4kA"
+		SortTagDefs()
+		execute "normal! /Name: " .. g:tag_to_test .. "\<CR>jA"
+		confirm("Add your tag description.\n\nWhen you are finished press <F2> to update the tag list.\n\n", "OK", 1)
 	endif
-endfunction
+enddef
 
 # -----------------------------------------------------------------
 # ---------------------------- ATTRIBUTES -------------------------
@@ -3171,48 +3192,48 @@ endfunction
 # ------------------------------------------------------
 
 # ------------------------------------------------------
-function Attributes(sort_col = 1) 
+def Attributes(sort_col = 1) 
 	
-	call ParmCheck()
+	ParmCheck()
 
 	# from the buffer which should be the line of the interview attribute
 	# tags. We're going to build our output in two reg
-	let g:attrib_chart = ""
-	let g:attrib_csv   = ""
+	g:attrib_chart = ""
+	g:attrib_csv   = ""
 	# from the buffer which should be the line of the interview attribute
 	# tags. We're going to build our output in two reg
-	let g:attrib_chart = ""
-	let g:attrib_csv   = ""
-	call GetInterviewFileList()
+	g:attrib_chart = ""
+	g:attrib_csv   = ""
+	GetInterviewFileList()
 
 	# save buffer number of current file to register 'a' so you can return here
-	let @a = bufnr('%')
+	@a = bufnr('%')
 	# go through the list of files copying and processing the first line
 	# from the buffer which should be the line of the interview attribute
 	# tags. We're going to build our output in two reg
-	let g:attrib_chart = ""
-	let g:attrib_csv   = ""
+	g:attrib_chart = ""
+	g:attrib_csv   = ""
 	for interview in range(0, (len(g:interview_list) - 1))
 		# go to interview file
-		execute "normal :e " . g:interview_list[interview] . "\<CR>"
+		execute "normal :e " .. g:interview_list[interview] .. "\<CR>"
 		# copy first row which should be the attribute tags.
 		execute "normal! ggVy"
-		let g:attribute_row = @@
+		g:attribute_row = @@
 		# format the attribute tags for the chart and for the csv
-		let g:interview_label = "| [[" . g:interview_list[interview][:-4] . "]]"
-		let g:attrib_chart_line = substitute(g:attribute_row, ": :", "|", "g")
-		let g:attrib_chart_line = substitute(g:attrib_chart_line, ":", "|", "g")
-		let g:attrib_chart_line = g:interview_label . g:attrib_chart_line
-		let g:attrib_chart = g:attrib_chart . g:attrib_chart_line
+		g:interview_label = "| [[" .. g:interview_list[interview][:-4] .. "]]"
+		g:attrib_chart_line = substitute(g:attribute_row, ": :", "|", "g")
+		g:attrib_chart_line = substitute(g:attrib_chart_line, ":", "|", "g")
+		g:attrib_chart_line = g:interview_label .. g:attrib_chart_line
+		g:attrib_chart = g:attrib_chart .. g:attrib_chart_line
 	endfor
 	# return to page where you're going to print the chart and paste the
 	# chart.
 	execute "normal! :b\<C-R>a\<CR>gg"
 	execute "normal! ggVGd"
-	execute "normal! i" . g:attrib_chart . "\<CR>"
+	execute "normal! i" .. g:attrib_chart .. "\<CR>"
 	execute "normal! Go\<ESC>v?.\<CR>jdgga\<ESC>\<CR>gg"
-	call ColSort(a:sort_col)
-endfunction
+	ColSort(sort_col)
+enddef
 
 # ------------------------------------------------------
 
@@ -3220,10 +3241,10 @@ endfunction
 # ------------------------------------------------------
 # Sort the Attribute table by column number
 # ------------------------------------------------------
-function ColSort(column) 
-	let g:sort_regex = "/\\(.\\{-}\\zs|\\)\\{" . a:column . "}/"
-	execute "normal! :sort " . g:sort_regex . "\<CR>"
-endfunction
+def ColSort(column: number) 
+	g:sort_regex = "/\\(.\\{-}\\zs|\\)\\{" .. column .. "}/"
+	execute "normal! :sort " .. g:sort_regex .. "\<CR>"
+enddef
 
 # -----------------------------------------------------------------
 # ---------------------------- OTHER ------------------------------
@@ -3232,35 +3253,35 @@ endfunction
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-function UpdateSubcode() 
+def UpdateSubcode() 
 	
-	call ParmCheck()
+	ParmCheck()
 
 	# -----------------------------------------------------------------
 	# Clear @@ register.
 	# -----------------------------------------------------------------
-	let @@ = ""
+	@@ = ""
 	# -----------------------------------------------------------------
 	# Process the first case.  Initialise list
 	# -----------------------------------------------------------------
-	let g:subcode_list = []
+	g:subcode_list = []
 	# -----------------------------------------------------------------
 	# VWS to get search results and open location list
 	# -----------------------------------------------------------------
-	execute "normal! :VWS " . '/ _\w\{1,}/' . "\<CR>"
+	execute "normal! :VWS " .. '/ _\w\{1,}/' .. "\<CR>"
 	execute "normal! :lopen\<CR>"	
 	# -----------------------------------------------------------------
 	# Add first search result to list
 	# -----------------------------------------------------------------
-	let g:is_search_result = search(' _\w\{1,}', "W")
+	g:is_search_result = search(' _\w\{1,}', "W")
 	if (g:is_search_result != 0)
 		execute "normal! lviwyel"
-		let g:subcode_list = g:subcode_list + [@@]	
+		g:subcode_list = g:subcode_list + [@@]	
 		while (g:is_search_result != 0)
-			let g:is_search_result = search(' _\w\{1,}', "W")
+			g:is_search_result = search(' _\w\{1,}', "W")
 			if (g:is_search_result != 0)
 				execute "normal! lviwyel"
-				let g:subcode_list = g:subcode_list + [@@]
+				g:subcode_list = g:subcode_list + [@@]
 			endif 
 		endwhile
 	endif
@@ -3268,7 +3289,7 @@ function UpdateSubcode()
 	# Need to change the list to a string so it can be pasted into a
 	# buffer.
 	# -----------------------------------------------------------------
-	let g:subcode_list_as_string = string(g:subcode_list)
+	g:subcode_list_as_string = string(g:subcode_list)
 	# -----------------------------------------------------------------
 	# Open new buffer; delete its contents and replace them with
 	# g:subcode_list_as_a_string; sort the buffer keeping unique values
@@ -3278,15 +3299,15 @@ function UpdateSubcode()
 	# to a file.
 	# -----------------------------------------------------------------
 	execute "normal! :sp new\<CR>"
-	execute "normal! ggVGd:put=" . g:subcode_list_as_string . "\<CR>"
+	execute "normal! ggVGd:put=" .. g:subcode_list_as_string .. "\<CR>"
 	execute "normal! :sort u\<CR>dd"
-	execute "normal! :w! "  . g:subcode_dictionary_path . "\<CR>"
+	execute "normal! :w! " .. g:subcode_dictionary_path .. "\<CR>"
 	execute "normal! \<C-w>k:lclose\<CR>\<C-w>j:q!\<CR>"
-endfunction
+enddef
 
-function CorrectAttributeLines() 
+def CorrectAttributeLines() 
 	
-	call ParmCheck()
+	ParmCheck()
 
 	# Change the pwd to that of the current wiki.
 	execute "normal! :cd %:p:h\<CR>"
@@ -3294,106 +3315,36 @@ function CorrectAttributeLines()
 	# fourth argument that is 1 makes it return a list. the first argument
 	# '.' means the current directory and the second argument '*' means
 	# all.
-	let g:file_list_all = globpath('.', '*', 0, 1)
+	g:file_list_all = globpath('.', '*', 0, 1)
 	# build regex we'll use just to find our interview files. 
-	let g:file_regex = g:interview_label_regex . '.md'
+	g:file_regex = g:interview_label_regex '.md'
 	#  cull the list for just those files that are interview files. the
 	#  match is at position 2 because the globpath function prefixes
-	#  filenames with ./ which occupies positions 0 and 1.
-	let g:interview_list = []
+	#  filenames with/ which occupies positions 0 and 1.
+	g:interview_list = []
 	for list_item in range(0, (len(g:file_list_all) - 1))
 		if (match(g:file_list_all[list_item], g:file_regex) == 2) 
-			# strip off the leading ./
-			let g:file_to_add = g:file_list_all[list_item][2:]
-			let g:interview_list = g:interview_list + [g:file_to_add]
+			# strip off the leading/
+			g:file_to_add = g:file_list_all[list_item][2:]
+			g:interview_list = g:interview_list + [g:file_to_add]
 		endif
 	endfor
 	# save buffer number of current file to register 'a' so you can return here
-	let @a = bufnr('%')
+	@a = bufnr('%')
 	# go through the list of files copying modifying the attribute line.
 	for interview in range(0, (len(g:interview_list) - 1))
 		# go to interview file
-		execute "normal :e " . g:interview_list[interview] . "\<CR>"
+		execute "normal :e " g:interview_list[interview] .. "\<CR>"
 		# copy first row which should be the attribute tags.
 		execute "normal! :1,1s/:/: :/g\<CR>"
 		execute "normal! :1,1s/^: :/:/\<CR>"
 		execute "normal! :1,1s/: :$/:/\<CR>"
 	endfor
-endfunction
+enddef
 
-function Fix() 
-		execute "normal! :1,1s/:/: :/g\<CR>"
-		execute "normal! :1,1s/^: :/:/\<CR>"
-		execute "normal! :1,1s/: :$/:/\<CR>"
-endfunction
+def Fix() 
+	execute "normal! :1,1s/:/: :/g\<CR>"
+	execute "normal! :1,1s/^: :/:/\<CR>"
+	execute "normal! :1,1s/: :$/:/\<CR>"
+enddef
 
-function CreateBlockMetadataDictOLD() 
-	# Read back from where the tag is and copy the tags you find into a
-	# list (one for each line in the block). Sort each line's tags and add
-	# create a tag list for the whole block. You have this code. Also add
-	# in the tag to be filled into the main list. Sort all the tags.
-	# Delete the tags from the block as you go because you'll add them
-	#redraw!
-	#lazyredraw
-	
-	# back in in an aligned format.
-	let g:tags_on_line    = []
-	#let g:last_match_line = g:match_line
-
-	# -----------------------------------------------------
-	# Find tags in lines above and add them to a list until the there is a gap between the lines with tags
-	# Search for first match the bW means search backwards and don't wrap around the end of the file.
-	# -----------------------------------------------------
-	let g:match_line              = search(':\a.\{-}:', 'bW')
-	# -----------------------------------------------------
-	#  As long as we find a match (ie the result of the search function is
-	#  not equal to zero) that is not the attribute line (1) continue.
-	#  ----------------------------------------------------
-	if (g:match_line <= 1)
-		call cursor(g:bottom_line, g:bottom_col)
-		call confirm("No tags found above the cursor",  "OK", 1)
-	else
-		# ----------------------------------------------------------
-		# Now we're going to look for the rest of the tags in a
-		# contiguously tagged block above where the cursor is.
-		# ----------------------------------------------------------
-		let g:current_match_line      = line('.')
-		let g:last_match_line         = g:match_line
-		# ----------------------------------------------
-		# Copy the first found tag and add it to the matched-tag-list. 
-		# ----------------------------------------------
-		call ProcessLineWithTags()
-		let g:last_match_line = g:match_line
-		# -----------------------------------------------------------
-		# Set an is-contiguous-tag-block boolean to true (1).
-		# -----------------------------------------------------------
-		let g:is_contiguous_tagged_block = 1
-		while (g:is_contiguous_tagged_block == 1)
-			# --------------------------------------------------
-			# Search backwards ('b') for another tag.
-			# --------------------------------------------------
-			let g:match_line = search(':\a.\{-}:', 'bW')
-			# If there is a tag in a contiguous block
-			if (g:match_line > 1) 
-				if (g:last_match_line - g:match_line == 1)
-					call ProcessLineWithTags()
-					let g:last_match_line = g:match_line
-				else
-					let g:is_contiguous_tagged_block = 0
-				endif
-			else
-				let g:is_contiguous_tagged_block = 0
-			endif
-		endwhile	
-	endif
-if (g:tag_fill_option == "last tag added")
-		if (index(g:block_tags_list, g:most_recent_tag_in_changes) == -1)
-			let g:tag_list_to_present =  [ g:most_recent_tag_in_changes ] + g:block_tags_list
-		else 
-			let g:tag_list_to_present = g:block_tags_list 
-		endif
-	elseif (g:tag_fill_option == "bottom of contiguous block")
-		let g:tag_list_to_present = g:block_tags_list 
-	endif
-	let g:block_tags_list = sort(g:block_tags_list)
-endfunction
