@@ -1165,23 +1165,23 @@ enddef
 # ---------------------------- REPORTS ----------------------------
 # -----------------------------------------------------------------
 
-def FullReport(search_term: string)
+def g:FullReport(search_term: string)
 	Report(search_term, "full", "FullReport", "no meta")
 enddef
 
-def AnnotationsReport(search_term: string)
+def g:AnnotationsReport(search_term: string)
 	Report(search_term, "annotations", "AnnotationReport", "no meta") 
 enddef
 
-def QuotesReport(search_term: string)
+def g:QuotesReport(search_term: string)
 	Report(search_term,  "quotes", "QuotesReport", "no meta") 
 enddef
 
-def MetaReport(search_term: string)
+def g:MetaReport(search_term: string)
 	Report(search_term,  "meta", "MetaReport", "meta") 
 enddef
 
-def VWSReport(search_term: string)
+def g:VWSReport(search_term: string)
 	Report(search_term, "VWS", "VWSReport", "meta") 
 enddef
 
@@ -1189,7 +1189,7 @@ enddef
 # This function produces summary reports for all tags defined in the 
 # tag glossary.
 # -----------------------------------------------------------------
-def AllSummariesFull() 
+def g:AllSummariesFull() 
 
 	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
@@ -1219,7 +1219,7 @@ enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-def AllSummariesGenReportsFull(id: number, result: number)
+def g:AllSummariesGenReportsFull(id: number, result: number)
 	if result == 2
 		execute "normal! :delmarks Q\<CR>mQ"
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
@@ -1237,7 +1237,7 @@ enddef
 # This function produces summary reports for all tags defined in the 
 # tag glossary.
 # -----------------------------------------------------------------
-def AllSummariesQuotes() 
+def g:AllSummariesQuotes() 
 
 	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
@@ -1267,7 +1267,7 @@ enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-def AllSummariesGenReportsQuotes(id: number, result: number)
+def g:AllSummariesGenReportsQuotes(id: number, result: number)
 	if result == 2
 		execute "normal! :delmarks Q\<CR>mQ"
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
@@ -1301,7 +1301,7 @@ enddef
 # This builds a formatted report for the tag specified as the search_term
 # argument.
 # -----------------------------------------------------------------
-def Gather(search_term: string) 
+def g:Gather(search_term: string) 
 	
 	ParmCheck()
 
@@ -1338,7 +1338,7 @@ def Gather(search_term: string)
 	execute "normal! `R\"sp"
 enddef
 
-def Report(search_term: string, report_type = "full", function_name = "FullReport", meta = "no meta") 
+def g:Report(search_term: string, report_type = "full", function_name = "FullReport", meta = "no meta") 
 	ParmCheck()
 	
 	g:tag_summary_file = g:tag_summaries_path .. search_term .. ".csv"
@@ -1791,7 +1791,7 @@ enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-def TagStats() 
+def g:TagStats() 
 
 	ParmCheck()
 	
