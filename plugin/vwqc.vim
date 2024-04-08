@@ -2415,7 +2415,7 @@ def g:TagsGenThisSession()
 	# See if the wiki config dictionary has had a
 	# tags_generated_this_session key added.
 	# ------------------------------------------------------
-	var g:tags_gen_this_wiki_this_session = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
+	g:tags_gen_this_wiki_this_session = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	# ------------------------------------------------------
 	# Checks to see if we have the proper current tag list for our tag
 	# omnicompletion.
