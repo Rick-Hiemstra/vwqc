@@ -1763,7 +1763,7 @@ enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-def CreateUniqueTagList(tags_desc): list<string>
+def CreateUniqueTagList(tags_desc: list<string>): list<string>
 	var unique_tags = []
 	for index in range(0, len(tags_desc) - 1)
 		if (index(unique_tags, tags_desc[index][2]) == -1)
