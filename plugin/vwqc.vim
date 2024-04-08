@@ -2523,12 +2523,13 @@ enddef
 #
 # ------------------------------------------------------
 def NoTagListNotice(tag_message: number) 
+	var popup_message = "undefined"
 	if (tag_message == 1)
-		var popup_message = "Press <F2> to populate the current tag list."
+		popup_message = "Press <F2> to populate the current tag list."
 	elseif (tag_message == 2)
-		var popup_message = "A tag list for this wiki has not been generated yet this session. Press <F2> to populate the current tag list with this wiki\'s tags."
+		popup_message = "A tag list for this wiki has not been generated yet this session. Press <F2> to populate the current tag list with this wiki\'s tags."
 	else 
-		var popup_message = "Update the tag list with this wiki\'s tags by pressing <F2>."
+		popup_message = "Update the tag list with this wiki\'s tags by pressing <F2>."
 	endif
 	confirm(popup_message, "Got it", 1)
 enddef
