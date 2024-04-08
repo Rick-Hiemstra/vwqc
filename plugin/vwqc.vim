@@ -304,9 +304,9 @@ def GetVWQCProjectParameters()
 	
 	g:project_name           = g:vimwiki_wikilocal_vars[g:wiki_number]['name']
 
-	g:extras_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g"). g:project_name .. "_extras/"
+	g:extras_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") .. g:project_name .. "_extras/"
 
-	g:backup_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g"). g:project_name .. " Backups/"
+	g:backup_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") .. g:project_name .. " Backups/"
 
 	# If header template location is explicitly defined then use it, otherwise use default file.
 	var has_template = 0
@@ -339,7 +339,7 @@ def GetVWQCProjectParameters()
 		g:tag_summaries_path       = expand(g:extras_path .. "tag_summaries/")
 	endif
 
-	g:glossary_path                    = g:vimwiki_wikilocal_vars[g:wiki_number]['path']. "Tag Glossary.md"
+	g:glossary_path                    = g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag Glossary.md"
 
 	var has_coder = 0
 	execute "normal! :let has_coder = has_key(g:" .. g:current_wiki_name .. ", 'coder_initials')\<CR>"
