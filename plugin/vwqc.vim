@@ -2976,7 +2976,7 @@ def CreateSubBlocksLists()
 	endfor
 enddef
 
-def BuildMetadataBlockFill(id: number, result:number) 
+def BuildMetadataBlockFill(id: number, result: number) 
 
 	g:fill_tag = g:block_tags_list[result - 1]
 
