@@ -2157,7 +2157,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def GetAttributeLine(interview): number 
+def GetAttributeLine(interview: string): number 
 	# -----------------------------------------------------------------
 	# Go to the Location List result under the cursor.
 	# -----------------------------------------------------------------
