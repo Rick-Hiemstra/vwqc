@@ -1664,7 +1664,7 @@ enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-def PrintTagInterviewSummary(tag_cross, tag_, interview_list) 
+def PrintTagInterviewSummary(tag_cross: dict<any>, tag_: string, interview_list: list<string>) 
 	var total_tags   = 0
 	var total_blocks = 0
 	var ave_block_size = 1.0
