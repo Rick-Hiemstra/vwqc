@@ -2126,7 +2126,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def RemoveMetadata(line_text): string
+def RemoveMetadata(line_text: string): string
 	# -----------------------------------------------------------------
 	#  There is something strange going on here. You shouldn't
 	#  have to go back 6 columns from the match. If you don't you
