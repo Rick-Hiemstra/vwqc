@@ -2957,13 +2957,6 @@ def SortTagDefs()
 enddef
 
 
-	popup_menu(["Yes", "No"], {
-		 title:    g:backup_message,
-		 callback: 'CreateBackup', 
-		 highlight: 'Question',
-		 border:     [],
-		 close:      'click', 
-		 padding:    [0, 1, 0, 1] })
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
