@@ -163,15 +163,15 @@ vim9script
 # -----------------------------------------------------------------
 # ---------------------------- VWQC SETUP -------------------------
 # -----------------------------------------------------------------
-var g:tag_dict                  = {}
-var g:current_tags              = []
-var g:loc_list                  = []
+#var g:tag_dict                  = {}
+#var g:current_tags              = []
+#var g:loc_list                  = []
 
 # ------------------------------------------------------
 # Displays a popup help menu
 # ------------------------------------------------------
 def HelpMenu()
-	var g:help_list = [             "NAVIGATION", 
+	var help_list = [             "NAVIGATION", 
 		                        "<leader>gt                          Go to",
 					"<leader>gb                          Go back", 
 				 	"<F7>                                Annotation Toggle", 
@@ -212,7 +212,7 @@ def HelpMenu()
 					"<leader>hm                          Help menu",
 					"<leader>ph                          Page help",
 				        "<leader>lp                          List project parameters"]
-	popup_menu(g:help_list , 
+	popup_menu(help_list , 
 				 { minwidth: 50,
 				 maxwidth: 100,
 				 pos: 'center',
@@ -2495,7 +2495,7 @@ def g:CreateTagDict()
 	# -----------------------------------------------------------------
 	# Define an empty tag dictionary
 	# -----------------------------------------------------------------
-	var g:tag_dict = {}
+	g:tag_dict = {}
 	# -----------------------------------------------------------------
 	# Build the tag dictionary. 
 	# -----------------------------------------------------------------
