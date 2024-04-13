@@ -2333,6 +2333,7 @@ def GenTagsWithLocationList()
 		endif
 	endfor	
 	var g:current_tags = deepcopy(g:tag_list)
+	echoerr "Finished GenTagsWithLocationList"
 enddef
 
 # ------------------------------------------------------
@@ -2505,6 +2506,7 @@ def CreateTagDict()
 	# Return to the buffer you called this function from
 	# -----------------------------------------------------------------
 	execute "normal! `Y"
+	echoerr "Finished CreateTagDict"
 enddef
 
 # ------------------------------------------------------
