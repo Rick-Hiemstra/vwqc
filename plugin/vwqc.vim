@@ -2285,6 +2285,7 @@ def GetTagUpdate()
 	# ------------------------------------------------------
 	GenDictTagList()
 	UpdateCurrentTagsList()
+	echoerr "got here"
 	UpdateCurrentTagsPage()
 	CurrentTagsPopUpMenu()
 
@@ -2346,7 +2347,6 @@ def UpdateCurrentTagsPage()
 	# Open the Tag List Current Page
 	execute "normal! :e " .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag List Current" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
 	# Delete what is there
-	echoerr "Got into the page"
 	execute "normal! ggVGd"
 	var tag_update_time = strftime("%Y-%m-%d %a %H:%M:%S")
 	execute "normal! i**Tag list last updated at: " .. tag_update_time .. "**\n\<CR>"
