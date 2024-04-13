@@ -1,9 +1,9 @@
 vim9script
 
-if !has('vim9script') ||  v:version < 901
-    echoerr 'Needs Vim version 9.1 and above'
-    finish
-endif
+#if !has('vim9script') ||  v:version < 901
+#    echoerr 'Needs Vim version 9.1 and above'
+#    finish
+#endif
 # -----------------------------------------------------------------
 # ----------------- DECLARE THIS A VIMSCRIPT 9 SCRIPT -------------
 # -----------------------------------------------------------------
@@ -451,7 +451,7 @@ enddef
 # -----------------------------------------------------------------
 # This function formats interview text to use in for Vimwiki interview coding. 
 # -----------------------------------------------------------------
-def FormatInterviewB(interview_label: string) 
+def g:FormatInterviewB(interview_label: string) 
 
 	ParmCheck()
 
