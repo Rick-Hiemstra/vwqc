@@ -2463,7 +2463,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def g:GenDictTagList() 
+def GenDictTagList() 
 	g:dict_tags = []
 	for tag_index in range(0, (len(g:current_tags) - 1))
  		if has_key(g:tag_dict, g:current_tags[tag_index])
@@ -2475,7 +2475,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def g:CreateTagDict() 
+def CreateTagDict() 
 
 	confirm("Entered CreatTagDict", "Got it", 1)
 	# -----------------------------------------------------------------
@@ -2520,7 +2520,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def g:CurrentTagsPopUpMenu() 
+def CurrentTagsPopUpMenu() 
 	popup_menu(g:tag_list_output , 
 				 { minwidth: 50,
 				 maxwidth: 50,
@@ -2533,7 +2533,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def g:NoTagListNotice(tag_message: number) 
+def NoTagListNotice(tag_message: number) 
 	var popup_message = "undefined"
 	if (tag_message == 1)
 		popup_message = "Press <F2> to populate the current tag list."
@@ -2545,169 +2545,13 @@ def g:NoTagListNotice(tag_message: number)
 	confirm(popup_message, "Got it", 1)
 enddef
 
-# ------------------------------------------------------
-#
-# ------------------------------------------------------
-def g:TagFillWithChoiceOLD() 
-	# ---------------------------------------------
-	# Create an empty matched-tag-list
-	# ---------------------------------------------
-	g:matched_tag_list = []
-	# ---------------------------------------------
-	# Set tag fill mode
-	# ---------------------------------------------
-	if !exists("g:tag_fill_option") 
-		g:tag_fill_option = "last tag added"
-	endif
-	if (g:tag_fill_option == "last tag added")
-		FindLastTagAddedToBuffer()
-	endif
-	# ----------------------------------------------------
-	# Mark the line and column number where you want the bottom of the tag block to be.
-	# -----------------------------------------------------
-	g:bottom_line = line('.')
-	g:bottom_col = virtcol('.')
-	# -----------------------------------------------------
-	# Find tags in lines above and add them to a list until the there is a gap between the lines with tags
-	# Search for first match the bW means search backwards and don't wrap around the end of the file.
-	# -----------------------------------------------------
-	g:match_line = search(':\a.\{-}:', 'bW')
-	# -----------------------------------------------------
-	#  As long as we find a match (ie the result of the search function is not equal to zero) that is not the attribute line (1) continue.
-	#  ----------------------------------------------------
-	if (g:match_line <= 1)
-		cursor(g:bottom_line, g:bottom_col)
-		confirm("No tags found above the cursor",  "OK", 1)
-	else
-		# ----------------------------------------------
-		# Set the last-matched-line equal to the matched-line. This is the first case situation.
-		# ----------------------------------------------
-		g:last_match_line = g:match_line
-		# ----------------------------------------------
-		# Copy the first found tag and add it to the matched-tag-list. Note the hh at the end of the execute statement moves the
-		# cursor to the left of the tag we just matched. This is so it doesn't get selected again when we look for more tags.
-		# ----------------------------------------------
-		execute "normal! lviWylvt:yhh"
-		g:first_tag_in_block = [@@]
-		if (g:tag_fill_option == "last tag added") 
-			if (len(g:matched_tag_list) == 0)
-				g:matched_tag_list = g:first_tag_in_block
-			elseif (g:first_tag_in_block[0] != g:matched_tag_list[0])
-				g:matched_tag_list = g:matched_tag_list + g:first_tag_in_block
-			endif
-		elseif (g:tag_fill_option == "bottom of contiguous block")
-			g:matched_tag_list = g:first_tag_in_block
-		endif
-		# -----------------------------------------------------------
-		# Set an is-contiguous-tag-block boolean to true (1).
-		# -----------------------------------------------------------
-		g:is_contiguous_tagged_block = 1
-		# ----------------------------------------------------------
-		# Now we're going to look for the rest of the tags in a
-		# contiguously tagged block above where the cursor is.
-		# ----------------------------------------------------------
-		while (g:is_contiguous_tagged_block == 1)
-			# --------------------------------------------------
-			# Search backwards ('b') for another tag.
-			# --------------------------------------------------
-			g:match_line = search(':\a.\{-}:', 'bW')
-			# --------------------------------------------------
-			# If we found a tag (ie. The search function doesn't return a zero) decide if we need to add it to our list.
-			# --------------------------------------------------
-			if (g:match_line > 1)
-				# -------------------------------------------
-				# Copy the tag we found. 
-				# -------------------------------------------
-				execute "normal! lviWylvt:yhh"
-				g:this_tag = @@
-				# -------------------------------------------
-				# We're setting up the have-tag variable as a boolean. So have-tag is set to 0 or false.
-				# -------------------------------------------
-				g:have_tag = 0
-				# -------------------------------------------
-				# Test to see if we already have this tag in our list. If we don't then add it to our tag
-				# list. This next if-block will only run if the most recently found tag is no more than
-				# one line above the previously found tag. i.e. That the tags are part of a contiguous block
-				# -------------------------------------------
-				if (g:last_match_line - g:match_line <= 1)
-					# -----------------------------------
-					#  Search through the matched-tag-list to see if we already have the tag
-					#  we're considering on this iteration of the while loop
-					#  ----------------------------------
-					for tag_index in g:matched_tag_list
-						if (tag_index == g:this_tag)
-							g:have_tag = 1
-						endif
-					endfor
-					# -----------------------------------
-					# If have tag is still false then we'll add it to our match-tag-list.
-					# Note we're not sorting our list.This means that the tags will be in
-					# the order they are found as we search backwards.
-					# -----------------------------------
-					if (g:have_tag == 0)
-						g:matched_tag_list = g:matched_tag_list + [g:this_tag]
-					endif
-					# -----------------------------------
-					# Before we iterate again we have to make the last-match-line equal to
-					# our current match-line.
-					# ----------------------------------
-					g:last_match_line = g:match_line
-				else
-					# -----------------------------------
-					# If the most recently found tag is on a line more than one line above the
-					# previously found tag then we found a tag outside of the tag block.
-					# -----------------------------------
-					g:is_contiguous_tagged_block = 0
-				endif
-			else
-				g:is_contiguous_tagged_block = 0
-			endif 
-
-		endwhile	
-		# ------------------------------------------------------------
-		# The choice number is the matched tag list index number. So 0 is the first element in the list. This will be the first tag
-		# we found when we searched backwards. 
-		# ------------------------------------------------------------
-		cursor(g:bottom_line, g:bottom_col)
-		g:choice = 0
-		# ------------------------------------------------------------
-		#  If the list has more than one element you want the user to choose the proper tag. Hitting enter chooses the first item in the list.
-		# ------------------------------------------------------------
-		if (len(g:matched_tag_list) > 1)
-			popup_menu(g:matched_tag_list, {
-				 title:    "Choose tag (Mode = " .. g:tag_fill_option .. "; F4 to change mode)"   ,
-				 callback: 'FillChosenTag'  , 
-				 highlight: 'Question'       ,
-				 border:     []              ,
-				 close:      'click'         , 
-				 padding:    [0, 1, 0, 1],
-				 })
-		elseif (len(g:matched_tag_list) == 1)
-			g:tag_to_fill = ":" .. g:matched_tag_list[0] .. ":"
-			# ------------------------------------------------------------
-			# Now we have to find the range to fill
-			# ------------------------------------------------------------
-			cursor(g:bottom_line, g:bottom_col)
-			g:line_of_tag_to_fill = search(g:tag_to_fill, 'bW')
-			if (g:line_of_tag_to_fill != 0)
-				g:lines_to_fill = g:bottom_line - g:line_of_tag_to_fill
-				cursor(g:bottom_line, g:bottom_col)
-				execute "normal! V" .. g:lines_to_fill .. "k\<CR>:s/$/ " .. g:tag_to_fill .. "/\<CR>A \<ESC>"
-			else
-				confirm("Tag not found above the cursor",  "OK", 1)
-			endif
-		endif
-
-		
-	endif	
-enddef
 
 # ------------------------------------------------------------
 # Find the last tag entered on the page. Do this by putting
 # :changes into register c and then searching it for the
 # first tag. 
 # ------------------------------------------------------------
-def g:FindLastTagAddedToBuffer() 
+def FindLastTagAddedToBuffer() 
 	# ------------------------------------------------------------
 	#  Redirect output to register changes variable
 	# ------------------------------------------------------------
@@ -2750,7 +2594,7 @@ def g:FindLastTagAddedToBuffer()
 	endif
 enddef
 
-def g:FillChosenTag(id: number, result: number) 
+def FillChosenTag(id: number, result: number) 
 	# ------------------------------------------------------------
 	# When ESC is press the a:result value will be -1. So take no action.
 	# ------------------------------------------------------------
