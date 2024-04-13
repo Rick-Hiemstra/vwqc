@@ -718,6 +718,7 @@ def CreateBackupQuery()
 
 	var today              = strftime("%Y-%m-%d")
 	var time_now           = strftime("%H-%M-%S")
+	var 
 	g:backup_path          = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") .. g:project_name .. " Backups/"
 	g:backup_folder_name   = today .. " at " .. time_now .. " Backup by " .. g:coder_initials .. "/"
 	g:new_backup_path      = g:backup_path .. g:backup_folder_name
