@@ -712,7 +712,7 @@ enddef
 # -----------------------------------------------------------------
 #
 # -----------------------------------------------------------------
-def CreateBackupQuery() 
+def g:CreateBackupQuery() 
 
 	ParmCheck()
 
@@ -743,7 +743,7 @@ enddef
 # -----------------------------------------------------------------
 #
 # -----------------------------------------------------------------
-def g:CreateBackup(id: number, result: number) 
+def CreateBackup(id: number, result: number) 
 	var backup_message = "Backup message not set."
 
 	if result == 1
