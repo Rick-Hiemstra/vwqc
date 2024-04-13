@@ -163,6 +163,9 @@ vim9script
 # -----------------------------------------------------------------
 # ---------------------------- VWQC SETUP -------------------------
 # -----------------------------------------------------------------
+var g:tag_dict                  = {}
+var g:current_tags              = []
+var g:loc_list                  = []
 
 # ------------------------------------------------------
 # Displays a popup help menu
@@ -1389,11 +1392,11 @@ def g:Report(search_term: string, report_type = "full", function_name = "FullRep
 	g:cross_codes            = []
 	
 	# Get the number of search results.
-	g:num_search_results = len(g:loc_list)
+	var search_results = len(g:loc_list)
 	
 	# Go through all the location list search results and build the
 	# interview line and annotation dictionaries. 
-	for g:ll_num in range(0, g:num_search_results - 1)
+	for g:ll_num in range(0, search_results - 1)
 		g:current_buf_name    = bufname(g:loc_list[g:ll_num]['bufnr'])[0:-g:ext_len]
 		g:ll_bufnr            = g:loc_list[g:ll_num]['bufnr']
 		g:line_text           = g:loc_list[g:ll_num]['text']
@@ -2314,27 +2317,27 @@ def g:GenTagsWithLocationList()
 	silent execute "normal! :VimwikiSearch /" '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' .. "/g\<CR>"
 
 	g:loc_list = getloclist(0)
-	g:tag_list = []
+	var tag_list = []
 
-	g:num_search_results = len(g:loc_list)
+	var search_results = len(g:loc_list)
 
 	var first_col = g:loc_list[0]['col'] 
 	var last_col  = g:loc_list[0]['end_col'] - 3
-	g:test_tag  = g:loc_list[0]['text'][first_col:last_col]
+	var test_tag  = g:loc_list[0]['text'][first_col:last_col]
 
 	if g:loc_list[0]['lnum'] > 1
-		g:tag_list = g:tag_list + [ g:test_tag ]
+		tag_list = tag_list + [ test_tag ]
 	endif
 
-	for g:line_index in range(1, g:num_search_results - 1)
-		first_col = g:loc_list[g:line_index]['col'] 
-		last_col  = g:loc_list[g:line_index]['end_col'] - 3
-		g:test_tag = g:loc_list[g:line_index]['text'][first_col:last_col]
-		if (index(g:tag_list, g:test_tag) == -1)
-			g:tag_list = g:tag_list + [ g:test_tag ]
+	for line_index in range(1, search_results - 1)
+		first_col = g:loc_list[line_index]['col'] 
+		last_col  = g:loc_list[line_index]['end_col'] - 3
+		test_tag = g:loc_list[line_index]['text'][first_col:last_col]
+		if (index(tag_list, test_tag) == -1)
+			tag_list = tag_list + [ test_tag ]
 		endif
 	endfor	
-	g:current_tags = deepcopy(g:tag_list)
+	g:current_tags = deepcopy(tag_list)
 	confirm("Finished GenTagsWithLocationList",  "OK", 1)
 enddef
 
