@@ -2306,7 +2306,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def g:GenTagsWithLocationList() 
+def GenTagsWithLocationList() 
 	ParmCheck()
 	# Change the pwd to that of the current wiki.
 	confirm("Entered GenTagsWithLocationList",  "OK", 1)
@@ -2344,7 +2344,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def g:UpdateCurrentTagsPage() 
+def UpdateCurrentTagsPage() 
 	# -----------------------------------------------------------------
 	# Use R mark to know how to get back
 	# -----------------------------------------------------------------
