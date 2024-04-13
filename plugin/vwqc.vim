@@ -2957,6 +2957,13 @@ def SortTagDefs()
 enddef
 
 
+	popup_menu(["Yes", "No"], {
+		 title:    g:backup_message,
+		 callback: 'CreateBackup', 
+		 highlight: 'Question',
+		 border:     [],
+		 close:      'click', 
+		 padding:    [0, 1, 0, 1] })
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
@@ -2974,6 +2981,7 @@ def GetTagDef()
 	# Tag Glossary page.
 	# -----------------------------------------------------------------
 	g:tag_to_test = GetTagUnderCursor()
+	
 	var tag_message = ":" .. g:tag_to_test .. ": is not defined in the Tag Glossary. Would you like to add it now?"
  	if (g:tag_to_test != "") 
 		if (has_key(g:tag_dict, g:tag_to_test))
@@ -2988,8 +2996,7 @@ def GetTagDef()
 				 highlight: 'Question',
  				 border: [],
  				 close : 'click',
-				 padding: [0, 1, 0, 1],
- 				 })
+				 padding: [0, 1, 0, 1] })
 		endif
 	else
  		popup_atcursor("There is no valid tag under the cursor.", {
