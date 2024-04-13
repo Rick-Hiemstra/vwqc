@@ -2973,6 +2973,7 @@ def GetTagDef()
 	# the definition in a popup window, else offer to add the tag to the
 	# Tag Glossary page.
 	# -----------------------------------------------------------------
+	var 
 	g:tag_to_test = GetTagUnderCursor()
  	if (g:tag_to_test != "") 
 		if (has_key(g:tag_dict, g:tag_to_test))
@@ -2982,7 +2983,7 @@ def GetTagDef()
  				 })
  		else
  			popup_menu(["Yes", "No"], {
-			         title: "\"" .. g:tag_to_test .. "\" is not defined in the Tag Glossary. Would you like to add it now?", 
+			         title: "\"" .. g:tag_to_test .. "\"" is not defined in the Tag Glossary. Would you like to add it now?", 
 				 callback: 'AddNewTagDef',
 				 highlight: 'Question',
  				 border: [],
