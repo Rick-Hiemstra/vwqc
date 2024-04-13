@@ -2305,6 +2305,7 @@ enddef
 def GenTagsWithLocationList() 
 	ParmCheck()
 	# Change the pwd to that of the current wiki.
+	confirm("Entered GenTagsWithLocationList",  "OK", 1)
 	execute "normal! :cd %:p:h\<CR>"
 	# Call VimwikiSearchTags against the a:search_term argument.
 	# Put the result in loc_list which is a list of location list
@@ -2470,10 +2471,13 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def CreateTagDict() 
+def g:CreateTagDict() 
+
+	confirm("Entered CreatTagDict", "Got it", 1)
 	# -----------------------------------------------------------------
 	# Change the pwd to that of the current wiki.
 	# -----------------------------------------------------------------
+	confirm("Entered CreateTagDict",  "OK", 1)
 	execute "normal! :cd %:p:h\<CR>"
 	# -----------------------------------------------------------------
 	# Use Y mark to know how to get back
