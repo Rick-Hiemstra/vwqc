@@ -2285,7 +2285,7 @@ def GetTagUpdate()
 	# ------------------------------------------------------
 	GenDictTagList()
 	UpdateCurrentTagsList()
-	echomsg "In GetTagUpdate"
+	confirm("In GetTagUpdate",  "OK", 1)
 	UpdateCurrentTagsPage()
 	CurrentTagsPopUpMenu()
 
@@ -2333,7 +2333,7 @@ def GenTagsWithLocationList()
 		endif
 	endfor	
 	var g:current_tags = deepcopy(g:tag_list)
-	echomsg "Finished GenTagsWithLocationList"
+	confirm("Finished GenTagsWithLocationList",  "OK", 1)
 enddef
 
 # ------------------------------------------------------
@@ -2506,7 +2506,7 @@ def CreateTagDict()
 	# Return to the buffer you called this function from
 	# -----------------------------------------------------------------
 	execute "normal! `Y"
-	echomsg "Finished CreateTagDict"
+	confirm("Finished CreateTagDict",  "OK", 1)
 enddef
 
 # ------------------------------------------------------
