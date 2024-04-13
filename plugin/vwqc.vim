@@ -2243,7 +2243,7 @@ def g:GetTagUpdate()
 	ParmCheck()
 
 	confirm("Populating tags. This may take a while.", "Got it", 1)
-	confirm("Spot 2.", "Got it", 1)
+	echo "GetTagUpdate enter"
 	CreateTagDict()
 
 	execute "normal! :delmarks Y\<CR>"
@@ -2255,7 +2255,7 @@ def g:GetTagUpdate()
 	# ------------------------------------------------------
 	# Find the vimwiki that the current buffer is in.
 	# ------------------------------------------------------
-	g:wiki_number = vimwiki#vars#get_bufferlocal('wiki_nr') 
+	# g:wiki_number = vimwiki#vars#get_bufferlocal('wiki_nr') 
 	# -----------------------------------------------------------------
 	# Save the current buffer so any new tags are found by
 	# VimwikiRebuildTags
@@ -2313,14 +2313,14 @@ def g:GenTagsWithLocationList()
 	# dictionaries that we'll process.
 	silent execute "normal! :VimwikiSearch /" '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' .. "/g\<CR>"
 
-	var g:loc_list = getloclist(0)
-	var g:tag_list = []
+	g:loc_list = getloclist(0)
+	g:tag_list = []
 
-	var g:num_search_results = len(g:loc_list)
+	g:num_search_results = len(g:loc_list)
 
 	var first_col = g:loc_list[0]['col'] 
 	var last_col  = g:loc_list[0]['end_col'] - 3
-	var g:test_tag  = g:loc_list[0]['text'][first_col:last_col]
+	g:test_tag  = g:loc_list[0]['text'][first_col:last_col]
 
 	if g:loc_list[0]['lnum'] > 1
 		g:tag_list = g:tag_list + [ g:test_tag ]
@@ -2334,7 +2334,7 @@ def g:GenTagsWithLocationList()
 			g:tag_list = g:tag_list + [ g:test_tag ]
 		endif
 	endfor	
-	var g:current_tags = deepcopy(g:tag_list)
+	g:current_tags = deepcopy(g:tag_list)
 	confirm("Finished GenTagsWithLocationList",  "OK", 1)
 enddef
 
@@ -2461,7 +2461,7 @@ enddef
 #
 # ------------------------------------------------------
 def g:GenDictTagList() 
-	var g:dict_tags = []
+	g:dict_tags = []
 	for tag_index in range(0, (len(g:current_tags) - 1))
  		if has_key(g:tag_dict, g:current_tags[tag_index])
 			g:dict_tags = g:dict_tags + [g:current_tags[tag_index]]
