@@ -2973,8 +2973,8 @@ def GetTagDef()
 	# the definition in a popup window, else offer to add the tag to the
 	# Tag Glossary page.
 	# -----------------------------------------------------------------
-	var tag_message = "'" .. g:tag_to_test .. "' is not defined in the Tag Glossary. Would you like to add it now?"
 	g:tag_to_test = GetTagUnderCursor()
+	var tag_message = ":" .. g:tag_to_test .. ": is not defined in the Tag Glossary. Would you like to add it now?"
  	if (g:tag_to_test != "") 
 		if (has_key(g:tag_dict, g:tag_to_test))
  			popup_atcursor(get(g:tag_dict, g:tag_to_test), {
