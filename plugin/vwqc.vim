@@ -2977,6 +2977,7 @@ def GetTagDef()
 	g:tag_to_test = GetTagUnderCursor()
 	
 	var tag_check_message = g:tag_to_test .. "is not defined blah in the Tag Glossary\. Would you like to add it now?"
+	echom "message: " .. tag_check_message
  	if (g:tag_to_test != "") 
 		if (has_key(g:tag_dict, g:tag_to_test))
  			popup_atcursor(get(g:tag_dict, g:tag_to_test), {
@@ -2984,7 +2985,8 @@ def GetTagDef()
  				 'close' : 'click',
  				 })
  		else
- 			popup_menu(["Yes", "No"], {
+			echom "AddNewTagDefSection"
+ 			popup_menu(['Yes', 'No'], {
 			         title: tag_check_message, 
 				 callback: 'AddNewTagDef',
 				 highlight: 'Question',
