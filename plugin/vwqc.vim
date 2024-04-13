@@ -2218,7 +2218,7 @@ augroup END
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def TagsLoadedCheck()
+def g:TagsLoadedCheck()
 	var last_wiki_warning = ""
 	if has_key(g:vimwiki_list[vimwiki#vars#get_bufferlocal('wiki_nr')], 'vwqc')
 		if (!exists("g:last_wiki"))
@@ -2238,11 +2238,12 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def GetTagUpdate() 
+def g:GetTagUpdate() 
 
 	ParmCheck()
 
 	confirm("Populating tags. This may take a while.", "Got it", 1)
+	confirm("Spot 2.", "Got it", 1)
 	CreateTagDict()
 
 	execute "normal! :delmarks Y\<CR>"
@@ -2302,7 +2303,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def GenTagsWithLocationList() 
+def g:GenTagsWithLocationList() 
 	ParmCheck()
 	# Change the pwd to that of the current wiki.
 	confirm("Entered GenTagsWithLocationList",  "OK", 1)
@@ -2340,7 +2341,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def UpdateCurrentTagsPage() 
+def g:UpdateCurrentTagsPage() 
 	# -----------------------------------------------------------------
 	# Use R mark to know how to get back
 	# -----------------------------------------------------------------
@@ -2369,7 +2370,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def UpdateCurrentTagsList() 
+def g:UpdateCurrentTagsList() 
 	var is_in_list = 0
 	var print_list_item = "undefined"
 	g:tag_dict_keys 		= keys(g:tag_dict)
@@ -2446,7 +2447,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def ToggleDoubleColonOmniComplete() 
+def g:ToggleDoubleColonOmniComplete() 
 	if maparg("::", "i") == ""
 		inoremap :: <ESC>a:<ESC>:call TagsGenThisSession()<CR>
 		confirm("Double colon (::) omni-completion on.", "Got it", 1)
@@ -2459,7 +2460,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def GenDictTagList() 
+def g:GenDictTagList() 
 	var g:dict_tags = []
 	for tag_index in range(0, (len(g:current_tags) - 1))
  		if has_key(g:tag_dict, g:current_tags[tag_index])
@@ -2516,7 +2517,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def CurrentTagsPopUpMenu() 
+def g:CurrentTagsPopUpMenu() 
 	popup_menu(g:tag_list_output , 
 				 { minwidth: 50,
 				 maxwidth: 50,
@@ -2529,7 +2530,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def NoTagListNotice(tag_message: number) 
+def g:NoTagListNotice(tag_message: number) 
 	var popup_message = "undefined"
 	if (tag_message == 1)
 		popup_message = "Press <F2> to populate the current tag list."
@@ -2544,7 +2545,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def TagFillWithChoiceOLD() 
+def g:TagFillWithChoiceOLD() 
 	# ---------------------------------------------
 	# Create an empty matched-tag-list
 	# ---------------------------------------------
@@ -2703,7 +2704,7 @@ enddef
 # :changes into register c and then searching it for the
 # first tag. 
 # ------------------------------------------------------------
-def FindLastTagAddedToBuffer() 
+def g:FindLastTagAddedToBuffer() 
 	# ------------------------------------------------------------
 	#  Redirect output to register changes variable
 	# ------------------------------------------------------------
@@ -2746,7 +2747,7 @@ def FindLastTagAddedToBuffer()
 	endif
 enddef
 
-def FillChosenTag(id: number, result: number) 
+def g:FillChosenTag(id: number, result: number) 
 	# ------------------------------------------------------------
 	# When ESC is press the a:result value will be -1. So take no action.
 	# ------------------------------------------------------------
@@ -2787,7 +2788,7 @@ def FillChosenTag(id: number, result: number)
 	endif
 enddef
 	
-def TagFillWithChoice() 
+def g:TagFillWithChoice() 
 	# ---------------------------------------------
 	# Set tag fill mode
 	# ---------------------------------------------
