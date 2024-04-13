@@ -2635,7 +2635,7 @@ def FillChosenTag(id: number, result: number)
 	endif
 enddef
 	
-def g:TagFillWithChoice() 
+def TagFillWithChoice() 
 	# ---------------------------------------------
 	# Set tag fill mode
 	# ---------------------------------------------
