@@ -2490,7 +2490,7 @@ def CreateTagDict()
 	# -----------------------------------------------------------------
 	# Go to the tag glossary
 	# -----------------------------------------------------------------
-	execute "normal! :e Tag Glossary" g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+	execute "normal! :e .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. Tag Glossary" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
 	execute "normal! gg"
 	# -----------------------------------------------------------------
 	# Define an empty tag dictionary
@@ -3033,7 +3033,7 @@ def AddNewTagDef(id: number, result: number)
 		# Go to Tag Glossary and create a new tag template populated with the 
 		# g:tag_to_test value
 		# -----------------------------------------------------------------
-		execute "normal! :e Tag Glossary" g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+		execute "normal! :e .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. Tag Glossary" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
 		execute "normal! Go{\n## Name: " .. g:tag_to_test .. "\n**Detailed Description:** \n**Incl. Criteria:** \n**Excl. Criteria:** \n**Example:** \n}\<ESC>4kA"
 		SortTagDefs()
 		execute "normal! /Name: " .. g:tag_to_test .. "\<CR>jA"
