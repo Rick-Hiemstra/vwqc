@@ -147,7 +147,7 @@ vim9script
 # FillChosenTag
 # ChangeTagFillOption
 # SortTagDefs
-# GetTagDef
+# GetTagDefB
 # GetTagUnderCursor
 # AddNewTagDef
 # 
@@ -2961,7 +2961,7 @@ enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-def GetTagDef() 
+def GetTagDefB() 
 	
 	ParmCheck()
 

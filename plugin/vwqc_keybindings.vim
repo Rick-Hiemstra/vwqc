@@ -41,7 +41,7 @@ nnoremap <leader>ph :call PageHelp()<CR>
 nnoremap <leader>lp :call ListProjectParameters()<CR>
 
 " ---------------- Get Tag Definition  -------------------------------
-nnoremap <leader>df :call GetTagDef()<CR>
+nnoremap <leader>df :call GetTagDefB()<CR>
 
 " ---------------- Call omni-complete -----------------------------
 "inoremap <F8> <C-x><C-o>
