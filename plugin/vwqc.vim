@@ -2285,7 +2285,7 @@ def GetTagUpdate()
 	# ------------------------------------------------------
 	GenDictTagList()
 	UpdateCurrentTagsList()
-	echoerr "got here"
+	echomsg "In GetTagUpdate"
 	UpdateCurrentTagsPage()
 	CurrentTagsPopUpMenu()
 
@@ -2333,7 +2333,7 @@ def GenTagsWithLocationList()
 		endif
 	endfor	
 	var g:current_tags = deepcopy(g:tag_list)
-	echoerr "Finished GenTagsWithLocationList"
+	echomsg "Finished GenTagsWithLocationList"
 enddef
 
 # ------------------------------------------------------
@@ -2506,7 +2506,7 @@ def CreateTagDict()
 	# Return to the buffer you called this function from
 	# -----------------------------------------------------------------
 	execute "normal! `Y"
-	echoerr "Finished CreateTagDict"
+	echomsg "Finished CreateTagDict"
 enddef
 
 # ------------------------------------------------------
