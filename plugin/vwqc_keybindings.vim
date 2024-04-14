@@ -29,7 +29,7 @@ vnoremap <leader>cv f│hy<ESC>:cd %:p:h<CR>:sp new<CR>pggVGJ:s/\s\{2,}/ /g<CR>V
 nnoremap <leader>tl :call TagLinter()<CR>
 
 " ---------------- Add New Tags to g:current_tags -------------------------------
-nnoremap <F2> :call GetTagUpdate()<CR>
+nnoremap <F2> :call GetTagUpdateB()<CR>
 
 " ---------------- Call Popup Help Menu  -------------------------------
 nnoremap <leader>hm :call HelpMenu()<CR>
