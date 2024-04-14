@@ -3020,7 +3020,7 @@ def GetTagUnderCursor(): string
 	# test to see if the word_under_cursor is surrounded by colons.
 	# -----------------------------------------------------------------
 	if word_under_cursor == tag_test
-		return word_under_cursor[1:-2]
+		return word_under_cursor[1: -2]
 	else
 		return ""
 	endif
