@@ -2491,7 +2491,7 @@ def CreateTagDict()
 	# -----------------------------------------------------------------
 	# Go to the tag glossary
 	# -----------------------------------------------------------------
-	execute "normal! :e .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. Tag Glossary" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+	execute "normal! :e" .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag Glossary" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
 	execute "normal! gg"
 	# -----------------------------------------------------------------
 	# Define an empty tag dictionary
@@ -2976,8 +2976,8 @@ def g:GetTagDefB()
 	# -----------------------------------------------------------------
 	g:tag_to_test = GetTagUnderCursor()
 	
-	var tag_check_message = g:tag_to_test .. "is not defined blah in the Tag Glossary\. Would you like to add it now?"
-	echom "message: " .. tag_check_message
+	var tag_check_message = g:tag_to_test .. " is not defined in the Tag Glossary\. Would you like to add it now?"
+
  	if (g:tag_to_test != "") 
 		if (has_key(g:tag_dict, g:tag_to_test))
  			popup_atcursor(get(g:tag_dict, g:tag_to_test), {
@@ -2985,7 +2985,6 @@ def g:GetTagDefB()
  				 'close': 'click',
  				 })
  		else
-			echom "AddNewTagDefSection"
  			popup_menu(['Yes', 'No'], {
 			         title: tag_check_message, 
 				 callback: 'AddNewTagDef',
@@ -3040,7 +3039,7 @@ def AddNewTagDef(id: number, result: number)
 		# Go to Tag Glossary and create a new tag template populated with the 
 		# g:tag_to_test value
 		# -----------------------------------------------------------------
-		execute "normal! :e .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. Tag Glossary" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+		execute "normal! :e" .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag Glossary" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
 		execute "normal! Go{\n## Name: " .. g:tag_to_test .. "\n**Detailed Description:** \n**Incl. Criteria:** \n**Excl. Criteria:** \n**Example:** \n}\<ESC>4kA"
 		SortTagDefs()
 		execute "normal! /Name: " .. g:tag_to_test .. "\<CR>jA"
