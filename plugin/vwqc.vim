@@ -2994,13 +2994,13 @@ def g:GetTagDefB()
 				 maxwidth: 100, 
 				 pos: "center", 
  				 border: [],
- 				 close : 'click',
+ 				 close: 'click',
 				 padding: [0, 1, 0, 1] })
 		endif
 	else
  		popup_atcursor("There is no valid tag under the cursor.", {
  			 'border': [],
- 			 'close' : 'click',
+ 			 'close': 'click',
  			 })
  	endif
 enddef
