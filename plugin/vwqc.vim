@@ -2291,7 +2291,7 @@ def GenTagsWithLocationList()
 	for line_index in range(1, search_results - 1)
 		first_col = g:loc_list[line_index]['col'] 
 		last_col  = g:loc_list[line_index]['end_col'] - 3
-		test_tag = g:loc_list[line_index]['text'][first_col:last_col]
+		test_tag = g:loc_list[line_index]['text'][first_col : last_col]
 		if (index(tag_list, test_tag) == -1)
 			tag_list = tag_list + [ test_tag ]
 		endif
