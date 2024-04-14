@@ -777,7 +777,7 @@ enddef
 # If it is a new window it names it using the label from line from which it is
 # called, adds a title label and the coders initials.
 # -----------------------------------------------------------------
-silent! def Annotation() 
+def Annotation() 
 	
 	ParmCheck()
 
@@ -858,9 +858,7 @@ silent! def Annotation()
 		# ------------------------------------------------------------------
 		#current_window_width    = winwidth(bufnr('%'))
 		current_window_width    = winwidth(win_getid())
-		echom "current window width: " .. current_window_width .. "\n"
 		annotation_window_width = current_window_width - g:border_offset - 45
-		echom "annotation window width :" .. annotation_window_width .. "\n"
 		if (annotation_window_width < 30)
 			annotation_window_width = 30
 		elseif (annotation_window_width > 80)
@@ -897,7 +895,7 @@ silent! def Annotation()
 			execute "normal! " .. '0/' .. g:interview_label_regex .. '\:\s\{1}\d\{4}' .. "\<CR>"
 			execute "normal \<Plug>VimwikiVSplitLink\<CR>"
 			execute "normal! :vertical resize " .. annotation_window_width .. " \<CR>"
-			execute "normal! Go\<ESC>V?.\<CR>jd2o\<ESC>"
+			execute "normal! Go\<ESC>V" .. '?.' .. "\<CR>jd2o\<ESC>"
 		        execute "normal! i[" .. current_time .. "] " .. list_of_tags_on_line .. "// \:" .. g:coder_initials .. "\:  \<ESC>"
 			startinsert
 		else
