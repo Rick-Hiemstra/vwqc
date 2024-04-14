@@ -2268,12 +2268,11 @@ enddef
 def GenTagsWithLocationList() 
 	ParmCheck()
 	# Change the pwd to that of the current wiki.
-	confirm("Entered GenTagsWithLocationList",  "OK", 1)
 	execute "normal! :cd %:p:h\<CR>"
 	# Call VimwikiSearchTags against the a:search_term argument.
 	# Put the result in loc_list which is a list of location list
 	# dictionaries that we'll process.
-	silent execute "normal! :VimwikiSearch /" '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' .. "/g\<CR>"
+	silent execute "normal! :VimwikiSearch /" .. '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' .. "/g\<CR>"
 
 	g:loc_list = getloclist(0)
 	var tag_list = []
@@ -2297,7 +2296,6 @@ def GenTagsWithLocationList()
 		endif
 	endfor	
 	g:current_tags = deepcopy(tag_list)
-	confirm("Finished GenTagsWithLocationList",  "OK", 1)
 enddef
 
 # ------------------------------------------------------
