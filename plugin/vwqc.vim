@@ -841,7 +841,7 @@ def Annotation()
 	# -----------------------------------------------------------------
 	var tag_search_regex = g:interview_label_regex .. '\: \d\{4}'
 	var tag_search       = searchpos(g:tag_search_regex)
-	match_line           = g:tag_search[0]
+	match_line           = tag_search[0]
 	match_col            = virtcol('.')
 	# -----------------------------------------------------------------
 	# Now we have to decide what to do with the result based on where
