@@ -2953,13 +2953,15 @@ def SortTagDefs()
 	#execute "normal! :%s/}/}\\r/g\<CR>"
 	execute "normal! :%s/}/}\r/g\<CR>"
 	#execute "normal! :g/{/,/}/s/\\n/TTTT\<CR>"
-	execute "normal! :g/{/,/}/s/\n/TTTT/\<CR>"
+
+	#execute "normal! :g/{/,/}/s/\n/TTTT/\<CR>"
+
 	#execute "normal! :3,$sort \i\<CR>"
-	execute "normal! :3,$sort \i\<CR>"
+	#execute "normal! :3,$sort \i\<CR>"
 	#execute "normal! " .. ':3,$g/^$/d' .. "\<CR>"
-	execute "normal! " .. ':3,$g/^$/d' .. "\<CR>"
+	#execute "normal! " .. ':3,$g/^$/d' .. "\<CR>"
 	#execute "normal! :%s/TTTT/\\r/g\<CR>"
-	execute "normal! :%s/TTTT/\r/g\<CR>"
+	#execute "normal! :%s/TTTT/\r/g\<CR>"
 enddef
 
 
