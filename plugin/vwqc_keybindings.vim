@@ -3,10 +3,10 @@
 " -----------------------------------------------------------------
 
 " --------------- Go To Interview Line ----------------------------
-nnoremap <leader>gt :call GoToReference()<CR>
+nnoremap <leader>gt :call GoToReferenceB()<CR>
 
 " --------------- Go back to the page selected by GoToReference()
-nnoremap <leader>gb :call GoBackFromReference()<CR>
+nnoremap <leader>gb :call GoBackFromReferenceB()<CR>
 
 " --------------- Call Annotation()
 nnoremap <F7> :call AnnotationToggleB()<CR>

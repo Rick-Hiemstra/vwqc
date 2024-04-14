@@ -1077,7 +1077,7 @@ enddef
 # Finds a label-line number pair in a Summary buffer and uses that to to to
 # that location in an interview buffer.
 # -----------------------------------------------------------------
-def GoToReference() 
+def GoToReferenceB() 
 	
 	ParmCheck()
 
@@ -1119,8 +1119,8 @@ enddef
 # -----------------------------------------------------------------
 # Returns to the place called by GoToReference().
 # -----------------------------------------------------------------
-def GoBackFromReference() 
-	execute "normal! `Zzz"
+def g:GoBackFromReferenceB() 
+	execute "normal! `Zzz`Z"
 enddef
 
 # -----------------------------------------------------------------
@@ -2987,7 +2987,7 @@ enddef
 # 
 # -----------------------------------------------------------------
 def AddNewTagDef(id: number, result: number) 
-	if result == 1
+	if (result == 1)
 		# -----------------------------------------------------------------
 		# Save buffer number of current file to register 'a' so you can return here
 		# -----------------------------------------------------------------
