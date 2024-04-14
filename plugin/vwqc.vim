@@ -965,7 +965,7 @@ def g:AnnotationToggleB()
 
 	var buffer_name              = expand('%:t')
 	var where_ext_starts         = strridx(buffer_name, g:wiki_extension)
-	var buffer_name              = buffer_name[0 : (where_ext_starts - 1)]
+	buffer_name                  = buffer_name[0 : (where_ext_starts - 1)]
 	# -----------------------------------------------------------------
 	# Check to see if it is a Summary file. It it is nothing happens.
 	# -----------------------------------------------------------------
