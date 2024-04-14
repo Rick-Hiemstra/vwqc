@@ -2480,7 +2480,7 @@ enddef
 #
 # ------------------------------------------------------
 def CurrentTagsPopUpMenu() 
-	popup_menu(g:tag_list_output , 
+	popup_menu(g:tag_list_output, 
 				 { minwidth: 50,
 				 maxwidth: 50,
 				 pos: 'center',
