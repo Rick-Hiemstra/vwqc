@@ -2300,6 +2300,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
+
 def UpdateCurrentTagsPage() 
 	# -----------------------------------------------------------------
 	# Use R mark to know how to get back
@@ -2323,7 +2324,7 @@ def UpdateCurrentTagsPage()
 	execute "normal! ggj"
 	#execute "normal! :q\<CR>"
 	# Return to where you were
-	execute "normal! `Rzz"
+	#execute "normal! `Rzz"
 	
 enddef
 
