@@ -354,7 +354,6 @@ def GetVWQCProjectParameters()
 	endif
 
 	g:wiki_extension   	   = g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-	g:target_file_ext  	   = g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
 	g:ext_len          	   = len(g:wiki_extension) + 1
 
 	g:last_wiki = g:wiki_number
@@ -553,13 +552,14 @@ def g:PageHelp()
 	# -----------------------------------------------------------------
 	# Find the current file name
 	
-	g:current_buffer_name = expand('%:t')
-	g:is_interview        = match(g:current_buffer_name, g:interview_label_regex)
-	g:is_annotation       = match(g:current_buffer_name, g:interview_label_regex .. ': \d\d\d\d')
-	g:is_summary          = match(g:current_buffer_name, 'Summary ')
+	var current_buffer_name = expand('%:t')
+	var is_interview        = match(g:current_buffer_name, g:interview_label_regex)
+	var is_annotation       = match(g:current_buffer_name, g:interview_label_regex .. ': \d\d\d\d')
+	var is_summary          = match(g:current_buffer_name, 'Summary ')
+	var page_help_list      = []
 
-	if g:current_buffer_name == "index" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-		g:page_help_list = [              
+	if current_buffer_name == "index" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+		page_help_list = [              
 			        "INDEX HELP PAGE", 
 		                "The index page is your project home page. You can return to this page by typing <leader>ww in normal mode.",
 		                "From here you can create new pages for interviews or summary pages.",
@@ -569,9 +569,9 @@ def g:PageHelp()
 		                "Press <leader>lp in normal mode to list project parameters. ",
 		                " ",
 			        "Click on this window to close it"]
-		DisplayPageHelp()
-	elseif g:current_buffer_name == "Attributes" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-		g:page_help_list = [              
+		DisplayPageHelp(page_help_list)
+	elseif current_buffer_name == "Attributes" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+		page_help_list = [              
 			        "ATTRIBUTES HELP PAGE", 
 		                "The \"Attributes\" page lists the interview attributes which are the tags that appear on the first line of",
 		                "each interview page. ",
@@ -586,16 +586,16 @@ def g:PageHelp()
 		                ":call Attributes(3) ",
 		                " ",
 			        "Click on this window to close it"]
-		DisplayPageHelp()
-	elseif g:current_buffer_name == "Tag List Current" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-		g:page_help_list = [              
+		DisplayPageHelp(page_help_list)
+	elseif current_buffer_name == "Tag List Current" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+		page_help_list = [              
 			        "TAG LIST CURRENT HELP PAGE", 
 		                "This lists current project tags. It is generated or updated by pressing F2",
 		                " ",
 			        "Click on this window to close it"]
-		DisplayPageHelp()
-	elseif g:current_buffer_name == "Tag Glossary" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-		g:page_help_list = [              
+		DisplayPageHelp(page_help_list)
+	elseif current_buffer_name == "Tag Glossary" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+		page_help_list = [              
 			        "TAG GLOSSARY HELP PAGE", 
 		                "Tag definitions can be added here manually, but they are best added by placing the cursor over a valid tag in an ", 
 			        "interview page in normal mode and pressing <leader>df. This will start a dialogue that will allow you to add a tag", 
@@ -607,16 +607,16 @@ def g:PageHelp()
 		                "the dialogue that is initiated when you press <leader>df while your cursor is on a tag and you are in normal mode.",
 		                " ",
 			        "Click on this window to close it"]
-		DisplayPageHelp()
-	elseif g:is_annotation == 0
-		g:page_help_list = [              
+		DisplayPageHelp(page_help_list)
+	elseif is_annotation == 0
+		page_help_list = [              
 			        "ANNOTATION HELP PAGE", 
 		                "Use F7 to toggle an annotation page open and closed",
 		                " ",
 			        "Click on this window to close it"]
-		DisplayPageHelp()
-	elseif g:is_interview == 0
-		g:page_help_list = [              
+		DisplayPageHelp(page_help_list)
+	elseif is_interview == 0
+		page_help_list = [              
 			        "INTERVIEW HELP PAGE", 
 		                "",
 			        "Interview pages are split into four parts or panes:",
@@ -671,9 +671,9 @@ def g:PageHelp()
 		                "initiate a dialogue that will allow you to delete the annotation.",
 		                "",
 			        "Click on this window to close it"]
-		DisplayPageHelp()
-	elseif g:is_summary == 0
-		g:page_help_list = [              
+		DisplayPageHelp(page_help_list)
+	elseif is_summary == 0
+		page_help_list = [              
 			        "SUMMARY HELP PAGE", 
 				 ":call FullReport(\"<tag>\")           Create report with tagged and annotation content",
 				 ":call QuotesReport(\"<tag>\")         Create report with just tagged content",
@@ -694,13 +694,13 @@ def g:PageHelp()
 		                "If you want to trim both the head and tail you can use <leader>ta.",
 		                "",
 			        "Click on this window to close it"]
-		DisplayPageHelp()
+		DisplayPageHelp(page_help_list)
 	endif
 
 enddef
 
-def DisplayPageHelp() 
-	popup_menu(g:page_help_list, 
+def DisplayPageHelp(page_help_list: list<string>) 
+	popup_menu(page_help_list, 
 			 { minwidth: 50,
 			 maxwidth: 150,
 			 pos: 'center',
@@ -781,52 +781,56 @@ def Annotation()
 	
 	ParmCheck()
 
-	# -----------------------------------------------------------------
-	#  Find the tags on the line this function is called from.
-	# -----------------------------------------------------------------
-	g:list_of_tags_on_line = ""
-	g:is_tag_on_line = 1
-	g:current_line = line(".")
+	var list_of_tags_on_line    = ""
+	var is_tag_on_line          = 1
+	var this_tag                = "Undefined"
+	var current_line            = line(".")
+	var match_line              = -1
+	var match_col               = 0
+	var current_window_width    = 0
+	var annotation_window_width = 0
+	var current_time            = strftime("%Y-%m-%d %H\:%M")
+
 	execute "normal! 0"
 	# -----------------------------------------------------------------
 	# Loop until no more tags are found on the line.
 	# -----------------------------------------------------------------
-	while (g:is_tag_on_line == 1)
+	while (is_tag_on_line == 1)
 		# --------------------------------------------------
 		# Search for a tag without going past the end of the file.
 		# --------------------------------------------------
-		g:match_line = search(':\a.\{-}:', "W")
+		match_line = search(':\a.\{-}:', "W")
 		# --------------------------------------------------
 		# If we found a tag (ie. The search function doesn't
 		# return a zero) and that tag is found on the current line
 		# then add the tag to our list. Note search will move the
 		# cursor to the first character of the match.
 		# --------------------------------------------------
-		if (g:match_line == g:current_line)
+		if (match_line == current_line)
 			# -------------------------------------------
 			# Copy the tag we found and move the cursor one
 			# character past the tag. Then add that tag to the
 			# list of tags we're building.
 			# -------------------------------------------
 			execute "normal! vf:yeel"
-			g:this_tag = getreg('@')
-			g:list_of_tags_on_line = g:list_of_tags_on_line .. g:this_tag .. " "
+			this_tag = getreg('@')
+			list_of_tags_on_line = list_of_tags_on_line .. this_tag .. " "
 		else
 			# No more tags
-			g:is_tag_on_line = 0
+			is_tag_on_line = 0
 		endif 
 	endwhile	
 	# -----------------------------------------------------------------
 	# Move cursor back to the start of current_line because the search
 	# function may have moved the cursor beyond current_line
 	# -----------------------------------------------------------------
-	cursor(g:current_line, 0)
+	cursor(current_line, 0)
 	execute "normal! 0"
 	# -----------------------------------------------------------------
 	# Initialize variables and move cursor to the beginning of the line.
 	# -----------------------------------------------------------------
-	g:match_line = 0
-	g:match_col = 0
+	match_line = 0
+	match_col = 0
 	# -----------------------------------------------------------------
 	# Search for the label - number pair on the line. searchpos() 
 	# returns a list with the line and column numbers of the cursor
@@ -835,10 +839,10 @@ def Annotation()
 	# character of match we found. So because we started in column 1
 	# if the column remains at 1 we know we didn't find a match.
 	# -----------------------------------------------------------------
-	g:tag_search_regex = g:interview_label_regex .. '\: \d\{4}'
-	g:tag_search = searchpos(g:tag_search_regex)
-	g:match_line = g:tag_search[0]
-	g:match_col  = virtcol('.')
+	var tag_search_regex = g:interview_label_regex .. '\: \d\{4}'
+	var tag_search       = searchpos(g:tag_search_regex)
+	match_line           = g:tag_search[0]
+	match_col            = virtcol('.')
 	# -----------------------------------------------------------------
 	# Now we have to decide what to do with the result based on where
 	# the cursor ended up. The first thing we test is whether the match
@@ -848,30 +852,17 @@ def Annotation()
 	# error message and reposition the cursor at the beginning of the 
 	# line where we started.
 	# -----------------------------------------------------------------
-	if g:current_line == g:match_line
+	if (current_line == match_line)
 		# ------------------------------------------------------------------
 		#  Figure out how wide we can make the annotation window
 		# ------------------------------------------------------------------
-		g:current_window_width = winwidth('%')
-		g:annotation_window_width = g:current_window_width - g:border_offset - 45
-		if g:annotation_window_width < 30
-			g:annotation_window_width = 30
-		elseif g:annotation_window_width > 80
-			g:annotation_window_width = 80
+		current_window_width    = winwidth('%')
+		annotation_window_width = current_window_width - g:border_offset - 45
+		if (annotation_window_width < 30)
+			annotation_window_width = 30
+		elseif (annotation_window_width > 80)
+			annotation_window_width = 80
 		endif
-		# ------------------------------------------------------------------
-		#  Figure out which version of Vim or NeoVim we're running.
-		#  Older versions have a different vsplit behavior. The first
-		#  test is for Vim and the second for NeoVim. has() returns a
-		#  1 for true or 0 for false.
-		# ------------------------------------------------------------------
-		#if has('nvim') && has('patch-0-6-0')
-		#	g:new_vsplit_behaviour = 1
-		#elseif has('patch-8.2.3832')
-		#	g:new_vsplit_behaviour = 1
-		#else
-		#	g:new_vsplit_behaviour = 0
-		#endif
 		# -----------------------------------------------------------------
 		# Test to see if the match starts at g:label_offset or 
 		# g:label_offset + 1. g:label_offset refers to the column
@@ -882,7 +873,7 @@ def Annotation()
 		# be bumped over to the right by 1 column, hence the match
 		# will start at g:label_offset + 1.
 		# -----------------------------------------------------------------
-		if g:match_col == g:label_offset		
+		if (match_col == g:label_offset)	
 			# -----------------------------------------------------------------
 			# Re-find the label-number pair and yank it. The next
 			# line builds the Vimwiki link. There must be a Vimwiki
@@ -894,17 +885,12 @@ def Annotation()
 			execute "normal! " .. '0/' .. g:interview_label_regex .. '\:\s\{1}\d\{4}' .. "\<CR>" .. 'vf│hhy'
 			execute "normal! gvc[]\<ESC>F[plli()\<ESC>\"\"P\<ESC>" 
 			execute "normal \<Plug>VimwikiVSplitLink"
-			#if g:new_vsplit_behaviour 
-			execute "normal! \<C-W>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>"
-		#	else
-		#		execute "normal! \<C-W>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>"
-		#	endif
+			execute "normal! \<C-W>x\<C-W>l:vertical resize " .. annotation_window_width .. "\<CR>"
 			put =expand('%:t')
 			execute "normal! 0kdd/.md\<CR>xxxI:\<ESC>2o\<ESC>"
-			g:current_time = strftime("%Y-%m-%d %H\:%M")
-		        execute "normal! i[" .. g:current_time .. "] " .. g:list_of_tags_on_line .. "// \:" .. g:coder_initials .. "\:  \<ESC>"
+		        execute "normal! i[" .. current_time .. "] " .. list_of_tags_on_line .. "// \:" .. g:coder_initials .. "\:  \<ESC>"
 			startinsert 
-		elseif g:match_col == (g:label_offset + 1)
+		elseif (match_col == (g:label_offset + 1))
 			# -----------------------------------------------------------------
 			# Re-find the link, but don't yank it. This places the 
 			# cursor on the first character of the match. The next
@@ -914,21 +900,16 @@ def Annotation()
 			# -----------------------------------------------------------------
 			execute "normal! " .. '0/' .. g:interview_label_regex .. '\:\s\{1}\d\{4}' .. "\<CR>"
 			execute "normal \<Plug>VimwikiVSplitLink"
-			if g:new_vsplit_behaviour 
-				execute "normal! \<C-w>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>"
-			else
-				execute "normal! \<C-W>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>"
-			endif
+			execute "normal! \<C-w>x\<C-W>l:vertical resize " .. annotation_window_width .. "\<CR>"
 			execute "normal! Go\<ESC>V?.\<CR>jd2o\<ESC>"
-			g:current_time = strftime("%Y-%m-%d %H\:%M")
-		        execute "normal! i[" .. g:current_time .. "] " .. g:list_of_tags_on_line .. "// \:" .. g:coder_initials .. "\:  \<ESC>"
+		        execute "normal! i[" .. current_time .. "] " .. list_of_tags_on_line .. "// \:" .. g:coder_initials .. "\:  \<ESC>"
 			startinsert
 		else
 			echo "Something is not right here."		
 		endif
 	else
 		echo "No match found on this line"
-		cursor(g:current_line, 0)
+		cursor(current_line, 0)
 	endif
 enddef
 
@@ -944,19 +925,19 @@ def ExitAnnotation()
 	# remaining bottom line to test_line 
 	# -----------------------------------------------------------------
 	execute "normal! Go\<ESC>V?.\<CR>jdVy\<ESC>"
-	g:test_line = getreg('@')
+	var test_line = getreg('@')
 	# -----------------------------------------------------------------
 	# Build a regex that looks for the coder tag at the beginning of the line and
 	# then only white space to the carriage return character.
 	# -----------------------------------------------------------------
-	g:find_coder_tag_regex = '\v:' .. g:coder_initials .. ':\s*\n'
-	g:is_orphaned_tag = match(g:test_line, g:find_coder_tag_regex) 
+	var find_coder_tag_regex = '\v:' .. g:coder_initials .. ':\s*\n'
+	var is_orphaned_tag      = match(test_line, find_coder_tag_regex) 
 	# -----------------------------------------------------------------
 	# If you don't find anything following the coder tag, ie there is no
 	# annotation following, delete the label info generated for this
 	# annotation.
 	# -----------------------------------------------------------------
-	if (g:is_orphaned_tag != -1)
+	if (is_orphaned_tag > -1)
 		execute "normal! Vkdd"
 	endif
 	# -----------------------------------------------------------------
@@ -971,48 +952,40 @@ enddef
 # This function determines what kind of buffer the cursor is in (annotation or
 # interview) and decides whether to call Annotation() or ExitAnnotation()
 # -----------------------------------------------------------------
-def g:AnnotationToggle() 
+def g:AnnotationToggleB() 
 
 	ParmCheck()
 
 	# -----------------------------------------------------------------
 	# Initialize buffer type variables
 	# -----------------------------------------------------------------
-	g:is_interview  = 0
-	g:is_annotation = 0
-	g:is_summary    = 0
+	var is_interview             = 0
+	var is_annotation            = 0
+	var is_summary               = 0
 
-	g:buffer_name      = expand('%:t')
-	g:where_ext_starts = strridx(g:buffer_name, g:wiki_extension)
-	g:buffer_name      = g:buffer_name[0 :(g:where_ext_starts - 1)]
+	var buffer_name              = expand('%:t')
+	var where_ext_starts         = strridx(buffer_name, g:wiki_extension)
+	var buffer_name              = buffer_name[0 : (where_ext_starts - 1)]
 	# -----------------------------------------------------------------
 	# Check to see if it is a Summary file. It it is nothing happens.
 	# -----------------------------------------------------------------
-	g:summary_search_match_loc = match(g:buffer_name, "Summary")
-	if (g:summary_search_match_loc == -1)	# not found
-		g:is_summary = 0		# FALSE
-	else
-		g:is_summary = 1		# TRUE
+	if (match(buffer_name, "Summary") > -1)	
+		is_summary = 1	
 	endif
 	# -----------------------------------------------------------------
 	# Check to see if the current search result buffer is
 	# an annotation file. If it is ExitAnnotation() is called.
 	# -----------------------------------------------------------------
-	g:pos_of_4_digit_number = match(g:buffer_name, ' \d\{4}')
-	if (g:pos_of_4_digit_number == -1)      " not found
-		g:is_annotation = 0		# FALSE
-	else
-		g:is_annotation = 1		# TRUE
+	if (match(buffer_name, ' \d\{4}') > -1)     
+		is_annotation = 1	
 		ExitAnnotation()		
 	endif
 	# -----------------------------------------------------------------
 	# Check to see if the current search result buffer is
 	# from an interview file. If it is Annotation() is called.
 	# -----------------------------------------------------------------
-	if (g:is_annotation == 1) || (g:is_summary == 1)
-		g:is_interview = 0		# FALSE
-	else
-		g:is_interview = 1		# TRUE
+	if (is_annotation == 0) || (is_summary == 0)
+		is_interview = 1		# TRUE
 		Annotation()
 	endif
 enddef
@@ -1024,24 +997,18 @@ def DeleteAnnotation()
 	
 	ParmCheck()
 
-	# ------------------------------------------------------------------
-	#  Figure out which version of Vim or NeoVim we're running.
-	#  Older versions have a different vsplit behavior. The first
-	#  test is for Vim and the second for NeoVim. has() returns a
-	#  1 for true or 0 for false.
-	# ------------------------------------------------------------------
-	if has('nvim') && has('patch-0-6-0')
-		g:new_vsplit_behaviour = 1
-	elseif has('patch-8.2.3832')
-		g:new_vsplit_behaviour = 1
-	else
-		g:new_vsplit_behaviour = 0
-	endif
-	# -----------------------------------------------------------------
-	#  Find the tags on the line this function is called from.
-	# -----------------------------------------------------------------
-	g:is_tag_on_line = 1
-	g:current_line = line(".")
+	var list_of_tags_on_line    = ""
+	var is_tag_on_line          = 1
+	var this_tag                = "Undefined"
+	var current_line            = line(".")
+	var match_line              = -1
+	var match_col               = 0
+	var col_to_jump_to          = 0
+	var current_window_width    = 0
+	var annotation_window_width = 0
+	var current_time            = strftime("%Y-%m-%d %H\:%M")
+	var candidate_delete_buffer = -1
+
 	execute "normal! 0"
 	# -----------------------------------------------------------------
 	# Search for the label - number pair on the line. searchpos() 
@@ -1051,10 +1018,10 @@ def DeleteAnnotation()
 	# character of match we found. So because we started in column 1
 	# if the column remains at 1 we know we didn't find a match.
 	# -----------------------------------------------------------------
-	g:tag_search_regex = g:interview_label_regex .. '\: \d\{4}'
-	g:tag_search = searchpos(g:tag_search_regex)
-	g:match_line = g:tag_search[0]
-	g:match_col  = virtcol('.')
+	var tag_search_regex = g:interview_label_regex .. '\: \d\{4}'
+	var tag_search = searchpos(g:tag_search_regex)
+	match_line = g:tag_search[0]
+	match_col  = virtcol('.')
 	# -----------------------------------------------------------------
 	# Now we have to decide what to do with the result based on where
 	# the cursor ended up. The first thing we test is whether the match
@@ -1064,7 +1031,7 @@ def DeleteAnnotation()
 	# error message and reposition the cursor at the beginning of the 
 	# line where we started.
 	# -----------------------------------------------------------------
-	if g:current_line == g:match_line
+	if (current_line == match_line)
 		# -----------------------------------------------------------------
 		# Test to see if the match starts at g:label_offset or 
 		# g:label_offset + 1. g:label_offset refers to the column
@@ -1075,9 +1042,9 @@ def DeleteAnnotation()
 		# be bumped over to the right by 1 column, hence the match
 		# will start at g:label_offset + 1.
 		# -----------------------------------------------------------------
-		if g:match_col == g:label_offset		
+		if (match_col == g:label_offset)
 			confirm("No annotation link found on this line.", "OK", 1)
-		elseif g:match_col == (g:label_offset + 1)
+		elseif (match_col == (g:label_offset + 1))
 			# -----------------------------------------------------------------
 			# Re-find the link, but don't yank it. This places the 
 			# cursor on the first character of the match. The next
@@ -1085,21 +1052,17 @@ def DeleteAnnotation()
 			# -----------------------------------------------------------------
 			execute "normal! " .. '0/' .. g:interview_label_regex .. '\:\s\{1}\d\{4}' .. "\<CR>"
 			execute "normal \<Plug>VimwikiVSplitLink"
-			if g:new_vsplit_behaviour 
-				execute "normal! \<C-W>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>"
-			else
-				execute "normal! \<C-W>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>" 
-			endif
-			g:candidate_delete_buffer = bufnr("%")
+			execute "normal! \<C-W>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>"
+			candidate_delete_buffer = bufnr("%")
 			execute "normal \<Plug>VimwikiDeleteFile"
 			# if bufwinnr() < 0 then the buffer doesn't exist.
-			if (bufwinnr(g:candidate_delete_buffer) < 0)
+			if (bufwinnr(candidate_delete_buffer) < 0)
 				execute "normal! :q\<CR>"
-				execute "normal! " .. g:match_line .. "G"
-				g:col_to_jump_to = g:match_col - 1
+				execute "normal! " .. match_line .. "G"
+				col_to_jump_to = match_col - 1
 				set virtualedit=all
 				# the lh at the end should probably be \|
-				execute "normal! 0" .. g:col_to_jump_to .. "lh"
+				execute "normal! 0" .. col_to_jump_to .. "lh"
 				set virtualedit=none
 				execute "normal! xf]vf)d"
 				confirm("Annotation deleted.", "Got it", 1)
@@ -1112,7 +1075,7 @@ def DeleteAnnotation()
 		endif
 	else
 		echo "No match found on this line"
-		cursor(g:current_line, 0)
+		cursor(current_line, 0)
 	endif
 enddef
 
@@ -1124,6 +1087,8 @@ def GoToReference()
 	
 	ParmCheck()
 
+	var target_file = "Undefined"
+	var target_line = -1
 	# -----------------------------------------------------------------
 	# Change the pwd to that of the current wiki.
 	# -----------------------------------------------------------------
@@ -1132,15 +1097,14 @@ def GoToReference()
 	# Find target file name.
 	# -----------------------------------------------------------------
 	execute "normal! 0/" .. g:interview_label_regex .. ':\s\d\{4}' .. "\<CR>" .. 'vf:hy'
-	g:target_file = getreg('@')
-	g:target_file = g:target_file .. g:target_file_ext
+	target_file = getreg('@') .. g:wiki_extension
 	# -----------------------------------------------------------------
 	# Find target line number "
 	# -----------------------------------------------------------------
 	execute "normal! `<"
 	execute "normal! " .. '/\d\{4}' .. "\<CR>"
 	execute "normal! viwy"
-	g:target_line = getreg('@')
+	target_line = getreg('@')
 	# -----------------------------------------------------------------
 	# Use Z mark to know how to get back
 	# -----------------------------------------------------------------
@@ -1148,13 +1112,13 @@ def GoToReference()
 	# -----------------------------------------------------------------
 	# Go to target file
 	# -----------------------------------------------------------------
-	execute "normal :e " .. g:target_file .. "\<CR>"
+	execute "normal :e " .. target_file .. "\<CR>"
 	execute "normal! gg"
 	# -----------------------------------------------------------------
 	# Find line number and center on page
 	# -----------------------------------------------------------------
 	execute "normal! gg"
-	search(g:target_line)
+	search(target_line)
 	execute "normal! zz"
 enddef
 
@@ -3082,7 +3046,7 @@ def Attributes(sort_col = 1)
 		execute "normal! ggVy"
 		g:attribute_row = getreg('@')
 		# format the attribute tags for the chart and for the csv
-		g:interview_label = "| [[" .. g:interview_list[interview][:-4] .. "]]"
+		g:interview_label = "| [[" .. g:interview_list[interview][ : -4] .. "]]"
 		g:attrib_chart_line = substitute(g:attribute_row, ": :", "|", "g")
 		g:attrib_chart_line = substitute(g:attrib_chart_line, ":", "|", "g")
 		g:attrib_chart_line = g:interview_label .. g:attrib_chart_line
