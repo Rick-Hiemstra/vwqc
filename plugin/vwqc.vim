@@ -865,13 +865,13 @@ def Annotation()
 		#  test is for Vim and the second for NeoVim. has() returns a
 		#  1 for true or 0 for false.
 		# ------------------------------------------------------------------
-		if has('nvim') && has('patch-0-6-0')
-			g:new_vsplit_behaviour = 1
-		elseif has('patch-8.2.3832')
-			g:new_vsplit_behaviour = 1
-		else
-			g:new_vsplit_behaviour = 0
-		endif
+		#if has('nvim') && has('patch-0-6-0')
+		#	g:new_vsplit_behaviour = 1
+		#elseif has('patch-8.2.3832')
+		#	g:new_vsplit_behaviour = 1
+		#else
+		#	g:new_vsplit_behaviour = 0
+		#endif
 		# -----------------------------------------------------------------
 		# Test to see if the match starts at g:label_offset or 
 		# g:label_offset + 1. g:label_offset refers to the column
@@ -894,11 +894,11 @@ def Annotation()
 			execute "normal! " .. '0/' .. g:interview_label_regex .. '\:\s\{1}\d\{4}' .. "\<CR>" .. 'vf│hhy'
 			execute "normal! gvc[]\<ESC>F[plli()\<ESC>\"\"P\<ESC>" 
 			execute "normal \<Plug>VimwikiVSplitLink"
-			if g:new_vsplit_behaviour 
-				execute "normal! \<C-W>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>"
-			else
-				execute "normal! \<C-W>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>"
-			endif
+			#if g:new_vsplit_behaviour 
+			execute "normal! \<C-W>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>"
+		#	else
+		#		execute "normal! \<C-W>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>"
+		#	endif
 			put =expand('%:t')
 			execute "normal! 0kdd/.md\<CR>xxxI:\<ESC>2o\<ESC>"
 			g:current_time = strftime("%Y-%m-%d %H\:%M")
@@ -971,7 +971,7 @@ enddef
 # This function determines what kind of buffer the cursor is in (annotation or
 # interview) and decides whether to call Annotation() or ExitAnnotation()
 # -----------------------------------------------------------------
-def AnnotationToggle() 
+def g:AnnotationToggle() 
 
 	ParmCheck()
 
