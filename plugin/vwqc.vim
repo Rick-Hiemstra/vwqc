@@ -986,7 +986,7 @@ def g:AnnotationToggleB()
 	# Check to see if the current search result buffer is
 	# from an interview file. If it is Annotation() is called.
 	# -----------------------------------------------------------------
-	if (is_annotation == 0) || (is_summary == 0)
+	if (is_annotation == 0) && (is_summary == 0)
 		is_interview = 1		# TRUE
 		Annotation()
 	endif
