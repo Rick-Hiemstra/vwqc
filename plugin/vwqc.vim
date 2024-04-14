@@ -3012,7 +3012,7 @@ enddef
 # -----------------------------------------------------------------
 def GetTagUnderCursor(): string       
 	execute "normal! viWy"        
-	var word_under_cursor             = @@ 
+	var word_under_cursor             = getreg('@') 
 	# Want tag_test to be 0
 	var tag_test                      = matchstr(word_under_cursor, ':.\{-}:')
 	# -----------------------------------------------------------------
