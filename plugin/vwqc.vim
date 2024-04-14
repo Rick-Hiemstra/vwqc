@@ -885,8 +885,10 @@ def Annotation()
 			execute "normal \<Plug>VimwikiVSplitLink"
 			execute "normal! :vertical resize " .. annotation_window_width .. "\<CR>"
 			put =expand('%:t')
-			silent! execute "normal! 0kdd/\" .. g:wiki_extension .. "\<cr>d$I:\<ESC>2o\<ESC>"
-		        unsilent execute "normal! i[" .. current_time .. "] " .. list_of_tags_on_line .. "// \:" .. g:coder_initials .. "\:  \<ESC>"
+			execute "normal! 0kddgg" 
+			search(g:wiki_extension)
+			execute "normal! d$I:\<ESC>2o\<ESC>"
+		        execute "normal! i[" .. current_time .. "] " .. list_of_tags_on_line .. "// \:" .. g:coder_initials .. "\:  \<ESC>"
 			startinsert 
 		elseif (match_col == (g:label_offset + 1))
 			# -----------------------------------------------------------------
@@ -896,8 +898,9 @@ def Annotation()
 			execute "normal \<Plug>VimwikiVSplitLink"
 			execute "normal! :vertical resize " .. annotation_window_width .. "\<CR>"
 			#execute "normal! Go\<ESC>V?.\<CR>"jd2o\<ESC>"
-			silent! execute "normal! Go\<ESC>V?.\<cr>jd2o\<ESC>"
-		        unsilent execute "normal! i[" .. current_time .. "] " .. list_of_tags_on_line .. "// \:" .. g:coder_initials .. "\:  \<ESC>"
+			execute "normal! Go\<ESC>V?.y"
+			execute "normal! `<jV`>d2o\<ESC>"
+		        execute "normal! i[" .. current_time .. "] " .. list_of_tags_on_line .. "// \:" .. g:coder_initials .. "\:  \<ESC>"
 			startinsert
 		else
 			echo "Something is not right here."		
