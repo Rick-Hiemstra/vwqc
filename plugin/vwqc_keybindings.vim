@@ -9,8 +9,8 @@ nnoremap <leader>gt :call GoToReference()<CR>
 nnoremap <leader>gb :call GoBackFromReference()<CR>
 
 " --------------- Call Annotation()
-nnoremap <F7> :call AnnotationToggle()<CR>
-inoremap <F7> <ESC>:call AnnotationToggle()<CR>
+nnoremap <F7> :call AnnotationToggleB()<CR>
+inoremap <F7> <ESC>:call AnnotationToggleB()<CR>
 
 " -------------- Delete Annotation ----------------------------------------
 nnoremap <leader>da :call DeleteAnnotation()<CR>
