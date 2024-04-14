@@ -2954,7 +2954,7 @@ def SortTagDefs()
 	execute "normal! :%s/}/}\r/g\<CR>"
 	#execute "normal! :g/{/,/}/s/\\n/TTTT\<CR>"
 
-	#execute "normal! :g/{/,/}/s/\n/TTTT/\<CR>"
+	execute "normal! :g/{/,/}/s/\n/TTTT/\<CR>"
 
 	#execute "normal! :3,$sort \i\<CR>"
 	#execute "normal! :3,$sort \i\<CR>"
