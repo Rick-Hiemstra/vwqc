@@ -2282,7 +2282,7 @@ def GenTagsWithLocationList()
 
 	var first_col = g:loc_list[0]['col'] 
 	var last_col  = g:loc_list[0]['end_col'] - 3
-	var test_tag  = g:loc_list[0]['text'][first_col:last_col]
+	var test_tag  = g:loc_list[0]['text'][first_col : last_col]
 
 	if g:loc_list[0]['lnum'] > 1
 		tag_list = tag_list + [ test_tag ]
