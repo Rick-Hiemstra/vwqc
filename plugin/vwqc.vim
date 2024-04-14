@@ -897,9 +897,7 @@ def Annotation()
 			execute "normal! " .. '0/' .. g:interview_label_regex .. '\:\s\{1}\d\{4}' .. "\<CR>"
 			execute "normal \<Plug>VimwikiVSplitLink"
 			execute "normal! :vertical resize " .. annotation_window_width .. "\<CR>"
-			#execute "normal! Go\<ESC>V?.\<CR>"jd2o\<ESC>"
-			execute "normal! Go\<ESC>V?.y"
-			execute "normal! `<jV`>d2o\<ESC>"
+			execute "normal! Go\<ESC>V?.\<CR>"jd2o\<ESC>"
 		        execute "normal! i[" .. current_time .. "] " .. list_of_tags_on_line .. "// \:" .. g:coder_initials .. "\:  \<ESC>"
 			startinsert
 		else
