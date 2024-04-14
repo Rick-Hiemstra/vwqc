@@ -2435,12 +2435,9 @@ enddef
 #
 # ------------------------------------------------------
 def CreateTagDict() 
-
-	confirm("Entered CreatTagDict", "Got it", 1)
 	# -----------------------------------------------------------------
 	# Change the pwd to that of the current wiki.
 	# -----------------------------------------------------------------
-	confirm("Entered CreateTagDict",  "OK", 1)
 	execute "normal! :cd %:p:h\<CR>"
 	# -----------------------------------------------------------------
 	# Use Y mark to know how to get back
@@ -2458,7 +2455,7 @@ def CreateTagDict()
 	# -----------------------------------------------------------------
 	# Build the tag dictionary. 
 	# -----------------------------------------------------------------
-	while search('{', "W")
+	while (search('{', "W") > 0)
 		execute "normal! j$bviWy0"
 		var tag_key = getreg('@')
 		var tag_def_list = []
@@ -2473,7 +2470,6 @@ def CreateTagDict()
 	# Return to the buffer you called this function from
 	# -----------------------------------------------------------------
 	execute "normal! `Y"
-	confirm("Finished CreateTagDict",  "OK", 1)
 enddef
 
 # ------------------------------------------------------
