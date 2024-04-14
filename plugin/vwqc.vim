@@ -2332,7 +2332,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def g:UpdateCurrentTagsList() 
+def UpdateCurrentTagsList() 
 	var is_in_list = 0
 	var print_list_item = "undefined"
 	g:tag_dict_keys 		= keys(g:tag_dict)
