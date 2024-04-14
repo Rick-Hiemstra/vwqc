@@ -2331,7 +2331,7 @@ enddef
 #
 # ------------------------------------------------------
 def UpdateCurrentTagsList() 
-	var is_in_list = 0
+	var is_in_list = -1
 	var print_list_item = "undefined"
 	g:tag_dict_keys 		= keys(g:tag_dict)
 	g:tag_dict_keys 		= sort(g:tag_dict_keys, 'i')
@@ -2343,10 +2343,10 @@ def UpdateCurrentTagsList()
 
 	for tag_dict_tag in range(0, (len(g:tag_dict_keys) - 1))
 		is_in_list = index(g:current_tags, g:tag_dict_keys[tag_dict_tag])
-		if is_in_list >= 0
+		if (is_in_list >= 0)
 			print_list_item = g:tag_dict_keys[tag_dict_tag]
 			g:in_both_lists = g:in_both_lists + [ print_list_item ]
-		elseif is_in_list < 0
+		elseif (is_in_list == -1)
 			print_list_item = g:tag_dict_keys[tag_dict_tag]
 			g:just_in_dict_list = g:just_in_dict_list + [ print_list_item ]
 		endif
@@ -2354,7 +2354,7 @@ def UpdateCurrentTagsList()
 
 	for current_tag in range(0, (len(g:current_tags) - 1))
 		is_in_list = index(g:tag_dict_keys, g:current_tags[current_tag])
-		if is_in_list < 0
+		if (is_in_list == -1)
 			print_list_item = g:current_tags[current_tag]
 			g:just_in_current_tag_list = g:just_in_current_tag_list + [ print_list_item ]
 		endif
@@ -2423,7 +2423,7 @@ enddef
 def GenDictTagList() 
 	g:dict_tags = []
 	for tag_index in range(0, (len(g:current_tags) - 1))
- 		if has_key(g:tag_dict, g:current_tags[tag_index])
+ 		if (has_key(g:tag_dict, g:current_tags[tag_index]) == TRUE)
 			g:dict_tags = g:dict_tags + [g:current_tags[tag_index]]
 		endif
 	endfor
