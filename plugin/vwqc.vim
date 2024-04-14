@@ -856,7 +856,8 @@ def Annotation()
 		# ------------------------------------------------------------------
 		#  Figure out how wide we can make the annotation window
 		# ------------------------------------------------------------------
-		current_window_width    = winwidth(bufnr('%'))
+		#current_window_width    = winwidth(bufnr('%'))
+		current_window_width    = winwidth(wind_getid())
 		echom "current window width: " .. current_window_width .. "\n"
 		annotation_window_width = current_window_width - g:border_offset - 45
 		echom "annotation window width :" .. annotation_window_width .. "\n"
@@ -1045,7 +1046,6 @@ def DeleteAnnotation()
 			# -----------------------------------------------------------------
 			execute "normal! " .. '0/' .. g:interview_label_regex .. '\:\s\{1}\d\{4}' .. "\<CR>"
 			execute "normal \<Plug>VimwikiVSplitLink"
-			#execute "normal! \<C-W>x\<C-W>l:vertical resize " .. g:annotation_window_width .. "\<CR>"
 			execute "normal! :vertical resize " .. annotation_window_width .. "\<CR>"
 			candidate_delete_buffer = bufnr("%")
 			execute "normal \<Plug>VimwikiDeleteFile"
