@@ -809,7 +809,7 @@ def Annotation()
 			# list of tags we're building.
 			# -------------------------------------------
 			execute "normal! vf:yeel"
-			g:this_tag = @@
+			g:this_tag = getreg('@')
 			g:list_of_tags_on_line = g:list_of_tags_on_line .. g:this_tag .. " "
 		else
 			# No more tags
@@ -944,7 +944,7 @@ def ExitAnnotation()
 	# remaining bottom line to test_line 
 	# -----------------------------------------------------------------
 	execute "normal! Go\<ESC>V?.\<CR>jdVy\<ESC>"
-	g:test_line = @@
+	g:test_line = getreg('@')
 	# -----------------------------------------------------------------
 	# Build a regex that looks for the coder tag at the beginning of the line and
 	# then only white space to the carriage return character.
@@ -1132,7 +1132,7 @@ def GoToReference()
 	# Find target file name.
 	# -----------------------------------------------------------------
 	execute "normal! 0/" .. g:interview_label_regex .. ':\s\d\{4}' .. "\<CR>" .. 'vf:hy'
-	g:target_file = @@
+	g:target_file = getreg('@')
 	g:target_file = g:target_file .. g:target_file_ext
 	# -----------------------------------------------------------------
 	# Find target line number "
@@ -1140,7 +1140,7 @@ def GoToReference()
 	execute "normal! `<"
 	execute "normal! " .. '/\d\{4}' .. "\<CR>"
 	execute "normal! viwy"
-	g:target_line = @@
+	g:target_line = getreg('@')
 	# -----------------------------------------------------------------
 	# Use Z mark to know how to get back
 	# -----------------------------------------------------------------
@@ -1330,15 +1330,15 @@ def g:Gather(search_term: string)
 
 	while search(g:search_term, "W")
 		if match(getline("."), g:tag_search_regex) > 0
-			@s = @s .. getline(".") .. "\n\n"
+			@s = getreg('s') .. getline(".") .. "\n\n"
 		else
 			execute "normal! ?{\<CR>V/}\<CR>y"
-			@s = @s .. @@ .. "\n"
+			@s = getreg('s') .. getreg('@') .. "\n"
 			execute "normal! `>"
 		endif	
 	endwhile
 
-	@s = @s "# END THEME: " .. search_term ..  "\n\n"
+	@s = getreg('s') "# END THEME: " .. search_term ..  "\n\n"
 	execute "normal! `R\"sp"
 enddef
 
@@ -1431,7 +1431,7 @@ def g:Report(search_term: string, report_type = "full", function_name = "FullRep
 			ProcessInterviewLines(meta, report_type, search_term)
 			ProcessAnnotationLines()
 		endfor
-		writefile(split(@u, "\n", 1), g:tag_summary_file)
+		writefile(split(getreg('u'), "\n", 1), g:tag_summary_file)
 	elseif (report_type == "annotations")
 		g:interview_list = g:anno_keys
 		for g:int_index in range(0, len(g:interview_list) - 1)
@@ -1444,7 +1444,7 @@ def g:Report(search_term: string, report_type = "full", function_name = "FullRep
 			ProcessInterviewTitle(g:int_keys[g:int_index])
 			ProcessInterviewLines(meta, report_type, search_term )
 		endfor
-		writefile([@u], g:tag_summary_file)
+		writefile([ getreg('u') ], g:tag_summary_file)
 	endif
 
 	@t = "| No. | Interview | Blocks | Lines | Lines/Block | Annos |\n|-------:|-------|------:|------:|------:|\n"
@@ -1456,8 +1456,8 @@ def g:Report(search_term: string, report_type = "full", function_name = "FullRep
 		CreateSummaryCountTableLine()
 	endfor 
 	g:total_lines_per_block = printf("%.1f", str2float(g:total_lines) / str2float(g:total_blocks))
-	@t = @t .. "|-------:|-------|------:|------:|------:|------:|\n"
-	@t = @t .. "| Totals: |  | " .. g:total_blocks ..  " | " .. g:total_lines .. " | " .. g:total_lines_per_block .. " | " .. g:total_annos .. " |\n"
+	@t = getreg('t') .. "|-------:|-------|------:|------:|------:|------:|\n"
+	@t = getreg('t') .. "| Totals: |  | " .. g:total_blocks ..  " | " .. g:total_lines .. " | " .. g:total_lines_per_block .. " | " .. g:total_annos .. " |\n"
 	 
 	#  Write summary line to t register for last interview
 	AddReportHeader(function_name, search_term)
@@ -1522,11 +1522,11 @@ def CrawlBufferTags(interview: number, interview_name: string)
 		if (g:tag_test != 0)
 			# Copy found tag
 			execute "normal! viWy"
-			g:tags_on_line = g:tags_on_line + [@@]
+			g:tags_on_line = g:tags_on_line + [ getreg('@') ]
 			g:tag_test = search(':\a.\{-}:', '', line("."))
 			while (g:tag_test != 0)
 				execute "normal! viWy"
-				tag_being_considered = @@
+				tag_being_considered = getreg('@')
 				g:have_tag = 0
 				# loop to see if we already have this tag
 				for tag_index in range(0, len(g:tags_on_line) - 1 )
@@ -1538,7 +1538,7 @@ def CrawlBufferTags(interview: number, interview_name: string)
 				if g:have_tag 
 					execute "normal! gvx"
 				else
-					g:tags_on_line = g:tags_on_line + [@@]
+					g:tags_on_line = g:tags_on_line + [ getreg('@') ]
 				endif
 				g:tag_test = search(':\a.\{-}:', '', line("."))
 			endwhile
@@ -2087,7 +2087,7 @@ def GetAnnoText(bufnr: number): string
 	execute "normal! :buffer " .. bufnr .. "\<CR>"
 	# Copy the annotation text.
 	execute "normal! G$?.\<CR>Vggy"
-	return @@
+	return getreg('@')
 enddef
 
 # ------------------------------------------------------
@@ -2170,7 +2170,7 @@ def GetAttributeLine(interview: string): number
 	# Get the first line and the length of the buffer in lines.
 	# -----------------------------------------------------------------
 	execute "normal! ggVy"
-	g:attribute_row = @@
+	g:attribute_row = getreg('@')
 	g:current_buf_length = line('$')
 	execute "normal! \<C-o>"
 	return g:attribute_row
@@ -2502,7 +2502,7 @@ def CreateTagDict()
 	# -----------------------------------------------------------------
 	while search('{', "W")
 		execute "normal! j$bviWy0"
-		var tag_key = @@
+		var tag_key = getreg('@')
 		var tag_def_list = []
 		while (getline(".") != "}") && (line(".") <= line("$"))
 			tag_def_list = tag_def_list + [getline(".")]
@@ -2915,7 +2915,7 @@ def ProcessLineMetadata()
 	execute "normal! lv$y"
 	#execute "normal! lvg_y"
 	# Tokenize what got copied into a list called g:line_meta_data
-	g:line_metadata = split(@@)
+	g:line_metadata = split(getreg('@'))
 	for index in range(0, len(g:line_metadata) - 1)
 		if (match(g:line_metadata[index], ':\a.\{-}:') != -1)
 			g:tags_on_line = g:tags_on_line + [ g:line_metadata[index][1:-2] ]
@@ -2950,17 +2950,10 @@ enddef
 #
 # ------------------------------------------------------
 def SortTagDefs() 
-	#execute "normal! :%s/}/}\\r/g\<CR>"
 	execute "normal! :%s/}/}\r/g\<CR>"
-	#execute "normal! :g/{/,/}/s/\\n/TTTT\<CR>"
-
 	execute "normal! :g/{/,/}/s/\\n/TTTT/\<CR>"
-
-	#execute "normal! :3,$sort \i\<CR>"
 	execute "normal! :3,$sort \i\<CR>"
-	#execute "normal! " .. ':3,$g/^$/d' .. "\<CR>"
 	execute "normal! " .. ':3,$g/^$/d' .. "\<CR>"
-	#execute "normal! :%s/TTTT/\\r/g\<CR>"
 	execute "normal! :%s/TTTT/\\r/g\<CR>"
 enddef
 
@@ -3087,7 +3080,7 @@ def Attributes(sort_col = 1)
 		execute "normal :e " .. g:interview_list[interview] .. "\<CR>"
 		# copy first row which should be the attribute tags.
 		execute "normal! ggVy"
-		g:attribute_row = @@
+		g:attribute_row = getreg('@')
 		# format the attribute tags for the chart and for the csv
 		g:interview_label = "| [[" .. g:interview_list[interview][:-4] .. "]]"
 		g:attrib_chart_line = substitute(g:attribute_row, ": :", "|", "g")
@@ -3145,12 +3138,12 @@ def UpdateSubcode()
 	g:is_search_result = search(' _\w\{1,}', "W")
 	if (g:is_search_result != 0)
 		execute "normal! lviwyel"
-		g:subcode_list = g:subcode_list + [@@]	
+		g:subcode_list = g:subcode_list + [ getreg('@') ]	
 		while (g:is_search_result != 0)
 			g:is_search_result = search(' _\w\{1,}', "W")
 			if (g:is_search_result != 0)
 				execute "normal! lviwyel"
-				g:subcode_list = g:subcode_list + [@@]
+				g:subcode_list = g:subcode_list + [ getreg('@') ]
 			endif 
 		endwhile
 	endif
