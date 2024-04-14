@@ -885,7 +885,7 @@ def Annotation()
 			execute "normal \<Plug>VimwikiVSplitLink"
 			execute "normal! :vertical resize " .. annotation_window_width .. "\<CR>"
 			put =expand('%:t')
-			execute "normal! 0kdd/" .. g:wiki_extension .. "\<CR>"
+			execute "normal! 0kdd/" .. g:wiki_extension .. "\<cr>"
 			execute "normal! d$I:\<ESC>2o\<ESC>"
 		        execute "normal! i[" .. current_time .. "] " .. list_of_tags_on_line .. "// \:" .. g:coder_initials .. "\:  \<ESC>"
 			startinsert 
@@ -897,7 +897,7 @@ def Annotation()
 			execute "normal \<Plug>VimwikiVSplitLink"
 			execute "normal! :vertical resize " .. annotation_window_width .. "\<CR>"
 			#execute "normal! Go\<ESC>V?.\<CR>"jd2o\<ESC>"
-			execute "normal! Go\<ESC>V?.\<CR>"
+			execute "normal! Go\<ESC>V?.\<cr>"
 			execute "normal! jd2o\<ESC>"
 		        execute "normal! i[" .. current_time .. "] " .. list_of_tags_on_line .. "// \:" .. g:coder_initials .. "\:  \<ESC>"
 			startinsert
