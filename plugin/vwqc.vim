@@ -2982,7 +2982,7 @@ def g:GetTagDefB()
 		if (has_key(g:tag_dict, g:tag_to_test))
  			popup_atcursor(get(g:tag_dict, g:tag_to_test), {
  				 'border': [],
- 				 'close' : 'click',
+ 				 'close': 'click',
  				 })
  		else
 			echom "AddNewTagDefSection"
