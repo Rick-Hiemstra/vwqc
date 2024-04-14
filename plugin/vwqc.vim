@@ -2200,12 +2200,12 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def GetTagUpdate() 
+def GetTagUpdateB() 
 
 	ParmCheck()
 
 	confirm("Populating tags. This may take a while.", "Got it", 1)
-	echo "GetTagUpdate enter"
+
 	CreateTagDict()
 
 	execute "normal! :delmarks Y\<CR>"
