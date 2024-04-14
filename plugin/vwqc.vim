@@ -2423,8 +2423,8 @@ enddef
 def GenDictTagList() 
 	g:dict_tags = []
 	for tag_index in range(0, (len(g:current_tags) - 1))
- 		if (has_key(g:tag_dict, g:current_tags[tag_index]) == true)
-			g:dict_tags = g:dict_tags + [g:current_tags[tag_index]]
+ 		if (has_key(g:tag_dict, g:current_tags[tag_index]))
+			g:dict_tags = g:dict_tags + [ g:current_tags[tag_index] ]
 		endif
 	endfor
 enddef
