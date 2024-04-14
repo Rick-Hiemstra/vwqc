@@ -856,7 +856,7 @@ def Annotation()
 		# ------------------------------------------------------------------
 		#  Figure out how wide we can make the annotation window
 		# ------------------------------------------------------------------
-		current_window_width    = winwidth('%')
+		current_window_width    = winwidth(bufnr('%'))
 		annotation_window_width = current_window_width - g:border_offset - 45
 		if (annotation_window_width < 30)
 			annotation_window_width = 30
