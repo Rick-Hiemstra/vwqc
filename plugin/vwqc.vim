@@ -2310,6 +2310,7 @@ def UpdateCurrentTagsPage()
 	execute "normal! :w\<CR>"
 	# Open the Tag List Current Page
 	execute "normal! :e " .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag List Current" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+	execute "normal! :e "Tag List Current" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
 	# Delete what is there
 	execute "normal! ggVGd"
 	var tag_update_time = strftime("%Y-%m-%d %a %H:%M:%S")
