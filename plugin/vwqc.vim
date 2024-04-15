@@ -1758,6 +1758,7 @@ def g:TagStats()
 	ParmCheck()
 	
 	var ext_length = (len(g:vimwiki_wikilocal_vars[g:wiki_number]['ext']) + 1) * -1
+	var interview_to_crawl = "Undefined"
 
 	# save buffer number of current file to register 'a' so you can return here
 	@a = bufnr('%')
@@ -1771,8 +1772,8 @@ def g:TagStats()
 	for interview in range(0, (len(g:interview_list) - 1))
 		# go to interview file
 		execute "normal :e " .. g:interview_list[interview] .. "\<CR>"
-		g:interview_to_crawl = expand('%:t:r')
-		CrawlBufferTags(interview, g:interview_to_crawl)	
+		interview_to_crawl = expand('%:t:r')
+		CrawlBufferTags(interview, interview_to_crawl)	
 	endfor
 
 	g:unique_tags = sort(CreateUniqueTagList(g:tags_list))
@@ -1801,7 +1802,8 @@ def g:TagStats()
 
 	# Return to the buffer where these charts and graphs are going to be
 	# produced and clear out the buffer.
-	execute "normal! :b\<C-R>a\<CR>gg"
+	#execute "normal! :b\<C-R>a\<CR>gg"
+	execute "normal! :b" .. getreg('a') .. "\<CR>gg"
 	execute "normal! ggVGd"
 
 	# Print interview tag summary tables
