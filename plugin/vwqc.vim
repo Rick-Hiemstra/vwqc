@@ -1761,7 +1761,7 @@ def g:TagStats()
 	var interview_to_crawl = "Undefined"
 
 	# save buffer number of current file to register 'a' so you can return here
-	@a = bufnr('%')
+	var buffer_to_return_to = bufnr('%')
 	
 	g:interview_list = []
 	GetInterviewFileList()
@@ -1803,7 +1803,7 @@ def g:TagStats()
 	# Return to the buffer where these charts and graphs are going to be
 	# produced and clear out the buffer.
 	#execute "normal! :b\<C-R>a\<CR>gg"
-	execute "normal! :b" .. getreg('a') .. "\<CR>gg"
+	execute "normal! :b" .. buffer_to_return_to .. "\<CR>gg"
 	execute "normal! ggVGd"
 
 	# Print interview tag summary tables
