@@ -1520,7 +1520,7 @@ def CalcInterviewTagCrosstabs(tags_list: list<string>, unique_tags: list<string>
 	g:initial_tag_dict     = {}
 
 	for index in range(0, (len(interview_list) - 1)) 
-		interview_list[index] = interview_list[index][:ext_length]
+		interview_list[index] = interview_list[index][ : ext_length]
 	endfor
 	# The initial_tag_dict is a dictionary the unique tags with values of four-element lists. Where
 	# element 
