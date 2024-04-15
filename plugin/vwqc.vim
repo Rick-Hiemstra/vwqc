@@ -2326,7 +2326,7 @@ def UpdateCurrentTagsPage()
 	execute "normal! ggj"
 	# Return to where you were
 	execute "normal! `Rzz"
-	execute "normal! <C-w>o"
+	execute "normal! \<C-w>o"
 enddef
 
 # ------------------------------------------------------
