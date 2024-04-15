@@ -2322,9 +2322,8 @@ def UpdateCurrentTagsPage()
 	execute "normal! i\n- **There are " .. len(g:just_in_dict_list) .. " tag(s) defined in the Tag Glossary but not used in coding.**\n"
 	put =g:just_in_dict_list
 	execute "normal! ggj"
-	#execute "normal! :q\<CR>"
 	# Return to where you were
-	#execute "normal! `Rzz"
+	execute "normal! `Rzz"
 	
 enddef
 
