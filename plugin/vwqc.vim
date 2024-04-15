@@ -1453,8 +1453,8 @@ def GetInterviewFileList()
 	for list_item in range(0, (len(file_list_all) - 1))
 		if (match(file_list_all[list_item], file_regex) == 2) 
 			# strip off the leading/
-			file_to_add = file_list_all[list_item][2:]
-			g:interview_list = g:interview_list + [file_to_add]
+			file_to_add = file_list_all[list_item][2 : ]
+			g:interview_list = g:interview_list + [ file_to_add ]
 		endif
 	endfor
 	#return l:interview_list
