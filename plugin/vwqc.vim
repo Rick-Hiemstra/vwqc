@@ -99,7 +99,7 @@ vim9script
 # Report
 #
 # GetInterviewFileList
-# CrawBufferTags
+# CrawlBufferTags
 # CalcInterviewTagCrosstabs
 # FindLargestTagAndBlockCounts
 # PrintInterviewTagSummary
@@ -2271,7 +2271,8 @@ def GenTagsWithLocationList()
 	# Call VimwikiSearchTags against the a:search_term argument.
 	# Put the result in loc_list which is a list of location list
 	# dictionaries that we'll process.
-	silent execute "normal! :VimwikiSearch /" .. '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' .. "/g\<CR>"
+	#silent execute "normal! :VimwikiSearch /" .. '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' .. "/g\<CR>"
+	silent execute "normal! :VimwikiSearch /" .. ':\a.\{-}:' .. "/g\<CR>"
 
 	g:loc_list = getloclist(0)
 	var tag_list = []
@@ -2307,7 +2308,6 @@ def UpdateCurrentTagsPage()
 	# -----------------------------------------------------------------
 	execute "normal! :delmarks R\<CR>"
 	execute "normal! mR"
-	execute "normal! :w\<CR>"
 	# Open the Tag List Current Page
 	execute "normal! :e " .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag List Current" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
 	execute "normal! :e Tag List Current" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
@@ -2324,10 +2324,9 @@ def UpdateCurrentTagsPage()
 	execute "normal! i\n- **There are " .. len(g:just_in_dict_list) .. " tag(s) defined in the Tag Glossary but not used in coding.**\n"
 	put =g:just_in_dict_list
 	execute "normal! ggj"
-	execute "normal! :w\<CR>"
 	# Return to where you were
 	execute "normal! `Rzz"
-	
+	execute "normal! <C-w>o"
 enddef
 
 # ------------------------------------------------------
