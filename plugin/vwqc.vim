@@ -2307,6 +2307,7 @@ def UpdateCurrentTagsPage()
 	# -----------------------------------------------------------------
 	execute "normal! :delmarks R\<CR>"
 	execute "normal! mR"
+	execute "normal :w\<CR>"
 	# Open the Tag List Current Page
 	execute "normal! :e " .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag List Current" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
 	# Delete what is there
