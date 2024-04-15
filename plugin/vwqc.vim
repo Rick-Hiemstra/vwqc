@@ -2307,7 +2307,7 @@ def UpdateCurrentTagsPage()
 	# -----------------------------------------------------------------
 	execute "normal! :delmarks R\<CR>"
 	execute "normal! mR"
-	execute "normal :w\<CR>"
+	execute "normal! :w\<CR>"
 	# Open the Tag List Current Page
 	execute "normal! :e " .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag List Current" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
 	# Delete what is there
@@ -2323,7 +2323,7 @@ def UpdateCurrentTagsPage()
 	execute "normal! i\n- **There are " .. len(g:just_in_dict_list) .. " tag(s) defined in the Tag Glossary but not used in coding.**\n"
 	put =g:just_in_dict_list
 	execute "normal! ggj"
-	execute "normal :w\<CR>"
+	execute "normal! :w\<CR>"
 	# Return to where you were
 	execute "normal! `Rzz"
 	
