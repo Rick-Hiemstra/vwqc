@@ -2533,7 +2533,8 @@ def FindLastTagAddedToBuffer()
 
 	g:most_recent_tag_in_changes       = ""
 	g:is_tag_on_page                   = 0
-	g:most_recent_tag_in_changes_start = match(g:changes, ':\a\w\{1,}:\(.*:\a\w\{1,}:\)\@!')
+	#g:most_recent_tag_in_changes_start = match(g:changes, ':\a\w\{1,}:\(.*:\a\w\{1,}:\)\@!')
+	g:most_recent_tag_in_changes_start = match(g:changes, ':\S\{-}:\(.*:\S\{-}:\)\@!')
 	# ------------------------------------------------------------
 	# If there is a tag on the page, find what it is.
 	# ------------------------------------------------------------
