@@ -142,7 +142,7 @@ vim9script
 # CreateTagDict
 # CurrentTagsPopUpMenu
 # NoTagListNotice 
-# TagFillWithChoice
+# TagFillWithChoiceB
 # FindLastTagAddedToBuffer
 # FillChosenTag
 # ChangeTagFillOption
@@ -2593,7 +2593,7 @@ def FillChosenTag(id: number, result: number)
 	endif
 enddef
 	
-def TagFillWithChoiceB() 
+def g:TagFillWithChoiceB() 
 	# ---------------------------------------------
 	# Set tag fill mode
 	# ---------------------------------------------
