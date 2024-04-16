@@ -75,8 +75,8 @@ nnoremap <F4> :call ChangeTagFillOption()<CR>
 inoremap <F4> <ESC>:call ChangeTagFillOption()<CR>
 
 " ---------------- Fill Tag Block ---------------------
-nnoremap <F5> :call TagFillWithChoice()<CR>	
-inoremap <F5> <ESC>:call TagFillWithChoice()<CR>
+nnoremap <F5> :call TagFillWithChoiceB()<CR>	
+inoremap <F5> <ESC>:call TagFillWithChoiceB()<CR>
 
 " ----------- Trim Partial Leading and Trailing Sentences -----
 " --- Trim Leading (trim head = <leader>th --------------------

@@ -2548,7 +2548,7 @@ def FindLastTagAddedToBuffer()
 	# that it doesn't appear in matched tag list twice.
 	# ------------------------------------------------------------
 	if g:is_tag_on_page == 1
-		g:matched_tag_list = [g:most_recent_tag_in_changes] 
+		g:matched_tag_list = [ g:most_recent_tag_in_changes ] 
 	endif
 enddef
 
@@ -2593,7 +2593,7 @@ def FillChosenTag(id: number, result: number)
 	endif
 enddef
 	
-def TagFillWithChoice() 
+def TagFillWithChoiceB() 
 	# ---------------------------------------------
 	# Set tag fill mode
 	# ---------------------------------------------
