@@ -2555,7 +2555,7 @@ enddef
 
 def FillChosenTag(id: number, result: number) 
 	# ------------------------------------------------------------
-	# When ESC is press the a:result value will be -1. So take no action.
+	# When ESC is press the result value will be -1. So take no action.
 	# ------------------------------------------------------------
 	if (result > 0)
 		# ------------------------------------------------------------
@@ -2601,6 +2601,7 @@ def g:TagFillWithChoiceB()
 	if !exists("g:tag_fill_option") 
 		g:tag_fill_option = "last tag added"
 	endif
+
 	if (g:tag_fill_option == "last tag added")
 		FindLastTagAddedToBuffer()
 	endif
@@ -2876,7 +2877,8 @@ def ProcessLineMetadata()
 	# Tokenize what got copied into a list called g:line_meta_data
 	g:line_metadata = split(getreg('@'))
 	for index in range(0, len(g:line_metadata) - 1)
-		if (match(g:line_metadata[index], ':\a.\{-}:') != -1)
+		#if (match(g:line_metadata[index], ':\a.\{-}:') != -1)
+		if (match(g:line_metadata[index], ':\S\{-}:') != -1)
 			g:tags_on_line = g:tags_on_line + [ g:line_metadata[index][1 : -2] ]
 			if (index(g:block_tags_list, g:line_metadata[index][1 : -2]) == -1)
 				g:block_tags_list = g:block_tags_list + [ g:line_metadata[index][1 : -2] ]
