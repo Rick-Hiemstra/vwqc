@@ -2818,7 +2818,7 @@ def BuildMetadataBlockFill(id: number, result: number)
 			endif
 		endfor
 
-		g:block_metadata[line_index] = g:block_metadata[line_index] + [ g:formatted_metadata g:block_metadata[line_index][3] ]
+		g:block_metadata[line_index] = g:block_metadata[line_index] + [ g:formatted_metadata .. g:block_metadata[line_index][3] ]
 		
 		g:block_metadata[line_index][4] = substitute(g:block_metadata[line_index][4], '\s\+$', '', 'g')
 		if g:block_metadata[line_index][4] == ""
