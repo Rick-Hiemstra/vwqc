@@ -2814,7 +2814,7 @@ def BuildMetadataBlockFill(id: number, result: number)
 			if (index(g:block_metadata[line_index][2], g:sub_block_tag_list[tag_index]) != -1)
 				g:formatted_metadata = g:formatted_metadata .. " :" .. g:sub_block_tag_list[tag_index] .. ":"
 			else
-				g:formatted_metadata = g:formatted_metadata repeat(' ', len(g:sub_block_tag_list[tag_index]) + 3)
+				g:formatted_metadata = g:formatted_metadata .. repeat(' ', len(g:sub_block_tag_list[tag_index]) + 3)
 			endif
 		endfor
 
