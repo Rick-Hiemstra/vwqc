@@ -2883,7 +2883,7 @@ def ProcessLineMetadata()
 			g:non_tag_metadata = g:non_tag_metadata .. " " .. g:line_metadata[index]
 		endif
 	endfor
-	g:block_metadata[line('.')] = g:block_metadata[line('.')] + [ g:tags_on_line , g:non_tag_metadata ]
+	g:block_metadata[line('.')] = g:block_metadata[line('.')] + [g:tags_on_line, g:non_tag_metadata]
 enddef
 
 # ------------------------------------------------------
