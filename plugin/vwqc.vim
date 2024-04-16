@@ -2768,7 +2768,7 @@ def CreateSubBlocksLists()
 	var found_block = 0
 	for line_index in range(str2nr(g:block_lines[0]), str2nr(g:block_lines[-1]))
 		if (len(g:block_metadata[line_index][2]) != 0) && (found_block == 0)
-			g:sub_blocks_tags_lists = g:sub_blocks_tags_lists + [ [ g:block_metadata[line_index][2] , [ line_index ] ] ]
+			g:sub_blocks_tags_lists = g:sub_blocks_tags_lists + [ [ g:block_metadata[line_index][2], [ line_index ] ] ]
 			found_block        = 1
 		# Inside a sub-block
 		elseif (len(g:block_metadata[line_index][2]) != 0) && (found_block == 1)
