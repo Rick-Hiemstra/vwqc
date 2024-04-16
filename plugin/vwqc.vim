@@ -2792,9 +2792,10 @@ enddef
 
 def BuildMetadataBlockFill(id: number, result: number) 
 
-	g:fill_tag = g:block_tags_list[result - 1]
+	g:sub_block_tag_list = []
+	g:fill_tag           = g:block_tags_list[result - 1]
 
-	g:block_lines = sort(keys(g:block_metadata))
+	g:block_lines        = sort(keys(g:block_metadata))
 
 	FindUpperTagFillLine()
 	AddFillTags()
