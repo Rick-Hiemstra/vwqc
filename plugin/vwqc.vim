@@ -2539,7 +2539,7 @@ def FindLastTagAddedToBuffer()
 	# ------------------------------------------------------------
 	if g:most_recent_tag_in_changes_start != -1
 		g:most_recent_tag_in_changes_end = match(g:changes, ':', g:most_recent_tag_in_changes_start + 1)
-		g:most_recent_tag_in_changes = g:changes[(g:most_recent_tag_in_changes_start + 1):(g:most_recent_tag_in_changes_end - 1)]
+		g:most_recent_tag_in_changes = g:changes[(g:most_recent_tag_in_changes_start + 1) : (g:most_recent_tag_in_changes_end - 1)]
 		g:is_tag_on_page = 1
 	endif
 	# ------------------------------------------------------------
