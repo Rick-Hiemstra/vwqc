@@ -2304,8 +2304,8 @@ def GenTagsWithLocationList()
 			last_col  = g:loc_list[line_index]['end_col'] - 7
 			test_tag = g:loc_list[line_index]['text'][first_col : last_col]
 		elseif (buffer_type == "Annotation")
-			first_col = g:loc_list[line_index]['col'] - 1 
-			last_col  = g:loc_list[line_index]['end_col'] - 4
+			first_col = g:loc_list[line_index]['col']  
+			last_col  = g:loc_list[line_index]['end_col'] - 3
 			test_tag = g:loc_list[line_index]['text'][first_col : last_col]
 		endif 
 	
