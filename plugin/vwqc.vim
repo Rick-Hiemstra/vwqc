@@ -2293,9 +2293,9 @@ def GenTagsWithLocationList()
 		first_col = g:loc_list[line_index]['col'] - 4 
 		last_col  = g:loc_list[line_index]['end_col'] - 7
 		test_tag = g:loc_list[line_index]['text'][first_col : last_col]
-		#echom line_index .. " has tag " .. test_tag .. " in buffer number " .. g:loc_list[line_index]['bufnr'] .. " on line " .. g:loc_list[line_index]['lnum'] .. "\n"
-		#echom g:loc_list[line_index]['text'] .. "\n"
-		#echom "col: " .. g:loc_list[line_index]['col'] .. " and endcol: " .. g:loc_list[line_index]['end_col'] .. " and last_col: " .. last_col .. "\n\n"
+		echom line_index .. " has tag " .. test_tag .. " in buffer number " .. g:loc_list[line_index]['bufnr'] .. " on line " .. g:loc_list[line_index]['lnum'] .. "\n"
+		echom g:loc_list[line_index]['text'] .. "\n"
+		echom "col: " .. g:loc_list[line_index]['col'] .. " and endcol: " .. g:loc_list[line_index]['end_col'] .. " and last_col: " .. last_col .. "\n\n"
 		if (index(tag_list, test_tag) == -1)
 			tag_list = tag_list + [ test_tag ]
 		endif
