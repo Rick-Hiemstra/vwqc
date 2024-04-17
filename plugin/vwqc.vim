@@ -2285,9 +2285,9 @@ def GenTagsWithLocationList()
 
 	var search_results = len(g:loc_list)
 
-	#var first_col = g:loc_list[0]['col'] 
-	#var last_col  = g:loc_list[0]['end_col'] - 3
-	#var test_tag  = g:loc_list[0]['text'][first_col : last_col]
+	var first_col = 0 
+	var last_col  = 0 
+	var test_tag  = "undefined"
 
 	#if (g:loc_list[0]['lnum'] > 1)
 	#	tag_list = tag_list + [ test_tag ]
@@ -2303,11 +2303,11 @@ def GenTagsWithLocationList()
 			if (buffer_type == "Interview")
 				first_col = g:loc_list[line_index]['col'] - 4 
 				last_col  = g:loc_list[line_index]['end_col'] - 7
-				test_tag = g:loc_list[line_index]['text'][first_col : last_col]
+				test_tag  = g:loc_list[line_index]['text'][first_col : last_col]
 			elseif (buffer_type == "Annotation")
 				first_col = g:loc_list[line_index]['col']  
 				last_col  = g:loc_list[line_index]['end_col'] - 3
-				test_tag = g:loc_list[line_index]['text'][first_col : last_col]
+				test_tag  = g:loc_list[line_index]['text'][first_col : last_col]
 			endif 
 		
 			echom line_index .. " has tag " .. test_tag .. " in buffer number " .. g:loc_list[line_index]['bufnr'] .. " on line " .. g:loc_list[line_index]['lnum'] .. "\n"
