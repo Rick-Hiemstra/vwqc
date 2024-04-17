@@ -2540,7 +2540,8 @@ def FindLastTagAddedToBuffer()
 	#g:most_recent_tag_in_changes_start = match(g:changes, ':\S\{-}:\(.*:\S\{-}:\)\@!')
 	
 	g:most_recent_tag_in_changes_start = match(g:changes, g:tag_regex .. '\(.*' .. g:tag_regex .. '\)\@!')
-	
+	echom "most recent tag: " .. g:most_recent_tag_in_changes
+
 	#g:tag_regex = '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' 
 
 	# ------------------------------------------------------------
@@ -2559,6 +2560,7 @@ def FindLastTagAddedToBuffer()
 	if g:is_tag_on_page == 1
 		g:matched_tag_list = [ g:most_recent_tag_in_changes ] 
 	endif
+	
 enddef
 
 def FillChosenTag(id: number, result: number) 
