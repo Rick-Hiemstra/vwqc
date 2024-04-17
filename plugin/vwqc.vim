@@ -2285,36 +2285,38 @@ def GenTagsWithLocationList()
 
 	var search_results = len(g:loc_list)
 
-	var first_col = g:loc_list[0]['col'] 
-	var last_col  = g:loc_list[0]['end_col'] - 3
-	var test_tag  = g:loc_list[0]['text'][first_col : last_col]
+	#var first_col = g:loc_list[0]['col'] 
+	#var last_col  = g:loc_list[0]['end_col'] - 3
+	#var test_tag  = g:loc_list[0]['text'][first_col : last_col]
 
-	if g:loc_list[0]['lnum'] > 1
-		tag_list = tag_list + [ test_tag ]
-	endif
+	#if (g:loc_list[0]['lnum'] > 1)
+	#	tag_list = tag_list + [ test_tag ]
+	#endif
 
 	var buffer_type = "undefined"
 
-	for line_index in range(1, search_results - 1)
+	for line_index in range(0, search_results - 1)
 
 		buffer_type = FindBufferType(bufname(g:loc_list[line_index]['bufnr']))
 	
-		if (buffer_type == "Interview")
-			first_col = g:loc_list[line_index]['col'] - 4 
-			last_col  = g:loc_list[line_index]['end_col'] - 7
-			test_tag = g:loc_list[line_index]['text'][first_col : last_col]
-		elseif (buffer_type == "Annotation")
-			first_col = g:loc_list[line_index]['col']  
-			last_col  = g:loc_list[line_index]['end_col'] - 3
-			test_tag = g:loc_list[line_index]['text'][first_col : last_col]
-		endif 
-	
-		echom line_index .. " has tag " .. test_tag .. " in buffer number " .. g:loc_list[line_index]['bufnr'] .. " on line " .. g:loc_list[line_index]['lnum'] .. "\n"
-		echom g:loc_list[line_index]['text'] .. "\n"
-		echom "col: " .. g:loc_list[line_index]['col'] .. " and endcol: " .. g:loc_list[line_index]['end_col'] .. " and last_col: " .. last_col .. "\n\n"
-		if (buffer_type == "Interview") || (buffer_type == "Annotation")
-			if (index(tag_list, test_tag) == -1)
-				tag_list = tag_list + [ test_tag ]
+		if (g:loc_list[line_index]['lnum'] > 1)
+			if (buffer_type == "Interview")
+				first_col = g:loc_list[line_index]['col'] - 4 
+				last_col  = g:loc_list[line_index]['end_col'] - 7
+				test_tag = g:loc_list[line_index]['text'][first_col : last_col]
+			elseif (buffer_type == "Annotation")
+				first_col = g:loc_list[line_index]['col']  
+				last_col  = g:loc_list[line_index]['end_col'] - 3
+				test_tag = g:loc_list[line_index]['text'][first_col : last_col]
+			endif 
+		
+			echom line_index .. " has tag " .. test_tag .. " in buffer number " .. g:loc_list[line_index]['bufnr'] .. " on line " .. g:loc_list[line_index]['lnum'] .. "\n"
+			echom g:loc_list[line_index]['text'] .. "\n"
+			echom "col: " .. g:loc_list[line_index]['col'] .. " and endcol: " .. g:loc_list[line_index]['end_col'] .. " and last_col: " .. last_col .. "\n\n"
+			if ((buffer_type == "Interview") || (buffer_type == "Annotation"))
+				if (index(tag_list, test_tag) == -1)
+					tag_list = tag_list + [ test_tag ]
+				endif
 			endif
 		endif
 	endfor	
