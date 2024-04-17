@@ -2297,7 +2297,7 @@ def GenTagsWithLocationList()
 
 	for line_index in range(1, search_results - 1)
 
-		buffer_type = FindBufferType(g:loc_list[line_index]['bufnr'])
+		buffer_type = FindBufferType(bufname(g:loc_list[line_index]['bufnr']))
 	
 		if (buffer_type == "Interview")
 			first_col = g:loc_list[line_index]['col'] - 4 
