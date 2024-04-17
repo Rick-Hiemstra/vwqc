@@ -2269,25 +2269,18 @@ def GenTagsWithLocationList()
 	ParmCheck()
 	# Change the pwd to that of the current wiki.
 	execute "normal! :cd %:p:h\<CR>"
-	# Call VimwikiSearchTags against the a:search_term argument.
-	# Put the result in loc_list which is a list of location list
-	# dictionaries that we'll process.
-	#silent execute "normal! :VimwikiSearch /" .. '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' .. "/g\<CR>"
+
 	silent execute "normal! :VimwikiSearch /" .. g:tag_regex .. "/g\<CR>"
-
 	g:loc_list = getloclist(0)
+
 	var tag_list = []
-
 	var search_results = len(g:loc_list)
-
 	var first_col = 0 
 	var last_col  = 0 
 	var test_tag  = "undefined"
-
 	var buffer_type = "undefined"
 
 	for line_index in range(0, search_results - 1)
-
 		buffer_type = FindBufferType(bufname(g:loc_list[line_index]['bufnr']))
 	
 		if (g:loc_list[line_index]['lnum'] > 1)
@@ -2544,7 +2537,12 @@ def FindLastTagAddedToBuffer()
 	g:most_recent_tag_in_changes       = ""
 	g:is_tag_on_page                   = 0
 	#g:most_recent_tag_in_changes_start = match(g:changes, ':\a\w\{1,}:\(.*:\a\w\{1,}:\)\@!')
-	g:most_recent_tag_in_changes_start = match(g:changes, ':\S\{-}:\(.*:\S\{-}:\)\@!')
+	#g:most_recent_tag_in_changes_start = match(g:changes, ':\S\{-}:\(.*:\S\{-}:\)\@!')
+	
+	g:most_recent_tag_in_changes_start = match(g:changes, g:tag_regex .. '\(.*' .. g:tag_regex .. ')\@!')
+	
+	#g:tag_regex = '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' 
+
 	# ------------------------------------------------------------
 	# If there is a tag on the page, find what it is.
 	# ------------------------------------------------------------
