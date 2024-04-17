@@ -163,9 +163,8 @@ vim9script
 # -----------------------------------------------------------------
 # ---------------------------- VWQC SETUP -------------------------
 # -----------------------------------------------------------------
-#var g:tag_dict                  = {}
-#var g:current_tags              = []
-#var g:loc_list                  = []
+
+g:tag_regex = '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' 
 
 # ------------------------------------------------------
 # Displays a popup help menu
@@ -2273,13 +2272,9 @@ def GenTagsWithLocationList()
 	# Call VimwikiSearchTags against the a:search_term argument.
 	# Put the result in loc_list which is a list of location list
 	# dictionaries that we'll process.
-	silent execute "normal! :VimwikiSearch /" .. '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' .. "/g\<CR>"
-	#silent execute "normal! :VimwikiSearch /" .. ':\S\{-}:' .. "/g\<CR>"
+	#silent execute "normal! :VimwikiSearch /" .. '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' .. "/g\<CR>"
+	silent execute "normal! :VimwikiSearch /" .. g:tag_regex .. "/g\<CR>"
 
-	# We need to just process pages in interview and annotation buffers.
-	# if it is an interview file, then back up 4 and 7, if its an
-	# annotation buffer then just back up 1 and 3.
-	# You can do this with bufname(4) and then feed this to 
 	g:loc_list = getloclist(0)
 	var tag_list = []
 
@@ -2288,10 +2283,6 @@ def GenTagsWithLocationList()
 	var first_col = 0 
 	var last_col  = 0 
 	var test_tag  = "undefined"
-
-	#if (g:loc_list[0]['lnum'] > 1)
-	#	tag_list = tag_list + [ test_tag ]
-	#endif
 
 	var buffer_type = "undefined"
 
@@ -2310,9 +2301,6 @@ def GenTagsWithLocationList()
 				test_tag  = g:loc_list[line_index]['text'][first_col : last_col]
 			endif 
 		
-			echom line_index .. " has tag " .. test_tag .. " in buffer number " .. g:loc_list[line_index]['bufnr'] .. " on line " .. g:loc_list[line_index]['lnum'] .. "\n"
-			echom g:loc_list[line_index]['text'] .. "\n"
-			echom "col: " .. g:loc_list[line_index]['col'] .. " and endcol: " .. g:loc_list[line_index]['end_col'] .. " and last_col: " .. last_col .. "\n\n"
 			if ((buffer_type == "Interview") || (buffer_type == "Annotation"))
 				if (index(tag_list, test_tag) == -1)
 					tag_list = tag_list + [ test_tag ]
