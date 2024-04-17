@@ -2276,6 +2276,10 @@ def GenTagsWithLocationList()
 	silent execute "normal! :VimwikiSearch /" .. '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' .. "/g\<CR>"
 	#silent execute "normal! :VimwikiSearch /" .. ':\S\{-}:' .. "/g\<CR>"
 
+	# We need to just process pages in interview and annotation buffers.
+	# if it is an interview file, then back up 4 and 7, if its an
+	# annotation buffer then just back up 1 and 3.
+	# You can do this with bufname(4) and then feed this to 
 	g:loc_list = getloclist(0)
 	var tag_list = []
 
@@ -2289,15 +2293,29 @@ def GenTagsWithLocationList()
 		tag_list = tag_list + [ test_tag ]
 	endif
 
+	var buffer_type = "undefined"
+
 	for line_index in range(1, search_results - 1)
-		first_col = g:loc_list[line_index]['col'] - 4 
-		last_col  = g:loc_list[line_index]['end_col'] - 7
-		test_tag = g:loc_list[line_index]['text'][first_col : last_col]
+
+		buffer_type = FindBufferType(g:loc_list[line_index]['bufnr'])
+	
+		if (buffer_type = "Interview")
+			first_col = g:loc_list[line_index]['col'] - 4 
+			last_col  = g:loc_list[line_index]['end_col'] - 7
+			test_tag = g:loc_list[line_index]['text'][first_col : last_col]
+		elseif (buffer_type = "Annotation")
+			first_col = g:loc_list[line_index]['col'] - 1 
+			last_col  = g:loc_list[line_index]['end_col'] - 4
+			test_tag = g:loc_list[line_index]['text'][first_col : last_col]
+		endif 
+	
 		echom line_index .. " has tag " .. test_tag .. " in buffer number " .. g:loc_list[line_index]['bufnr'] .. " on line " .. g:loc_list[line_index]['lnum'] .. "\n"
 		echom g:loc_list[line_index]['text'] .. "\n"
 		echom "col: " .. g:loc_list[line_index]['col'] .. " and endcol: " .. g:loc_list[line_index]['end_col'] .. " and last_col: " .. last_col .. "\n\n"
-		if (index(tag_list, test_tag) == -1)
-			tag_list = tag_list + [ test_tag ]
+		if (buffer_type == "Interview") || (buffer_type == "Annotation")
+			if (index(tag_list, test_tag) == -1)
+				tag_list = tag_list + [ test_tag ]
+			endif
 		endif
 	endfor	
 	g:current_tags = deepcopy(tag_list)
