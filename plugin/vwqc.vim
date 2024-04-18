@@ -2739,6 +2739,8 @@ def CreateBlockMetadataDict()
 	g:block_switch               = 0
 	g:continue_searching         = 1
 	g:while_counter              = 0
+	
+	echom "block_tags_list[0]: " .. g:block_tags_list .. "\n"
 
 	FindFirstInterviewLine()
 
