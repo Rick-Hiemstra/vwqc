@@ -2793,7 +2793,7 @@ def CreateBlockMetadataDict()
 		var first_tag    = g:block_tags_list[0]
 		var rest_of_tags = g:block_tags_list[1 : ]
 		rest_of_tags     = sort(rest_of_tags)
-		g:block_tags_list = first_tag + rest_of_tags
+		g:block_tags_list = [first_tag] + [rest_of_tags]
 	endif
 #		g:block_tags_list = sort(g:block_tags_list)
 #	endif
