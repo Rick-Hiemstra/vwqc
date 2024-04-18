@@ -2568,8 +2568,8 @@ def FindLastTagAddedToBuffer()
 
 	if (g:is_tag_on_page >= 0)
 		g:matched_tag_list = [ g:most_recent_tag_in_changes ] 
+		echom "matched tag list first: " .. g:matched_tag_list[0] .. "\n" 
 	endif
-	echom "matched tag list first: " .. g:matched_tag_list .. "\n" 
 enddef
 
 def FillChosenTag(id: number, result: number) 
