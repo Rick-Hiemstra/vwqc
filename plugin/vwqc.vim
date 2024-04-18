@@ -2539,7 +2539,7 @@ def FindLastTagAddedToBuffer()
 	#g:most_recent_tag_in_changes_start = match(g:changes, ':\a\w\{1,}:\(.*:\a\w\{1,}:\)\@!')
 	#g:most_recent_tag_in_changes_start = match(g:changes, ':\S\{-}:\(.*:\S\{-}:\)\@!')
 	
-	g:most_recent_tag_in_changes_start = match(g:changes, '\(' .. g:tag_regex .. '\)\(.*\(' .. g:tag_regex .. '\)\@!')
+	g:most_recent_tag_in_changes_start = match(g:changes, '\(' .. g:tag_regex .. '\)\(.*\(' .. g:tag_regex .. '\)\)\@!')
 	echom "most recent tag: " .. g:most_recent_tag_in_changes_start
 
 	#g:tag_regex = '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' 
