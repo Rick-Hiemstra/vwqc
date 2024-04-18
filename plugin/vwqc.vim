@@ -2740,7 +2740,7 @@ def CreateBlockMetadataDict()
 	g:continue_searching         = 1
 	g:while_counter              = 0
 	
-	echom "block_tags_list[0]: " .. g:block_tags_list .. "\n"
+	echom "block_tags_list top: " .. string(g:block_tags_list) .. "\n"
 
 	FindFirstInterviewLine()
 
@@ -2788,6 +2788,7 @@ def CreateBlockMetadataDict()
 		g:block_tags_list = []
 	endif
 
+	echom "block_tags_list bottom: " .. string(g:block_tags_list) .. "\n"
 	g:block_tags_list = sort(g:block_tags_list)
 enddef
 
