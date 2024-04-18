@@ -446,7 +446,7 @@ def g:FormatInterview(label = "default")
 	else
 		bad_label_error_message = proposed_label ..
 		       	" does not conform to the " .. 
-			" g:vimwiki_wikilocal_vars[g:wiki_number]['interview_label_regex'] .. 
+			g:vimwiki_wikilocal_vars[g:wiki_number]['interview_label_regex'] .. 
 		        " label regular expression from the VWQC configuration. Interview formatting aborted."	
 		confirm(bad_label_error_message, "Got it", 1)
 	endif
