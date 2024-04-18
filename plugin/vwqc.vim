@@ -2539,8 +2539,11 @@ def FindLastTagAddedToBuffer()
 	#g:most_recent_tag_in_changes_start = match(g:changes, ':\a\w\{1,}:\(.*:\a\w\{1,}:\)\@!')
 	#g:most_recent_tag_in_changes_start = match(g:changes, ':\S\{-}:\(.*:\S\{-}:\)\@!')
 	
-	g:most_recent_tag_in_changes_start = match(g:changes, '\(' .. g:tag_regex .. '\)\(.*\(' .. g:tag_regex .. '\)\)\@!')
-	echom "most recent tag: " .. g:most_recent_tag_in_changes_start
+	
+	g:is_tag_on_page                   = match(g:changes, '\(' .. g:tag_regex .. '\)\(.*\(' .. g:tag_regex .. '\)\)\@!')
+	g:most_recent_tag_in_changes       = matchstr(g:changes, '\(' .. g:tag_regex .. '\)\(.*\(' .. g:tag_regex .. '\)\)\@!')
+	g:most_recent_tag_in_changes       = g:most_recent_tag_in_changes[1 : -1]
+	echom "most recent tag: " .. g:most_recent_tag_in_changes
 
 	#g:tag_regex = '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' 
 
@@ -2558,7 +2561,9 @@ def FindLastTagAddedToBuffer()
 	# first tag in matched_tag_list. We'll also have to make sure
 	# that it doesn't appear in matched tag list twice.
 	# ------------------------------------------------------------
-	if g:is_tag_on_page == 1
+	g:matched_tag_list = []
+
+	if (g:is_tag_on_page >= 0)
 		g:matched_tag_list = [ g:most_recent_tag_in_changes ] 
 	endif
 	echom "matched tag list first: " .. g:matched_tag_list .. "\n" 
