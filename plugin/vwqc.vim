@@ -2927,7 +2927,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def ChangeTagFillOption() 
+def g:ChangeTagFillOption() 
 	if (!exists("g:tag_fill_option"))
 		g:tag_fill_option = "last tag added"
 		confirm("Default tag presented when F5 is pressed will be the last tag added to the buffer.",  "OK", 1)
