@@ -423,7 +423,7 @@ def DoesFileNameMatchLabelRegex(test_value: string): number
 	endif
 enddef
 
-def g:FormatInterview(label = "default") 
+def FormatInterview(label = "default") 
 	var valid_label_test    = 0
 	var proposed_label      = ""
 	var file_label_mismatch_warning = "Warning not set"
@@ -444,7 +444,10 @@ def g:FormatInterview(label = "default")
 		endif
 		FormatInterviewB(proposed_label)
 	else
-		bad_label_error_message = proposed_label .. " does not conform to the " .. g:vimwiki_wikilocal_vars[g:wiki_number]['interview_label_regex'] .. " label regular expression from the VWQC configuration. " .. "Interview formatting aborted."	
+		bad_label_error_message = proposed_label ..
+		       	" does not conform to the " .. 
+			" g:vimwiki_wikilocal_vars[g:wiki_number]['interview_label_regex'] .. 
+		        " label regular expression from the VWQC configuration. Interview formatting aborted."	
 		confirm(bad_label_error_message, "Got it", 1)
 	endif
 enddef
@@ -452,7 +455,7 @@ enddef
 # -----------------------------------------------------------------
 # This function formats interview text to use in for Vimwiki interview coding. 
 # -----------------------------------------------------------------
-def g:FormatInterviewB(interview_label: string) 
+def FormatInterviewB(interview_label: string) 
 
 	ParmCheck()
 
