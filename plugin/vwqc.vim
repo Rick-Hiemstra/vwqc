@@ -2553,12 +2553,12 @@ def FindLastTagAddedToBuffer()
 	# ------------------------------------------------------------
 	# If there is a tag on the page, find what it is.
 	# ------------------------------------------------------------
-	if g:most_recent_tag_in_changes_start != -1
-		g:most_recent_tag_in_changes_end = match(g:changes, ':', g:most_recent_tag_in_changes_start + 1)
-		g:most_recent_tag_in_changes = g:changes[(g:most_recent_tag_in_changes_start + 1) : (g:most_recent_tag_in_changes_end - 1)]
-		echom "most_recent_tag: " .. g:most_recent_tag_in_changes .. "\n"
-		g:is_tag_on_page = 1
-	endif
+	#if g:most_recent_tag_in_changes_start != -1
+	#	g:most_recent_tag_in_changes_end = match(g:changes, ':', g:most_recent_tag_in_changes_start + 1)
+	#	g:most_recent_tag_in_changes = g:changes[(g:most_recent_tag_in_changes_start + 1) : (g:most_recent_tag_in_changes_end - 1)]
+	#	echom "most_recent_tag: " .. g:most_recent_tag_in_changes .. "\n"
+	#	g:is_tag_on_page = 1
+	#endif
 	# ------------------------------------------------------------
 	# Next we have to take g:most_recent_tag_in_changes and make it the
 	# first tag in matched_tag_list. We'll also have to make sure
