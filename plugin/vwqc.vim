@@ -2545,8 +2545,8 @@ def FindLastTagAddedToBuffer()
 	
 	g:is_tag_on_page                   = match(g:changes, '\(' .. g:tag_regex .. '\)\(.*\(' .. g:tag_regex .. '\)\)\@!')
 	g:most_recent_tag_in_changes       = matchstr(g:changes, '\(' .. g:tag_regex .. '\)\(.*\(' .. g:tag_regex .. '\)\)\@!')
-	g:most_recent_tag_in_changes       = g:most_recent_tag_in_changes[1 : -1]
-	echom "most recent tag: " .. g:most_recent_tag_in_changes
+	g:most_recent_tag_in_changes       = g:most_recent_tag_in_changes[1 : -2]
+	#echom "most recent tag: " .. g:most_recent_tag_in_changes
 
 	#g:tag_regex = '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' 
 
@@ -2568,7 +2568,7 @@ def FindLastTagAddedToBuffer()
 
 	if (g:is_tag_on_page >= 0)
 		g:matched_tag_list = [ g:most_recent_tag_in_changes ] 
-		echom "matched tag list first: " .. g:matched_tag_list[0] .. "\n" 
+	#	echom "matched tag list first: " .. g:matched_tag_list[0] .. "\n" 
 	endif
 enddef
 
@@ -2630,7 +2630,12 @@ def g:TagFillWithChoiceB()
 	g:bottom_line = line('.')
 	g:bottom_col = virtcol('.')
 	
-	g:block_tags_list = []
+	if (g:tag_fill_option == "bottom of contiguous block")
+		g:block_tags_list = []
+	else
+		g:block_tags_list = g:matched_tag_list
+	endif 
+
 	g:tag_block_dict  = {}
 
 	CreateBlockMetadataDict()
@@ -2716,7 +2721,7 @@ enddef
 
 def FindFirstInterviewLine()
 	execute "normal! gg"
-	g:tag_search_regex = g:interview_label_regex .. '\: \d\{4}'
+	#g:tag_search_regex = g:interview_label_regex .. '\: \d\{4}'
 	g:first_interview_line = search(g:tag_search_regex, "W")
 	cursor(g:bottom_line, g:bottom_col)
 enddef
@@ -2726,7 +2731,7 @@ def CreateBlockMetadataDict()
 
 	g:block_metadata             = {}
 	g:tags_on_line               = []
-	g:block_tags_list            = []
+	#g:block_tags_list            = []
 	g:sub_blocks_tags_lists      = []
 	#g:last_match_line = g:match_line
 	g:contiguous_block           = 1
