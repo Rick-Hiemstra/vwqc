@@ -423,7 +423,7 @@ def DoesFileNameMatchLabelRegex(test_value: string): number
 	endif
 enddef
 
-def FormatInterview(label = "default") 
+def g:FormatInterview(label = "default") 
 	var valid_label_test    = 0
 	var proposed_label      = ""
 	var file_label_mismatch_warning = "Warning not set"
