@@ -2788,12 +2788,14 @@ def CreateBlockMetadataDict()
 		g:block_tags_list = []
 	endif
 
-	#echom "block_tags_list bottom: " .. string(g:block_tags_list) .. "\n"
+	echom "block_tags_list bottom: " .. string(g:block_tags_list) .. "\n"
 	if (g:tag_fill_option == "last tag added")
 		var first_tag    = g:block_tags_list[0]
 		var rest_of_tags = g:block_tags_list[1 : ]
+		echom "rest of tags: " .. string(rest_of_tags)
 		rest_of_tags     = sort(rest_of_tags)
 		g:block_tags_list = [first_tag] + [rest_of_tags]
+
 	endif
 #		g:block_tags_list = sort(g:block_tags_list)
 #	endif
