@@ -2759,8 +2759,8 @@ def CreateBlockMetadataDict()
 		g:rest_of_tags    = g:block_tags_list[1 : ]
 		g:rest_of_tags    = sort(g:rest_of_tags)
 		g:block_tags_list = g:first_tag + g:rest_of_tags
-	else
-		g:block_tags_list = sort(g:block_tags_list)
+	#else
+	#	g:block_tags_list = sort(g:block_tags_list)
 	endif
 enddef
 
