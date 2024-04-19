@@ -2643,6 +2643,7 @@ def g:TagFillWithChoiceB()
 	if (g:tag_fill_option == "last tag added")
 		
 		FindLastTagAddedToBuffer()
+		g:block_tags_list = [ g:most_recent_tag_in_changes ]
 
 	endif
 	# ----------------------------------------------------
