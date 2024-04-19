@@ -28,10 +28,7 @@ vim9script
 # Version 0.1 - 
 # 2024-04-02	
 #
-# Updated help menus to reflect recent coding changes
-#
-# Added an autogroup that checks to see if the current vwqc wiki's tags are
-# loaded.
+# Write a function to restore a backup
 #
 # -----------------------------------------------------------------
 # ------------------------ TO DO ------------------------------
@@ -59,25 +56,25 @@ vim9script
 # -----------------------------------------------------------------
 #
 # ---- Setup ----
-# HelpMenu
-# ProjectSetup
-# CreateDefaultInterviewHeader
-# GetVWQCProjectParameters
-# ListProjectParameters
-# ParmCheck
-# DoesFileNameMatchLabelRegex
-# FormatInterview
-# FormatInterviewB
-# AugmentVimwikiLocalVars
-# PageHelp
-# DisplayPageHelp
-# CreateBackupQuery
-# CreateBackup
+## HelpMenu
+## ProjectSetup
+## CreateDefaultInterviewHeader
+## GetVWQCProjectParameters
+## ListProjectParameters
+## ParmCheck
+## DoesFileNameMatchLabelRegex
+## FormatInterview
+## FormatInterviewB
+## AugmentVimwikiLocalVars
+## PageHelp
+## DisplayPageHelp
+## CreateBackupQuery
+## CreateBackup
 #
 # ---- Annotations ----
-# Annotation
-# ExitAnnotation
-# AnnotationToggle
+## Annotation
+## ExitAnnotation
+## AnnotationToggle
 # DeleteAnnotation
 #
 # ---- Navigation ----
@@ -344,11 +341,8 @@ def GetVWQCProjectParameters()
 	g:glossary_path                    = g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag Glossary.md"
 
 	g:has_coder = 0
-	echom "test a has_coder: " .. g:has_coder .. "\n"
 	execute "normal! :let g:has_coder = has_key(g:" .. g:current_wiki_name .. ", 'coder_initials')\<CR>"
-	echom "test b has_coder: " .. g:has_coder .. "\n"
 	if (g:has_coder == 1)
-		echom "test c has_coder: " .. g:has_coder .. "\n"
 		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials'] = g:" .. g:current_wiki_name .. ".coder_initials\<CR>" 
        		g:coder_initials           = g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials']
 	else
@@ -558,9 +552,9 @@ def g:PageHelp()
 	# Find the current file name
 	
 	var current_buffer_name = expand('%:t')
-	var is_interview        = match(g:current_buffer_name, g:interview_label_regex)
-	var is_annotation       = match(g:current_buffer_name, g:interview_label_regex .. ': \d\d\d\d')
-	var is_summary          = match(g:current_buffer_name, 'Summary ')
+	var is_interview        = match(current_buffer_name, g:interview_label_regex)
+	var is_annotation       = match(current_buffer_name, g:interview_label_regex .. ': \d\d\d\d')
+	var is_summary          = match(current_buffer_name, 'Summary ')
 	var page_help_list      = []
 
 	if current_buffer_name == "index" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
