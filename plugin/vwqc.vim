@@ -2535,7 +2535,8 @@ def FindLastTagAddedToBuffer()
 			break
 		endif
 	endfor 
-	
+	g:block_tags_list = [ g:most_recent_tag_in_changes ]
+		
 enddef
 
 def FillChosenTag(id: number, result: number) 
@@ -2590,7 +2591,6 @@ def g:TagFillWithChoiceB()
 	if (g:tag_fill_option == "last tag added")
 		
 		FindLastTagAddedToBuffer()
-		g:block_tags_list = [ g:most_recent_tag_in_changes ]
 
 	endif
 	# ----------------------------------------------------
@@ -2698,9 +2698,7 @@ def CreateBlockMetadataDict()
 
 	g:block_metadata             = {}
 	g:tags_on_line               = []
-	#g:block_tags_list            = []
 	g:sub_blocks_tags_lists      = []
-	#g:last_match_line = g:match_line
 	g:contiguous_block           = 1
 	g:found_block                = 0
 	g:block_switch               = 0
@@ -2756,16 +2754,14 @@ def CreateBlockMetadataDict()
 	endif
 
 	##echom "block_tags_list bottom: " .. string(g:block_tags_list) .. "\n"
-	#if (g:tag_fill_option == "last tag added")
-	#	var first_tag    = g:block_tags_list[0]
-	#	var rest_of_tags = g:block_tags_list[1 : ]
-	#	#echom "rest of tags: " .. string(rest_of_tags)
-	#	rest_of_tags     = sort(rest_of_tags)
-	#	g:block_tags_list = [first_tag] + [rest_of_tags]
-
-	#endif
-	g:block_tags_list = sort(g:block_tags_list)
-#	endif
+	if (g:tag_fill_option == "last tag added")
+		var first_tag    = g:block_tags_list[0]
+		var rest_of_tags = g:block_tags_list[1 : ]
+		rest_of_tags     = sort(rest_of_tags)
+		g:block_tags_list = [first_tag] + [rest_of_tags]
+	else
+		g:block_tags_list = sort(g:block_tags_list)
+	endif
 enddef
 
 def CreateSubBlocksLists() 
