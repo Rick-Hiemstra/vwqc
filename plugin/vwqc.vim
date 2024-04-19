@@ -2531,64 +2531,11 @@ def FindLastTagAddedToBuffer()
 		index_inv = len_cl - 1 - index
 		g:line_has_tag = matchstrpos(getline(g:cl[0][index_inv]['lnum']), '\(' .. g:tag_regex .. '\)\(.*\(' .. g:tag_regex .. '\)\)\@!')
 		if (g:line_has_tag[1] > -1)
-			g:most_recent_tag_in_changes = g:line_has_tag[0]
+			g:most_recent_tag_in_changes = g:line_has_tag[0][1 : -2]
 			break
 		endif
 	endfor 
 	
-	#set nomore
-	#redir => g:changes
-	#changes
-	#redir END
-	#set more
-	# ------------------------------------------------------------
-	# Redraw to get past the "press Enter" message that the
-	# changes command produces
-	# ------------------------------------------------------------
-	#redraw!
-	# ------------------------------------------------------------
-	# Find the last tag in changes variable. Note the regex here
-	# finds a tag that isn't followed by a tag. This is
-	# called a negative lookahead. First you need to take out the
-	# line breaks in what is sent to the changes variable register.
-	# ------------------------------------------------------------
-#	echom string(g:changes)
-#	g:changes = substitute(g:changes, '\n', '', "g")
-#	echom "g:changes last 100: " .. g:changes[-100 : ] .. "\n"
-        
-
-#	g:most_recent_tag_in_changes       = ""
-#	g:is_tag_on_page                   = 0
-	#g:most_recent_tag_in_changes_start = match(g:changes, ':\a\w\{1,}:\(.*:\a\w\{1,}:\)\@!')
-	#g:most_recent_tag_in_changes_start = match(g:changes, ':\S\{-}:\(.*:\S\{-}:\)\@!')
-	
-	
-#	g:is_tag_on_page                   = match(g:changes, '\(' .. g:tag_regex .. '\)\(.*\(' .. g:tag_regex .. '\)\)\@!')
-#	g:most_recent_tag_in_changes       = matchstr(g:changes, '\(' .. g:tag_regex .. '\)\(.*\(' .. g:tag_regex .. '\)\)\@!')
-#	g:most_recent_tag_in_changes       = g:most_recent_tag_in_changes[1 : -2]
-#	echom "most recent tag just after it is found: " .. g:most_recent_tag_in_changes
-
-	#g:tag_regex = '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' 
-
-	# ------------------------------------------------------------
-	# If there is a tag on the page, find what it is.
-	# ------------------------------------------------------------
-	#if g:most_recent_tag_in_changes_start != -1
-	#	g:most_recent_tag_in_changes_end = match(g:changes, ':', g:most_recent_tag_in_changes_start + 1)
-	#	g:most_recent_tag_in_changes = g:changes[(g:most_recent_tag_in_changes_start + 1) : (g:most_recent_tag_in_changes_end - 1)]
-	#	echom "most_recent_tag: " .. g:most_recent_tag_in_changes .. "\n"
-	#	g:is_tag_on_page = 1
-	#endif
-	# ------------------------------------------------------------
-	# Next we have to take g:most_recent_tag_in_changes and make it the
-	# first tag in matched_tag_list. We'll also have to make sure
-	# that it doesn't appear in matched tag list twice.
-	# ------------------------------------------------------------
-	#g:block_tags_list = []
-
-	#if (g:is_tag_on_page > 0)
-	#	g:block_tags_list = [ g:most_recent_tag_in_changes ]
-	#endif
 enddef
 
 def FillChosenTag(id: number, result: number) 
