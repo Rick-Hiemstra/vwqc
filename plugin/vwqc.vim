@@ -2589,9 +2589,7 @@ def g:TagFillWithChoiceB()
 	endif
 
 	if (g:tag_fill_option == "last tag added")
-		
 		FindLastTagAddedToBuffer()
-
 	endif
 	# ----------------------------------------------------
 	# Mark the line and column number where you want the bottom of the tag block to be.
