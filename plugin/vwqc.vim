@@ -1543,7 +1543,7 @@ def CalcInterviewTagCrosstabs(unique_tags: list<string>, interview_list: list<st
 		g:tag_count_dict[interview_list[interview]] = deepcopy(g:initial_tag_dict)
 	endfor
 
-	for index in range(0, len(tags_list) - 1)
+	for index in range(0, len(g:tags_list) - 1)
 		# Increment the tag count for this tag
 		g:tag_count_dict[g:tags_list[index][0]][g:tags_list[index][2]][0] = g:tag_count_dict[g:tags_list[index][0]][g:tags_list[index][2]][0] + 1
 		# if tags_list row number minus row number minus the
