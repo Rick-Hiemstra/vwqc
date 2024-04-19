@@ -208,7 +208,7 @@ def g:HelpMenu()
 					"<leader>hm                          Help menu",
 					"<leader>ph                          Page help",
 				        "<leader>lp                          List project parameters"]
-	popup_menu(help_list , 
+	popup_menu(help_list, 
 				 { minwidth: 50,
 				 maxwidth: 100,
 				 pos: 'center',
