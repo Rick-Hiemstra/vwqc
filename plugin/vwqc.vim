@@ -2529,7 +2529,7 @@ def FindLastTagAddedToBuffer()
 
 	for index in range(0, len_cl - 1)
 		index_inv = len_cl - 1 - index
-		g:line_has_tag = matchstrpos(getline(g:cl[0][index_inv]['lnum']), g:tag_regex .. '\(.*' .. g:tag_regex .. '\)\@!')
+		g:line_has_tag = matchstrpos(getline(g:cl[0][index_inv]['lnum']), g:tag_regex .. '\(.*:\S\{-}:\)\@!')
 		if (g:line_has_tag[1] > -1)
 			g:most_recent_tag_in_changes = g:line_has_tag[0][1 : -2]
 			break
