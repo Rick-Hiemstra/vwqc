@@ -171,7 +171,7 @@ def g:HelpMenu()
 		                        "<leader>gt                          Go to",
 					"<leader>gb                          Go back", 
 				 	"<F7>                                Annotation Toggle", 
-				        " " , 
+				        " ", 
 				     	"CODING", 
 					"<F2>                                Update tags", 
 					"<F8>                                Tag omni-complete, same as <F9>",
