@@ -75,11 +75,11 @@ vim9script
 ## Annotation
 ## ExitAnnotation
 ## AnnotationToggle
-# DeleteAnnotation
+## DeleteAnnotation
 #
 # ---- Navigation ----
-# GoToReference
-# GoBackFromReference
+## GoToReference
+## GoBackFromReference
 #
 # ---- Reports ----
 # FullReport
@@ -1513,7 +1513,7 @@ enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-def CalcInterviewTagCrosstabs(tags_list: list<string>, unique_tags: list<string>, interview_list: list<string>, ext_length: number): dict<any>
+def CalcInterviewTagCrosstabs(unique_tags: list<string>, interview_list: list<string>, ext_length: number): dict<any>
 	#build the data structure that will hold the interview-tag crosstabs
 	g:tag_count_dict       = {}
 	g:initial_tag_dict     = {}
@@ -1777,7 +1777,7 @@ def g:TagStats()
 
 	g:unique_tags = sort(CreateUniqueTagList(g:tags_list))
 
-	g:tag_cross   = CalcInterviewTagCrosstabs(g:tags_list, g:unique_tags, g:interview_list, ext_length)
+	g:tag_cross   = CalcInterviewTagCrosstabs(g:unique_tags, g:interview_list, ext_length)
 	
 	# Find the longest tag in terms of the number of characters in the tag.
 	var len_longest_tag = FindLengthOfLongestTag(g:unique_tags)
@@ -2536,47 +2536,6 @@ def FindLastTagAddedToBuffer()
 		
 enddef
 
-def FillChosenTag(id: number, result: number) 
-	# ------------------------------------------------------------
-	# When ESC is press the result value will be -1. So take no action.
-	# ------------------------------------------------------------
-	if (result > 0)
-		# ------------------------------------------------------------
-		# Now we have our choice which corresponds to the matched-tag-
-		# list element. All that remains is to fill the tag.
-		# ------------------------------------------------------------
-		g:tag_to_fill = ":" .. g:matched_tag_list[result - 1] .. ":"
-		# ------------------------------------------------------------
-		# Now we have to find the range to fill
-		# ------------------------------------------------------------
-		cursor(g:bottom_line, g:bottom_col)
-		g:line_of_tag_to_fill = search(g:tag_to_fill, 'bW')
-		# ------------------------------------------------------------
-		# If the tag_to_fill is found above the cursor position, and
-		# its not more than 20 lines above the contiguously tagged
-		# block above the cursor position.
-		# ------------------------------------------------------------
-		g:proceed_to_fill = 0
-		if (g:tag_fill_option == "bottom of contiguous block")
-			g:lines_to_fill = g:bottom_line - g:line_of_tag_to_fill
-			g:proceed_to_fill = 1
-		elseif (g:line_of_tag_to_fill != 0)
-			#execute "normal! ?" g:tag_to_fill .. "\<CR>"
-			g:lines_to_fill = g:bottom_line - g:line_of_tag_to_fill
-			g:proceed_to_fill = 1
-		endif
-		# ------------------------------------------------------------
-		# This actually fills the tag.
-		# ------------------------------------------------------------
-		cursor(g:bottom_line, g:bottom_col)
-		if (g:proceed_to_fill)
-			execute "normal! V" .. g:lines_to_fill .. "k\<CR>:s/$/ " .. g:tag_to_fill .. "/\<CR>A \<ESC>"
-		else
-			confirm("Tag not found above the cursor. No action taken.",  "OK", 1)
-		endif
-	endif
-enddef
-	
 def g:TagFillWithChoiceB() 
 	# ---------------------------------------------
 	# Set tag fill mode
