@@ -166,7 +166,7 @@ g:tag_regex = '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)'
 # ------------------------------------------------------
 # Displays a popup help menu
 # ------------------------------------------------------
-def HelpMenu()
+def g:HelpMenu()
 	var help_list = [             "NAVIGATION", 
 		                        "<leader>gt                          Go to",
 					"<leader>gb                          Go back", 
