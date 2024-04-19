@@ -1545,22 +1545,22 @@ def CalcInterviewTagCrosstabs(unique_tags: list<string>, interview_list: list<st
 
 	for index in range(0, len(tags_list) - 1)
 		# Increment the tag count for this tag
-		g:tag_count_dict[tags_list[index][0]][tags_list[index][2]][0] = g:tag_count_dict[tags_list[index][0]][tags_list[index][2]][0] + 1
+		g:tag_count_dict[g:tags_list[index][0]][g:tags_list[index][2]][0] = g:tag_count_dict[g:tags_list[index][0]][g:tags_list[index][2]][0] + 1
 		# if tags_list row number minus row number minus the
 		# correspondent tag tracking number isn't 1, i.e. contiguous
-		if ((tags_list[index][1] - g:tag_count_dict[tags_list[index][0]][tags_list[index][2]][2]) != 1)
+		if ((g:tags_list[index][1] - g:tag_count_dict[g:tags_list[index][0]][g:tags_list[index][2]][2]) != 1)
 			#Mark that you've entered a block 
-			g:tag_count_dict[tags_list[index][0]][tags_list[index][2]][3] = 1
+			g:tag_count_dict[g:tags_list[index][0]][g:tags_list[index][2]][3] = 1
 			#Increment the block counter for this tag
-			g:tag_count_dict[tags_list[index][0]][tags_list[index][2]][1] = g:tag_count_dict[tags_list[index][0]][tags_list[index][2]][1] + 1
+			g:tag_count_dict[g:tags_list[index][0]][g:tags_list[index][2]][1] = g:tag_count_dict[g:tags_list[index][0]][g:tags_list[index][2]][1] + 1
 		else
 			# Reset the block counter because you're
 			# inside a block now. There is no need to
 			# increment the block counter.
-			g:tag_count_dict[tags_list[index][0]][tags_list[index][2]][3] = 0
+			g:tag_count_dict[g:tags_list[index][0]][g:tags_list[index][2]][3] = 0
 		endif
 		# Set the last line for this kind of tag equal to the line of the tag we've been considering in this loop.
-		g:tag_count_dict[tags_list[index][0]][tags_list[index][2]][2] = tags_list[index][1]
+		g:tag_count_dict[g:tags_list[index][0]][g:tags_list[index][2]][2] = g:tags_list[index][1]
 	endfor
 	return g:tag_count_dict
 enddef
