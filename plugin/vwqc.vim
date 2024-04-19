@@ -2878,8 +2878,7 @@ def ProcessLineMetadata()
 		if (match(g:line_metadata[index], ':\S\{-}:') != -1)
 			g:tags_on_line = g:tags_on_line + [ g:line_metadata[index][1 : -2] ]
 			if (index(g:block_tags_list, g:line_metadata[index][1 : -2]) == -1)
-				#g:block_tags_list = g:block_tags_list + [ g:line_metadata[index][1 : -2] ]
-				g:block_tags_list = [ g:line_metadata[index][1 : -2] ] + g:block_tags_list 
+				g:block_tags_list = g:block_tags_list + [ g:line_metadata[index][1 : -2] ]
 			endif
 		else
 			g:non_tag_metadata = g:non_tag_metadata .. " " .. g:line_metadata[index]
