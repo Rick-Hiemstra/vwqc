@@ -346,10 +346,11 @@ def GetVWQCProjectParameters()
 	g:has_coder = 0
 	execute "normal! :let g:has_coder = has_key(g:" .. g:current_wiki_name .. ", 'coder_initials')\<CR>"
 	if (g:has_coder == 1)
+		echom "test a" .. g:has_coder
 		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials'] = g:" .. g:current_wiki_name .. ".coder_initials\<CR>" 
-       		g:coder_initials                 = g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials']
+       		g:coder_initials           = g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials']
 	else
-       		g:coder_initials                 = "Unknown coder"
+       		g:coder_initials           = "Unknown coder"
 	endif
 
 	g:wiki_extension   	   = g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
