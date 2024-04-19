@@ -2515,38 +2515,58 @@ enddef
 # :changes into register c and then searching it for the
 # first tag. 
 # ------------------------------------------------------------
-def FindLastTagAddedToBuffer() 
+def FindLastTagAddedToBuffer()
 	# ------------------------------------------------------------
 	#  Redirect output to register changes variable
 	# ------------------------------------------------------------
-	set nomore
-	redir => g:changes
-	changes
-	redir END
-	set more
+	g:cl = []
+	
+	g:cl = getchangelist()
+	
+	var len_cl     = len(g:cl[0])
+	var index_inv  = 0 
+	g:line_has_tag = []
+
+	for index in range(0, len_cl - 1)
+		index_inv = len_cl - 1 - index
+		g:line_has_tag = matchstrpos(getline(g:cl[0][index_inv]['lnum']), '\(' .. g:tag_regex .. '\)\(.*\(' .. g:tag_regex .. '\)\)\@!')
+		if (g:line_has_tag[1] > -1)
+			g:most_recent_tag_in_changes = g:line_has_tag[0]
+			break
+		endif
+	endfor 
+	
+	#set nomore
+	#redir => g:changes
+	#changes
+	#redir END
+	#set more
 	# ------------------------------------------------------------
 	# Redraw to get past the "press Enter" message that the
 	# changes command produces
 	# ------------------------------------------------------------
-	redraw!
+	#redraw!
 	# ------------------------------------------------------------
 	# Find the last tag in changes variable. Note the regex here
 	# finds a tag that isn't followed by a tag. This is
 	# called a negative lookahead. First you need to take out the
 	# line breaks in what is sent to the changes variable register.
 	# ------------------------------------------------------------
-	g:changes = substitute(g:changes, '\n', '', "g")
+#	echom string(g:changes)
+#	g:changes = substitute(g:changes, '\n', '', "g")
+#	echom "g:changes last 100: " .. g:changes[-100 : ] .. "\n"
+        
 
-	g:most_recent_tag_in_changes       = ""
-	g:is_tag_on_page                   = 0
+#	g:most_recent_tag_in_changes       = ""
+#	g:is_tag_on_page                   = 0
 	#g:most_recent_tag_in_changes_start = match(g:changes, ':\a\w\{1,}:\(.*:\a\w\{1,}:\)\@!')
 	#g:most_recent_tag_in_changes_start = match(g:changes, ':\S\{-}:\(.*:\S\{-}:\)\@!')
 	
 	
-	g:is_tag_on_page                   = match(g:changes, '\(' .. g:tag_regex .. '\)\(.*\(' .. g:tag_regex .. '\)\)\@!')
-	g:most_recent_tag_in_changes       = matchstr(g:changes, '\(' .. g:tag_regex .. '\)\(.*\(' .. g:tag_regex .. '\)\)\@!')
-	g:most_recent_tag_in_changes       = g:most_recent_tag_in_changes[1 : -2]
-	#echom "most recent tag: " .. g:most_recent_tag_in_changes
+#	g:is_tag_on_page                   = match(g:changes, '\(' .. g:tag_regex .. '\)\(.*\(' .. g:tag_regex .. '\)\)\@!')
+#	g:most_recent_tag_in_changes       = matchstr(g:changes, '\(' .. g:tag_regex .. '\)\(.*\(' .. g:tag_regex .. '\)\)\@!')
+#	g:most_recent_tag_in_changes       = g:most_recent_tag_in_changes[1 : -2]
+#	echom "most recent tag just after it is found: " .. g:most_recent_tag_in_changes
 
 	#g:tag_regex = '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' 
 
@@ -2564,12 +2584,11 @@ def FindLastTagAddedToBuffer()
 	# first tag in matched_tag_list. We'll also have to make sure
 	# that it doesn't appear in matched tag list twice.
 	# ------------------------------------------------------------
-	g:matched_tag_list = []
+	#g:block_tags_list = []
 
-	if (g:is_tag_on_page >= 0)
-		g:matched_tag_list = [ g:most_recent_tag_in_changes ] 
-	#	echom "matched tag list first: " .. g:matched_tag_list[0] .. "\n" 
-	endif
+	#if (g:is_tag_on_page > 0)
+	#	g:block_tags_list = [ g:most_recent_tag_in_changes ]
+	#endif
 enddef
 
 def FillChosenTag(id: number, result: number) 
@@ -2622,7 +2641,9 @@ def g:TagFillWithChoiceB()
 	endif
 
 	if (g:tag_fill_option == "last tag added")
+		
 		FindLastTagAddedToBuffer()
+
 	endif
 	# ----------------------------------------------------
 	# Mark the line and column number where you want the bottom of the tag block to be.
@@ -2632,8 +2653,6 @@ def g:TagFillWithChoiceB()
 	
 	if (g:tag_fill_option == "bottom of contiguous block")
 		g:block_tags_list = []
-	else
-		g:block_tags_list = g:matched_tag_list
 	endif 
 
 	g:tag_block_dict  = {}
@@ -2788,16 +2807,16 @@ def CreateBlockMetadataDict()
 		g:block_tags_list = []
 	endif
 
-	echom "block_tags_list bottom: " .. string(g:block_tags_list) .. "\n"
-	if (g:tag_fill_option == "last tag added")
-		var first_tag    = g:block_tags_list[0]
-		var rest_of_tags = g:block_tags_list[1 : ]
-		echom "rest of tags: " .. string(rest_of_tags)
-		rest_of_tags     = sort(rest_of_tags)
-		g:block_tags_list = [first_tag] + [rest_of_tags]
+	##echom "block_tags_list bottom: " .. string(g:block_tags_list) .. "\n"
+	#if (g:tag_fill_option == "last tag added")
+	#	var first_tag    = g:block_tags_list[0]
+	#	var rest_of_tags = g:block_tags_list[1 : ]
+	#	#echom "rest of tags: " .. string(rest_of_tags)
+	#	rest_of_tags     = sort(rest_of_tags)
+	#	g:block_tags_list = [first_tag] + [rest_of_tags]
 
-	endif
-#		g:block_tags_list = sort(g:block_tags_list)
+	#endif
+	g:block_tags_list = sort(g:block_tags_list)
 #	endif
 enddef
 
