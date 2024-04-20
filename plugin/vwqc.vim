@@ -1656,7 +1656,7 @@ def PrintTagInterviewSummary(tag_cross: dict<any>, tag_: string, interview_list:
 
 	execute "normal! i|:---|---:|---:|---:|\n"
 	execute "normal! ki\<ESC>j"
-	ave_total_blocks_size = printf("%.1f", str2float(total_tags) / str2float(total_blocks))
+	ave_total_blocks_size = printf("%.1f", 1.0 * total_tags / total_blocks)
 	execute "normal! i| Totals |" ..
 				 total_tags            .. "|" .. 
 				 total_blocks          .. "|" ..
