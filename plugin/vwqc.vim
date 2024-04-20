@@ -1784,7 +1784,8 @@ def g:TagStats()
 	endfor
 
 	#Creates the g:unique_tags list 
-	sort(CreateUniqueTagList())
+	CreateUniqueTagList()
+	sort(g:unique_tags)
 
 	g:tag_cross   = CalcInterviewTagCrosstabs(g:unique_tags, g:interview_list, ext_length)
 	
