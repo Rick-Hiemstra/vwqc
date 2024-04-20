@@ -1436,6 +1436,7 @@ enddef
 # 
 # -----------------------------------------------------------------
 def GetInterviewFileList() 
+
 	var file_to_add = "undefined"
 	execute "normal! :cd %:p:h\<CR>"
 	# get a list of all the files and directories in the pwd. Note the
@@ -1443,6 +1444,7 @@ def GetInterviewFileList()
 	# '.' means the current directory and the second argument '*' means
 	# all.
 	var file_list_all = globpath('.', '*', 0, 1)
+	echom "file_list_all: " ..  file_list_all .. "\n"
 	# build regex we'll use just to find our interview files. 
 	var file_regex = g:interview_label_regex .. '.md'
 	#  cull the list for just those files that are interview files. the
@@ -1492,7 +1494,7 @@ def CrawlBufferTags(interview: number, interview_name: string)
 					endif
 				endfor
 				# if we have the tag, delete it
-				if g:have_tag 
+				if (g:have_tag != 0)
 					execute "normal! gvx"
 				else
 					g:tags_on_line = g:tags_on_line + [ getreg('@') ]
@@ -1752,6 +1754,9 @@ def FindLengthOfLongestTag(tag_list: list<string>): number
 	return longest_tag_length
 enddef
 
+def g:TestFunc(a: number, b: string): dict<any>
+
+enddef 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
@@ -1763,8 +1768,9 @@ def g:TagStats()
 	var interview_to_crawl = "Undefined"
 
 	# save buffer number of current file to register 'a' so you can return here
-	var buffer_to_return_to = bufnr('%')
+	var g:buffer_to_return_to = bufnr('%')
 	
+	echom "g:buffer_to_return_to: " ..  g:buffer_to_return_to .. "\n"
 	g:interview_list = []
 	GetInterviewFileList()
 
@@ -1805,7 +1811,7 @@ def g:TagStats()
 	# Return to the buffer where these charts and graphs are going to be
 	# produced and clear out the buffer.
 	#execute "normal! :b\<C-R>a\<CR>gg"
-	execute "normal! :b" .. buffer_to_return_to .. "\<CR>gg"
+	execute "normal! :b" .. g:buffer_to_return_to .. "\<CR>gg"
 	execute "normal! ggVGd"
 
 	# Print interview tag summary tables
