@@ -1444,7 +1444,7 @@ def GetInterviewFileList()
 	# '.' means the current directory and the second argument '*' means
 	# all.
 	var file_list_all = globpath('.', '*', 0, 1)
-	echom "file_list_all: " ..  file_list_all .. "\n"
+	echom "file_list_all: " ..  string(file_list_all) .. "\n"
 	# build regex we'll use just to find our interview files. 
 	var file_regex = g:interview_label_regex .. '.md'
 	#  cull the list for just those files that are interview files. the
