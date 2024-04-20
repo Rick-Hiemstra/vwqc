@@ -1588,7 +1588,7 @@ enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-def PrintInterviewTagSummary(tag_cross: dict<any>, interview: string, unique_tags: list<string>) 
+def PrintInterviewTagSummary(interview: string, unique_tags: list<string>) 
 	var total_tags     = 0
 	var total_blocks   = 0
 	var ave_block_size = 0
@@ -1601,14 +1601,14 @@ def PrintInterviewTagSummary(tag_cross: dict<any>, interview: string, unique_tag
 	execute "normal! ki\<ESC>j"
 
 	for tag_index in range(0, (len(unique_tags) - 1))
-		ave_block_size = printf("%.1f", str2float(tag_cross[interview][unique_tags[tag_index]][0]) / str2float(tag_cross[interview][unique_tags[tag_index]][1]))
+		ave_block_size = printf("%.1f", str2float(g:tag_cross[interview][unique_tags[tag_index]][0]) / str2float(g:tag_cross[interview][unique_tags[tag_index]][1]))
 		execute "normal! i|" .. unique_tags[tag_index] .. "|" .. 
-					 tag_cross[interview][unique_tags[tag_index]][0]. "|" .. 
-					 tag_cross[interview][unique_tags[tag_index]][1]. "|" ..
+					 g:tag_cross[interview][unique_tags[tag_index]][0]. "|" .. 
+					 g:tag_cross[interview][unique_tags[tag_index]][1]. "|" ..
 					 ave_block_size        .. "|\n"
 		execute "normal! ki\<ESC>j"
-		total_tags   = total_tags   + tag_cross[interview][unique_tags[tag_index]][0]
-		total_blocks = total_blocks + tag_cross[interview][unique_tags[tag_index]][1]
+		total_tags   = total_tags   + g:tag_cross[interview][unique_tags[tag_index]][0]
+		total_blocks = total_blocks + g:tag_cross[interview][unique_tags[tag_index]][1]
 	endfor
 
 	execute "normal! i|:---|---:|---:|---:|\n"
@@ -1807,7 +1807,7 @@ def g:TagStats()
 
 	# Print interview tag summary tables
 	for interview in range(0, (len(g:interview_list) - 1))
-		PrintInterviewTagSummary(g:tag_cross, g:interview_list[interview], g:unique_tags)	
+		PrintInterviewTagSummary(g:interview_list[interview], g:unique_tags)	
 	endfor
 	#Print tag interview summary tables
 	for tag_index in range(0, (len(g:unique_tags) - 1))
