@@ -1607,7 +1607,7 @@ def PrintInterviewTagSummary(interview: string)
 		echom "g:tag_cross[interview][g:unique_tags[tag_index]][0]: " .. g:tag_cross[interview][g:unique_tags[tag_index]][0] .. "\n"
 		echom "g:tag_cross[interview][g:unique_tags[tag_index]][1]: " .. g:tag_cross[interview][g:unique_tags[tag_index]][1] .. "\n"
 
-		ave_block_size = printf("%.1f", str2float(g:tag_cross[interview][g:unique_tags[tag_index]][0]) / str2float(g:tag_cross[interview][g:unique_tags[tag_index]][1]))
+		ave_block_size = printf("%.1f", 1.0 * g:tag_cross[interview][g:unique_tags[tag_index]][0] / g:tag_cross[interview][g:unique_tags[tag_index]][1])
 		execute "normal! i|" .. g:unique_tags[tag_index] .. "|" .. 
 					 g:tag_cross[interview][g:unique_tags[tag_index]][0] .. "|" .. 
 					 g:tag_cross[interview][g:unique_tags[tag_index]][1] .. "|" ..
@@ -1645,7 +1645,7 @@ def PrintTagInterviewSummary(tag_cross: dict<any>, tag_: string, interview_list:
 	execute "normal! ki\<ESC>j"
 
 	for interview_index in range(0, (len(interview_list) - 1))
-		ave_block_size = printf("%.1f", str2float(tag_cross[interview_list[interview_index]][tag_][0]) / str2float(tag_cross[interview_list[interview_index]][tag_][1]))
+		ave_block_size = printf("%.1f", 1.0 * tag_cross[interview_list[interview_index]][tag_][0]) / tag_cross[interview_list[interview_index]][tag_][1])
 		execute "normal! i|" interview_list[interview_index] .. "|" .. 
 					 tag_cross[interview_list[interview_index]][tag_][0] .. "|" .. 
 					 tag_cross[interview_list[interview_index]][tag_][1] .. "|" ..
