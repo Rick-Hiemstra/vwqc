@@ -1676,7 +1676,7 @@ def GraphInterviewTagSummary(tag_cross: dict<any>, interview: string, unique_tag
 	var tag_amount      = 0
 
 	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
-	execute "normal! Gi**Graph: Interview " interview .. "** (Updated: " .. report_update_time .. ")\n"
+	execute "normal! Gi**Graph: Interview " .. interview .. "** (Updated: " .. report_update_time .. ")\n"
 
 	for tag_index in range(0, (len(unique_tags) - 1))
 		offset       = longest_tag_length - len(unique_tags[tag_index])
@@ -1706,7 +1706,7 @@ def GraphTagInterviewSummary(tag_cross: dict<any>, tag_: string, interviews: lis
 	var tag_amount      = 0
 
 	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
-	execute "normal! Gi**Graph: Tag " tag .. "** (Updated: " .. report_update_time .. ")\n"
+	execute "normal! Gi**Graph: Tag " .. tag_ .. "** (Updated: " .. report_update_time .. ")\n"
 
 	for interview_index in range(0, (len(interviews) - 1))
 		offset       = longest_tag_length - len(interviews[interview_index])
