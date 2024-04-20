@@ -1635,6 +1635,7 @@ def PrintTagInterviewSummary(tag_cross: dict<any>, tag_: string, interview_list:
 	var total_tags   = 0
 	var total_blocks = 0
 	var ave_block_size = "Undefined"
+	var ave_total_blocks_size = "Undefined"
 
 	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
 	execute "normal! Gi**Tag " tag_ .. " tag summary last updated at " .. report_update_time .. "**\n\n"
