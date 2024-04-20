@@ -1608,8 +1608,8 @@ def PrintInterviewTagSummary(interview: string)
 
 		ave_block_size = printf("%.1f", str2float(g:tag_cross[interview][g:unique_tags[tag_index]][0]) / str2float(g:tag_cross[interview][g:unique_tags[tag_index]][1]))
 		execute "normal! i|" .. g:unique_tags[tag_index] .. "|" .. 
-					 g:tag_cross[interview][g:unique_tags[tag_index]][0]. "|" .. 
-					 g:tag_cross[interview][g:unique_tags[tag_index]][1]. "|" ..
+					 g:tag_cross[interview][g:unique_tags[tag_index]][0] .. "|" .. 
+					 g:tag_cross[interview][g:unique_tags[tag_index]][1] .. "|" ..
 					 ave_block_size        .. "|\n"
 		execute "normal! ki\<ESC>j"
 		total_tags   = total_tags   + g:tag_cross[interview][g:unique_tags[tag_index]][0]
@@ -1645,9 +1645,9 @@ def PrintTagInterviewSummary(tag_cross: dict<any>, tag_: string, interview_list:
 	for interview_index in range(0, (len(interview_list) - 1))
 		ave_block_size = printf("%.1f", str2float(tag_cross[interview_list[interview_index]][tag_][0]) / str2float(tag_cross[interview_list[interview_index]][tag_][1]))
 		execute "normal! i|" interview_list[interview_index] .. "|" .. 
-					\ tag_cross[interview_list[interview_index]][tag_][0] "|" .. 
-					\ tag_cross[interview_list[interview_index]][tag_][1] "|" ..
-					\ ave_block_size         "|\n"
+					 tag_cross[interview_list[interview_index]][tag_][0] .. "|" .. 
+					 tag_cross[interview_list[interview_index]][tag_][1] .. "|" ..
+					 ave_block_size     ..    "|\n"
 		execute "normal! ki\<ESC>j"
 		total_tags   = total_tags   + tag_cross[interview_list[interview_index]][tag_][0]
 		total_blocks = total_blocks + tag_cross[interview_list[interview_index]][tag_][1]
@@ -1656,10 +1656,10 @@ def PrintTagInterviewSummary(tag_cross: dict<any>, tag_: string, interview_list:
 	execute "normal! i|:---|---:|---:|---:|\n"
 	execute "normal! ki\<ESC>j"
 	var ave_total_blocks_size = printf("%.1f", str2float(total_tags) / str2float(total_blocks))
-	execute "normal! i| Totals |" 
-				\ total_tags             "|" .. 
-				\ total_blocks           "|" ..
-				\ ave_total_blocks_size  "|\n\n"
+	execute "normal! i| Totals |" ..
+				 total_tags            .. "|" .. 
+				 total_blocks          .. "|" ..
+				 ave_total_blocks_size .. "|\n\n"
 	#execute "normal! 2ki\<ESC>2j"
 	execute "normal! 2ki\<ESC>2j"
 enddef
@@ -1681,18 +1681,17 @@ def GraphInterviewTagSummary(tag_cross: dict<any>, interview: string, unique_tag
 		block_amount = tag_cross[interview][unique_tags[tag_index]][1]
 		tag_amount   = tag_cross[interview][unique_tags[tag_index]][0] - block_amount
 		if tag_cross[interview][unique_tags[tag_index]][0] != 0
-			execute "normal! i" unique_tags[tag_index] .. " " .. repeat(" ", offset) ..
-						\	"|" repeat('□', str2nr(string(round(block_amount * bar_scale)))) .. 
-						\	repeat('▤', str2nr(string(round(tag_amount * bar_scale)))) 
-						\ 	" " tag_cross[interview][unique_tags[tag_index]][0] .. 
-						\	"(" tag_cross[interview][unique_tags[tag_index]][1] .. ")\n"
+			execute "normal! i" .. unique_tags[tag_index] .. " " .. repeat(" ", offset) ..
+							"|" repeat('□', str2nr(string(round(block_amount * bar_scale)))) .. 
+							repeat('▤', str2nr(string(round(tag_amount * bar_scale)))) ..
+						 	" " .. tag_cross[interview][unique_tags[tag_index]][0] .. 
+							"(" .. tag_cross[interview][unique_tags[tag_index]][1] .. ")\n"
 		else
-			execute "normal! i" unique_tags[tag_index] .. " " .. repeat(" ", offset) ..
-						\	"|\n"
+			execute "normal! i" .. unique_tags[tag_index] .. " " .. repeat(" ", offset) .. "|\n"
 		endif
 	endfor
 	execute "normal! iLegend: □ = coding block bar over top of tag bar. ▤ = tag bar.\n"
-	execute "normal! iScale: " bar_scale_print .. " square characters represent 1 observation.\n\n"
+	execute "normal! iScale: " .. bar_scale_print .. " square characters represent 1 observation.\n\n"
 enddef
 
 # -----------------------------------------------------------------
@@ -1712,18 +1711,17 @@ def GraphTagInterviewSummary(tag_cross: dict<any>, tag_: string, interviews: lis
 		block_amount = tag_cross[interviews[interview_index]][tag_][1]
 		tag_amount   = tag_cross[interviews[interview_index]][tag_][0] - block_amount
 		if tag_cross[interviews[interview_index]][tag_][0] != 0
-			execute "normal! i" interviews[interview_index] .. " " .. repeat(" ", offset) ..
-						\	"|" repeat('□', str2nr(string(round(block_amount * bar_scale)))) .. 
-						\	repeat('▤', str2nr(string(round(tag_amount * bar_scale)))) 
-						\ 	" " tag_cross[interviews[interview_index]][tag_][0] .. 
-						\	"(" tag_cross[interviews[interview_index]][tag_][1] .. ")\n"
+			execute "normal! i" .. interviews[interview_index] .. " " .. repeat(" ", offset) ..
+							"|" .. repeat('□', str2nr(string(round(block_amount * bar_scale)))) .. 
+							repeat('▤', str2nr(string(round(tag_amount * bar_scale)))) ..
+						 	" " .. tag_cross[interviews[interview_index]][tag_][0] .. 
+							"(" .. tag_cross[interviews[interview_index]][tag_][1] .. ")\n"
 		else
-			execute "normal! i" interviews[interview_index] .. " " .. repeat(" ", offset) ..
-						\	"|\n"
+			execute "normal! i" interviews[interview_index] .. " " .. repeat(" ", offset) .. "|\n"
 		endif
 	endfor
 	execute "normal! iLegend: □ = coding block bar over top of tag bar. ▤ = tag bar.\n"
-	execute "normal! iScale: " bar_scale_print .. " square characters represent 1 observation.\n\n"
+	execute "normal! iScale: " .. bar_scale_print .. " square characters represent 1 observation.\n\n"
 enddef
 
 # -----------------------------------------------------------------
