@@ -1591,9 +1591,10 @@ enddef
 # 
 # -----------------------------------------------------------------
 def PrintInterviewTagSummary(interview: string) 
-	var total_tags     = 0
-	var total_blocks   = 0
-	var ave_block_size = "Undefined"
+	var total_tags           = 0
+	var total_blocks         = 0
+	var ave_block_size       = "Undefined"
+	var ave_total_block_size = "Undefined"
 
 	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
 	execute "normal! Gi**Interview " .. interview .. " tag summary last updated at " .. report_update_time .. "**\n\n"
@@ -1618,12 +1619,11 @@ def PrintInterviewTagSummary(interview: string)
 
 	execute "normal! i|:---|---:|---:|---:|\n"
 	execute "normal! ki\<ESC>j"
-	var ave_total_blocks_size = printf("%.1f", str2float(total_tags) / str2float(total_blocks))
+	ave_total_blocks_size = printf("%.1f", str2float(total_tags) / str2float(total_blocks))
 	execute "normal! i| Totals |" .. 
 				 total_tags            .. "|" .. 
 				 total_blocks          .. "|" ..
 				 ave_total_blocks_size .. "|\n\n"
-	#execute "normal! 2ki\<ESC>2j"
 	execute "normal! 2ki\<ESC>2j"
 enddef
 
