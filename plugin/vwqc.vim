@@ -1645,7 +1645,7 @@ def PrintTagInterviewSummary(tag_: string, interview_list: list<string>)
 	execute "normal! ki\<ESC>j"
 
 	for interview_index in range(0, (len(interview_list) - 1))
-		ave_block_size = printf("%.1f", 1.0 * g:tag_cross[interview_list[interview_index]][tag_][0]) / g:tag_cross[interview_list[interview_index]][tag_][1])
+		ave_block_size = printf("%.1f", 1.0 * g:tag_cross[interview_list[interview_index]][tag_][0] / g:tag_cross[interview_list[interview_index]][tag_][1])
 		execute "normal! i|" interview_list[interview_index] .. "|" .. 
 					 g:tag_cross[interview_list[interview_index]][tag_][0] .. "|" .. 
 					 g:tag_cross[interview_list[interview_index]][tag_][1] .. "|" ..
