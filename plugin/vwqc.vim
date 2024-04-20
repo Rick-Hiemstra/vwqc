@@ -1782,7 +1782,7 @@ def g:TagStats()
 	# Find the longest tag in terms of the number of characters in the tag.
 	var len_longest_tag = FindLengthOfLongestTag(g:unique_tags)
 
-	var window_width = winwidth('%')
+	var window_width = winwidth(win_getid())
 
 	# Find the largest tag and block tallies. This will be used in the scale calculation for graphs.
 	# Multiplying by 1.0 is done to coerce integers to floats.
