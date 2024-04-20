@@ -1678,7 +1678,7 @@ def GraphInterviewTagSummary(interview: string, longest_tag_length: number, bar_
 	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
 	execute "normal! Gi**Graph: Interview " .. interview .. "** (Updated: " .. report_update_time .. ")\n"
 
-	for tag_index in range(0, (len(unique_tags) - 1))
+	for tag_index in range(0, (len(g:unique_tags) - 1))
 		offset       = longest_tag_length - len(g:unique_tags[tag_index])
 		block_amount = g:tag_cross[interview][g:unique_tags[tag_index]][1]
 		tag_amount   = g:tag_cross[interview][g:unique_tags[tag_index]][0] - block_amount
