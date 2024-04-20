@@ -1729,14 +1729,13 @@ enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-def CreateUniqueTagList(): list<string>
-	var unique_tags = []
+def CreateUniqueTagList()
+	g:unique_tags = []
 	for index in range(0, len(g:tags_list) - 1)
-		if (index(unique_tags, g:tags_list[index][2]) == -1)
-			unique_tags = unique_tags + [g:tags_list[index][2]]
+		if (index(g:unique_tags, g:tags_list[index][2]) == -1)
+			g:unique_tags = g:unique_tags + [g:tags_list[index][2]]
 		endif
 	endfor
-	return unique_tags
 enddef 
 
 # -----------------------------------------------------------------
@@ -1784,7 +1783,8 @@ def g:TagStats()
 		CrawlBufferTags(interview, interview_to_crawl)	
 	endfor
 
-	g:unique_tags = sort(CreateUniqueTagList())
+	#Creates the g:unique_tags list 
+	sort(CreateUniqueTagList())
 
 	g:tag_cross   = CalcInterviewTagCrosstabs(g:unique_tags, g:interview_list, ext_length)
 	
