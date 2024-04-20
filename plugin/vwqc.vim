@@ -1768,7 +1768,7 @@ def g:TagStats()
 	var interview_to_crawl = "Undefined"
 
 	# save buffer number of current file to register 'a' so you can return here
-	var g:buffer_to_return_to = bufnr('%')
+	g:buffer_to_return_to = bufnr('%')
 	
 	echom "g:buffer_to_return_to: " ..  g:buffer_to_return_to .. "\n"
 	g:interview_list = []
