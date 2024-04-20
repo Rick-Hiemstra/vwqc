@@ -1593,7 +1593,7 @@ enddef
 def PrintInterviewTagSummary(interview: string) 
 	var total_tags     = 0
 	var total_blocks   = 0
-	var ave_block_size = 0
+	var ave_block_size = "Undefined"
 
 	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
 	execute "normal! Gi**Interview " .. interview .. " tag summary last updated at " .. report_update_time .. "**\n\n"
@@ -1606,8 +1606,7 @@ def PrintInterviewTagSummary(interview: string)
 		echom "g:tag_cross[interview][g:unique_tags[tag_index]][0]: " .. g:tag_cross[interview][g:unique_tags[tag_index]][0] .. "\n"
 		echom "g:tag_cross[interview][g:unique_tags[tag_index]][1]: " .. g:tag_cross[interview][g:unique_tags[tag_index]][1] .. "\n"
 
-		#ave_block_size = printf("%.1f", str2float(g:tag_cross[interview][g:unique_tags[tag_index]][0]) / str2float(g:tag_cross[interview][g:unique_tags[tag_index]][1]))
-		ave_block_size = "fix later"
+		ave_block_size = printf("%.1f", str2float(g:tag_cross[interview][g:unique_tags[tag_index]][0]) / str2float(g:tag_cross[interview][g:unique_tags[tag_index]][1]))
 		execute "normal! i|" .. g:unique_tags[tag_index] .. "|" .. 
 					 g:tag_cross[interview][g:unique_tags[tag_index]][0]. "|" .. 
 					 g:tag_cross[interview][g:unique_tags[tag_index]][1]. "|" ..
@@ -1634,7 +1633,7 @@ enddef
 def PrintTagInterviewSummary(tag_cross: dict<any>, tag_: string, interview_list: list<string>) 
 	var total_tags   = 0
 	var total_blocks = 0
-	var ave_block_size = 1.0
+	var ave_block_size = "Undefined"
 
 	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
 	execute "normal! Gi**Tag " tag_ .. " tag summary last updated at " .. report_update_time .. "**\n\n"
