@@ -1606,7 +1606,8 @@ def PrintInterviewTagSummary(interview: string)
 		echom "g:tag_cross[interview][g:unique_tags[tag_index]][0]: " .. g:tag_cross[interview][g:unique_tags[tag_index]][0] .. "\n"
 		echom "g:tag_cross[interview][g:unique_tags[tag_index]][1]: " .. g:tag_cross[interview][g:unique_tags[tag_index]][1] .. "\n"
 
-		ave_block_size = printf("%.1f", str2float(g:tag_cross[interview][g:unique_tags[tag_index]][0]) / str2float(g:tag_cross[interview][g:unique_tags[tag_index]][1]))
+		#ave_block_size = printf("%.1f", str2float(g:tag_cross[interview][g:unique_tags[tag_index]][0]) / str2float(g:tag_cross[interview][g:unique_tags[tag_index]][1]))
+		ave_block_size = "fix later"
 		execute "normal! i|" .. g:unique_tags[tag_index] .. "|" .. 
 					 g:tag_cross[interview][g:unique_tags[tag_index]][0]. "|" .. 
 					 g:tag_cross[interview][g:unique_tags[tag_index]][1]. "|" ..
