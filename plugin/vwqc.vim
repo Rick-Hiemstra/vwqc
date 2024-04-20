@@ -1601,6 +1601,9 @@ def PrintInterviewTagSummary(interview: string)
 	execute "normal! ki\<ESC>j"
 
 	for tag_index in range(0, (len(g:unique_tags) - 1))
+		echom "g:tag_cross[interview][g:unique_tags[tag_index]][0]: " .. g:tag_cross[interview][g:unique_tags[tag_index]][0] .. "\n"
+		echom "g:tag_cross[interview][g:unique_tags[tag_index]][1]: " .. g:tag_cross[interview][g:unique_tags[tag_index]][1] .. "\n"
+
 		ave_block_size = printf("%.1f", str2float(g:tag_cross[interview][g:unique_tags[tag_index]][0]) / str2float(g:tag_cross[interview][g:unique_tags[tag_index]][1]))
 		execute "normal! i|" .. g:unique_tags[tag_index] .. "|" .. 
 					 g:tag_cross[interview][g:unique_tags[tag_index]][0]. "|" .. 
