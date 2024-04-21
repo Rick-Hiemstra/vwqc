@@ -2023,10 +2023,10 @@ def PopulateAnnoLineList(buf_type: string)
 	g:current_anno_dict           = {}
 	g:current_anno_int_name       = GetAnnoInterview(g:current_buf_name)
 	g:anno_text                   = GetAnnoText(g:ll_bufnr)
-	g:current_anno_dict = { "int_name"    : g:current_anno_int_name,
-				   "anno_name"   : g:current_buf_name,
-				   "bufnr"       : g:ll_bufnr,
-				   "text"        : g:anno_text }
+	g:current_anno_dict = { "int_name":        g:current_anno_int_name,
+				   "anno_name":    g:current_buf_name,
+				   "bufnr":        g:ll_bufnr,
+				   "text":         g:anno_text }
 	
 	if len(g:anno_dict) == 0
 		g:anno_dict[g:current_anno_dict.int_name] = [ g:current_anno_dict ]
