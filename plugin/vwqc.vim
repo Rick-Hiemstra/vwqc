@@ -1142,7 +1142,7 @@ def g:MetaReport(search_term: string)
 	g:Report(search_term,  "meta", "MetaReport", "meta") 
 enddef
 
-def VWSReport(search_term: string)
+def g:VWSReport(search_term: string)
 	g:Report(search_term, "VWS", "VWSReport", "meta") 
 enddef
 
