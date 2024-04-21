@@ -1192,6 +1192,7 @@ def g:AllSummariesGenReportsFull(id: number, result: number)
 		put =g:summary_link_list
 		execute "normal! `Q"
 	endif
+	execute "normal! \<C-w>o"
 enddef
 
 # -----------------------------------------------------------------
