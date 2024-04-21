@@ -1379,7 +1379,7 @@ def g:Report(search_term: string, report_type = "full", function_name = "FullRep
 
 	#combined_list_len = len(g:int_and_anno_keys)
 
-	g:unique_keys = filter(copy(g:int_and_anno_keys), 'index(g:int_and_anno_keys, v:val, v:key+1) == -1')
+	g:unique_keys = filter(copy(g:int_and_anno_keys), 'index(g:int_and_anno_keys, v:val, v:key + 1) == -1')
 	
 	if (report_type == "full") || (report_type == "meta") || (report_type == "VWS")
 		g:interview_list = g:unique_keys
