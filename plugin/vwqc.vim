@@ -1842,11 +1842,11 @@ enddef
 # -----------------------------------------------------------------
 def PopulateQuoteLineList() 
 	g:current_line_dict   = {}
-	g:current_line_dict = { "int_name"    : g:current_buf_name,
-				"bufnr"       : g:ll_bufnr,
-				"text_w_meta" : g:line_text,
-				"text"        : g:line_text_less_meta,
-				"line_num"    : g:current_int_line_num}
+	g:current_line_dict = { "int_name":    g:current_buf_name,
+				"bufnr":       g:ll_bufnr,
+				"text_w_meta": g:line_text,
+				"text":        g:line_text_less_meta,
+				"line_num":    g:current_int_line_num}
 	
 	if len(g:quote_dict) == 0
 
