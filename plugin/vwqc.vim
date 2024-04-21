@@ -1944,7 +1944,7 @@ def ProcessInterviewTitle(interview: string)
 
 	g:interview_title = "\n# ======================================\n# INTERVIEW: "
 					.. interview ..
-					#\n# ======================================\n**ATTRIBUTES:** "
+					"\n# ======================================\n**ATTRIBUTES:** "
 					.. g:attribute_line .. "\n"
 
 	@s = @s .. g:interview_title
@@ -2017,7 +2017,7 @@ def ProcessAnnotationLines()
 enddef
 
 # -----------------------------------------------------------------
-# 
+#
 # -----------------------------------------------------------------
 def PopulateAnnoLineList(buf_type: string) 
 	g:current_anno_dict           = {}
