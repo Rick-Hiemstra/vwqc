@@ -1531,7 +1531,6 @@ def GetInterviewFileList()
 	# '.' means the current directory and the second argument '*' means
 	# all.
 	var file_list_all = globpath('.', '*', 0, 1)
-	echom "file_list_all: " ..  string(file_list_all) .. "\n"
 	# build regex we'll use just to find our interview files. 
 	var file_regex = g:interview_label_regex .. '.md'
 	#  cull the list for just those files that are interview files. the
@@ -1691,8 +1690,6 @@ def PrintInterviewTagSummary(interview: string)
 	execute "normal! ki\<ESC>j"
 
 	for tag_index in range(0, (len(g:unique_tags) - 1))
-		echom "g:tag_cross[interview][g:unique_tags[tag_index]][0]: " .. g:tag_cross[interview][g:unique_tags[tag_index]][0] .. "\n"
-		echom "g:tag_cross[interview][g:unique_tags[tag_index]][1]: " .. g:tag_cross[interview][g:unique_tags[tag_index]][1] .. "\n"
 
 		ave_block_size = printf("%.1f", 1.0 * g:tag_cross[interview][g:unique_tags[tag_index]][0] / g:tag_cross[interview][g:unique_tags[tag_index]][1])
 		execute "normal! i|" .. g:unique_tags[tag_index] .. "|" .. 
@@ -2775,8 +2772,6 @@ def CreateBlockMetadataDict()
 	g:continue_searching         = 1
 	g:while_counter              = 0
 	
-	#echom "block_tags_list top: " .. string(g:block_tags_list) .. "\n"
-
 	FindFirstInterviewLine()
 
 	#if there are interview lines in the buffer
@@ -2823,7 +2818,6 @@ def CreateBlockMetadataDict()
 		g:block_tags_list = []
 	endif
 
-	##echom "block_tags_list bottom: " .. string(g:block_tags_list) .. "\n"
 	if (g:tag_fill_option == "last tag added")
 		g:first_tag       = [ g:block_tags_list[0] ]
 		g:rest_of_tags    = g:block_tags_list[1 : ]
