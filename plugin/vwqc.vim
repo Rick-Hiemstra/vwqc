@@ -1181,6 +1181,7 @@ enddef
 # 
 # -----------------------------------------------------------------
 def g:AllSummariesGenReportsFull(id: number, result: number)
+	set lazyredraw
 	if result == 2
 		execute "normal! :delmarks Q\<CR>mQ"
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
@@ -1193,6 +1194,8 @@ def g:AllSummariesGenReportsFull(id: number, result: number)
 		execute "normal! `Q"
 	endif
 	execute "normal! \<C-w>o"
+	set nolazyredraw
+	redraw
 enddef
 
 # -----------------------------------------------------------------
