@@ -1975,7 +1975,7 @@ def CreateSummaryCountTableLine()
 	endif 
 
 	#var lines_per_block = str2float(number_of_lines) / str2float(number_of_blocks)
-	var lines_per_block = 1.0* number_of_lines / number_of_blocks
+	var lines_per_block = 1.0 * number_of_lines / number_of_blocks
 	lines_per_block = printf("%.1f", lines_per_block)
 
 	var number_of_annos = 0
