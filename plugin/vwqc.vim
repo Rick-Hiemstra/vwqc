@@ -1412,7 +1412,8 @@ def g:Report(search_term: string, report_type = "full", function_name = "FullRep
 	for g:int_index in range(0, len(g:unique_keys) - 1)
 		CreateSummaryCountTableLine()
 	endfor 
-	g:total_lines_per_block = printf("%.1f", str2float(g:total_lines) / str2float(g:total_blocks))
+	#g:total_lines_per_block = printf("%.1f", str2float(g:total_lines) / str2float(g:total_blocks))
+	g:total_lines_per_block = printf("%.1f", 1.0 * g:total_lines / g:total_blocks)
 	@t = getreg('t') .. "|-------:|-------|------:|------:|------:|------:|\n"
 	@t = getreg('t') .. "| Totals: |  | " .. g:total_blocks ..  " | " .. g:total_lines .. " | " .. g:total_lines_per_block .. " | " .. g:total_annos .. " |\n"
 	 
