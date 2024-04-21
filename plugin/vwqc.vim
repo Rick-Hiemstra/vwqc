@@ -1299,7 +1299,7 @@ def g:Gather(search_term: string)
 		endif	
 	endwhile
 
-	@s = getreg('s') "# END THEME: " .. search_term ..  "\n\n"
+	@s = getreg('s') .. "# END THEME: " .. search_term ..  "\n\n"
 	execute "normal! `R\"sp"
 enddef
 
