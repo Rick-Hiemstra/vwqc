@@ -192,6 +192,7 @@ def g:HelpMenu()
 					":call Gather(\"<tag>\")               Create secondary tag sub-report", 
 					":call AllSummariesFull()            Create FullReport summaries for all tags in tag glossary", 
 					":call AllSummariesQuotes()          Create QuotesReport summaries for all tags in tag glossary", 
+					":call AllSummariesMeta()            Create MetaReport summaries for all tags in tag glossary", 
 					":call TagStats()                    Create tables and graphs by tag and interview", 
 				        " ",
 					"WORKING WITH REPORTS",
@@ -228,10 +229,17 @@ def g:ProjectSetup()
 		var index_already_created = "The index page already has content.\n\nSetup not performed."
 		confirm(index_already_created,  "OK", 1)
 	else
-		execute "normal! O## <Project Title> ##\n\n[Tag Glossary](Tag Glossary)\n[Tag List Current](Tag List Current)\n"
+		execute "normal! O## <Project Title> ##\n\n## Apparatus ##\n\n[Tag Glossary](Tag Glossary)\n[Tag List Current](Tag List Current)\n"
 		execute "normal! i[Attributes](Attributes)\n[Style Guide](Style Guide)\n\n## Interviews ##\n"
 		execute "normal! i\no = Needs to be coded; p = in process; x = first pass done; z = second pass done\n\n"
-		execute "normal! i[o] \n[o] \n[o] \n[o] \n\n## Tag Summaries ##\n\n"
+		execute "normal! i[o] \n[o] \n[o] \n[o] \n\n## Summaries Reports ##\n\n"
+		execute "normal! i[Summary Interviews - Full Reports](Summary Interviews - Full Reports)\n"
+		execute "normal! i[Summary Interviews - Quotes Reports](Summary Interviews - Quotes Reports)\n"
+		execute "normal! i[Summary Interviews - Meta Reports](Summary Interviews - Meta Reports)\n"
+		execute "normal! i[Summary Tag Stats - Tables - By Interview](Summary Tag Stats - Tables - By Interview)\n"
+		execute "normal! i[Summary Tag Stats - Tables - By Tag](Summary Tag Stats - Tables - By Tag)\n"
+		execute "normal! i[Summary Tag Stats - Charts - By Interview](Summary Tag Stats - Charts - By Interview)\n"
+		execute "normal! i[Summary Tag Stats - Charts - By Tag](Summary Tag Stats - Charts - By Tag)\n"
 
 		GetVWQCProjectParameters()
 
@@ -1154,7 +1162,7 @@ def g:AllSummariesFull()
 
 	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
-	
+
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	g:tags_list_length = len(g:in_both_lists)
 
@@ -1182,6 +1190,11 @@ enddef
 # -----------------------------------------------------------------
 def g:AllSummariesGenReportsFull(id: number, result: number)
 	set lazyredraw
+	
+	execute "normal! :e Summary Interviews - Full Reports" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+	# Delete what is there
+	execute "normal! ggVGd"
+
 	if result == 2
 		execute "normal! :delmarks Q\<CR>mQ"
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
@@ -1193,6 +1206,7 @@ def g:AllSummariesGenReportsFull(id: number, result: number)
 		put =g:summary_link_list
 		execute "normal! `Q"
 	endif
+
 	execute "normal! \<C-w>o"
 	set nolazyredraw
 	redraw
@@ -1233,6 +1247,12 @@ enddef
 # 
 # -----------------------------------------------------------------
 def g:AllSummariesGenReportsQuotes(id: number, result: number)
+	set lazyredraw
+
+	execute "normal! :e Summary Interviews - Quotes Reports" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+	# Delete what is there
+	execute "normal! ggVGd"
+
 	if result == 2
 		execute "normal! :delmarks Q\<CR>mQ"
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
@@ -1244,6 +1264,68 @@ def g:AllSummariesGenReportsQuotes(id: number, result: number)
 		put =g:summary_link_list
 		execute "normal! `Q"
 	endif
+
+	execute "normal! \<C-w>o"
+	set nolazyredraw
+	redraw
+enddef
+
+# -----------------------------------------------------------------
+# This function produces summary reports for all tags defined in the 
+# tag glossary.
+# -----------------------------------------------------------------
+def g:AllSummariesMeta() 
+
+	ParmCheck()
+	execute "normal! :cd %:p:h\<CR>"
+	
+	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
+	g:tags_list_length = len(g:in_both_lists)
+
+	if g:tags_list_length > 0
+		GenSummaryLists("quotes")
+	endif
+	
+	if (g:tags_generated == 1) && (g:tags_list_length > 0)
+		popup_menu(["No, abort", "Yes, generate summary reports"], {
+			 title:    "Running this function will erase older \"Meta\" versions of these reports. Do you want to continue?",
+			 callback: 'AllSummariesGenReportsMeta', 
+			 highlight: 'Question',
+			 border:     [],
+			 close:      'click', 
+			 padding:    [0, 1, 0, 1], })
+	else
+		confirm("Either tags have not been generate for this session or there are no tags to create reports for.",  "OK", 1)
+
+	endif
+	
+enddef
+
+# -----------------------------------------------------------------
+# 
+# -----------------------------------------------------------------
+def g:AllSummariesGenReportsMeta(id: number, result: number)
+	set lazyredraw
+
+	execute "normal! :e Summary Interviews - Meta Reports" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+	# Delete what is there
+	execute "normal! ggVGd"
+
+	if result == 2
+		execute "normal! :delmarks Q\<CR>mQ"
+		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
+		for index in range(0, g:tags_list_length - 1)
+			execute "normal! :e " g:summary_file_list[index] .. "\<CR>"
+			g:MetaReport(g:in_both_lists[index])
+		endfor
+		execute "normal! `Q"
+		put =g:summary_link_list
+		execute "normal! `Q"
+	endif
+
+	execute "normal! \<C-w>o"
+	set nolazyredraw
+	redraw
 enddef
 
 # -----------------------------------------------------------------
@@ -2329,7 +2411,7 @@ def UpdateCurrentTagsPage()
 	execute "normal! :delmarks R\<CR>"
 	execute "normal! mR"
 	# Open the Tag List Current Page
-	execute "normal! :e " .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag List Current" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+	#execute "normal! :e " .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag List Current" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
 	execute "normal! :e Tag List Current" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
 	# Delete what is there
 	execute "normal! ggVGd"
