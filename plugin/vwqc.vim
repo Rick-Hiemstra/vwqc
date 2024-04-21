@@ -2108,7 +2108,7 @@ def RemoveMetadata(line_text: string): string
 	#  function works.
 	# -----------------------------------------------------------------
 	g:border_location = match(line_text, g:tag_search_regex) - 6
-	return line_text[:g:border_location]
+	return line_text[ : g:border_location]
 enddef
 
 
