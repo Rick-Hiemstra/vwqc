@@ -1856,7 +1856,6 @@ def g:TagStats()
 	# save buffer number of current file to register 'a' so you can return here
 	g:buffer_to_return_to = bufnr('%')
 	
-	echom "g:buffer_to_return_to: " ..  g:buffer_to_return_to .. "\n"
 	g:interview_list = []
 	GetInterviewFileList()
 
@@ -1900,28 +1899,49 @@ def g:TagStats()
 	# produced and clear out the buffer.
 	#execute "normal! :b\<C-R>a\<CR>gg"
 	execute "normal! :b" .. g:buffer_to_return_to .. "\<CR>gg"
+
+	set lazyredraw
+
+	execute "normal! :e Summary Tag Stats - Tables - By Interview" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
 	execute "normal! ggVGd"
 
 	# Print interview tag summary tables
 	for interview in range(0, (len(g:interview_list) - 1))
 		PrintInterviewTagSummary(g:interview_list[interview])	
 	endfor
+
+	execute "normal! :e Summary Tag Stats - Tables - By Tag" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+	execute "normal! ggVGd"
+
 	#Print tag interview summary tables
 	for tag_index in range(0, (len(g:unique_tags) - 1))
 		PrintTagInterviewSummary(g:unique_tags[tag_index], g:interview_list)
 	endfor
+
+	execute "normal! :e Summary Tag Stats - Charts - By Interview" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+	execute "normal! ggVGd"
+
 	# Print interview tag summary graphs
 	for interview in range(0, (len(g:interview_list) - 1))
 		GraphInterviewTagSummary(g:interview_list[interview], len_longest_tag, bar_scale)	
 	endfor
+
+	execute "normal! :e Summary Tag Stats - Charts - By Tag" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+	execute "normal! ggVGd"
+
 	# Print interview tag summary graphs
 	for tag_index in range(0, (len(g:unique_tags) - 1))
 		GraphTagInterviewSummary(g:unique_tags[tag_index], len_longest_tag, bar_scale)	
 	endfor
 	
-	#execute "normal! iLongest tag " l:len_longest_tag .. "\n"
-	#execute "normal! iMax bar width " l:max_bar_width .. "\n"
-	#execute "normal! ilargest_tag_count " l:largest_tag_count .. "\n"
+	set nolazyredraw
+	redraw
+
+	# Return to the buffer where these charts and graphs are going to be
+	# produced and clear out the buffer.
+	execute "normal! :b" .. g:buffer_to_return_to .. "\<CR>gg"
+
+	confirm("Tag stats have been updated. Access tag stats pages from the index page", "OK", 1)
 enddef
 
 # -----------------------------------------------------------------
