@@ -2044,7 +2044,7 @@ enddef
 # ------------------------------------------------------
 def GetAnnoInterview(buffer_name: string): string
 	var line_num_loc  = match(buffer_name, ':')
-	var cropped_name  = buffer_name[0:line_num_loc - 1]
+	var cropped_name  = buffer_name[0 : line_num_loc - 1]
 	return cropped_name
 enddef
 
