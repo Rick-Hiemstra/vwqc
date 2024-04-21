@@ -1988,7 +1988,7 @@ def CreateSummaryCountTableLine()
 	g:total_annos  = g:total_annos  + number_of_annos
 
 	var interview_number = g:int_index + 1
-	@t = @t ..  "| " .. l:interview_number ..  "| [" .. g:unique_keys[g:int_index] .. "](" ..
+	@t = @t ..  "| " .. interview_number ..  "| [" .. g:unique_keys[g:int_index] .. "](" ..
 				 g:unique_keys[g:int_index] .. ") | " ..
 				 number_of_blocks ..  " | " ..
 				 number_of_lines .. " | " .. 
