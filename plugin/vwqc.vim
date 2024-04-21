@@ -2067,17 +2067,15 @@ def CreateCSVRecord(search_term: string, block_index: number, line_index: number
 	# Build output record
 	# -----------------------------------------------------------------
 	var attributes = substitute(g:attribute_line, '\s\+', '', "g")
-	attributes = substitute(attributes , ":", ",", "g")
-	attributes = attributes[:-3]
+	attributes = substitute(attributes, ":", ",", "g")
+	attributes = attributes[ : -3]
 	var block = block_index + 1
 	var outline =           search_term .. "," ..
 				 g:interview_list[g:int_index]. "," ..
 				 block .. "," ..
-				 g:quote_dict[g:interview_list[g:int_index]][block_index][line_index]["line_num"]. "," ..
+				 g:quote_dict[g:interview_list[g:int_index]][block_index][line_index]["line_num"] .. "," ..
 				 "\"" .. g:quote_dict[g:interview_list[g:int_index]][block_index][line_index]["text"] .. "\"," ..
-				 g:current_buf_length.
-				 attributes 
-
+				 g:current_buf_length .. attributes 
 	return outline
 enddef
 
