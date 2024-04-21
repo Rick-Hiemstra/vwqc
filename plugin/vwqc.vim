@@ -2071,7 +2071,7 @@ def CreateCSVRecord(search_term: string, block_index: number, line_index: number
 	attributes = attributes[ : -3]
 	var block = block_index + 1
 	var outline =           search_term .. "," ..
-				 g:interview_list[g:int_index]. "," ..
+				 g:interview_list[g:int_index] .. "," ..
 				 block .. "," ..
 				 g:quote_dict[g:interview_list[g:int_index]][block_index][line_index]["line_num"] .. "," ..
 				 "\"" .. g:quote_dict[g:interview_list[g:int_index]][block_index][line_index]["text"] .. "\"," ..
