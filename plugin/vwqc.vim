@@ -1355,7 +1355,7 @@ def g:Report(search_term: string, report_type = "full", function_name = "FullRep
 	# Go through all the location list search results and build the
 	# interview line and annotation dictionaries. 
 	for g:ll_num in range(0, search_results - 1)
-		g:current_buf_name    = bufname(g:loc_list[g:ll_num]['bufnr'])[0:-g:ext_len]
+		g:current_buf_name    = bufname(g:loc_list[g:ll_num]['bufnr'])[0 : -g:ext_len]
 		g:ll_bufnr            = g:loc_list[g:ll_num]['bufnr']
 		g:line_text           = g:loc_list[g:ll_num]['text']
 		g:line_text_less_meta = RemoveMetadata(g:line_text)
