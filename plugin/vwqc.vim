@@ -1956,7 +1956,7 @@ enddef
 def GetInterviewLineInfo(line_text: string): number 
 	var interview_label_position      = match(line_text, g:tag_search_regex)
 	var interview_line_num_pos        = match(line_text, ' \d\{4}', interview_label_position)
-	var current_interview_line_number = str2nr(line_text[(interview_line_num_pos + 1):(interview_line_num_pos + 4)])
+	var current_interview_line_number = str2nr(line_text[(interview_line_num_pos + 1) : (interview_line_num_pos + 4)])
 	return current_interview_line_number
 enddef
 
