@@ -1881,8 +1881,8 @@ def ProcessInterviewLines(meta: string, report_type: string, search_term: string
 
 	var csv_line          = "undefined"
 	var lines             = 0
-	var last_line_number  = "undefined"
-	var first_line_number = "undefined"
+	var last_line_num     = "undefined"
+	var first_line_num    = "undefined"
 	var line_type         = "undefined"
 	var blocks            = 0
 
