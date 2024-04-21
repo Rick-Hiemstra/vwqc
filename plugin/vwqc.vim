@@ -1289,7 +1289,7 @@ def g:Gather(search_term: string)
 
 	@s = "# BEGIN THEME: " .. search_term ..  "\n\n"
 
-	while search(g:search_term, "W")
+	while (search(g:search_term, "W") != 0)
 		if match(getline("."), g:tag_search_regex) > 0
 			@s = getreg('s') .. getline(".") .. "\n\n"
 		else
