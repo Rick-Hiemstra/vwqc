@@ -1127,23 +1127,23 @@ enddef
 # -----------------------------------------------------------------
 
 def g:FullReport(search_term: string)
-	Report(search_term, "full", "FullReport", "no meta")
+	g:Report(search_term, "full", "FullReport", "no meta")
 enddef
 
 def g:AnnotationsReport(search_term: string)
-	Report(search_term, "annotations", "AnnotationReport", "no meta") 
+	g:Report(search_term, "annotations", "AnnotationReport", "no meta") 
 enddef
 
 def g:QuotesReport(search_term: string)
-	Report(search_term,  "quotes", "QuotesReport", "no meta") 
+	g:Report(search_term,  "quotes", "QuotesReport", "no meta") 
 enddef
 
 def g:MetaReport(search_term: string)
-	Report(search_term,  "meta", "MetaReport", "meta") 
+	g:Report(search_term,  "meta", "MetaReport", "meta") 
 enddef
 
 def VWSReport(search_term: string)
-	Report(search_term, "VWS", "VWSReport", "meta") 
+	g:Report(search_term, "VWS", "VWSReport", "meta") 
 enddef
 
 # -----------------------------------------------------------------
