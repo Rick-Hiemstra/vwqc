@@ -1377,7 +1377,7 @@ def g:Report(search_term: string, report_type = "full", function_name = "FullRep
 	g:int_and_anno_keys = sort(g:int_keys + g:anno_keys)
 	
 
-	combined_list_len = len(g:int_and_anno_keys)
+	#combined_list_len = len(g:int_and_anno_keys)
 
 	g:unique_keys = filter(copy(g:int_and_anno_keys), 'index(g:int_and_anno_keys, v:val, v:key+1) == -1')
 	
