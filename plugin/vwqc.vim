@@ -1943,7 +1943,7 @@ def ProcessInterviewTitle(interview: string)
 	g:attribute_line = GetAttributeLine(interview)
 
 	g:interview_title = "\n# ======================================\n# INTERVIEW: "
-					.. interview.
+					.. interview ..
 					#\n# ======================================\n**ATTRIBUTES:** "
 					.. g:attribute_line .. "\n"
 
