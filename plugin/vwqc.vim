@@ -1136,22 +1136,27 @@ enddef
 
 def g:FullReport(search_term: string)
 	g:Report(search_term, "full", "FullReport", "no meta")
+	execute "normal! \<C-w>0"
 enddef
 
 def g:AnnotationsReport(search_term: string)
 	g:Report(search_term, "annotations", "AnnotationReport", "no meta") 
+	execute "normal! \<C-w>0"
 enddef
 
 def g:QuotesReport(search_term: string)
 	g:Report(search_term,  "quotes", "QuotesReport", "no meta") 
+	execute "normal! \<C-w>0"
 enddef
 
 def g:MetaReport(search_term: string)
 	g:Report(search_term,  "meta", "MetaReport", "meta") 
+	execute "normal! \<C-w>0"
 enddef
 
 def g:VWSReport(search_term: string)
 	g:Report(search_term, "VWS", "VWSReport", "meta") 
+	execute "normal! \<C-w>0"
 enddef
 
 # -----------------------------------------------------------------
