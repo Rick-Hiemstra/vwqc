@@ -1081,7 +1081,7 @@ def g:GoToReference()
 	ParmCheck()
 
 	var target_file = "Undefined"
-	var target_line = -1
+	var target_line = "Undefined"
 	# -----------------------------------------------------------------
 	# Change the pwd to that of the current wiki.
 	# -----------------------------------------------------------------
