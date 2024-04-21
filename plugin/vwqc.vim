@@ -1076,7 +1076,7 @@ enddef
 # Finds a label-line number pair in a Summary buffer and uses that to to to
 # that location in an interview buffer.
 # -----------------------------------------------------------------
-def GoToReferenceB() 
+def g:GoToReference() 
 	
 	ParmCheck()
 
@@ -1118,7 +1118,7 @@ enddef
 # -----------------------------------------------------------------
 # Returns to the place called by GoToReference().
 # -----------------------------------------------------------------
-def g:GoBackFromReferenceB() 
+def g:GoBackFromReference() 
 	execute "normal! `Zzz`Z"
 enddef
 
