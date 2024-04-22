@@ -232,7 +232,7 @@ def g:ProjectSetup()
 		execute "normal! O## <Project Title> ##\n\n## Apparatus ##\n\n[Tag Glossary](Tag Glossary)\n[Tag List Current](Tag List Current)\n"
 		execute "normal! i[Attributes](Attributes)\n[Style Guide](Style Guide)\n\n## Interviews ##\n"
 		execute "normal! i\no = Needs to be coded; p = in process; x = first pass done; z = second pass done\n\n"
-		execute "normal! i[o] \n[o] \n[o] \n[o] \n\n## Summaries Reports ##\n\n"
+		execute "normal! i[o] \n[o] \n[o] \n[o] \n\n## Summary Reports ##\n\n"
 		execute "normal! i[Summary Interviews - Full Reports](Summary Interviews - Full Reports)\n"
 		execute "normal! i[Summary Interviews - Quotes Reports](Summary Interviews - Quotes Reports)\n"
 		execute "normal! i[Summary Interviews - Meta Reports](Summary Interviews - Meta Reports)\n"
