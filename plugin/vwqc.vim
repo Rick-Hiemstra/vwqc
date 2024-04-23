@@ -1289,7 +1289,7 @@ def g:AllSummariesMeta()
 	g:tags_list_length = len(g:in_both_lists)
 
 	if g:tags_list_length > 0
-		GenSummaryLists("quotes")
+		GenSummaryLists("meta")
 	endif
 	
 	if (g:tags_generated == 1) && (g:tags_list_length > 0)
@@ -1342,12 +1342,14 @@ def g:AllSummariesAnnos()
 
 	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
+	GetInterviewFileList() 
+	#g:interview_list
 	
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	g:tags_list_length = len(g:in_both_lists)
 
 	if g:tags_list_length > 0
-		GenSummaryLists("quotes")
+		GenSummaryLists("Annotations")
 	endif
 	
 	if (g:tags_generated == 1) && (g:tags_list_length > 0)
@@ -1607,7 +1609,6 @@ def GetInterviewFileList()
 			g:interview_list = g:interview_list + [ file_to_add ]
 		endif
 	endfor
-	#return l:interview_list
 enddef
 
 # -----------------------------------------------------------------
