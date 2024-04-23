@@ -2267,7 +2267,7 @@ enddef
 # ------------------------------------------------------
 def g:TrimTrailingPartialSentence() 
 	execute "normal! $"
-	g:trim_tail_regex = '**'. g:tag_search_regex
+	g:trim_tail_regex = '**' .. g:tag_search_regex
 	g:tag_test = search(g:trim_tail_regex, 'b', line("."))
 	execute "normal! hv(d0"
 	#execute "normal! $" '?**' .. g:tag_search_regex .. "\<CR>hv(d"
