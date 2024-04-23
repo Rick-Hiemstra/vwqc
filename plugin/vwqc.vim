@@ -1342,8 +1342,15 @@ def g:AllSummariesAnnos()
 
 	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
+
+	g:interview_list = []
+
 	GetInterviewFileList() 
-	#g:interview_list
+	g:interview_list_length = len(g:interview_list)
+
+	for index in range(0, len(g:interview_list) - 1 )
+		g:interview_list[index] = g:interview_list[index][ : -g:ext_len]
+	endfor
 	
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	g:tags_list_length = len(g:in_both_lists)
@@ -1352,6 +1359,13 @@ def g:AllSummariesAnnos()
 		GenSummaryLists("Annotations")
 	endif
 	
+	if len(g:interview_list) > 0
+		GenInterviewLists("Annotations")
+	endif
+
+	g:summary_file_list = g:summary_file_list + g:interview_file_list
+	g:summary_link_list = g:summary_link_list + g:interview_link_list
+
 	if (g:tags_generated == 1) && (g:tags_list_length > 0)
 		popup_menu(["No, abort", "Yes, generate summary reports"], {
 			 title:    "Running this function will erase older \"Annotation\" versions of these reports. Do you want to continue?",
@@ -1376,13 +1390,13 @@ def g:AllSummariesGenReportsAnnos(id: number, result: number)
 	execute "normal! :e Summary Interviews - Annotations Reports" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
 	# Delete what is there
 	execute "normal! ggVGd"
-
+	
 	if result == 2
 		execute "normal! :delmarks Q\<CR>mQ"
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
-		for index in range(0, g:tags_list_length - 1)
+		for index in range(0, len(g:summary_file_list - 1)
 			execute "normal! :e " g:summary_file_list[index] .. "\<CR>"
-			g:AnnotationsReport(g:in_both_lists[index])
+			g:AnnotationsReport(g:summary_file_list[index])
 		endfor
 		execute "normal! `Q"
 		put =g:summary_link_list
@@ -1393,6 +1407,7 @@ def g:AllSummariesGenReportsAnnos(id: number, result: number)
 	set nolazyredraw
 	redraw
 enddef
+
 # -----------------------------------------------------------------
 # Generated list of file names from the g:in_both_lists list.
 # -----------------------------------------------------------------
@@ -1409,6 +1424,21 @@ def GenSummaryLists(summary_type: string)
 	endfor
 enddef
 
+# -----------------------------------------------------------------
+# Generated list of file names from the g:interview_list.
+# -----------------------------------------------------------------
+def GenInterviewLists(summary_type: string) 
+	var file_name = "undefined"
+	var link_name = "undefined"
+	g:interview_file_list = []
+	g:interview_link_list = []
+	for interview_index in range(0, (len(g:interview_list) - 1))
+		file_name = "Summary " .. g:interview_list[interview_index] .. " " .. summary_type .. " batch" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
+		link_name = "[Summary " .. g:interview_list[interview_index] .. " " .. summary_type .. " batch](Summary " .. g:interview_list[interview_index] .. " " .. summary_type .. " batch)"
+		g:interview_file_list = g:interview_file_list + [file_name]
+		g:interview_link_list = g:interview_link_list + [link_name]
+	endfor
+enddef
 # -----------------------------------------------------------------
 # This builds a formatted report for the tag specified as the search_term
 # argument.
