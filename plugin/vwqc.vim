@@ -2256,7 +2256,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def TrimLeadingPartialSentence() 
+def g:TrimLeadingPartialSentence() 
 	#execute "normal! vip\"by"
 	#execute "normal! `<v)hx"
 	execute "normal! 0v)hx"
@@ -2265,7 +2265,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def TrimTrailingPartialSentence() 
+def g:TrimTrailingPartialSentence() 
 	execute "normal! $"
 	g:trim_tail_regex = '**'. g:tag_search_regex
 	g:tag_test = search(g:trim_tail_regex, 'b', line("."))
@@ -2278,9 +2278,9 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def TrimLeadingAndTrailingPartialSentence() 
-	TrimLeadingPartialSentence()
-	TrimTrailingPartialSentence()
+def g:TrimLeadingAndTrailingPartialSentence() 
+	g:TrimLeadingPartialSentence()
+	g:TrimTrailingPartialSentence()
 enddef
 
 
