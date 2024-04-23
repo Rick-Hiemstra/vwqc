@@ -3151,8 +3151,8 @@ def g:Attributes(sort_col = 1)
 	g:attrib_csv   = ""
 	GetInterviewFileList()
 
-	# save buffer number of current file to register 'a' so you can return here
-	@a = bufnr('%')
+	# save buffer number of current register so you can return here
+	var buffer_to_come_back_to = bufnr("%")
 	# go through the list of files copying and processing the first line
 	# from the buffer which should be the line of the interview attribute
 	# tags. We're going to build our output in two reg
@@ -3173,7 +3173,7 @@ def g:Attributes(sort_col = 1)
 	endfor
 	# return to page where you're going to print the chart and paste the
 	# chart.
-	execute "normal! :b\<C-R>a\<CR>gg"
+	execute "normal! :b\" .. buffer_to_come_back_to .. "\<CR>gg"
 	execute "normal! ggVGd"
 	execute "normal! i" .. g:attrib_chart .. "\<CR>"
 	execute "normal! Go\<ESC>v?.\<CR>jdgga\<ESC>\<CR>gg"
