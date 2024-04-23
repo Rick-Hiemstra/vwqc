@@ -3173,7 +3173,7 @@ def g:Attributes(sort_col = 1)
 	endfor
 	# return to page where you're going to print the chart and paste the
 	# chart.
-	execute "normal! :b\" .. buffer_to_come_back_to .. "\<CR>gg"
+	execute "normal! :b" .. buffer_to_come_back_to .. "\<CR>gg"
 	execute "normal! ggVGd"
 	execute "normal! i" .. g:attrib_chart .. "\<CR>"
 	execute "normal! Go\<ESC>v?.\<CR>jdgga\<ESC>\<CR>gg"
