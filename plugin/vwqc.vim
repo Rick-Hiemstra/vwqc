@@ -193,6 +193,7 @@ def g:HelpMenu()
 					":call AllSummariesFull()            Create FullReport summaries for all tags in tag glossary", 
 					":call AllSummariesQuotes()          Create QuotesReport summaries for all tags in tag glossary", 
 					":call AllSummariesMeta()            Create MetaReport summaries for all tags in tag glossary", 
+					":call AllSummariesAnnos()           Create AnnotationsReport summaries for all interviews and all tags in tag glossary", 
 					":call TagStats()                    Create tables and graphs by tag and interview", 
 				        " ",
 					"WORKING WITH REPORTS",
