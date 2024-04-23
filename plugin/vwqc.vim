@@ -1344,13 +1344,14 @@ def g:AllSummariesAnnos()
 	execute "normal! :cd %:p:h\<CR>"
 
 	g:interview_list = []
+	g:interview_list_without_ext = []
 
 	GetInterviewFileList() 
 	g:interview_list_length = len(g:interview_list)
 
-	#for index in range(0, len(g:interview_list) - 1 )
-	#	g:interview_list[index] = g:interview_list[index][ : -g:ext_len]
-	#endfor
+	for index in range(0, len(g:interview_list) - 1 )
+		g:interview_list_without_ext[index] = g:interview_list[index][ : -g:ext_len]
+	endfor
 	
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	g:tags_list_length = len(g:in_both_lists)
@@ -1365,6 +1366,7 @@ def g:AllSummariesAnnos()
 
 	g:summary_file_list = g:summary_file_list + g:interview_file_list
 	g:summary_link_list = g:summary_link_list + g:interview_link_list
+	g:anno_list_tags_and_interviews = g:in_both_lists + g:interview_list_without_ext
 
 	if (g:tags_generated == 1) && (g:tags_list_length > 0)
 		popup_menu(["No, abort", "Yes, generate summary reports"], {
@@ -1396,7 +1398,7 @@ def g:AllSummariesGenReportsAnnos(id: number, result: number)
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
 		for index in range(0, len(g:summary_file_list) - 1)
 			execute "normal! :e " .. g:summary_file_list[index] .. "\<CR>"
-			g:AnnotationsReport(g:summary_file_list[index])
+			g:AnnotationsReport(g:anno_list_tags_and_interviews[index])
 		endfor
 		execute "normal! `Q"
 		put =g:summary_link_list
