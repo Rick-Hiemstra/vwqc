@@ -1348,9 +1348,9 @@ def g:AllSummariesAnnos()
 	GetInterviewFileList() 
 	g:interview_list_length = len(g:interview_list)
 
-	for index in range(0, len(g:interview_list) - 1 )
-		g:interview_list[index] = g:interview_list[index][ : -g:ext_len]
-	endfor
+	#for index in range(0, len(g:interview_list) - 1 )
+	#	g:interview_list[index] = g:interview_list[index][ : -g:ext_len]
+	#endfor
 	
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	g:tags_list_length = len(g:in_both_lists)
@@ -1395,7 +1395,7 @@ def g:AllSummariesGenReportsAnnos(id: number, result: number)
 		execute "normal! :delmarks Q\<CR>mQ"
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
 		for index in range(0, len(g:summary_file_list - 1)
-			execute "normal! :e " g:summary_file_list[index] .. "\<CR>"
+			execute "normal! :e " .. g:summary_file_list[index] .. "\<CR>"
 			g:AnnotationsReport(g:summary_file_list[index])
 		endfor
 		execute "normal! `Q"
