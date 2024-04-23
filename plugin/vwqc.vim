@@ -212,7 +212,7 @@ def g:HelpMenu()
 				        "<leader>lp                          List project parameters"]
 	popup_menu(help_list, 
 				 { minwidth: 50,
-				 maxwidth: 100,
+				 maxwidth: 120,
 				 pos: 'center',
 				 border: [],
 				 close: 'click',
