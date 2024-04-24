@@ -955,7 +955,7 @@ enddef
 # This function determines what kind of buffer the cursor is in (annotation or
 # interview) and decides whether to call Annotation() or ExitAnnotation()
 # -----------------------------------------------------------------
-def g:AnnotationToggleB() 
+def g:AnnotationToggle() 
 
 	ParmCheck()
 
@@ -2398,7 +2398,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def g:GetTagUpdateB() 
+def g:GetTagUpdate() 
 
 	ParmCheck()
 
@@ -2733,7 +2733,7 @@ def FindLastTagAddedToBuffer()
 		
 enddef
 
-def g:TagFillWithChoiceB() 
+def g:TagFillWithChoice() 
 	# ---------------------------------------------
 	# Set tag fill mode
 	# ---------------------------------------------
@@ -3069,7 +3069,7 @@ enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-def g:GetTagDefB() 
+def g:GetTagDef() 
 	
 	ParmCheck()
 
@@ -3161,6 +3161,22 @@ enddef
 
 # ------------------------------------------------------
 
+	
+	if result == 2
+		execute "normal! :delmarks Q\<CR>mQ"
+		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
+		for index in range(0, len(g:summary_file_list) - 1)
+			execute "normal! :e " .. g:summary_file_list[index] .. "\<CR>"
+			g:AnnotationsReport(g:anno_list_tags_and_interviews[index])
+		endfor
+		execute "normal! `Q"
+		put =g:summary_link_list
+		execute "normal! `Q"
+	endif
+
+	execute "normal! \<C-w>o"
+	set nolazyredraw
+	redraw
 # ------------------------------------------------------
 def g:Attributes(sort_col = 1) 
 	
@@ -3176,6 +3192,9 @@ def g:Attributes(sort_col = 1)
 	g:attrib_csv   = ""
 	GetInterviewFileList()
 
+	execute "normal! :e Attributes" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+	# Delete what is there
+	execute "normal! ggVGd"
 	# save buffer number of current register so you can return here
 	var buffer_to_come_back_to = bufnr("%")
 	# go through the list of files copying and processing the first line

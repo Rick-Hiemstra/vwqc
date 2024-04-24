@@ -9,8 +9,8 @@ nnoremap <leader>gt :call g:GoToReference()<CR>
 nnoremap <leader>gb :call g:GoBackFromReference()<CR>
 
 " --------------- Call Annotation()
-nnoremap <F7> :call AnnotationToggleB()<CR>
-inoremap <F7> <ESC>:call AnnotationToggleB()<CR>
+nnoremap <F7> :call AnnotationToggle()<CR>
+inoremap <F7> <ESC>:call AnnotationToggle()<CR>
 
 " -------------- Delete Annotation ----------------------------------------
 nnoremap <leader>da :call DeleteAnnotation()<CR>
@@ -29,7 +29,7 @@ vnoremap <leader>cv f│hy<ESC>:cd %:p:h<CR>:sp new<CR>pggVGJ:s/\s\{2,}/ /g<CR>V
 nnoremap <leader>tl :call TagLinter()<CR>
 
 " ---------------- Add New Tags to g:current_tags -------------------------------
-nnoremap <F2> :call GetTagUpdateB()<CR>
+nnoremap <F2> :call GetTagUpdate()<CR>
 
 " ---------------- Call Popup Help Menu  -------------------------------
 nnoremap <leader>hm :call HelpMenu()<CR>
@@ -41,7 +41,7 @@ nnoremap <leader>ph :call PageHelp()<CR>
 nnoremap <leader>lp :call ListProjectParameters()<CR>
 
 " ---------------- Get Tag Definition  -------------------------------
-nnoremap <leader>df :call GetTagDefB()<CR>
+nnoremap <leader>df :call GetTagDef()<CR>
 
 " ---------------- Call omni-complete -----------------------------
 "inoremap <F8> <C-x><C-o>
@@ -75,8 +75,8 @@ nnoremap <F4> :call ChangeTagFillOption()<CR>
 inoremap <F4> <ESC>:call ChangeTagFillOption()<CR>
 
 " ---------------- Fill Tag Block ---------------------
-nnoremap <F5> :call TagFillWithChoiceB()<CR>	
-inoremap <F5> <ESC>:call TagFillWithChoiceB()<CR>
+nnoremap <F5> :call TagFillWithChoice()<CR>	
+inoremap <F5> <ESC>:call TagFillWithChoice()<CR>
 
 " ----------- Trim Partial Leading and Trailing Sentences -----
 " --- Trim Leading (trim head = <leader>th --------------------
