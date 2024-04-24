@@ -1234,23 +1234,28 @@ def g:AllSummariesQuotes()
 	execute "normal! :cd %:p:h\<CR>"
 	
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
-	g:tags_list_length = len(g:in_both_lists)
+	if (g:tags_generated == 1)
 
-	if g:tags_list_length > 0
-		GenSummaryLists("quotes")
-	endif
-	
-	if (g:tags_generated == 1) && (g:tags_list_length > 0)
-		popup_menu(["No, abort", "Yes, generate summary reports"], {
-			 title:    "Running this function will erase older \"Quotes\" versions of these reports. Do you want to continue?",
-			 callback: 'AllSummariesGenReportsQuotes', 
-			 highlight: 'Question',
-			 border:     [],
-			 close:      'click', 
-			 padding:    [0, 1, 0, 1], })
+		g:tags_list_length = len(g:in_both_lists)
+
+		if g:tags_list_length > 0
+			GenSummaryLists("quotes")
+		endif
+		
+		if (g:tags_generated == 1) && (g:tags_list_length > 0)
+			popup_menu(["No, abort", "Yes, generate summary reports"], {
+				 title:    "Running this function will erase older \"Quotes\" versions of these reports. Do you want to continue?",
+				 callback: 'AllSummariesGenReportsQuotes', 
+				 highlight: 'Question',
+				 border:     [],
+				 close:      'click', 
+				 padding:    [0, 1, 0, 1], })
+		else
+			confirm("Either tags have not been generate for this session or there are no tags to create reports for.",  "OK", 1)
+
+		endif
 	else
-		confirm("Either tags have not been generate for this session or there are no tags to create reports for.",  "OK", 1)
-
+		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
 	endif
 	
 enddef
@@ -1292,23 +1297,27 @@ def g:AllSummariesMeta()
 	execute "normal! :cd %:p:h\<CR>"
 	
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
-	g:tags_list_length = len(g:in_both_lists)
+	if (g:tags_generated == 1)
+		g:tags_list_length = len(g:in_both_lists)
 
-	if g:tags_list_length > 0
-		GenSummaryLists("meta")
-	endif
-	
-	if (g:tags_generated == 1) && (g:tags_list_length > 0)
-		popup_menu(["No, abort", "Yes, generate summary reports"], {
-			 title:    "Running this function will erase older \"Meta\" versions of these reports. Do you want to continue?",
-			 callback: 'AllSummariesGenReportsMeta', 
-			 highlight: 'Question',
-			 border:     [],
-			 close:      'click', 
-			 padding:    [0, 1, 0, 1], })
+		if g:tags_list_length > 0
+			GenSummaryLists("meta")
+		endif
+		
+		if (g:tags_generated == 1) && (g:tags_list_length > 0)
+			popup_menu(["No, abort", "Yes, generate summary reports"], {
+				 title:    "Running this function will erase older \"Meta\" versions of these reports. Do you want to continue?",
+				 callback: 'AllSummariesGenReportsMeta', 
+				 highlight: 'Question',
+				 border:     [],
+				 close:      'click', 
+				 padding:    [0, 1, 0, 1], })
+		else
+			confirm("Either tags have not been generate for this session or there are no tags to create reports for.",  "OK", 1)
+
+		endif
 	else
-		confirm("Either tags have not been generate for this session or there are no tags to create reports for.",  "OK", 1)
-
+		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
 	endif
 	
 enddef
@@ -1349,42 +1358,48 @@ def g:AllSummariesAnnos()
 	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
 
-	g:interview_list = []
-	g:interview_list_without_ext = []
-
-	GetInterviewFileList() 
-	g:interview_list_length = len(g:interview_list)
-
-	for index in range(0, len(g:interview_list) - 1 )
-		g:interview_list_without_ext[index] = g:interview_list[index][ : -g:ext_len]
-	endfor
-	
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
-	g:tags_list_length = len(g:in_both_lists)
+	if (g:tags_generated == 1)
 
-	if g:tags_list_length > 0
-		GenSummaryLists("Annotations")
-	endif
-	
-	if len(g:interview_list) > 0
-		GenInterviewLists("Annotations")
-	endif
+		g:interview_list = []
+		g:interview_list_without_ext = []
 
-	g:summary_file_list = g:summary_file_list + g:interview_file_list
-	g:summary_link_list = g:summary_link_list + g:interview_link_list
-	g:anno_list_tags_and_interviews = g:in_both_lists + g:interview_list_without_ext
+		GetInterviewFileList() 
+		g:interview_list_length = len(g:interview_list)
 
-	if (g:tags_generated == 1) && (g:tags_list_length > 0)
-		popup_menu(["No, abort", "Yes, generate summary reports"], {
-			 title:    "Running this function will erase older \"Annotation\" versions of these reports. Do you want to continue?",
-			 callback: 'AllSummariesGenReportsAnnos', 
-			 highlight: 'Question',
-			 border:     [],
-			 close:      'click', 
-			 padding:    [0, 1, 0, 1], })
+		for index in range(0, len(g:interview_list) - 1 )
+			g:interview_list_without_ext[index] = g:interview_list[index][ : -g:ext_len]
+		endfor
+		
+		g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
+		g:tags_list_length = len(g:in_both_lists)
+
+		if g:tags_list_length > 0
+			GenSummaryLists("Annotations")
+		endif
+		
+		if len(g:interview_list) > 0
+			GenInterviewLists("Annotations")
+		endif
+
+		g:summary_file_list = g:summary_file_list + g:interview_file_list
+		g:summary_link_list = g:summary_link_list + g:interview_link_list
+		g:anno_list_tags_and_interviews = g:in_both_lists + g:interview_list_without_ext
+
+		if (g:tags_generated == 1) && (g:tags_list_length > 0)
+			popup_menu(["No, abort", "Yes, generate summary reports"], {
+				 title:    "Running this function will erase older \"Annotation\" versions of these reports. Do you want to continue?",
+				 callback: 'AllSummariesGenReportsAnnos', 
+				 highlight: 'Question',
+				 border:     [],
+				 close:      'click', 
+				 padding:    [0, 1, 0, 1], })
+		else
+			confirm("Either tags have not been generate for this session or there are no tags to create reports for.",  "OK", 1)
+
+		endif
 	else
-		confirm("Either tags have not been generate for this session or there are no tags to create reports for.",  "OK", 1)
-
+		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
 	endif
 	
 enddef
