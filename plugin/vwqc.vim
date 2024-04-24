@@ -3278,46 +3278,5 @@ def UpdateSubcode()
 	execute "normal! \<C-w>k:lclose\<CR>\<C-w>j:q!\<CR>"
 enddef
 
-def CorrectAttributeLines() 
-	
-	ParmCheck()
 
-	# Change the pwd to that of the current wiki.
-	execute "normal! :cd %:p:h\<CR>"
-	# get a list of all the files and directories in the pwd. note the
-	# fourth argument that is 1 makes it return a list. the first argument
-	# '.' means the current directory and the second argument '*' means
-	# all.
-	g:file_list_all = globpath('.', '*', 0, 1)
-	# build regex we'll use just to find our interview files. 
-	g:file_regex = g:interview_label_regex '.md'
-	#  cull the list for just those files that are interview files. the
-	#  match is at position 2 because the globpath function prefixes
-	#  filenames with/ which occupies positions 0 and 1.
-	g:interview_list = []
-	for list_item in range(0, (len(g:file_list_all) - 1))
-		if (match(g:file_list_all[list_item], g:file_regex) == 2) 
-			# strip off the leading/
-			g:file_to_add = g:file_list_all[list_item][2:]
-			g:interview_list = g:interview_list + [g:file_to_add]
-		endif
-	endfor
-	# save buffer number of current file to register 'a' so you can return here
-	@a = bufnr('%')
-	# go through the list of files copying modifying the attribute line.
-	for interview in range(0, (len(g:interview_list) - 1))
-		# go to interview file
-		execute "normal :e " g:interview_list[interview] .. "\<CR>"
-		# copy first row which should be the attribute tags.
-		execute "normal! :1,1s/:/: :/g\<CR>"
-		execute "normal! :1,1s/^: :/:/\<CR>"
-		execute "normal! :1,1s/: :$/:/\<CR>"
-	endfor
-enddef
-
-def Fix() 
-	execute "normal! :1,1s/:/: :/g\<CR>"
-	execute "normal! :1,1s/^: :/:/\<CR>"
-	execute "normal! :1,1s/: :$/:/\<CR>"
-enddef
 
