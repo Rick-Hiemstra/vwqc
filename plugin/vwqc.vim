@@ -1615,8 +1615,6 @@ def g:Report(search_term: string, report_type = "full", function_name = "FullRep
 	execute "normal! ggdd"
 enddef
 
-#this code is in Attributes(). Need substitute a call to this function
-#instead.
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
@@ -1630,7 +1628,6 @@ def GetInterviewFileList()
 	# all.
 	var file_list_all = globpath('.', '*', 0, 1)
 	# build regex we'll use just to find our interview files. 
-	#var file_regex = g:interview_label_regex .. '.md'
 	var file_regex = g:interview_label_regex .. g:wiki_extension
 	#  cull the list for just those files that are interview files. the
 	#  match is at position 2 because the globpath function prefixes
@@ -1649,8 +1646,6 @@ enddef
 # 
 # -----------------------------------------------------------------
 def CrawlBufferTags(interview: number, interview_name: string) 
-	# This is essentially the TagLinterFunction that copies the results to
-	# g:tags_list
 	var start_line = 2
 	var end_line   = line('$')
 	var tag_being_considered = "undefined"
@@ -1935,9 +1930,6 @@ def FindLengthOfLongestTag(tag_list: list<string>): number
 	return longest_tag_length
 enddef
 
-def g:TestFunc(a: number, b: string): dict<any>
-
-enddef 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
@@ -1983,7 +1975,7 @@ def g:TagStats()
 
 	# find the number of digits in the following counts. Used for
 	# calculating the graph scale. The nested functions are mostly to
-	# convert the float to an lint. Vimscript doesn't have a direct way to do this.
+	# convert the float to an int. Vimscript doesn't have a direct way to do this.
 	var largest_tag_count_digits    = str2nr(string(trunc(log10(largest_tag_count) + 1)))
 	var largest_block_count_digits  = str2nr(string(trunc(log10(largest_block_count) + 1)))
 
@@ -1992,7 +1984,6 @@ def g:TagStats()
 
 	# Return to the buffer where these charts and graphs are going to be
 	# produced and clear out the buffer.
-	#execute "normal! :b\<C-R>a\<CR>gg"
 	execute "normal! :b" .. g:buffer_to_return_to .. "\<CR>gg"
 
 	set lazyredraw
@@ -2176,7 +2167,6 @@ def CreateSummaryCountTableLine()
 		endfor
 	endif 
 
-	#var lines_per_block = str2float(number_of_lines) / str2float(number_of_blocks)
 	var lines_per_block_num = 1.0 * number_of_lines / number_of_blocks
 	var lines_per_block = printf("%.1f", lines_per_block_num)
 
@@ -2270,6 +2260,7 @@ def CreateCSVRecord(search_term: string, block_index: number, line_index: number
 	# Build output record
 	# -----------------------------------------------------------------
 	var attributes = substitute(g:attribute_line, '\s\+', '', "g")
+	attributes = substitute(attributes, ": :", ",", "g")
 	attributes = substitute(attributes, ":", ",", "g")
 	attributes = attributes[ : -3]
 	var block = block_index + 1
