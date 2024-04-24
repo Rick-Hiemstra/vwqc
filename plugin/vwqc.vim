@@ -130,7 +130,7 @@ vim9script
 # TrimLeadingAndTrailingPartialSentence
 #
 # ---- Tags ----
-# GetTagUpdateB
+# GetTagUpdate
 # UpdateCurrentTagsPage 
 # UpdateCurrentTagsList
 # TagsGenThisSession
@@ -139,12 +139,12 @@ vim9script
 # CreateTagDict
 # CurrentTagsPopUpMenu
 # NoTagListNotice 
-# TagFillWithChoiceB
+# TagFillWithChoice
 # FindLastTagAddedToBuffer
 # FillChosenTag
 # ChangeTagFillOption
 # SortTagDefs
-# GetTagDefB
+# GetTagDef
 # GetTagUnderCursor
 # AddNewTagDef
 # 
@@ -1171,23 +1171,28 @@ def g:AllSummariesFull()
 	execute "normal! :cd %:p:h\<CR>"
 
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
-	g:tags_list_length = len(g:in_both_lists)
+	if (g:tags_generated == 1)
 
-	if g:tags_list_length > 0
-		GenSummaryLists("full")
-	endif
+		g:tags_list_length = len(g:in_both_lists)
 	
-	if (g:tags_generated == 1) && (g:tags_list_length > 0)
-		popup_menu(["No, abort", "Yes, generate summary reports"], {
-			 title:    "Running this function will erase older \"Full\" versions of these reports. Do you want to continue?",
-			 callback: 'AllSummariesGenReportsFull', 
-			 highlight: 'Question',
-			 border:     [],
-			 close:      'click', 
-			 padding:    [0, 1, 0, 1], })
+		if g:tags_list_length > 0
+			GenSummaryLists("full")
+		endif
+		
+		if (g:tags_generated == 1) && (g:tags_list_length > 0)
+			popup_menu(["No, abort", "Yes, generate summary reports"], {
+				 title:    "Running this function will erase older \"Full\" versions of these reports. Do you want to continue?",
+				 callback: 'AllSummariesGenReportsFull', 
+				 highlight: 'Question',
+				 border:     [],
+				 close:      'click', 
+				 padding:    [0, 1, 0, 1], })
+		else
+			confirm("Either tags have not been generate for this session or there are no tags to create reports for.",  "OK", 1)
+	
+		endif
 	else
-		confirm("Either tags have not been generate for this session or there are no tags to create reports for.",  "OK", 1)
-
+		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
 	endif
 	
 enddef
@@ -2378,7 +2383,7 @@ augroup END
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def g:TagsLoadedCheck()
+def g:tagsloadedcheck()
 	var last_wiki_warning = ""
 	if has_key(g:vimwiki_list[vimwiki#vars#get_bufferlocal('wiki_nr')], 'vwqc')
 		if (!exists("g:last_wiki"))
