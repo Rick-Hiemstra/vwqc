@@ -91,7 +91,7 @@ nnoremap <leader>ta :call TrimLeadingAndTrailingPartialSentence()<CR>
 " ------------------ VWQC Settings ---------------------
 " -----------------------------------------------------------------
 
-" ----------- Required to make us of the par utility -----
+" ----------- Required to make use of the par utility -----
 set formatprg=par\ w80
 
 " ----------- Sets some vimwiki behaviors -----
