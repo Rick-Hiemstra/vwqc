@@ -3160,23 +3160,7 @@ enddef
 # -----------------------------------------------------------------
 
 # ------------------------------------------------------
-
-	
-	if result == 2
-		execute "normal! :delmarks Q\<CR>mQ"
-		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
-		for index in range(0, len(g:summary_file_list) - 1)
-			execute "normal! :e " .. g:summary_file_list[index] .. "\<CR>"
-			g:AnnotationsReport(g:anno_list_tags_and_interviews[index])
-		endfor
-		execute "normal! `Q"
-		put =g:summary_link_list
-		execute "normal! `Q"
-	endif
-
-	execute "normal! \<C-w>o"
-	set nolazyredraw
-	redraw
+#
 # ------------------------------------------------------
 def g:Attributes(sort_col = 1) 
 	
