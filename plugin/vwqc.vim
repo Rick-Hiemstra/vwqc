@@ -3230,7 +3230,7 @@ enddef
 # ------------------------------------------------------
 # Sort the Attribute table by column number
 # ------------------------------------------------------
-def ColSort(column: number) 
+def ColSort(column: 1) 
 	g:sort_regex = "/\\(.\\{-}\\zs|\\)\\{" .. column .. "}/"
 	execute "normal! :sort " .. g:sort_regex .. "\<CR>"
 enddef
