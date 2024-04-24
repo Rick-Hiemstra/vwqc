@@ -2383,7 +2383,7 @@ augroup END
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def g:tagsloadedcheck()
+def g:TagsLoadedCheck()
 	var last_wiki_warning = ""
 	if has_key(g:vimwiki_list[vimwiki#vars#get_bufferlocal('wiki_nr')], 'vwqc')
 		if (!exists("g:last_wiki"))
