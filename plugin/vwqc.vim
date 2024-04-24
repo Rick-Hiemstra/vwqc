@@ -56,30 +56,30 @@ vim9script
 # -----------------------------------------------------------------
 #
 # ---- Setup ----
-## HelpMenu
-## ProjectSetup
-## CreateDefaultInterviewHeader
-## GetVWQCProjectParameters
-## ListProjectParameters
-## ParmCheck
-## DoesFileNameMatchLabelRegex
-## FormatInterview
-## FormatInterviewB
-## AugmentVimwikiLocalVars
-## PageHelp
-## DisplayPageHelp
-## CreateBackupQuery
-## CreateBackup
+# HelpMenu
+# ProjectSetup
+# CreateDefaultInterviewHeader
+# GetVWQCProjectParameters
+# ListProjectParameters
+# ParmCheck
+# DoesFileNameMatchLabelRegex
+# FormatInterview
+# FormatInterviewB
+# AugmentVimwikiLocalVars
+# PageHelp
+# DisplayPageHelp
+# CreateBackupQuery
+# CreateBackup
 #
 # ---- Annotations ----
-## Annotation
-## ExitAnnotation
-## AnnotationToggle
-## DeleteAnnotation
+# Annotation
+# ExitAnnotation
+# AnnotationToggle
+# DeleteAnnotation
 #
 # ---- Navigation ----
-## GoToReference
-## GoBackFromReference
+# GoToReference
+# GoBackFromReference
 #
 # ---- Reports ----
 # FullReport
@@ -1630,7 +1630,8 @@ def GetInterviewFileList()
 	# all.
 	var file_list_all = globpath('.', '*', 0, 1)
 	# build regex we'll use just to find our interview files. 
-	var file_regex = g:interview_label_regex .. '.md'
+	#var file_regex = g:interview_label_regex .. '.md'
+	var file_regex = g:interview_label_regex .. g:wiki_extension
 	#  cull the list for just those files that are interview files. the
 	#  match is at position 2 because the globpath function prefixes
 	#  filenames with/ which occupies positions 0 and 1.
