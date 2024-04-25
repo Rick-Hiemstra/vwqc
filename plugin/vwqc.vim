@@ -1342,13 +1342,10 @@ def g:AllSummariesGenReportsMeta(id: number, result: number)
 		put =g:summary_link_list
 		execute "normal! `Q"
 	endif
-	echo "After loop, waiting to close extra windows"
 	echom "After loop, waiting to close extra windows"
-	execute "normal! \<C-w>o"
-	echo "Extra windows closed waiting to stop lazyredraw"
+	#execute "normal! \<C-w>o"
 	echom "Extra windows closed waiting to stop lazyredraw"
 	set nolazyredraw
-	echo "Lazy redraw off waiting to redraw"
 	echom "Lazy redraw off waiting to redraw"
 	redraw
 enddef
