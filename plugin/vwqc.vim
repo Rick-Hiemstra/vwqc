@@ -1342,9 +1342,14 @@ def g:AllSummariesGenReportsMeta(id: number, result: number)
 		put =g:summary_link_list
 		execute "normal! `Q"
 	endif
-
+	echo "After loop, waiting to close extra windows"
+	echom "After loop, waiting to close extra windows"
 	execute "normal! \<C-w>o"
+	echo "Extra windows closed waiting to stop lazyredraw"
+	echom "Extra windows closed waiting to stop lazyredraw"
 	set nolazyredraw
+	echo "Lazy redraw off waiting to redraw"
+	echom "Lazy redraw off waiting to redraw"
 	redraw
 enddef
 
@@ -2175,7 +2180,6 @@ enddef
 def GetInterviewLineInfo(line_text: string): number 
 	var interview_label_position      = match(line_text, g:tag_search_regex)
 	var interview_line_num_pos        = match(line_text, ' \d\{4}', interview_label_position)
-	# echom "line: " .. line_text .. " number: " .. line_text[(interview_line_num_pos - 1) : (interview_line_num_pos + 2)]
 	var current_interview_line_number = str2nr(line_text[(interview_line_num_pos - 1) : (interview_line_num_pos + 2)])
 	return current_interview_line_number
 enddef
