@@ -2119,7 +2119,7 @@ def ProcessInterviewLines(meta: string, report_type: string, search_term: string
 		for block_index in range(0, blocks - 1)
 			g:csv_block = ""
 			first_line_num = printf("%04d", g:quote_dict[g:interview_list[g:int_index]][block_index][0]["line_num"])
-			echom "Inteview: " .. g:interview_list[g:int_index] .. " search term: " .. search_term .. " line_num: " .. g:quote_dict[g:interview_list[g:int_index]][block_index][0]["line_num"] .. " and formated: " .. first_line_num .. "\n"
+			#echom "Inteview: " .. g:interview_list[g:int_index] .. " search term: " .. search_term .. " line_num: " .. g:quote_dict[g:interview_list[g:int_index]][block_index][0]["line_num"] .. " and formated: " .. first_line_num .. "\n"
 			last_line_num  = printf("%04d", g:quote_dict[g:interview_list[g:int_index]][block_index][-1]["line_num"])
 			lines = len(g:quote_dict[g:interview_list[g:int_index]][block_index])
 			g:block = ""
@@ -2175,6 +2175,7 @@ enddef
 def GetInterviewLineInfo(line_text: string): number 
 	var interview_label_position      = match(line_text, g:tag_search_regex)
 	var interview_line_num_pos        = match(line_text, ' \d\{4}', interview_label_position)
+	echom "line: " .. line_text .. " number: " .. line_text[(interivew_line_num_pos + 1) : (interview_lin_num_pos + 4)]
 	var current_interview_line_number = str2nr(line_text[(interview_line_num_pos + 1) : (interview_line_num_pos + 4)])
 	return current_interview_line_number
 enddef
