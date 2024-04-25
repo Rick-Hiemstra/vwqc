@@ -1914,7 +1914,7 @@ def GraphTagInterviewSummary(tag_: string, longest_tag_length: number, bar_scale
 						 	" " .. g:tag_cross[g:interview_list[interview_index]][tag_][0] .. 
 							"(" .. g:tag_cross[g:interview_list[interview_index]][tag_][1] .. ")\n"
 		else
-			execute "normal! i" g:interview_list[interview_index] .. " " .. repeat(" ", offset) .. "|\n"
+			execute "normal! i" .. g:interview_list[interview_index] .. " " .. repeat(" ", offset) .. "|\n"
 		endif
 	endfor
 	execute "normal! iLegend: □ = coding block bar over top of tag bar. ▤ = tag bar.\n"
