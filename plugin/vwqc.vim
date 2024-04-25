@@ -2119,7 +2119,7 @@ def ProcessInterviewLines(meta: string, report_type: string, search_term: string
 		for block_index in range(0, blocks - 1)
 			g:csv_block = ""
 			first_line_num = printf("%04d", g:quote_dict[g:interview_list[g:int_index]][block_index][0]["line_num"])
-			echom "Inteview: " .. g:interview_list[g:int_index] ..  " line_num: " .. g:quote_dict[g:interview_list[g:int_index]][block_index][0]["line_num"] .. " and formated: " .. first_line_num .. "\n"
+			echom "Inteview: " .. g:interview_list[g:int_index] .. " search term: " .. search_term .. " line_num: " .. g:quote_dict[g:interview_list[g:int_index]][block_index][0]["line_num"] .. " and formated: " .. first_line_num .. "\n"
 			last_line_num  = printf("%04d", g:quote_dict[g:interview_list[g:int_index]][block_index][-1]["line_num"])
 			lines = len(g:quote_dict[g:interview_list[g:int_index]][block_index])
 			g:block = ""
