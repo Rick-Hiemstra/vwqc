@@ -138,7 +138,6 @@ vim9script
 # GenDictTagList
 # CreateTagDict
 # CurrentTagsPopUpMenu
-# NoTagListNotice 
 # TagFillWithChoice
 # FindLastTagAddedToBuffer
 # FillChosenTag
@@ -1957,97 +1956,103 @@ def g:TagStats()
 
 	ParmCheck()
 	
-	var ext_length = (len(g:vimwiki_wikilocal_vars[g:wiki_number]['ext']) + 1) * -1
-	var interview_to_crawl = "Undefined"
+	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
+	if (g:tags_generated == 1)
 
-	# save buffer number of current file to register 'a' so you can return here
-	g:buffer_to_return_to = bufnr('%')
-	
-	g:interview_list = []
-	GetInterviewFileList()
+		var ext_length = (len(g:vimwiki_wikilocal_vars[g:wiki_number]['ext']) + 1) * -1
+		var interview_to_crawl = "Undefined"
 
-	g:tags_list = []
-	
-	# Go through each interview file building up a list of tags
-	for interview in range(0, (len(g:interview_list) - 1))
-		# go to interview file
-		execute "normal :e " .. g:interview_list[interview] .. "\<CR>"
-		interview_to_crawl = expand('%:t:r')
-		CrawlBufferTags(interview, interview_to_crawl)	
-	endfor
+		# save buffer number of current file to register 'a' so you can return here
+		g:buffer_to_return_to = bufnr('%')
+		
+		g:interview_list = []
+		GetInterviewFileList()
 
-	#Creates the g:unique_tags list 
-	CreateUniqueTagList()
-	sort(g:unique_tags)
+		g:tags_list = []
+		
+		# Go through each interview file building up a list of tags
+		for interview in range(0, (len(g:interview_list) - 1))
+			# go to interview file
+			execute "normal :e " .. g:interview_list[interview] .. "\<CR>"
+			interview_to_crawl = expand('%:t:r')
+			CrawlBufferTags(interview, interview_to_crawl)	
+		endfor
 
-	g:tag_cross   = CalcInterviewTagCrosstabs(g:unique_tags, g:interview_list, ext_length)
-	
-	# Find the longest tag in terms of the number of characters in the tag.
-	var len_longest_tag = FindLengthOfLongestTag(g:unique_tags)
+		#Creates the g:unique_tags list 
+		CreateUniqueTagList()
+		sort(g:unique_tags)
 
-	var window_width = winwidth(win_getid())
+		g:tag_cross   = CalcInterviewTagCrosstabs(g:unique_tags, g:interview_list, ext_length)
+		
+		# Find the longest tag in terms of the number of characters in the tag.
+		var len_longest_tag = FindLengthOfLongestTag(g:unique_tags)
 
-	# Find the largest tag and block tallies. This will be used in the scale calculation for graphs.
-	# Multiplying by 1.0 is done to coerce integers to floats.
-	var largest_tag_and_block_counts = FindLargestTagAndBlockCounts(g:tag_cross, g:unique_tags, g:interview_list, ext_length)
-	var largest_tag_count            = largest_tag_and_block_counts[0] * 1.0
-	var largest_block_count          = largest_tag_and_block_counts[1] * 1.0
+		var window_width = winwidth(win_getid())
 
-	# find the number of digits in the following counts. Used for
-	# calculating the graph scale. The nested functions are mostly to
-	# convert the float to an int. Vimscript doesn't have a direct way to do this.
-	var largest_tag_count_digits    = str2nr(string(trunc(log10(largest_tag_count) + 1)))
-	var largest_block_count_digits  = str2nr(string(trunc(log10(largest_block_count) + 1)))
+		# Find the largest tag and block tallies. This will be used in the scale calculation for graphs.
+		# Multiplying by 1.0 is done to coerce integers to floats.
+		var largest_tag_and_block_counts = FindLargestTagAndBlockCounts(g:tag_cross, g:unique_tags, g:interview_list, ext_length)
+		var largest_tag_count            = largest_tag_and_block_counts[0] * 1.0
+		var largest_block_count          = largest_tag_and_block_counts[1] * 1.0
 
-	var max_bar_width = window_width - len_longest_tag - largest_tag_count - largest_tag_count_digits - largest_block_count_digits - 8
-	var bar_scale     = max_bar_width / largest_tag_count
+		# find the number of digits in the following counts. Used for
+		# calculating the graph scale. The nested functions are mostly to
+		# convert the float to an int. Vimscript doesn't have a direct way to do this.
+		var largest_tag_count_digits    = str2nr(string(trunc(log10(largest_tag_count) + 1)))
+		var largest_block_count_digits  = str2nr(string(trunc(log10(largest_block_count) + 1)))
 
-	# Return to the buffer where these charts and graphs are going to be
-	# produced and clear out the buffer.
-	execute "normal! :b" .. g:buffer_to_return_to .. "\<CR>gg"
+		var max_bar_width = window_width - len_longest_tag - largest_tag_count - largest_tag_count_digits - largest_block_count_digits - 8
+		var bar_scale     = max_bar_width / largest_tag_count
 
-	set lazyredraw
+		# Return to the buffer where these charts and graphs are going to be
+		# produced and clear out the buffer.
+		execute "normal! :b" .. g:buffer_to_return_to .. "\<CR>gg"
 
-	execute "normal! :e Summary Tag Stats - Tables - By Interview" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
-	execute "normal! ggVGd"
+		set lazyredraw
 
-	# Print interview tag summary tables
-	for interview in range(0, (len(g:interview_list) - 1))
-		PrintInterviewTagSummary(g:interview_list[interview])	
-	endfor
+		execute "normal! :e Summary Tag Stats - Tables - By Interview" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+		execute "normal! ggVGd"
 
-	execute "normal! :e Summary Tag Stats - Tables - By Tag" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
-	execute "normal! ggVGd"
+		# Print interview tag summary tables
+		for interview in range(0, (len(g:interview_list) - 1))
+			PrintInterviewTagSummary(g:interview_list[interview])	
+		endfor
 
-	#Print tag interview summary tables
-	for tag_index in range(0, (len(g:unique_tags) - 1))
-		PrintTagInterviewSummary(g:unique_tags[tag_index], g:interview_list)
-	endfor
+		execute "normal! :e Summary Tag Stats - Tables - By Tag" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+		execute "normal! ggVGd"
 
-	execute "normal! :e Summary Tag Stats - Charts - By Interview" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
-	execute "normal! ggVGd"
+		#Print tag interview summary tables
+		for tag_index in range(0, (len(g:unique_tags) - 1))
+			PrintTagInterviewSummary(g:unique_tags[tag_index], g:interview_list)
+		endfor
 
-	# Print interview tag summary graphs
-	for interview in range(0, (len(g:interview_list) - 1))
-		GraphInterviewTagSummary(g:interview_list[interview], len_longest_tag, bar_scale)	
-	endfor
+		execute "normal! :e Summary Tag Stats - Charts - By Interview" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+		execute "normal! ggVGd"
 
-	execute "normal! :e Summary Tag Stats - Charts - By Tag" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
-	execute "normal! ggVGd"
+		# Print interview tag summary graphs
+		for interview in range(0, (len(g:interview_list) - 1))
+			GraphInterviewTagSummary(g:interview_list[interview], len_longest_tag, bar_scale)	
+		endfor
 
-	# Print interview tag summary graphs
-	for tag_index in range(0, (len(g:unique_tags) - 1))
-		GraphTagInterviewSummary(g:unique_tags[tag_index], len_longest_tag, bar_scale)	
-	endfor
-	
-	set nolazyredraw
-	redraw
+		execute "normal! :e Summary Tag Stats - Charts - By Tag" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+		execute "normal! ggVGd"
 
-	# Return to the buffer where these charts and graphs are going to be
-	# produced and clear out the buffer.
-	execute "normal! :b" .. g:buffer_to_return_to .. "\<CR>gg"
+		# Print interview tag summary graphs
+		for tag_index in range(0, (len(g:unique_tags) - 1))
+			GraphTagInterviewSummary(g:unique_tags[tag_index], len_longest_tag, bar_scale)	
+		endfor
+		
+		set nolazyredraw
+		redraw
 
-	confirm("Tag stats have been updated. Access tag stats pages from the index page", "OK", 1)
+		# Return to the buffer where these charts and graphs are going to be
+		# produced and clear out the buffer.
+		execute "normal! :b" .. g:buffer_to_return_to .. "\<CR>gg"
+
+		confirm("Tag stats have been updated. Access tag stats pages from the index page", "OK", 1)
+	else
+		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
+	endif
 enddef
 
 # -----------------------------------------------------------------
@@ -2590,42 +2595,30 @@ def UpdateCurrentTagsList()
 enddef
 
 # ------------------------------------------------------
-#
+# This is what populates the omnicomplete for tags. ie <F8>.
 # ------------------------------------------------------
 def g:TagsGenThisSession() 
 	
 	ParmCheck()
 
-	# -----------------------------------------------------------------
-	# Change the pwd to that of the current wiki.
-	# -----------------------------------------------------------------
-	execute "normal! :cd %:p:h\<CR>"
-	# ------------------------------------------------------
-	# See if the wiki config dictionary has had a
-	# tags_generated_this_session key added.
-	# ------------------------------------------------------
-	g:tags_gen_this_wiki_this_session = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
-	# ------------------------------------------------------
-	# Checks to see if we have the proper current tag list for our tag
-	# omnicompletion.
-	# ------------------------------------------------------
-	if !exists("g:current_tags_set_this_session")
-		NoTagListNotice(1)
+	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
+	if (g:tags_generated == 1)
+
+		# -----------------------------------------------------------------
+		# Change the pwd to that of the current wiki.
+		# -----------------------------------------------------------------
+		execute "normal! :cd %:p:h\<CR>"
+		# ------------------------------------------------------
+		# See if the wiki config dictionary has had a
+		# tags_generated_this_session key added.
+		# ------------------------------------------------------
+		# The ! after startinsert makes it insert after (like A). If
+		# you don't have the ! it inserts before (like i)
+		# ------------------------------------------------------
+		startinsert!
+		feedkeys("\<c-x>\<c-o>")
 	else
-		if g:tags_gen_this_wiki_this_session != 1 
-			NoTagListNotice(2)
-		else
-			if g:last_wiki_tags_generated_for != g:wiki_number
-				NoTagListNotice(3)
-			else
-				# ------------------------------------------------------
-				# The ! after startinsert makes it insert after (like A). If
-				# you don't have the ! it inserts before (like i)
-				# ------------------------------------------------------
-				startinsert!
-				feedkeys("\<c-x>\<c-o>")
-			endif
-		endif
+		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
 	endif
 enddef
 
@@ -2708,20 +2701,6 @@ def CurrentTagsPopUpMenu()
 				 })
 enddef
 
-# ------------------------------------------------------
-#
-# ------------------------------------------------------
-def NoTagListNotice(tag_message: number) 
-	var popup_message = "undefined"
-	if (tag_message == 1)
-		popup_message = "Press <F2> to populate the current tag list."
-	elseif (tag_message == 2)
-		popup_message = "A tag list for this wiki has not been generated yet this session. Press <F2> to populate the current tag list with this wiki\'s tags."
-	else 
-		popup_message = "Update the tag list with this wiki\'s tags by pressing <F2>."
-	endif
-	confirm(popup_message, "Got it", 1)
-enddef
 
 
 # ------------------------------------------------------------
