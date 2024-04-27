@@ -47,9 +47,9 @@ VWQC uses popup windows which are best displayed in a GUI implementation of Vim 
 
 ### Prerequisites ###
 
-VWQC requires Vim 8.2.3832 or later or NeoVim 0.6.0 or later. 
+VWQC requires Vim 9.1 or higher. Although Vimwiki which VWQC is built on is written in legacy Vimscript, VWQC is written in Vim9script. VWQC cannot be run in Neovim as Neovim does not support Vim9script.
 
-Make sure you have the following settings in your vimrc file:
+Make sure you have the following settings in your .vimrc file:
 
 ```
 set nocompatible
@@ -121,7 +121,6 @@ The following keybindings and commands are set in the plugin.
 - `<leader>da`                         Delete annotation
 - `<leader>df`                         Get/define tag definition
 - `<leader>tc`                         Double-colon omni-complete toggle
-- `:call TagLinter`                    Remove duplicate tags from lines
 
 **REPORTS**
 - `:call FullReport("<tag>")`           Create full tag summary
@@ -132,6 +131,8 @@ The following keybindings and commands are set in the plugin.
 - `:call Gather("<tag>")`               Create secondary tag sub-report
 - `:call AllSummariesFull()`              Create FullReport summaries for all tags in tag glossary 
 - `:call AllSummariesQuotes()`            Create QuotesReport summaries for all tags in tag glossary 
+- `:call AllSummariesMeta()`              Create MetaReport summaries for all tags in tag glossary 
+- `:call AllSummariesAnnos()`             Create AnnnotationsReport summaries for all interviews and all tags in tag glossary 
 - `:call TagStats()`                      Create tables and graphs by tag and interview 
   
 **WORKING WITH REPORTS**

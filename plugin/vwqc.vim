@@ -1,9 +1,9 @@
 vim9script
 
-#if !has('vim9script') ||  v:version < 901
-#    echoerr 'Needs Vim version 9.1 and above'
-#    finish
-#endif
+if !has('vim9script') ||  v:version < 901
+    echoerr 'Needs Vim version 9.1 and above'
+    finish
+endif
 # -----------------------------------------------------------------
 # ----------------- DECLARE THIS A VIMSCRIPT 9 SCRIPT -------------
 # -----------------------------------------------------------------
@@ -60,8 +60,8 @@ vim9script
 # ProjectSetup
 # CreateDefaultInterviewHeader
 # GetVWQCProjectParameters
-# ListProjectParameters
 # ParmCheck
+# ListProjectParameters
 # DoesFileNameMatchLabelRegex
 # FormatInterview
 # FormatInterviewB
@@ -91,7 +91,12 @@ vim9script
 # AllSummariesGenReportsFull
 # AllSummariesQuotes
 # AllSummariesGenReportsQuotes
+# AllSummariesMeta
+# AllSummariesGenReportsMeta
+# AllSummariesAnnos
+# AllSummariesGenReportsAnnos
 # GenSummaryLists
+# GenInterviewLists
 # Gather
 # Report
 #
@@ -108,6 +113,7 @@ vim9script
 # TagStats
 #
 # PopulateQuoteLineList
+# BuildListOfCrossCodes
 # ProcessInterviewLines
 # ProcessInterviewTitle
 # GetInterviewLineInfo
@@ -130,7 +136,9 @@ vim9script
 # TrimLeadingAndTrailingPartialSentence
 #
 # ---- Tags ----
+# TagsLoadedCheck
 # GetTagUpdate
+# GenTagsWithLocationList
 # UpdateCurrentTagsPage 
 # UpdateCurrentTagsList
 # TagsGenThisSession
@@ -138,9 +146,18 @@ vim9script
 # GenDictTagList
 # CreateTagDict
 # CurrentTagsPopUpMenu
-# TagFillWithChoice
 # FindLastTagAddedToBuffer
-# FillChosenTag
+# TagFillWithChoice
+# FillTagBlock
+# CreateFillLine
+# FindFirstInterviewLine
+# CreateBlockMetadataDict
+# CreateSubBlocksLists
+# BuildMetadataBlockFill
+# AddFillTags
+# FindUpperTagFillLine
+# WriteInFormattedTagMetadata
+# ProcessLineMetadata
 # ChangeTagFillOption
 # SortTagDefs
 # GetTagDef
@@ -148,7 +165,6 @@ vim9script
 # AddNewTagDef
 # 
 # ---- Attributes ----
-# GetInterviewFileList
 # Attributes
 # ColSort
 #
