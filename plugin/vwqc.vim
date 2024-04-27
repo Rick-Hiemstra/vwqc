@@ -25,8 +25,8 @@ endif
 # -----------------------------------------------------------------
 # Vimwiki Qualitative Code (VWQC) - Vimscript 9 version
 # Written by Rick Hiemstra and Lindsay Callaway
-# Version 0.1 - 
-# 2024-04-02	
+# Version Vim9 1.0 
+# 2024-04-27	
 #
 # Write a function to restore a backup
 #
@@ -34,22 +34,20 @@ endif
 # ------------------------ TO DO ------------------------------
 # -----------------------------------------------------------------
 # Update page help
-# Modify the file names when reports are created by AllSummaries() so that the
-# name reflects the function origin.
 # Could you do this with ripgrep to get more speed? Then you process the lines
 # Re-format the how attributes are handled
 # Write a function to modify the attribute lines in the old wikis.
 #
 # Change Vimwiki so g:current_tags is only deepcopied if it is an interview
-# wiki. Add wiki_x.vwqc = 1 to interview wikis to identify interview wikis.
-# This will make sure that the tag completion behavior isn't compromised on
-# non-vwqc wikis.
+# wiki. 
 #
 # Change the Gather() function so that it will give you an error message if
 # you try to use it in a non-quotes report (or other kind of buffer).
 #
-# Add thevwqc key-value pair to the wiki definitions.
-# 
+# Remove the .swp files from backups
+# Create a restore backup function.
+#
+# Find the older :\
 
 # -----------------------------------------------------------------
 # ------------------------ FUNCTIONS ------------------------------
@@ -823,7 +821,8 @@ def Annotation()
 		# --------------------------------------------------
 		# Search for a tag without going past the end of the file.
 		# --------------------------------------------------
-		match_line = search(':\a.\{-}:', "W")
+		#match_line = search(':\a.\{-}:', "W")
+		match_line = search(g:tag_regex, "W")
 		# --------------------------------------------------
 		# If we found a tag (ie. The search function doesn't
 		# return a zero) and that tag is found on the current line
