@@ -3087,43 +3087,50 @@ def g:GetTagDef()
 	
 	ParmCheck()
 
-	# -----------------------------------------------------------------
-	# Change the pwd to that of the current wiki.
-	# -----------------------------------------------------------------
 	execute "normal! :cd %:p:h\<CR>"
-	# -----------------------------------------------------------------
-	# Find the tag under the cursor. If it exists in the tag_dict display
-	# the definition in a popup window, else offer to add the tag to the
-	# Tag Glossary page.
-	# -----------------------------------------------------------------
-	g:tag_to_test = GetTagUnderCursor()
-	
-	var tag_check_message = g:tag_to_test .. " is not defined in the Tag Glossary\. Would you like to add it now?"
+	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
+	if (g:tags_generated == 1)
 
- 	if (g:tag_to_test != "") 
-		if (has_key(g:tag_dict, g:tag_to_test))
- 			popup_atcursor(get(g:tag_dict, g:tag_to_test), {
+		# -----------------------------------------------------------------
+		# Change the pwd to that of the current wiki.
+		# -----------------------------------------------------------------
+		execute "normal! :cd %:p:h\<CR>"
+		# -----------------------------------------------------------------
+		# Find the tag under the cursor. If it exists in the tag_dict display
+		# the definition in a popup window, else offer to add the tag to the
+		# Tag Glossary page.
+		# -----------------------------------------------------------------
+		g:tag_to_test = GetTagUnderCursor()
+		
+		var tag_check_message = g:tag_to_test .. " is not defined in the Tag Glossary\. Would you like to add it now?"
+
+ 		if (g:tag_to_test != "") 
+			if (has_key(g:tag_dict, g:tag_to_test))
+ 				popup_atcursor(get(g:tag_dict, g:tag_to_test), {
+ 					 'border': [],
+ 					 'close': 'click',
+ 					 })
+ 			else
+ 				popup_menu(['Yes', 'No'], {
+				         title: tag_check_message, 
+					 callback: 'AddNewTagDef',
+					 highlight: 'Question',
+					 minwidth: 50,
+					 maxwidth: 100, 
+					 pos: "center", 
+ 					 border: [],
+ 					 close: 'click',
+					 padding: [0, 1, 0, 1] })
+			endif
+		else
+ 			popup_atcursor("There is no valid tag under the cursor.", {
  				 'border': [],
  				 'close': 'click',
  				 })
- 		else
- 			popup_menu(['Yes', 'No'], {
-			         title: tag_check_message, 
-				 callback: 'AddNewTagDef',
-				 highlight: 'Question',
-				 minwidth: 50,
-				 maxwidth: 100, 
-				 pos: "center", 
- 				 border: [],
- 				 close: 'click',
-				 padding: [0, 1, 0, 1] })
-		endif
+ 		endif
 	else
- 		popup_atcursor("There is no valid tag under the cursor.", {
- 			 'border': [],
- 			 'close': 'click',
- 			 })
- 	endif
+		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
+	endif
 enddef
 
 
