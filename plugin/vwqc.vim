@@ -2468,7 +2468,33 @@ def g:GetTagUpdate()
 	# VimwikiRebuildTags
 	# -----------------------------------------------------------------
 	execute "normal :w\<CR>"
-	GenTagsWithLocationList()
+
+	var ext_length = (len(g:vimwiki_wikilocal_vars[g:wiki_number]['ext']) + 1) * -1
+	var interview_to_crawl = "Undefined"
+
+	# save buffer number of current file to register 'a' so you can return here
+	g:buffer_to_return_to = bufnr('%')
+	
+	g:interview_list = []
+	GetInterviewFileList()
+
+	g:tags_list = []
+	
+	# Go through each interview file building up a list of tags
+	for interview in range(0, (len(g:interview_list) - 1))
+		# go to interview file
+		execute "normal :e " .. g:interview_list[interview] .. "\<CR>"
+		interview_to_crawl = expand('%:t:r')
+		CrawlBufferTags(interview, interview_to_crawl)	
+	endfor
+
+	#Creates the g:unique_tags list 
+	CreateUniqueTagList()
+	sort(g:unique_tags)
+
+	g:current_tags = deepcopy(g:unique_tags)
+
+	# GenTagsWithLocationList()
 	# -----------------------------------------------------------------
 	# g:current_tags is used in vimwiki's omnicomplete function. At this
 	# point this is a modifcation to ftplugin#vimwikimwiki#Complete_wikifiles
@@ -2509,6 +2535,69 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
+#def g:GetTagUpdate() 
+#
+#	ParmCheck()
+#
+#	confirm("Populating tags. This may take a while.", "Got it", 1)
+#
+#	CreateTagDict()
+#
+#	execute "normal! :delmarks Y\<CR>"
+#	execute "normal! mY"
+#	# -----------------------------------------------------------------
+#	# Change the pwd to that of the current wiki.
+#	# -----------------------------------------------------------------
+#	execute "normal! :cd %:p:h\<CR>"
+#	# ------------------------------------------------------
+#	# Find the vimwiki that the current buffer is in.
+#	# ------------------------------------------------------
+#	# g:wiki_number = vimwiki#vars#get_bufferlocal('wiki_nr') 
+#	# -----------------------------------------------------------------
+#	# Save the current buffer so any new tags are found by
+#	# VimwikiRebuildTags
+#	# -----------------------------------------------------------------
+#	execute "normal :w\<CR>"
+#	GenTagsWithLocationList()
+#	# -----------------------------------------------------------------
+#	# g:current_tags is used in vimwiki's omnicomplete function. At this
+#	# point this is a modifcation to ftplugin#vimwikimwiki#Complete_wikifiles
+#	# where
+#	#    tags = vimwiki#tags#get_tags()
+#	# has been replaced by
+#	#    tags = deepcopy(g:current_tags)
+#	# This was done because as the number of tags grows in a project
+#	# vimwiki#tags#get_tags() slows down.
+#	# -----------------------------------------------------------------
+#	g:current_tags = sort(g:current_tags, 'i')
+#	# ------------------------------------------------------
+#	# Set the current wiki as the wiki that g:current_tags were last
+#	# generated for. Also mark that a set of current tags has been
+#	# generated to true.
+#	# ------------------------------------------------------
+#	g:last_wiki_tags_generated_for = g:wiki_number
+#	g:current_tags_set_this_session = 1
+#	# ------------------------------------------------------
+#	# Popup menu to display the list of current tags sorted in
+#	# case-insenstive alphabetical order
+#	# ------------------------------------------------------
+#	GenDictTagList()
+#	UpdateCurrentTagsList()
+#	UpdateCurrentTagsPage()
+#	CurrentTagsPopUpMenu()
+#
+#	g:current_tags = sort(g:just_in_dict_list + g:just_in_current_tag_list + g:in_both_lists)
+#
+#	# ------------------------------------------------------
+#	# Add an element to the current wiki's configuration dictionary that
+#	# marks it as having had its tags generated in this vim session.
+#	# ------------------------------------------------------
+#	g:vimwiki_wikilocal_vars[g:wiki_number]['tags_generated_this_session'] = 1
+#	execute "normal! `Yzz"
+#enddef
+# ------------------------------------------------------
+#
+# ------------------------------------------------------
 def GenTagsWithLocationList() 
 	ParmCheck()
 	# Change the pwd to that of the current wiki.
@@ -2532,14 +2621,12 @@ def GenTagsWithLocationList()
 				first_col = g:loc_list[line_index]['col'] - 4 
 				last_col  = g:loc_list[line_index]['end_col'] - 7
 				test_tag  = g:loc_list[line_index]['text'][first_col : last_col]
-				echom "BufType: " .. buffer_type .. ", test_tag: " .. test_tag .. ", line: " .. g:loc_list[line_index]['lnum']  .. ", first_col: " .. first_col .. " last_col: " .. last_col .. ", loc_list col: " .. g:loc_list[line_index]['col'] .. ", loc_list endcol: " .. g:loc_list[line_index]['end_col'] .. "\n"
-				echom "text: " .. g:loc_list[line_index]['text'] .. "\n"
+			#	echom "BufType: " .. buffer_type .. ", test_tag: " .. test_tag .. ", line: " .. g:loc_list[line_index]['lnum']  .. ", first_col: " .. first_col .. " last_col: " .. last_col .. ", loc_list col: " .. g:loc_list[line_index]['col'] .. ", loc_list endcol: " .. g:loc_list[line_index]['end_col'] .. "\n"
+			#	echom "text: " .. g:loc_list[line_index]['text'] .. "\n"
 			elseif (buffer_type == "Annotation")
 				first_col = g:loc_list[line_index]['col']  
 				last_col  = g:loc_list[line_index]['end_col'] - 3
 				test_tag  = g:loc_list[line_index]['text'][first_col : last_col]
-				echom "BufType: " .. buffer_type .. ", test_tag: " .. test_tag .. ", line: " .. g:loc_list[line_index]['lnum']  .. ", first_col: " .. first_col .. " last_col: " .. last_col .. ", loc_list col: " .. g:loc_list[line_index]['col'] .. ", loc_list endcol: " .. g:loc_list[line_index]['end_col'] .. "\n"
-				echom "text: " .. g:loc_list[line_index]['text'] .. "\n"
 			endif 
 		
 			if ((buffer_type == "Interview") || (buffer_type == "Annotation"))
