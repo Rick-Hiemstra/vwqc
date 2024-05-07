@@ -3078,7 +3078,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def SortTagDefs() 
+def g:SortTagDefs() 
 	execute "normal! :%s/}/}\r/g\<CR>"
 	execute "normal! :g/{/,/}/s/\\n/TTTT/\<CR>"
 	execute "normal! :1,$sort \i\<CR>"
@@ -3177,7 +3177,7 @@ def AddNewTagDef(id: number, result: number)
 		# -----------------------------------------------------------------
 		execute "normal! :e" .. g:vimwiki_wikilocal_vars[g:wiki_number]['path'] .. "Tag Glossary" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
 		execute "normal! Go{\n## Name: " .. g:tag_to_test .. "\n**Detailed Description:** \n**Incl. Criteria:** \n**Excl. Criteria:** \n**Example:** \n}\<ESC>4kA"
-		SortTagDefs()
+		g:SortTagDefs()
 		execute "normal! /Name: " .. g:tag_to_test .. "\<CR>jA"
 		confirm("Add your tag description.\n\nWhen you are finished press <F2> to update the tag list.\n\n", "OK", 1)
 	endif
