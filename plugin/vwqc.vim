@@ -2532,12 +2532,12 @@ def GenTagsWithLocationList()
 				first_col = g:loc_list[line_index]['col'] - 4 
 				last_col  = g:loc_list[line_index]['end_col'] - 7
 				test_tag  = g:loc_list[line_index]['text'][first_col : last_col]
-				echom "BufType: " .. buffer_type .. " test_tag: " .. test_tag .. " line_index: " .. line_index .. "buffer: " .. g:loc_list[line_index]['text'] .. " first_col: " .. first_col .. " last_col: " .. last_col
+				echom "BufType: " .. buffer_type .. " test_tag: " .. test_tag .. " line: " .. g:loc_list[line_index]['lnum'] .. " buffer: " .. g:loc_list[line_index]['text'] .. " first_col: " .. first_col .. " last_col: " .. last_col
 			elseif (buffer_type == "Annotation")
 				first_col = g:loc_list[line_index]['col']  
 				last_col  = g:loc_list[line_index]['end_col'] - 3
 				test_tag  = g:loc_list[line_index]['text'][first_col : last_col]
-				echom "BufType: " .. buffer_type .. " test_tag: " .. test_tag .. " line_index: " .. line_index .. "buffer: " .. g:loc_list[line_index]['text'] .. " first_col: " .. first_col .. " last_col: " .. last_col
+				echom "BufType: " .. buffer_type .. " test_tag: " .. test_tag .. " line_index: " .. g:loc_list[line_index]['lnum'] .. " buffer: " .. g:loc_list[line_index]['text'] .. " first_col: " .. first_col .. " last_col: " .. last_col
 			endif 
 		
 			if ((buffer_type == "Interview") || (buffer_type == "Annotation"))
