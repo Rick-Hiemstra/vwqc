@@ -2491,8 +2491,13 @@ def g:GetTagUpdate()
 	#Creates the g:unique_tags list 
 	CreateUniqueTagList()
 	sort(g:unique_tags)
+	
+	g:current_tags = []
+	for index in range(0, (len(g:unique_tags) - 1))
+		g:current_tags = g:current_tags + [g:unique_tags[index][1 : -1]
 
-	g:current_tags = deepcopy(g:unique_tags)
+	endfor
+
 
 	# GenTagsWithLocationList()
 	# -----------------------------------------------------------------
