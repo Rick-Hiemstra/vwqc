@@ -2494,7 +2494,7 @@ def g:GetTagUpdate()
 	
 	g:current_tags = []
 	for index in range(0, (len(g:unique_tags) - 1))
-		g:current_tags = g:current_tags + [g:unique_tags[index][1 : -1]
+		g:current_tags = g:current_tags + [g:unique_tags[index][1 : -1]]
 
 	endfor
 
