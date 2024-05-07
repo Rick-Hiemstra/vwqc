@@ -47,6 +47,13 @@ endif
 # Remove the .swp files from backups
 # Create a restore backup function.
 #
+# Deal with the case where a wiki is configured with a path that doesn't end 
+# with a /
+#
+# Figure out why Tag Glossary items aren't being sorted properly.
+#
+# Add a popup on exit to prompt a backup, or make a backup automatic.
+#
 # Find the older :\
 
 # -----------------------------------------------------------------
@@ -3074,7 +3081,7 @@ enddef
 def SortTagDefs() 
 	execute "normal! :%s/}/}\r/g\<CR>"
 	execute "normal! :g/{/,/}/s/\\n/TTTT/\<CR>"
-	execute "normal! :3,$sort \i\<CR>"
+	execute "normal! :1,$sort \i\<CR>"
 	execute "normal! " .. ':3,$g/^$/d' .. "\<CR>"
 	execute "normal! :%s/TTTT/\\r/g\<CR>"
 enddef
