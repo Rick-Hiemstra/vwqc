@@ -1683,7 +1683,12 @@ def GetInterviewFileList()
 enddef
 
 # -----------------------------------------------------------------
-# 
+# g:tags_list is a list of tags with the following sub-elements:
+# 0) Interview name
+# 1) Line number the tag is on
+# 2) The tag
+# 3) All the tags on the line
+# 4) The line text less metadata.
 # -----------------------------------------------------------------
 def CrawlBufferTags(interview: number, interview_name: string) 
 	var start_line = 2
@@ -1722,8 +1727,10 @@ def CrawlBufferTags(interview: number, interview_name: string)
 			endwhile
 		endif
 		# Add tags found on line to g:tags_list
+		var line_text = getline(".")
+		line_text = line_text[1 : g:text_col_width]
 		for tag_index in range(0, len(g:tags_on_line) - 1)
-			g:tags_list = g:tags_list + [[interview_name, line, g:tags_on_line[tag_index]]]
+			g:tags_list = g:tags_list + [[interview_name, line, g:tags_on_line[tag_index], g:tags_on_line, line_text]]
 		endfor
 		# Go to start of next line
 		execute "normal! j0"
@@ -2495,9 +2502,7 @@ def g:GetTagUpdate()
 	g:current_tags = []
 	for index in range(0, (len(g:unique_tags) - 1))
 		g:current_tags = g:current_tags + [g:unique_tags[index][1 : -2]]
-
 	endfor
-
 
 	# GenTagsWithLocationList()
 	# -----------------------------------------------------------------
