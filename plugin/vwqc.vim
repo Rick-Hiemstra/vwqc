@@ -1734,7 +1734,7 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 
 		var processed_line_1 = 0
 		for tag_index in range(0, len(g:tags_on_line) - 1)
-			echom "line: " .. line .. ", interview: " .. interview_name .. ", tag: " .. g:tags_on_line[tag_index]
+			#echom "line: " .. line .. ", interview: " .. interview_name .. ", tag: " .. g:tags_on_line[tag_index]
 			if ((line == 1) && (processed_line_1 == 0))
 				g:attr_list = g:attr_list + [[interview_name, g:tags_on_line]]
 				#g:attr_list = g:attr_list + [[interview_name, line, g:tags_on_line[tag_index], interview_line_num, g:tags_on_line, line_text]]
