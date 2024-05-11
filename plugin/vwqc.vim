@@ -106,7 +106,7 @@ endif
 # Report
 #
 # GetInterviewFileList
-# CrawlBufferTags
+# CrawlInterviewTags
 # CalcInterviewTagCrosstabs
 # FindLargestTagAndBlockCounts
 # PrintInterviewTagSummary
@@ -1691,8 +1691,8 @@ enddef
 # 4) All the tags on the line
 # 5) The line text less metadata.
 # -----------------------------------------------------------------
-def CrawlBufferTags(interview: number, interview_name: string) 
-	var start_line = 2
+def CrawlInterviewTags(interview: number, interview_name: string) 
+	var start_line = 1
 	var end_line   = line('$')
 	var tag_being_considered = "undefined"
 	# move through each line testing for tags and removing duplicate tags
@@ -1732,8 +1732,14 @@ def CrawlBufferTags(interview: number, interview_name: string)
 		var interview_line_num  = str2nr(matchstr(line_text, ': \d\{4} │')[2 : -2])
 		line_text = line_text[0 : (g:text_col_width + 1)]
 
+		var processed_line_1 = 0
 		for tag_index in range(0, len(g:tags_on_line) - 1)
-			g:tags_list = g:tags_list + [[interview_name, line, g:tags_on_line[tag_index], interview_line_num, g:tags_on_line, line_text]]
+			if ((line == 1) && (processed_line_1 == 0))
+				g:attr_list = g:attr_list + [[interview_name, g:tags_on_line]]
+				processed_line_1 = 1
+			else
+				g:tags_list = g:tags_list + [[interview_name, line, g:tags_on_line[tag_index], interview_line_num, g:tags_on_line, line_text]]
+			endif
 		endfor
 		# Go to start of next line
 		execute "normal! j0"
@@ -2000,13 +2006,14 @@ def g:TagStats()
 		GetInterviewFileList()
 
 		g:tags_list = []
+		g:attr_list = []
 		
 		# Go through each interview file building up a list of tags
 		for interview in range(0, (len(g:interview_list) - 1))
 			# go to interview file
 			execute "normal :e " .. g:interview_list[interview] .. "\<CR>"
 			interview_to_crawl = expand('%:t:r')
-			CrawlBufferTags(interview, interview_to_crawl)	
+			CrawlInterviewTags(interview, interview_to_crawl)	
 		endfor
 
 		#Creates the g:unique_tags list 
@@ -2489,13 +2496,14 @@ def g:GetTagUpdate()
 	GetInterviewFileList()
 
 	g:tags_list = []
+	g:attr_list = []
 	
 	# Go through each interview file building up a list of tags
 	for interview in range(0, (len(g:interview_list) - 1))
 		# go to interview file
 		execute "normal :e " .. g:interview_list[interview] .. "\<CR>"
 		interview_to_crawl = expand('%:t:r')
-		CrawlBufferTags(interview, interview_to_crawl)	
+		CrawlInterviewTags(interview, interview_to_crawl)	
 	endfor
 
 	#Creates the g:unique_tags list 
