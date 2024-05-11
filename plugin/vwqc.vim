@@ -207,12 +207,10 @@ def g:HelpMenu()
 					":call FullReport(\"<tag>\")           Create full tag summary",
 					":call AnnotationsReport(\"<tag>\")    Create tag annotations summary",
 					":call QuotesReport(\"<tag>\")         Create tag report for coded interview lines",
-					":call MetaReport(\"<tag>\")           Create tag report for with line metadata",
 					":call VWSReport(\"<string>\")         Create custom search report", 
 					":call Gather(\"<tag>\")               Create secondary tag sub-report", 
 					":call AllSummariesFull()            Create FullReport summaries for all tags in tag glossary", 
 					":call AllSummariesQuotes()          Create QuotesReport summaries for all tags in tag glossary", 
-					":call AllSummariesMeta()            Create MetaReport summaries for all tags in tag glossary", 
 					":call AllSummariesAnnos()           Create AnnotationsReport summaries for all interviews and all tags in tag glossary", 
 					":call TagStats()                    Create tables and graphs by tag and interview", 
 				        " ",
@@ -256,7 +254,6 @@ def g:ProjectSetup()
 		execute "normal! i[o] \n[o] \n[o] \n[o] \n\n## Summary Reports ##\n\n"
 		execute "normal! i[Summary Interviews - Full Reports](Summary Interviews - Full Reports)\n"
 		execute "normal! i[Summary Interviews - Quotes Reports](Summary Interviews - Quotes Reports)\n"
-		execute "normal! i[Summary Interviews - Meta Reports](Summary Interviews - Meta Reports)\n"
 		execute "normal! i[Summary Interviews - Annotations Reports](Summary Interviews - Annotations Reports)\n"
 		execute "normal! i[Summary Tag Stats - Tables - By Interview](Summary Tag Stats - Tables - By Interview)\n"
 		execute "normal! i[Summary Tag Stats - Tables - By Tag](Summary Tag Stats - Tables - By Tag)\n"
@@ -706,7 +703,6 @@ def g:PageHelp()
 			        "SUMMARY HELP PAGE", 
 				 ":call FullReport(\"<tag>\")           Create report with tagged and annotation content",
 				 ":call QuotesReport(\"<tag>\")         Create report with just tagged content",
-				 ":call MetaReport(\"<tag>\")           Create the FullReport with all line metadata",
 				 ":call VWSReport(\"<string>\")         Create custom search report", 
 		                " ",
 		                "Quoted lines can also be recoded within a report. These re-codings",
@@ -1172,11 +1168,6 @@ def g:QuotesReport(search_term: string)
 	execute "normal! \<C-w>o"
 enddef
 
-def g:MetaReport(search_term: string)
-	g:Report(search_term,  "meta", "MetaReport", "meta") 
-	execute "normal! \<C-w>o"
-enddef
-
 def g:VWSReport(search_term: string)
 	g:Report(search_term, "VWS", "VWSReport", "meta") 
 	execute "normal! \<C-w>o"
@@ -1304,67 +1295,6 @@ def g:AllSummariesGenReportsQuotes(id: number, result: number)
 	endif
 
 	execute "normal! \<C-w>o"
-	set nolazyredraw
-	redraw
-enddef
-
-# -----------------------------------------------------------------
-# This function produces summary reports for all tags defined in the 
-# tag glossary.
-# -----------------------------------------------------------------
-def g:AllSummariesMeta() 
-
-	ParmCheck()
-	execute "normal! :cd %:p:h\<CR>"
-	
-	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
-	if (g:tags_generated == 1)
-		g:tags_list_length = len(g:in_both_lists)
-
-		if g:tags_list_length > 0
-			GenSummaryLists("meta")
-		endif
-		
-		if (g:tags_generated == 1) && (g:tags_list_length > 0)
-			popup_menu(["No, abort", "Yes, generate summary reports"], {
-				 title:    "Running this function will erase older \"Meta\" versions of these reports. Do you want to continue?",
-				 callback: 'AllSummariesGenReportsMeta', 
-				 highlight: 'Question',
-				 border:     [],
-				 close:      'click', 
-				 padding:    [0, 1, 0, 1], })
-		else
-			confirm("Either tags have not been generate for this session or there are no tags to create reports for.",  "OK", 1)
-
-		endif
-	else
-		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
-	endif
-	
-enddef
-
-# -----------------------------------------------------------------
-# 
-# -----------------------------------------------------------------
-def g:AllSummariesGenReportsMeta(id: number, result: number)
-	set lazyredraw
-
-	execute "normal! :e Summary Interviews - Meta Reports" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
-	# Delete what is there
-	execute "normal! ggVGd"
-
-	if result == 2
-		execute "normal! :delmarks Q\<CR>mQ"
-		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
-		for index in range(0, g:tags_list_length - 1)
-			execute "normal! :e " g:summary_file_list[index] .. "\<CR>"
-			g:MetaReport(g:in_both_lists[index])
-		endfor
-		execute "normal! `Q"
-		put =g:summary_link_list
-		execute "normal! `Q"
-	endif
-	#execute "normal! \<C-w>o"
 	set nolazyredraw
 	redraw
 enddef
@@ -1523,6 +1453,138 @@ def g:Gather(search_term: string)
 	execute "normal! `R\"sp"
 enddef
 
+def g:Query(search_term: string, report_type = "full", function_name = "FullReport", meta = "no meta") 
+	ParmCheck()
+	
+	g:tag_summary_file = g:tag_summaries_path .. search_term .. ".csv"
+	# Change the pwd to that of the current wiki.
+	execute "normal! :cd %:p:h\<CR>"
+
+	# Set a mark R in the current buffer which is the buffer where your
+	# report will appear.
+	execute "normal! :delmarks R\<CR>"
+	execute "normal! ggmR"
+
+	# Set tag summary file path
+	g:tag_summary_file      = g:tag_summaries_path .. search_term .. ".csv"
+
+	# Call VimwikiSearchTags against the a:search_term argument.
+	# Put the result in loc_list which is a list of location list
+	# dictionaries that we'll process.
+	if (report_type == "VWS")
+		g:escaped_search_term = escape(search_term, ' \')
+		execute "normal! :VimwikiSearch /" .. search_term .. "/\<CR>"
+	else
+		execute "normal! :VimwikiSearchTags " .. search_term .. "\<CR>"
+	endif
+
+	g:loc_list = getloclist(0)
+
+	g:escaped_search_term = escape(search_term, ' \')
+	execute "normal! :VimwikiSearch /" .. search_term .. "/\<CR>"
+
+	# Initialize values the will be used in the for loop below. The
+	# summary is going to be aggregated in the s register.
+	@s                               = "\n"
+	@t				 = "| No. | Interview | Blocks | Lines | Annos |\n|-------:|-------|------:|------:|------:|\n"
+	@u                               = ""
+
+	g:quote_dict =  {}
+	g:anno_dict = {}
+
+	g:last_line              = 0
+	g:last_int_line 	     = 0
+	g:last_int_name 	     = 0
+	g:last_block_num         = 0
+	g:anno_int_name          = ""
+	g:last_anno_int_name     = ""
+	g:current_anno_int_name  = ""
+	g:block_count            = 0
+	g:block_line_count       = 0
+	g:cross_codes            = []
+	
+	# Get the number of search results.
+	var search_results = len(g:loc_list)
+	
+	# Go through all the location list search results and build the
+	# interview line and annotation dictionaries. 
+	for g:ll_num in range(0, search_results - 1)
+		g:current_buf_name    = bufname(g:loc_list[g:ll_num]['bufnr'])[0 : -g:ext_len]
+		g:ll_bufnr            = g:loc_list[g:ll_num]['bufnr']
+		g:line_text           = g:loc_list[g:ll_num]['text']
+		g:line_text_less_meta = RemoveMetadata(g:line_text)
+		g:current_buf_type    = FindBufferType(g:current_buf_name)
+		if (g:current_buf_type == "Interview")
+			g:current_int_line_num = GetInterviewLineInfo(g:line_text)
+			PopulateQuoteLineList()
+			g:last_int_line_num  = g:current_int_line_num
+			g:last_int_name      = g:current_buf_name
+		elseif (g:current_buf_type == "Annotation")
+			PopulateAnnoLineList(g:current_buf_type)
+			g:last_anno_int_name  = g:current_anno_int_name
+			g:last_anno_buf_name  = g:current_buf_name
+		endif
+	endfor
+
+	g:int_keys          = sort(keys(g:quote_dict))
+	g:anno_keys         = sort(keys(g:anno_dict))
+	g:int_and_anno_keys = sort(g:int_keys + g:anno_keys)
+	
+
+	#combined_list_len = len(g:int_and_anno_keys)
+
+	g:unique_keys = filter(copy(g:int_and_anno_keys), 'index(g:int_and_anno_keys, v:val, v:key + 1) == -1')
+	
+	if (report_type == "full") || (report_type == "VWS")
+		g:interview_list = g:unique_keys
+		for g:int_index in range(0, len(g:interview_list) - 1)
+			ProcessInterviewTitle(g:interview_list[g:int_index])
+			ProcessInterviewLines(meta, report_type, search_term)
+			ProcessAnnotationLines()
+		endfor
+		writefile(split(getreg('u'), "\n", 1), g:tag_summary_file)
+	elseif (report_type == "annotations")
+		g:interview_list = g:anno_keys
+		for g:int_index in range(0, len(g:interview_list) - 1)
+			ProcessInterviewTitle(g:interview_list[g:int_index])
+			ProcessAnnotationLines()
+		endfor
+	elseif (report_type == "quotes")
+		g:interview_list = g:int_keys
+		for g:int_index in range(0, len(g:interview_list) - 1)
+			ProcessInterviewTitle(g:int_keys[g:int_index])
+			ProcessInterviewLines(meta, report_type, search_term )
+		endfor
+		writefile([ getreg('u') ], g:tag_summary_file)
+	endif
+
+	@t = "| No. | Interview | Blocks | Lines | Lines/Block | Annos |\n|-------:|-------|------:|------:|------:|\n"
+	g:total_blocks      = 0
+	g:total_lines       = 0
+	g:total_annos       = 0
+
+	for g:int_index in range(0, len(g:unique_keys) - 1)
+		CreateSummaryCountTableLine()
+	endfor 
+	#g:total_lines_per_block = printf("%.1f", str2float(g:total_lines) / str2float(g:total_blocks))
+	g:total_lines_per_block = printf("%.1f", 1.0 * g:total_lines / g:total_blocks)
+	@t = getreg('t') .. "|-------:|-------|------:|------:|------:|------:|\n"
+	@t = getreg('t') .. "| Totals: |  | " .. g:total_blocks ..  " | " .. g:total_lines .. " | " .. g:total_lines_per_block .. " | " .. g:total_annos .. " |\n"
+	 
+	#  Write summary line to t register for last interview
+	AddReportHeader(function_name, search_term)
+
+	# Clear old material from the buffer
+	execute "normal! `RggVGd"
+	
+	# Paste the s register into the buffer. The s register has the quotes
+	# we've been copying.
+	execute "normal! \"tPgga\<ESC>"
+	execute "normal! gg\"qPGo"
+	execute "normal! \"sp"
+	execute "normal! ggdd"
+enddef
+
 def g:Report(search_term: string, report_type = "full", function_name = "FullReport", meta = "no meta") 
 	ParmCheck()
 	
@@ -1605,7 +1667,7 @@ def g:Report(search_term: string, report_type = "full", function_name = "FullRep
 
 	g:unique_keys = filter(copy(g:int_and_anno_keys), 'index(g:int_and_anno_keys, v:val, v:key + 1) == -1')
 	
-	if (report_type == "full") || (report_type == "meta") || (report_type == "VWS")
+	if (report_type == "full") || (report_type == "VWS")
 		g:interview_list = g:unique_keys
 		for g:int_index in range(0, len(g:interview_list) - 1)
 			ProcessInterviewTitle(g:interview_list[g:int_index])
@@ -1696,7 +1758,6 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 	var tag_being_considered = "undefined"
 	# move through each line testing for tags and removing duplicate tags
 	# on each line
-	execute "normal 2G"
 	
 	g:tags_on_line = []
 	for line in range(1, end_line)
@@ -1749,6 +1810,72 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 	endfor	
 enddef
 
+# -----------------------------------------------------------------
+# g:tags_list is a list of tags with the following sub-elements:
+# 0) Interview name
+# 1) Buffer line number the tag is on
+# 2) The tag
+# 3) Interview line number the tag is on
+# 4) All the tags on the line
+# 5) The line text less metadata.
+# -----------------------------------------------------------------
+def CrawlAnnotationTags(interview: number, interview_name: string) 
+	var end_line   = line('$')
+	var tag_being_considered = "undefined"
+	# move through each line testing for tags and removing duplicate tags
+	# on each line
+	execute "normal! gg"
+	interview = matchstr('\%
+	
+	g:tags_in_anno = []
+	for line in range(2, end_line)
+		# search() returns 0 if match not found
+		g:tag_test = search(':\a.\{-}:', '', line("."))
+		if (g:tag_test != 0)
+			# Copy found tag
+			execute "normal! viWy"
+			g:tags_on_line = g:tags_on_line + [ getreg('@') ]
+			g:tag_test = search(':\a.\{-}:', '', line("."))
+			while (g:tag_test != 0)
+				execute "normal! viWy"
+				tag_being_considered = getreg('@')
+				g:have_tag = 0
+				# loop to see if we already have this tag
+				for tag_index in range(0, len(g:tags_on_line) - 1 )
+					if (tag_being_considered == g:tags_on_line[tag_index])
+						g:have_tag = 1
+					endif
+				endfor
+				# if we have the tag, delete it
+				if (g:have_tag != 0)
+					execute "normal! gvx"
+				else
+					g:tags_on_line = g:tags_on_line + [ getreg('@') ]
+				endif
+				g:tag_test = search(':\a.\{-}:', '', line("."))
+			endwhile
+		endif
+		# Add tags found on line to g:tags_list
+		var line_text           = getline(".")
+		var interview_line_num  = str2nr(matchstr(line_text, ': \d\{4} │')[2 : -2])
+		line_text = line_text[0 : (g:text_col_width + 1)]
+
+		var processed_line_1 = 0
+		for tag_index in range(0, len(g:tags_on_line) - 1)
+			#echom "line: " .. line .. ", interview: " .. interview_name .. ", tag: " .. g:tags_on_line[tag_index]
+			if ((line == 1) && (processed_line_1 == 0))
+				g:attr_list = g:attr_list + [[interview_name, g:tags_on_line]]
+				#g:attr_list = g:attr_list + [[interview_name, line, g:tags_on_line[tag_index], interview_line_num, g:tags_on_line, line_text]]
+				processed_line_1 = 1
+			else
+				g:tags_list = g:tags_list + [[interview_name, line, g:tags_on_line[tag_index], interview_line_num, g:tags_on_line, line_text]]
+			endif
+		endfor
+		# Go to start of next line
+		#execute "normal! j0"
+		g:tags_on_line = []
+	endfor	
+enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
@@ -3339,54 +3466,6 @@ def g:Attributes(sort_col = 1)
 	endif
 enddef
 
-# ------------------------------------------------------
-#
-# ------------------------------------------------------
-#def g:Attributes(sort_col = 1) 
-#	
-#	ParmCheck()
-#
-#	# from the buffer which should be the line of the interview attribute
-#	# tags. We're going to build our output in two reg
-#	g:attrib_chart = ""
-#	g:attrib_csv   = ""
-#	# from the buffer which should be the line of the interview attribute
-#	# tags. We're going to build our output in two reg
-#	g:attrib_chart = ""
-#	g:attrib_csv   = ""
-#	GetInterviewFileList()
-#
-#	execute "normal! :e Attributes" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
-#	# Delete what is there
-#	execute "normal! ggVGd"
-#	# save buffer number of current register so you can return here
-#	var buffer_to_come_back_to = bufnr("%")
-#	# go through the list of files copying and processing the first line
-#	# from the buffer which should be the line of the interview attribute
-#	# tags. We're going to build our output in two reg
-#	g:attrib_chart = ""
-#	g:attrib_csv   = ""
-#	for interview in range(0, (len(g:interview_list) - 1))
-#		# go to interview file
-#		execute "normal :e " .. g:interview_list[interview] .. "\<CR>"
-#		# copy first row which should be the attribute tags.
-#		execute "normal! ggVy"
-#		g:attribute_row = getreg('@')
-#		# format the attribute tags for the chart and for the csv
-#		g:interview_label = "| [[" .. g:interview_list[interview][ : -4] .. "]]"
-#		g:attrib_chart_line = substitute(g:attribute_row, ": :", "|", "g")
-#		g:attrib_chart_line = substitute(g:attrib_chart_line, ":", "|", "g")
-#		g:attrib_chart_line = g:interview_label .. g:attrib_chart_line
-#		g:attrib_chart = g:attrib_chart .. g:attrib_chart_line
-#	endfor
-#	# return to page where you're going to print the chart and paste the
-#	# chart.
-#	execute "normal! :b" .. buffer_to_come_back_to .. "\<CR>gg"
-#	execute "normal! ggVGd"
-#	execute "normal! i" .. g:attrib_chart .. "\<CR>"
-#	execute "normal! Go\<ESC>v?.\<CR>jdgga\<ESC>\<CR>gg"
-#	ColSort(sort_col)
-#enddef
 
 # ------------------------------------------------------
 
