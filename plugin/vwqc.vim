@@ -2099,7 +2099,7 @@ def CreateUniqueAnnoTagList()
 	for index in range(0, len(g:anno_tags_list) - 1)
 		for sub_index in range(0, len(g:anno_tags_list[index][2]) - 1)
 			if (index(g:unique_anno_tags, g:anno_tags_list[index][2][sub_index]) == -1)
-				g:unique_anno_tags = g:unique_anno_tags + [ g:anno_tags_list[index][2][sub_index][2 : -2] ]
+				g:unique_anno_tags = g:unique_anno_tags + [ g:anno_tags_list[index][2][sub_index][1 : -2] ]
 			endif
 		endfor
 	endfor
