@@ -2650,7 +2650,7 @@ def g:GetTagUpdate()
 		# go to interview file
 		execute "normal :e " .. g:anno_list[annotation] .. "\<CR>"
 		anno_to_crawl = expand('%:t:r')
-		CrawlAnnotationsTags(annotation, anno_to_crawl)	
+		CrawlAnnotationTags(annotation, anno_to_crawl)	
 	endfor
 
 
