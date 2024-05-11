@@ -3306,7 +3306,7 @@ enddef
 # ------------------------------------------------------
 def g:Attributes(sort_col = 1) 
 	
-	g:attr_line = "Undefined"
+	g:attr_line = ""
 	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
@@ -3316,9 +3316,9 @@ def g:Attributes(sort_col = 1)
 		execute "normal! ggVGd"
 		# save buffer number of current register so you can return here
 		for interview in range(0, (len(g:attr_list) - 1))
-			g:attr_line = "| [[" .. g:attr_list[interview][0] .. "]] | "
+			g:attr_line = g:attr_line ..  "| [[" .. g:attr_list[interview][0] .. "]] | "
 			for index in range(0, (len(g:attr_list[interview][1]) - 1))
-				g:attr_line = g:attr_line .. g:attr_list[interview][1][index][2 : -2] .. " |"
+				g:attr_line = g:attr_line .. g:attr_list[interview][1][index][1 : -2] .. " |"
 			endfor
 			g:attr_line = g:attr_line .. "\n"
 			echom g:attr_line
