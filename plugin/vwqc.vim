@@ -1514,8 +1514,8 @@ def WriteInterviewBlocks(search_term: string)
 				# increment the block counter.
 				g:tag_count_dict[g:tags_list[index][0]][3] = 0
 				g:quote_blocks_dict[g:tags_list[index - 1]][3] = g:tags_list[index - 1][3]
-				g:quote_blocks_dict[g:tags_list[index][2]      = g:tags_list[index][3]
-				g:quote_blocks_dict[g:tags_list[index][0]][0] = g:quote_blocks_dict[g:tags_list[index][0]][0] + [ g:tags_list[index][5] ]
+				g:quote_blocks_dict[g:tags_list[index]][2]     = g:tags_list[index][3]
+				g:quote_blocks_dict[g:tags_list[index][0]][0]  = g:quote_blocks_dict[g:tags_list[index][0]][0] + [ g:tags_list[index][5] ]
 				g:quote_blocks_dict[g:tags_list[index][0]][g:tag_count_dict[g:tags_list[index][0]][1] - 1] = g:quote_blocks_dict[g:tags_list[index][0]][g:tag_count_dict[g:tags_list[index][0]][1] -1] .. g:tags_list[index][5] 
 			endif
 			# Set the last line for this kind of tag equal to the line of the tag we've been considering in this loop.
