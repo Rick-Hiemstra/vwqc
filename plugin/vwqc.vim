@@ -3306,49 +3306,80 @@ enddef
 # ------------------------------------------------------
 def g:Attributes(sort_col = 1) 
 	
+	var attr_line = "Undefined"
 	ParmCheck()
+	execute "normal! :cd %:p:h\<CR>"
+	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
+	if (g:tags_generated == 1)
+		execute "normal! :e Attributes" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+		# Delete what is there
+		execute "normal! ggVGd"
+		# save buffer number of current register so you can return here
+		for interview in range(0, (len(g:attr_list) - 1))
+			attr_line = "| [[" .. g:attr_list[0] .. "]] | "
+			for index in range(0, (len(g:attr_list[1])))
+				attr_line = attr_line .. g:attr_list[1][index][2 : -2] .. " |"
+			endfor
+		endfor
+		# return to page where you're going to print the chart and paste the
+		# chart.
+		execute "normal! i" .. attr_line .. "\<CR>\n"
+		execute "normal! Go\<ESC>v?.\<CR>jdgga\<ESC>\<CR>gg"
+		ColSort(sort_col)
 
-	# from the buffer which should be the line of the interview attribute
-	# tags. We're going to build our output in two reg
-	g:attrib_chart = ""
-	g:attrib_csv   = ""
-	# from the buffer which should be the line of the interview attribute
-	# tags. We're going to build our output in two reg
-	g:attrib_chart = ""
-	g:attrib_csv   = ""
-	GetInterviewFileList()
-
-	execute "normal! :e Attributes" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
-	# Delete what is there
-	execute "normal! ggVGd"
-	# save buffer number of current register so you can return here
-	var buffer_to_come_back_to = bufnr("%")
-	# go through the list of files copying and processing the first line
-	# from the buffer which should be the line of the interview attribute
-	# tags. We're going to build our output in two reg
-	g:attrib_chart = ""
-	g:attrib_csv   = ""
-	for interview in range(0, (len(g:interview_list) - 1))
-		# go to interview file
-		execute "normal :e " .. g:interview_list[interview] .. "\<CR>"
-		# copy first row which should be the attribute tags.
-		execute "normal! ggVy"
-		g:attribute_row = getreg('@')
-		# format the attribute tags for the chart and for the csv
-		g:interview_label = "| [[" .. g:interview_list[interview][ : -4] .. "]]"
-		g:attrib_chart_line = substitute(g:attribute_row, ": :", "|", "g")
-		g:attrib_chart_line = substitute(g:attrib_chart_line, ":", "|", "g")
-		g:attrib_chart_line = g:interview_label .. g:attrib_chart_line
-		g:attrib_chart = g:attrib_chart .. g:attrib_chart_line
-	endfor
-	# return to page where you're going to print the chart and paste the
-	# chart.
-	execute "normal! :b" .. buffer_to_come_back_to .. "\<CR>gg"
-	execute "normal! ggVGd"
-	execute "normal! i" .. g:attrib_chart .. "\<CR>"
-	execute "normal! Go\<ESC>v?.\<CR>jdgga\<ESC>\<CR>gg"
-	ColSort(sort_col)
+	else
+		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
+	endif
 enddef
+
+# ------------------------------------------------------
+#
+# ------------------------------------------------------
+#def g:Attributes(sort_col = 1) 
+#	
+#	ParmCheck()
+#
+#	# from the buffer which should be the line of the interview attribute
+#	# tags. We're going to build our output in two reg
+#	g:attrib_chart = ""
+#	g:attrib_csv   = ""
+#	# from the buffer which should be the line of the interview attribute
+#	# tags. We're going to build our output in two reg
+#	g:attrib_chart = ""
+#	g:attrib_csv   = ""
+#	GetInterviewFileList()
+#
+#	execute "normal! :e Attributes" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+#	# Delete what is there
+#	execute "normal! ggVGd"
+#	# save buffer number of current register so you can return here
+#	var buffer_to_come_back_to = bufnr("%")
+#	# go through the list of files copying and processing the first line
+#	# from the buffer which should be the line of the interview attribute
+#	# tags. We're going to build our output in two reg
+#	g:attrib_chart = ""
+#	g:attrib_csv   = ""
+#	for interview in range(0, (len(g:interview_list) - 1))
+#		# go to interview file
+#		execute "normal :e " .. g:interview_list[interview] .. "\<CR>"
+#		# copy first row which should be the attribute tags.
+#		execute "normal! ggVy"
+#		g:attribute_row = getreg('@')
+#		# format the attribute tags for the chart and for the csv
+#		g:interview_label = "| [[" .. g:interview_list[interview][ : -4] .. "]]"
+#		g:attrib_chart_line = substitute(g:attribute_row, ": :", "|", "g")
+#		g:attrib_chart_line = substitute(g:attrib_chart_line, ":", "|", "g")
+#		g:attrib_chart_line = g:interview_label .. g:attrib_chart_line
+#		g:attrib_chart = g:attrib_chart .. g:attrib_chart_line
+#	endfor
+#	# return to page where you're going to print the chart and paste the
+#	# chart.
+#	execute "normal! :b" .. buffer_to_come_back_to .. "\<CR>gg"
+#	execute "normal! ggVGd"
+#	execute "normal! i" .. g:attrib_chart .. "\<CR>"
+#	execute "normal! Go\<ESC>v?.\<CR>jdgga\<ESC>\<CR>gg"
+#	ColSort(sort_col)
+#enddef
 
 # ------------------------------------------------------
 
