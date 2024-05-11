@@ -2543,6 +2543,7 @@ def g:GetTagUpdate()
 	GenDictTagList()
 	UpdateCurrentTagsList()
 	UpdateCurrentTagsPage()
+	g:Attributes()
 	CurrentTagsPopUpMenu()
 
 	g:current_tags = sort(g:just_in_dict_list + g:just_in_current_tag_list + g:in_both_lists)
@@ -2677,8 +2678,8 @@ def UpdateCurrentTagsPage()
 	execute "normal! :e Tag List Current" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
 	# Delete what is there
 	execute "normal! ggVGd"
-	var tag_update_time = strftime("%Y-%m-%d %a %H:%M:%S")
-	execute "normal! i**Tag list last updated at: " .. tag_update_time .. "**\n\<CR>"
+	g:tag_update_time = strftime("%Y-%m-%d %a %H:%M:%S")
+	execute "normal! i**Tag list last updated at: " .. g:tag_update_time .. "**\n\<CR>"
 	execute "normal! i- **There are " .. len(g:in_both_lists) .. " tag(s) defined in the Tag Glossary and included in the current tags list.**\n"
 	put =g:in_both_lists
 	execute "normal! Go"
@@ -3328,6 +3329,9 @@ def g:Attributes(sort_col = 1)
 		execute "normal! i" .. g:attr_line .. "\<CR>\n"
 		execute "normal! Go\<ESC>v?.\<CR>jdgga\<ESC>\<CR>gg"
 		ColSort(sort_col)
+
+		g:attr_update_time = strftime("%Y-%m-%d %a %H:%M:%S")
+		execute "normal! O##Attributes: Updated at " .. g:attribute_update_time .. " based on the " .. g:tag_update_time .. " tag update.\<ESC>gg"
 
 	else
 		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
