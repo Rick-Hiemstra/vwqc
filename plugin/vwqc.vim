@@ -1692,7 +1692,7 @@ enddef
 # 5) The line text less metadata.
 # -----------------------------------------------------------------
 def CrawlInterviewTags(interview: number, interview_name: string) 
-	var start_line = 1
+	var start_line = 0
 	var end_line   = line('$')
 	var tag_being_considered = "undefined"
 	# move through each line testing for tags and removing duplicate tags
