@@ -2097,7 +2097,7 @@ enddef
 def CreateUniqueAnnoTagList()
 	g:unique_anno_tags = []
 	for index in range(0, len(g:anno_tags_list) - 1)
-		for sub_index in range(0, len(g:anno_tags_list[index][2]))
+		for sub_index in range(0, len(g:anno_tags_list[index][2]) - 1)
 			if (index(g:unique_anno_tags, g:anno_tags_list[index][2][sub_index]) == -1)
 				g:unique_anno_tags = g:unique_anno_tags + [ g:anno_tags_list[index][2][sub_index] ]
 			endif
