@@ -3330,9 +3330,9 @@ def g:Attributes(sort_col = 1)
 		ColSort(sort_col)
 
 		g:attr_update_time = strftime("%Y-%m-%d %a %H:%M:%S")
-		execute "normal! O##Attributes:\nUpdated at " .. g:attr_update_time .. 
+		execute "normal! OATTRIBUTES:\nUpdated at " .. g:attr_update_time .. 
 			"\nbased on the " .. g:tag_update_time .. " tag update.\n" .. 
-			"sorted by column " .. sort_col .. "\<CR>"
+			"sorted by column " .. sort_col .. "\<ESC>"
 
 	else
 		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
