@@ -1734,7 +1734,8 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 
 		var processed_line_1 = 0
 		for tag_index in range(0, len(g:tags_on_line) - 1)
-			if ((line == 1) && (processed_line_1 == 0))
+			#if ((line == 1) && (processed_line_1 == 0))
+			if ((line == 1) )
 				g:attr_list = g:attr_list + [[interview_name, g:tags_on_line]]
 				processed_line_1 = 1
 			else
