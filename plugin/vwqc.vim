@@ -1834,7 +1834,7 @@ enddef
 # 1) Line number in the annotation is attached to in the interview
 # 2) A list of tags found in the annotation
 # -----------------------------------------------------------------
-def CrawlAnnotationTags(interview: number, interview_name: string) 
+def CrawlAnnotationTags(anno_num: number, anno_name: string) 
 
 	var tag_being_considered = "undefined"
 	execute "normal! gg"
