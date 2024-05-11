@@ -1686,8 +1686,8 @@ enddef
 # g:tags_list is a list of tags with the following sub-elements:
 # 0) Interview name
 # 1) Buffer line number the tag is on
-# 2) Interview line number the tag is on
-# 3) The tag
+# 2) The tag
+# 3) Interview line number the tag is on
 # 4) All the tags on the line
 # 5) The line text less metadata.
 # -----------------------------------------------------------------
