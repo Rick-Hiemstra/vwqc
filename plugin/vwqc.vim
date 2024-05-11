@@ -1844,7 +1844,7 @@ def CrawlAnnotationTags(anno_num: number, anno_name: string)
 	var line_num_as_string  = matchstr(top_line, ': \d\{4}')[2 : ]
 	
 	g:tags_in_anno = []
-	for line in range(2, line('$')
+	for line in range(2, line('$'))
 		# search() returns 0 if match not found
 		g:tag_test = search(':\a.\{-}:', 'W')
 		if (g:tag_test != 0)
