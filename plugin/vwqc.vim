@@ -1491,7 +1491,7 @@ def WriteInterviewBlocks(search_term: string)
 	#Create an interview dict with a the values for each key being a
 	# copy of the initial_tag_dict
 	for interview in range(0, (len(g:interview_list) - 1))
-		g:tag_count_dict[interview_list[interview]]    = [0, 0, 0, 0]
+		g:tag_count_dict[g:interview_list[interview]]    = [0, 0, 0, 0]
 		g:quote_blocks_dict[g:interview_list[interview]] = [] 
 	endfor
 	
