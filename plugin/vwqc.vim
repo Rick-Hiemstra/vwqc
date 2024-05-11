@@ -1692,7 +1692,6 @@ enddef
 # 5) The line text less metadata.
 # -----------------------------------------------------------------
 def CrawlInterviewTags(interview: number, interview_name: string) 
-	var start_line = 0
 	var end_line   = line('$')
 	var tag_being_considered = "undefined"
 	# move through each line testing for tags and removing duplicate tags
@@ -1700,8 +1699,8 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 	execute "normal 2G"
 	
 	g:tags_on_line = []
-	for line in range(start_line, end_line)
-		execute "normal! 0"
+	for line in range(1, end_line)
+		cursor(line, 0)
 		# search() returns 0 if match not found
 		g:tag_test = search(':\a.\{-}:', '', line("."))
 		if (g:tag_test != 0)
@@ -1745,7 +1744,7 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 			endif
 		endfor
 		# Go to start of next line
-		execute "normal! j0"
+		#execute "normal! j0"
 		g:tags_on_line = []
 	endfor	
 enddef
