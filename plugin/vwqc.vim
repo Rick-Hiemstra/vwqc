@@ -1701,6 +1701,7 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 	
 	g:tags_on_line = []
 	for line in range(start_line, end_line)
+		execute "normal! 0"
 		# search() returns 0 if match not found
 		g:tag_test = search(':\a.\{-}:', '', line("."))
 		if (g:tag_test != 0)
