@@ -1839,9 +1839,9 @@ def CrawlAnnotationTags(interview: number, interview_name: string)
 	var tag_being_considered = "undefined"
 	execute "normal! gg"
 
-	top_line            = getline('.')
-	interview           = matchstr(top_line, g:interview_label_regex)
-	line_num_as_string  = matchstr(top_line, ': \d\{4}')[2 : ]
+	var top_line            = getline('.')
+	var interview           = matchstr(top_line, g:interview_label_regex)
+	var line_num_as_string  = matchstr(top_line, ': \d\{4}')[2 : ]
 	
 	g:tags_in_anno = []
 	for line in range(2, line('$')
