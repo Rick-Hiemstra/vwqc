@@ -1733,7 +1733,7 @@ def CrawlBufferTags(interview: number, interview_name: string)
 		line_text = line_text[0 : (g:text_col_width + 1)]
 
 		for tag_index in range(0, len(g:tags_on_line) - 1)
-			g:tags_list = g:tags_list + [[interview_name, line, interview_line_number, g:tags_on_line[tag_index], g:tags_on_line, line_text]]
+			g:tags_list = g:tags_list + [[interview_name, line, interview_line_num, g:tags_on_line[tag_index], g:tags_on_line, line_text]]
 		endfor
 		# Go to start of next line
 		execute "normal! j0"
