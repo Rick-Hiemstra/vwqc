@@ -113,7 +113,7 @@ endif
 # PrintTagInterviewSummary
 # GraphInterviewTagSummary
 # GraphTagInterviewSummary
-# CreateUniqueTagList
+# CreateUniqueInterviewTagList
 # FindLengthOfLongestTag
 # TagStats
 #
@@ -1456,8 +1456,6 @@ enddef
 def g:Query(search_term: string, report_type = "full", function_name = "FullReport", meta = "no meta") 
 	ParmCheck()
 	
-	g:tag_summary_file = g:tag_summaries_path .. search_term .. ".csv"
-	# Change the pwd to that of the current wiki.
 	execute "normal! :cd %:p:h\<CR>"
 
 	# Set a mark R in the current buffer which is the buffer where your
@@ -1465,24 +1463,14 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 	execute "normal! :delmarks R\<CR>"
 	execute "normal! ggmR"
 
-	# Set tag summary file path
-	g:tag_summary_file      = g:tag_summaries_path .. search_term .. ".csv"
+	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
+	if (g:tags_generated == 1)
+		GenerateAnnotationTags()
 
-	# Call VimwikiSearchTags against the a:search_term argument.
-	# Put the result in loc_list which is a list of location list
-	# dictionaries that we'll process.
-	if (report_type == "VWS")
-		g:escaped_search_term = escape(search_term, ' \')
-		execute "normal! :VimwikiSearch /" .. search_term .. "/\<CR>"
+
 	else
-		execute "normal! :VimwikiSearchTags " .. search_term .. "\<CR>"
+		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
 	endif
-
-	g:loc_list = getloclist(0)
-
-	g:escaped_search_term = escape(search_term, ' \')
-	execute "normal! :VimwikiSearch /" .. search_term .. "/\<CR>"
-
 	# Initialize values the will be used in the for loop below. The
 	# summary is going to be aggregated in the s register.
 	@s                               = "\n"
@@ -1493,8 +1481,8 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 	g:anno_dict = {}
 
 	g:last_line              = 0
-	g:last_int_line 	     = 0
-	g:last_int_name 	     = 0
+	g:last_int_line 	 = 0
+	g:last_int_name 	 = 0
 	g:last_block_num         = 0
 	g:anno_int_name          = ""
 	g:last_anno_int_name     = ""
@@ -1745,6 +1733,33 @@ def GetInterviewFileList()
 enddef
 
 # -----------------------------------------------------------------
+# 
+# -----------------------------------------------------------------
+def GetAnnotationFileList() 
+
+	var file_to_add = "undefined"
+	execute "normal! :cd %:p:h\<CR>"
+	# get a list of all the files and directories in the pwd. Note the
+	# fourth argument that is 1 makes it return a list. The first argument
+	# '.' means the current directory and the second argument '*' means
+	# all.
+	var file_list_all = globpath('.', '*', 0, 1)
+	# build regex we'll use just to find our interview files. 
+	var file_regex = g:interview_label_regex .. '\d\{4}' .. g:wiki_extension
+	#  cull the list for just those files that are interview files. the
+	#  match is at position 2 because the globpath function prefixes
+	#  filenames with/ which occupies positions 0 and 1.
+	g:anno_list = []
+	for list_item in range(0, (len(file_list_all) - 1))
+		if (match(file_list_all[list_item], file_regex) == 2) 
+			# strip off the leading/
+			file_to_add = file_list_all[list_item][2 : ]
+			g:anno_list = g:anno_list + [ file_to_add ]
+		endif
+	endfor
+enddef
+
+# -----------------------------------------------------------------
 # g:tags_list is a list of tags with the following sub-elements:
 # 0) Interview name
 # 1) Buffer line number the tag is on
@@ -1810,71 +1825,47 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 	endfor	
 enddef
 
+def GenerateAnnotationTags()
+	
+enddef
 # -----------------------------------------------------------------
 # g:tags_list is a list of tags with the following sub-elements:
 # 0) Interview name
-# 1) Buffer line number the tag is on
-# 2) The tag
-# 3) Interview line number the tag is on
-# 4) All the tags on the line
-# 5) The line text less metadata.
+# 1) Line number in the annotation is attached to in the interview
+# 2) A list of tags found in the annotation
 # -----------------------------------------------------------------
 def CrawlAnnotationTags(interview: number, interview_name: string) 
-	var end_line   = line('$')
+
 	var tag_being_considered = "undefined"
-	# move through each line testing for tags and removing duplicate tags
-	# on each line
 	execute "normal! gg"
-	interview = matchstr('\%
+
+	top_line            = getline('.')
+	interview           = matchstr(top_line, g:interview_label_regex)
+	line_num_as_string  = matchstr(top_line, ': \d\{4}')[2 : ]
 	
 	g:tags_in_anno = []
-	for line in range(2, end_line)
+	for line in range(2, line('$')
 		# search() returns 0 if match not found
-		g:tag_test = search(':\a.\{-}:', '', line("."))
+		g:tag_test = search(':\a.\{-}:', 'W')
 		if (g:tag_test != 0)
 			# Copy found tag
 			execute "normal! viWy"
-			g:tags_on_line = g:tags_on_line + [ getreg('@') ]
-			g:tag_test = search(':\a.\{-}:', '', line("."))
+			g:tags_in_anno = g:tags_in_anno + [ getreg('@') ]
+			g:tag_test = search(':\a.\{-}:', 'W')
 			while (g:tag_test != 0)
 				execute "normal! viWy"
 				tag_being_considered = getreg('@')
 				g:have_tag = 0
 				# loop to see if we already have this tag
-				for tag_index in range(0, len(g:tags_on_line) - 1 )
-					if (tag_being_considered == g:tags_on_line[tag_index])
-						g:have_tag = 1
-					endif
-				endfor
-				# if we have the tag, delete it
-				if (g:have_tag != 0)
-					execute "normal! gvx"
-				else
-					g:tags_on_line = g:tags_on_line + [ getreg('@') ]
-				endif
-				g:tag_test = search(':\a.\{-}:', '', line("."))
+				if (index(g:tags_in_anno, tag_being_considered) == -1)
+
+					g:tags_in_anno = g:tags_in_anno + [ tag_being_considered ]
+				endif 
+				g:tag_test = search(':\a.\{-}:', 'W')
 			endwhile
 		endif
-		# Add tags found on line to g:tags_list
-		var line_text           = getline(".")
-		var interview_line_num  = str2nr(matchstr(line_text, ': \d\{4} │')[2 : -2])
-		line_text = line_text[0 : (g:text_col_width + 1)]
-
-		var processed_line_1 = 0
-		for tag_index in range(0, len(g:tags_on_line) - 1)
-			#echom "line: " .. line .. ", interview: " .. interview_name .. ", tag: " .. g:tags_on_line[tag_index]
-			if ((line == 1) && (processed_line_1 == 0))
-				g:attr_list = g:attr_list + [[interview_name, g:tags_on_line]]
-				#g:attr_list = g:attr_list + [[interview_name, line, g:tags_on_line[tag_index], interview_line_num, g:tags_on_line, line_text]]
-				processed_line_1 = 1
-			else
-				g:tags_list = g:tags_list + [[interview_name, line, g:tags_on_line[tag_index], interview_line_num, g:tags_on_line, line_text]]
-			endif
-		endfor
-		# Go to start of next line
-		#execute "normal! j0"
-		g:tags_on_line = []
 	endfor	
+	g:anno_tags_list = g:anno_tags_list + [[ interview, line_num_as_string, g:tags_in_anno ]]
 enddef
 # -----------------------------------------------------------------
 # 
@@ -2091,12 +2082,26 @@ enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-def CreateUniqueTagList()
+def CreateUniqueInterviewTagList()
 	g:unique_tags = []
 	for index in range(0, len(g:tags_list) - 1)
 		if (index(g:unique_tags, g:tags_list[index][2]) == -1)
 			g:unique_tags = g:unique_tags + [g:tags_list[index][2]]
 		endif
+	endfor
+enddef 
+
+# -----------------------------------------------------------------
+# 
+# -----------------------------------------------------------------
+def CreateUniqueAnnoTagList()
+	g:unique_anno_tags = []
+	for index in range(0, len(g:anno_tags_list) - 1)
+		for sub_index in range(0, len(g:anno_tags_list[index][2]))
+			if (index(g:unique_anno_tags, g:anno_tags_list[index][2][sub_index]) == -1)
+				g:unique_anno_tags = g:unique_anno_tags + [ g:anno_tags_list[index][2][sub_index] ]
+			endif
+		endfor
 	endfor
 enddef 
 
@@ -2146,7 +2151,7 @@ def g:TagStats()
 		endfor
 
 		#Creates the g:unique_tags list 
-		CreateUniqueTagList()
+		CreateUniqueInterviewTagList()
 		sort(g:unique_tags)
 
 		g:tag_cross   = CalcInterviewTagCrosstabs(g:unique_tags, g:interview_list, ext_length)
@@ -2624,6 +2629,9 @@ def g:GetTagUpdate()
 	g:interview_list = []
 	GetInterviewFileList()
 
+	g:anno_list = []
+	GetAnnotationFileList()
+
 	g:tags_list = []
 	g:attr_list = []
 	
@@ -2634,10 +2642,24 @@ def g:GetTagUpdate()
 		interview_to_crawl = expand('%:t:r')
 		CrawlInterviewTags(interview, interview_to_crawl)	
 	endfor
+	
+	var anno_to_crawl = "Undefined"
+	g:anno_tags_list  = []
+	# Go through each annotation file building up a list of tags
+	for annotation in range(0, (len(g:anno_list) - 1))
+		# go to interview file
+		execute "normal :e " .. g:anno_list[annotation] .. "\<CR>"
+		anno_to_crawl = expand('%:t:r')
+		CrawlAnnotationsTags(annotation, anno_to_crawl)	
+	endfor
+
 
 	#Creates the g:unique_tags list 
-	CreateUniqueTagList()
+	CreateUniqueInterviewTagList()
 	sort(g:unique_tags)
+
+	CreateUniqueAnnoTagList()
+	sort(g:unique_anno_tags)
 	
 	g:current_tags = []
 	for index in range(0, (len(g:unique_tags) - 1))
@@ -2815,6 +2837,9 @@ def UpdateCurrentTagsPage()
 	execute "normal! Go"
 	execute "normal! i\n- **There are " .. len(g:just_in_dict_list) .. " tag(s) defined in the Tag Glossary but not used in coding.**\n"
 	put =g:just_in_dict_list
+	execute "normal! Go"
+	execute "normal! i\n- **There are " .. len(g:unique_anno_tags) .. " tag(s) that appear in annotations.**\n"
+	put =g:unique_anno_tags
 	execute "normal! ggj"
 	# Return to where you were
 	execute "normal! `Rzz"
