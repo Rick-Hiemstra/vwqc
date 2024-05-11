@@ -3306,7 +3306,7 @@ enddef
 # ------------------------------------------------------
 def g:Attributes(sort_col = 1) 
 	
-	var attr_line = "Undefined"
+	g:attr_line = "Undefined"
 	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
@@ -3316,14 +3316,16 @@ def g:Attributes(sort_col = 1)
 		execute "normal! ggVGd"
 		# save buffer number of current register so you can return here
 		for interview in range(0, (len(g:attr_list) - 1))
-			attr_line = "| [[" .. g:attr_list[0] .. "]] | "
+			g:attr_line = "| [[" .. g:attr_list[0] .. "]] | "
 			for index in range(0, (len(g:attr_list[1])))
-				attr_line = attr_line .. g:attr_list[1][index][2 : -2] .. " |"
+				g:attr_line = attr_line .. g:attr_list[1][index][2 : -2] .. " |"
 			endfor
+			g:attr_line = g:attr_line .. "\n"
+			echom g:attr_line
 		endfor
 		# return to page where you're going to print the chart and paste the
 		# chart.
-		execute "normal! i" .. attr_line .. "\<CR>\n"
+		execute "normal! i" .. g:attr_line .. "\<CR>\n"
 		execute "normal! Go\<ESC>v?.\<CR>jdgga\<ESC>\<CR>gg"
 		ColSort(sort_col)
 
