@@ -1910,6 +1910,7 @@ enddef
 # 0) Interview name
 # 1) Line number in the annotation is attached to in the interview
 # 2) A list of tags found in the annotation
+# 3) The text of the annotation
 # -----------------------------------------------------------------
 def CrawlAnnotationTags(anno_num: number, anno_name: string) 
 
@@ -1935,14 +1936,14 @@ def CrawlAnnotationTags(anno_num: number, anno_name: string)
 				g:have_tag = 0
 				# loop to see if we already have this tag
 				if (index(g:tags_in_anno, tag_being_considered) == -1)
-
 					g:tags_in_anno = g:tags_in_anno + [ tag_being_considered ]
 				endif 
 				g:tag_test = search(':\a.\{-}:', 'W')
 			endwhile
 		endif
 	endfor	
-	g:anno_tags_list = g:anno_tags_list + [[ interview, line_num_as_string, g:tags_in_anno ]]
+	execute "normal! ggVGy"
+	g:anno_tags_list = g:anno_tags_list + [[ interview, line_num_as_string, g:tags_in_anno, getreg('@') ]]
 enddef
 # -----------------------------------------------------------------
 # 
