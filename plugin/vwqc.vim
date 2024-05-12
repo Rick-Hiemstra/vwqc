@@ -1883,7 +1883,7 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 		var line_text           = getline(".")
 		var interview_line_num  = matchstr(line_text, ': \d\{4}')[2 : ]
 		line_text = line_text[0 : (g:text_col_width + 1)]
-		echom "First tag on line: " .. line .. " is " .. g:tags_on_line[0]
+		#echom "First tag on line: " .. line .. " is " .. g:tags_on_line[0]
 
 		var processed_line_1 = 0
 		for tag_index in range(0, len(g:tags_on_line) - 1)
