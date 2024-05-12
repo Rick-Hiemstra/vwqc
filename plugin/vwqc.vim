@@ -1551,7 +1551,7 @@ enddef
 
 def BuildListOfTagsOnBlock()
 	for tag_index in range(0, len(g:list_of_tags_on_line) - 1)
-		if (index(g:list_of_tags_on_block, g:list_of_tags_on_line[tag_index]) == 1)
+		if (index(g:list_of_tags_on_block, g:list_of_tags_on_line[tag_index]) == -1)
 			g:list_of_tags_on_block = g:list_of_tags_on_block + [ g:list_of_tags_on_line[tag_index] ]
 		endif
 	endfor
