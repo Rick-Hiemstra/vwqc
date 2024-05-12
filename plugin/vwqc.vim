@@ -1532,7 +1532,6 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 		endif 
 	endfor
 	TidyUpBlockText()
-	g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:block_text ]
 enddef
 
 def TidyUpBlockText()
