@@ -1848,17 +1848,19 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 	var tag_being_considered = "undefined"
 	# move through each line testing for tags and removing duplicate tags
 	# on each line
-	
+	execute "normal! gg"
+
 	g:tags_on_line = []
+
 	for line in range(1, end_line)
-		cursor(line, 0)
+		#cursor(line, 0)
 		# search() returns 0 if match not found
-		g:tag_test = search(':\a.\{-}:', '', line("."))
+		g:tag_test = search(':\a.\{-}:', 'c', line("."))
 		if (g:tag_test != 0)
 			# Copy found tag
 			execute "normal! viWy"
 			g:tags_on_line = g:tags_on_line + [ getreg('@') ]
-			g:tag_test = search(':\a.\{-}:', '', line("."))
+			g:tag_test = search(':\a.\{-}:', 'c', line("."))
 			while (g:tag_test != 0)
 				execute "normal! viWy"
 				tag_being_considered = getreg('@')
@@ -1875,7 +1877,7 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 				else
 					g:tags_on_line = g:tags_on_line + [ getreg('@') ]
 				endif
-				g:tag_test = search(':\a.\{-}:', '', line("."))
+				g:tag_test = search(':\a.\{-}:', 'c', line("."))
 			endwhile
 		endif
 		# Add tags found on line to g:tags_list
@@ -1895,7 +1897,7 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 			endif
 		endfor
 		# Go to start of next line
-		#execute "normal! j0"
+		execute "normal! j0"
 		g:tags_on_line = []
 	endfor	
 enddef
