@@ -1866,14 +1866,11 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 				execute "normal! viWy"
 				tag_being_considered = getreg('@')
 				g:have_tag = 0
-				# loop to see if we already have this tag
-				for tag_index in range(0, len(g:tags_on_line) - 1 )
-					if (tag_being_considered == g:tags_on_line[tag_index])
-						g:have_tag = 1
-					endif
-				endfor
+				if (index(g:tags_on_line, tag_being_considered) > -1)
+					g:have_tag = 1
+				endif
 				# if we have the tag, delete it
-				if (g:have_tag != 0)
+				if (g:have_tag == 1)
 					execute "normal! gvx"
 				else
 					g:tags_on_line = g:tags_on_line + [ getreg('@') ]
@@ -1886,13 +1883,12 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 		var line_text           = getline(".")
 		var interview_line_num  = matchstr(line_text, ': \d\{4}')[2 : ]
 		line_text = line_text[0 : (g:text_col_width + 1)]
+		echom "First tag on line: " .. line .. " is " .. g:tags_on_line[0]
 
 		var processed_line_1 = 0
 		for tag_index in range(0, len(g:tags_on_line) - 1)
-			#echom "line: " .. line .. ", interview: " .. interview_name .. ", tag: " .. g:tags_on_line[tag_index]
 			if ((line == 1) && (processed_line_1 == 0))
 				g:attr_list = g:attr_list + [[interview_name, g:tags_on_line]]
-				#g:attr_list = g:attr_list + [[interview_name, line, g:tags_on_line[tag_index], interview_line_num, g:tags_on_line, line_text]]
 				processed_line_1 = 1
 			else
 				g:tags_list = g:tags_list + [[interview_name, line, g:tags_on_line[tag_index], interview_line_num, g:tags_on_line, line_text]]
