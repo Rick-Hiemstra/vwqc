@@ -1470,6 +1470,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 	g:block_last_line  = "Undefined"
 	g:last_line        = "Undefined"
 	g:block_text       = "Undefined"
+	g:last_interview   = "Undefined"
 	
 	# g:tag_count_dict
 	# The keys will be the interview names
