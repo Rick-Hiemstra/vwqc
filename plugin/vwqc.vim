@@ -330,16 +330,19 @@ def GetVWQCProjectParameters()
 	
 	g:project_name           = g:vimwiki_wikilocal_vars[g:wiki_number]['name']
 
-	g:extras_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") .. g:project_name .. "_extras/"
+	g:extras_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g")
+	       	.. g:project_name .. "_extras/"
 
-	g:backup_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") .. g:project_name .. " Backups/"
+	g:backup_path = substitute(g:vimwiki_wikilocal_vars[g:wiki_number]['path'], '[^\/]\{-}\/$', "", "g") 
+		.. g:project_name .. " Backups/"
 
 	# If header template location is explicitly defined then use it, otherwise use default file.
 	var has_template = 0
 	#has_template = has_key("g:" ..  g:current_wiki_name .. ", 'interview_header_template')\<CR>"
 	execute "normal! :let has_template = has_key(g:" ..  g:current_wiki_name .. ", 'interview_header_template')\<CR>"
 	if (has_template == 1) 
-		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'] = g:" .. g:current_wiki_name .. ".interview_header_template\<CR>" 
+		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'] = g:"
+		       	.. g:current_wiki_name .. ".interview_header_template\<CR>" 
 		g:int_header_template    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['interview_header_template'])
 	else
 		g:int_header_template    = expand(g:extras_path .. "interview_header_template.txt")
@@ -349,7 +352,8 @@ def GetVWQCProjectParameters()
 	var has_sub_code_dict = 0
 	execute "normal! :let has_sub_code_dict = has_key(g:" .. g:current_wiki_name .. ", 'subcode_dictionary')\<CR>"
 	if (has_sub_code_dict == 1)
-		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['subcode_dictionary'] = g:" .. g:current_wiki_name .. ".subcode_dictionary\<CR>" 
+		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['subcode_dictionary'] = g:" 
+			.. g:current_wiki_name .. ".subcode_dictionary\<CR>" 
 		g:subcode_dictionary_path    = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['subcode_dictionary'])
 	else
 		g:subcode_dictionary_path    = expand(g:extras_path .. "subcode_dictionary.txt")
@@ -359,7 +363,8 @@ def GetVWQCProjectParameters()
 	var has_tag_sum_path = 0
 	execute "normal! :let has_tag_sum_path = has_key(g:" ..  g:current_wiki_name .. ", 'tag_summaries')\<CR>"
 	if (has_tag_sum_path == 1)
-		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'] = g:" .. g:current_wiki_name .. ".tag_summaries\<CR>" 
+		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'] = g:" 
+			.. g:current_wiki_name .. ".tag_summaries\<CR>" 
 		g:tag_summaries_path       = expand(g:vimwiki_wikilocal_vars[g:wiki_number]['tag_summaries'])
 	else
 		g:tag_summaries_path       = expand(g:extras_path .. "tag_summaries/")
@@ -370,7 +375,8 @@ def GetVWQCProjectParameters()
 	g:has_coder = 0
 	execute "normal! :let g:has_coder = has_key(g:" .. g:current_wiki_name .. ", 'coder_initials')\<CR>"
 	if (g:has_coder == 1)
-		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials'] = g:" .. g:current_wiki_name .. ".coder_initials\<CR>" 
+		execute "normal! :let g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials'] = g:" 
+			.. g:current_wiki_name .. ".coder_initials\<CR>" 
        		g:coder_initials           = g:vimwiki_wikilocal_vars[g:wiki_number]['coder_initials']
 	else
        		g:coder_initials           = "Unknown coder"
@@ -1466,11 +1472,12 @@ enddef
 # 5) The line text less metadata.
 # -----------------------------------------------------------------
 def g:CreateAndCountInterviewBlocks(search_term: string)
-	g:block_first_line = "Undefined"
-	g:block_last_line  = "Undefined"
-	g:last_line        = "Undefined"
-	g:block_text       = "Undefined"
-	g:last_interview   = "Undefined"
+	g:block_first_line      = "Undefined"
+	g:block_last_line       = "Undefined"
+	g:last_line             = "Undefined"
+	g:block_text            = "Undefined"
+	g:last_interview        = "Undefined"
+	g:list_of_tags_on_block = []
 	
 	# g:tag_count_dict
 	# The keys will be the interview names
@@ -1516,19 +1523,23 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 				#Increment the block counter for this interview
 				g:tag_count_dict[g:tags_list[index][0]][1] = g:tag_count_dict[g:tags_list[index][0]][1] + 1
 				#Record the first line number of this block
-				g:block_first_line = g:tags_list[index][3]
-				g:last_line        = g:tags_list[index][3]
-				g:last_interview   = g:tags_list[index][0]
+				g:block_first_line      = g:tags_list[index][3]
+				g:last_line             = g:tags_list[index][3]
+				g:last_interview        = g:tags_list[index][0]
+				g:list_of_tags_on_line  = g:tags_list[index][4]
+				g:list_of_tags_on_block = g:tags_list[index][4]
 				# add to the quoteblocks
-				g:block_text = g:tags_list[index][5]
+				g:block_text            = g:tags_list[index][5]
 				#g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
 			else
 				# Reset the block counter because you're inside a block now. 
 				g:tag_count_dict[g:tags_list[index][0]][3] = 0
 				# Add this line to the g:block_text
-				g:block_text = g:block_text .. g:tags_list[index][5]
-				g:last_line        = g:tags_list[index][3]
-				g:last_interview   = g:tags_list[index][0]
+				g:block_text            = g:block_text .. g:tags_list[index][5]
+				g:last_line             = g:tags_list[index][3]
+				g:last_interview        = g:tags_list[index][0]
+				g:list_of_tags_on_line  = g:tags_list[index][4]
+				BuildListOfTagsOnBlock()
 			endif
 			# Set the last line for this kind of tag equal to the line of the tag we've been considering in this loop.
 			g:tag_count_dict[g:tags_list[index][0]][2] = g:tags_list[index][1]
@@ -1538,13 +1549,21 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 	g:quote_blocks_dict[g:last_interview] = g:quote_blocks_dict[g:last_interview] + [ g:block_text ]
 enddef
 
+def BuildListOfTagsOnBlock()
+	for tag_index in range(0, len(g:list_of_tags_on_line) - 1)
+		if (index(g:list_of_tags_on_block, g:list_of_tags_on_line[tag_index]) == 1)
+			g:list_of_tags_on_block = g:list_of_tags_on_block + [ g:list_of_tags_on_line[tag_index] ]
+		endif
+	endfor
+enddef
+
 def TidyUpBlockText()
 	# Take out extra spaces
 	g:block_text = substitute(g:block_text, '\s\+', ' ', "g")
 	# Take out time stamps and speaker labels. This may be AWS Transcribe specific
 	g:block_text = substitute(g:block_text, '(\d:\d\d:\d\d)\sspk_\d:\s', '', "g") 
 	g:block_text = substitute(g:block_text, "\'\'", "\'", "g") 
-	g:cross_codes_string = string(g:cross_codes)
+	g:cross_codes_string = string(g:list_of_tags_on_block)
 	g:cross_codes_string = substitute(g:cross_codes_string, "\'", ' ', "g")
 	g:cross_codes_string = substitute(g:cross_codes_string, ',', '', "g")
 	g:cross_codes_string = substitute(g:cross_codes_string, '\s\+', ' ', "g")
