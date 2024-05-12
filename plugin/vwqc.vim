@@ -1506,9 +1506,11 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 			g:tag_count_dict[g:tags_list[index][0]][0] = g:tag_count_dict[g:tags_list[index][0]][0] + 1
 			# if tags_list row number minus row number minus the correspondent tag tracking number isn't 1, i.e. non-contiguous
 			if ((g:tags_list[index][1] - g:tag_count_dict[g:tags_list[index][0]][2]) != 1)
-				TidyUpBlockText()
-				# Add the block to the block list for this interview dictionary value
-				g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:block_text ]
+				if g:tag_count_dict[g:tags_list[index][0]][1] != 0
+					TidyUpBlockText()
+					# Add the block to the block list for this interview dictionary value
+					g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:block_text ]
+				endif
 				#Mark that you've entered a block 
 				g:tag_count_dict[g:tags_list[index][0]][3] = 1
 				#Increment the block counter for this interview
