@@ -1494,8 +1494,8 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 	# copy of the initial_tag_dict
 	for interview in range(0, (len(g:interview_list) - 1))
 		g:interview_less_extension = g:interview_list[interview][ : -g:ext_len]
-		g:tag_count_dict[g:interview_list[interview]]    = [0, 0, 0, 0]
-		g:quote_blocks_dict[g:interview_list[interview]] = []
+		g:tag_count_dict[g:interview_less_extension]    = [0, 0, 0, 0]
+		g:quote_blocks_dict[g:interview_less_extension] = []
 	endfor
 	
 	for index in range(0, len(g:tags_list) - 1)
