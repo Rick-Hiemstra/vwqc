@@ -1860,7 +1860,8 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 			# Copy found tag
 			execute "normal! viWy"
 			g:tags_on_line = g:tags_on_line + [ getreg('@') ]
-			g:tag_test = search(':\a.\{-}:', 'c', line("."))
+			execute "normal! l"
+			g:tag_test = search(':\a.\{-}:', '', line("."))
 			while (g:tag_test != 0)
 				execute "normal! viWy"
 				tag_being_considered = getreg('@')
@@ -1877,7 +1878,8 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 				else
 					g:tags_on_line = g:tags_on_line + [ getreg('@') ]
 				endif
-				g:tag_test = search(':\a.\{-}:', 'c', line("."))
+				execute "normal! l"
+				g:tag_test = search(':\a.\{-}:', '', line("."))
 			endwhile
 		endif
 		# Add tags found on line to g:tags_list
