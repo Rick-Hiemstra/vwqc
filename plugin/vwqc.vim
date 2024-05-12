@@ -1543,7 +1543,7 @@ def TidyUpBlockText()
 	g:block_text = substitute(g:block_text, '\s\+', ' ', "g")
 	# Take out time stamps and speaker labels. This may be AWS Transcribe specific
 	g:block_text = substitute(g:block_text, '(\d:\d\d:\d\d)\sspk_\d:\s', '', "g") 
-	g:block_text = substitute(g:block_text, "''", "'", "g") 
+	g:block_text = substitute(g:block_text, '\\'\\'', '\\'', "g") 
 	g:cross_codes_string = string(g:cross_codes)
 	g:cross_codes_string = substitute(g:cross_codes_string, "\'", ' ', "g")
 	g:cross_codes_string = substitute(g:cross_codes_string, ',', '', "g")
