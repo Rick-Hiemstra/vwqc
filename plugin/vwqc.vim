@@ -1848,7 +1848,7 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 	var tag_being_considered = "undefined"
 	# move through each line testing for tags and removing duplicate tags
 	# on each line
-	execute "normal! gg"
+	execute "normal! gg0"
 
 	g:tags_on_line = []
 
