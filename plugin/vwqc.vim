@@ -1505,7 +1505,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 			g:tag_count_dict[g:tags_list[index][0]][0] = g:tag_count_dict[g:tags_list[index][0]][0] + 1
 			# if tags_list row number minus row number minus the correspondent tag tracking number isn't 1, i.e. non-contiguous
 			if ((g:tags_list[index][1] - g:tag_count_dict[g:tags_list[index][0]][2]) != 1)
-				TidyUpBlockText()
+				TidyUpBlockText(index)
 				# Add the block to the block list for this interview dictionary value
 				g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:block_text ]
 				#Mark that you've entered a block 
@@ -1532,7 +1532,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 
 enddef
 
-def TidyUpBlockText()
+def TidyUpBlockText(index: number)
 	# Take out extra spaces
 	g:block = substitute(g:block_text, '\s\+', ' ', "g")
 	# Take out time stamps and speaker labels. This may be AWS Transcribe specific
@@ -1541,7 +1541,7 @@ def TidyUpBlockText()
 	g:cross_codes_string = substitute(g:cross_codes_string, "\'", ' ', "g")
 	g:cross_codes_string = substitute(g:cross_codes_string, ',', '', "g")
 	g:cross_codes_string = substitute(g:cross_codes_string, '\s\+', ' ', "g")
-	g:block_text = g:block_text .. " **" .. g:interview_list[g:int_index] .. ": "
+	g:block_text = g:block_text .. " **" .. g:tags_list[index - 1][0] .. ": "
 	       	.. g:block_first_line .. " - " .. g:last_line .. "** " .. g:cross_codes_string .. "\n\n"
 enddef 
 # -----------------------------------------------------------------
