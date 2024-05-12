@@ -1465,30 +1465,31 @@ enddef
 # 4) All the tags on the line
 # 5) The line text less metadata.
 # -----------------------------------------------------------------
-def WriteInterviewBlocks(search_term: string)
-	#build the data structure that will hold the interview-tag crosstabs
+def CreateAndCountInterviewBlocks(search_term: string)
+	g:block_first_line = "Undefined"
+	g:block_last_line  = "Undefined"
+	g:last_line        = "Undefined"
+	g:block_text       = "Undefined"
+	# g:tag_count_dict
+	# The keys will be the interview names
+	# 	0 is the tag count
+	# 	1 is the block count
+	# 	2 is the space to keep track of the last tag's interview line number, 
+	# 	3 is a boolean (represented by a 0 or 1 indicating if you're tracking a tag block or not. 
+	# This will count and keep track of the tag and block counts. We'll
+	# also use it to create blocks
 	g:tag_count_dict       = {}
 	g:initial_tag_dict     = {}
 	
+	# g:quote_blocks_dict
+	# The keys will be the interview names
+	# 	0 Each value will be a list of quote blocks.
+	# 	1 is a list of tags associated with the current block being processed
+	# 	2 is the first interview line number of the block
+	# 	3 is the last interview line number of the block
 	g:quote_blocks_dict    = {}
 
-	# The initial_tag_dict is a dictionary the unique tags with values of four-element lists. Where
-	# element 
-	# 0 is the tag count
-	# 1 is the block count
-	# 2 is the space to keep track of the last tag's interview line number, 
-	# 3 is a boolean (represented by a 0 or 1 indicating if you're
-	# tracking a tag block or not. 
-	
-	# The quote_blocks_dict is a dictionary of x elements. Where
-	# element 
-	# 0 is a list of blocks
-	# 1 is a list of tags associated with the current block being processed
-	# 2 is the first interview line number of the block
-	# 3 is the last interview line number of the block
-	
-
-	#Create an interview dict with a the values for each key being a
+	#Create an interview dict with the values for each key being a
 	# copy of the initial_tag_dict
 	for interview in range(0, (len(g:interview_list) - 1))
 		g:tag_count_dict[g:interview_list[interview]]    = [0, 0, 0, 0]
@@ -1496,27 +1497,31 @@ def WriteInterviewBlocks(search_term: string)
 	endfor
 	
 	for index in range(0, len(g:tags_list) - 1)
+		# if the current tag we're processing equals the search term
 		if (g:tags_list[index][2] == search_term)
 			# Increment the tag count for this tag
 			g:tag_count_dict[g:tags_list[index][0]][0] = g:tag_count_dict[g:tags_list[index][0]][0] + 1
 			# if tags_list row number minus row number minus the correspondent tag tracking number isn't 1, i.e. non-contiguous
 			if ((g:tags_list[index][1] - g:tag_count_dict[g:tags_list[index][0]][2]) != 1)
+				TidyUpBlockText()
+				# Add the block to the block list for this interview dictionary value
+				g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:block_text ]
 				#Mark that you've entered a block 
 				g:tag_count_dict[g:tags_list[index][0]][3] = 1
-				#Increment the block counter for this tag
+				#Increment the block counter for this interview
 				g:tag_count_dict[g:tags_list[index][0]][1] = g:tag_count_dict[g:tags_list[index][0]][1] + 1
 				#Record the first line number of this block
-				g:quote_blocks_dict[g:tags_list[index][0]][2] = g:tags_list[index][3]
+				g:block_first_line = g:tags_list[index][3]
+				g:last_line        = g:tags_list[index][3]
 				# add to the quoteblocks
-				g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
+				g:block_text = g:tags_list[index][5]
+				#g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
 			else
-				# Reset the block counter because you're inside a block now. There is no need to
-				# increment the block counter.
+				# Reset the block counter because you're inside a block now. 
 				g:tag_count_dict[g:tags_list[index][0]][3] = 0
-				g:quote_blocks_dict[g:tags_list[index - 1]][3] = g:tags_list[index - 1][3]
-				g:quote_blocks_dict[g:tags_list[index]][2]     = g:tags_list[index][3]
-				g:quote_blocks_dict[g:tags_list[index][0]][0]  = g:quote_blocks_dict[g:tags_list[index][0]][0] + [ g:tags_list[index][5] ]
-				g:quote_blocks_dict[g:tags_list[index][0]][g:tag_count_dict[g:tags_list[index][0]][1] - 1] = g:quote_blocks_dict[g:tags_list[index][0]][g:tag_count_dict[g:tags_list[index][0]][1] - 1] .. g:tags_list[index][5] 
+				# Add this line to the g:block_text
+				g:block_text = g:block_text .. g:tags_list[index][5]
+				g:last_line        = g:tags_list[index][3]
 			endif
 			# Set the last line for this kind of tag equal to the line of the tag we've been considering in this loop.
 			g:tag_count_dict[g:tags_list[index][0]][2] = g:tags_list[index][1]
@@ -1525,6 +1530,20 @@ def WriteInterviewBlocks(search_term: string)
 
 enddef
 
+def TidyUpBlockText()
+	g:last_line
+	g:block_first_line
+	# Take out extra spaces
+	g:block = substitute(g:block_text, '\s\+', ' ', "g")
+	# Take out time stamps and speaker labels. This may be AWS Transcribe specific
+	g:block = substitute(g:block_text, '(\d:\d\d:\d\d)\sspk_\d:\s', '', "g") 
+	g:cross_codes_string = string(g:cross_codes)
+	g:cross_codes_string = substitute(g:cross_codes_string, "\'", ' ', "g")
+	g:cross_codes_string = substitute(g:cross_codes_string, ',', '', "g")
+	g:cross_codes_string = substitute(g:cross_codes_string, '\s\+', ' ', "g")
+	g:block_text = g:block_text .. " **" .. g:interview_list[g:int_index] .. ": "
+	       	.. g:block_first_line .. " - " .. g:last_line .. "** " .. g:cross_codes_string .. "\n\n"
+enddef 
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
@@ -1540,112 +1559,88 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
-
-		WriteInterviewBlocks(search_term)
-
+		# Initialize values the will be used in the for loop below. The
+		# summary is going to be aggregated in the s register.
+		@s                               = "\n"
+		@t				 = "| No. | Interview | Blocks | Lines | Annos |\n|-------:|-------|------:|------:|------:|\n"
+		@u                               = ""
+	
+		g:quote_dict =  {}
+		g:anno_dict = {}
+	
+		g:last_line              = 0
+		g:last_int_line 	 = 0
+		g:last_int_name 	 = 0
+		g:last_block_num         = 0
+		g:anno_int_name          = ""
+		g:last_anno_int_name     = ""
+		g:current_anno_int_name  = ""
+		g:block_count            = 0
+		g:block_line_count       = 0
+		g:cross_codes            = []
+		
+		# Get the number of search results.
+	
+		g:int_keys          = sort(keys(g:quote_dict))
+		g:anno_keys         = sort(keys(g:anno_dict))
+		g:int_and_anno_keys = sort(g:int_keys + g:anno_keys)
+		
+	
+		#combined_list_len = len(g:int_and_anno_keys)
+	
+		g:unique_keys = filter(copy(g:int_and_anno_keys), 'index(g:int_and_anno_keys, v:val, v:key + 1) == -1')
+		
+		if (report_type == "full")
+			g:interview_list = g:unique_keys
+			for g:int_index in range(0, len(g:interview_list) - 1)
+				ProcessInterviewTitle(g:interview_list[g:int_index])
+				ProcessInterviewLines(meta, report_type, search_term)
+				ProcessAnnotationLines()
+			endfor
+			writefile(split(getreg('u'), "\n", 1), g:tag_summary_file)
+		elseif (report_type == "annotations")
+			g:interview_list = g:anno_keys
+			for g:int_index in range(0, len(g:interview_list) - 1)
+				ProcessInterviewTitle(g:interview_list[g:int_index])
+				ProcessAnnotationLines()
+			endfor
+		elseif (report_type == "quotes")
+			g:interview_list = g:int_keys
+			for g:int_index in range(0, len(g:interview_list) - 1)
+				ProcessInterviewTitle(g:int_keys[g:int_index])
+				ProcessInterviewLines(meta, report_type, search_term )
+			endfor
+			writefile([ getreg('u') ], g:tag_summary_file)
+		endif
+	
+		@t = "| No. | Interview | Blocks | Lines | Lines/Block | Annos |\n|-------:|-------|------:|------:|------:|\n"
+		g:total_blocks      = 0
+		g:total_lines       = 0
+		g:total_annos       = 0
+	
+		for g:int_index in range(0, len(g:unique_keys) - 1)
+			CreateSummaryCountTableLine()
+		endfor 
+		#g:total_lines_per_block = printf("%.1f", str2float(g:total_lines) / str2float(g:total_blocks))
+		g:total_lines_per_block = printf("%.1f", 1.0 * g:total_lines / g:total_blocks)
+		@t = getreg('t') .. "|-------:|-------|------:|------:|------:|------:|\n"
+		@t = getreg('t') .. "| Totals: |  | " .. g:total_blocks ..  " | " .. g:total_lines .. " | " .. g:total_lines_per_block .. " | " .. g:total_annos .. " |\n"
+		 
+		#  Write summary line to t register for last interview
+		AddReportHeader(function_name, search_term)
+	
+		# Clear old material from the buffer
+		execute "normal! `RggVGd"
+		
+		# Paste the s register into the buffer. The s register has the quotes
+		# we've been copying.
+		execute "normal! \"tPgga\<ESC>"
+		execute "normal! gg\"qPGo"
+		execute "normal! \"sp"
+		execute "normal! ggdd"
 	else
 		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
 	endif
-#	# Initialize values the will be used in the for loop below. The
-#	# summary is going to be aggregated in the s register.
-#	@s                               = "\n"
-#	@t				 = "| No. | Interview | Blocks | Lines | Annos |\n|-------:|-------|------:|------:|------:|\n"
-#	@u                               = ""
-#
-#	g:quote_dict =  {}
-#	g:anno_dict = {}
-#
-#	g:last_line              = 0
-#	g:last_int_line 	 = 0
-#	g:last_int_name 	 = 0
-#	g:last_block_num         = 0
-#	g:anno_int_name          = ""
-#	g:last_anno_int_name     = ""
-#	g:current_anno_int_name  = ""
-#	g:block_count            = 0
-#	g:block_line_count       = 0
-#	g:cross_codes            = []
-#	
-#	# Get the number of search results.
-#	var search_results = len(g:loc_list)
-#	
-#	# Go through all the location list search results and build the
-#	# interview line and annotation dictionaries. 
-#	for g:ll_num in range(0, search_results - 1)
-#		g:current_buf_name    = bufname(g:loc_list[g:ll_num]['bufnr'])[0 : -g:ext_len]
-#		g:ll_bufnr            = g:loc_list[g:ll_num]['bufnr']
-#		g:line_text           = g:loc_list[g:ll_num]['text']
-#		g:line_text_less_meta = RemoveMetadata(g:line_text)
-#		g:current_buf_type    = FindBufferType(g:current_buf_name)
-#		if (g:current_buf_type == "Interview")
-#			g:current_int_line_num = GetInterviewLineInfo(g:line_text)
-#			PopulateQuoteLineList()
-#			g:last_int_line_num  = g:current_int_line_num
-#			g:last_int_name      = g:current_buf_name
-#		elseif (g:current_buf_type == "Annotation")
-#			PopulateAnnoLineList(g:current_buf_type)
-#			g:last_anno_int_name  = g:current_anno_int_name
-#			g:last_anno_buf_name  = g:current_buf_name
-#		endif
-#	endfor
-#
-#	g:int_keys          = sort(keys(g:quote_dict))
-#	g:anno_keys         = sort(keys(g:anno_dict))
-#	g:int_and_anno_keys = sort(g:int_keys + g:anno_keys)
-#	
-#
-#	#combined_list_len = len(g:int_and_anno_keys)
-#
-#	g:unique_keys = filter(copy(g:int_and_anno_keys), 'index(g:int_and_anno_keys, v:val, v:key + 1) == -1')
-#	
-#	if (report_type == "full") || (report_type == "VWS")
-#		g:interview_list = g:unique_keys
-#		for g:int_index in range(0, len(g:interview_list) - 1)
-#			ProcessInterviewTitle(g:interview_list[g:int_index])
-#			ProcessInterviewLines(meta, report_type, search_term)
-#			ProcessAnnotationLines()
-#		endfor
-#		writefile(split(getreg('u'), "\n", 1), g:tag_summary_file)
-#	elseif (report_type == "annotations")
-#		g:interview_list = g:anno_keys
-#		for g:int_index in range(0, len(g:interview_list) - 1)
-#			ProcessInterviewTitle(g:interview_list[g:int_index])
-#			ProcessAnnotationLines()
-#		endfor
-#	elseif (report_type == "quotes")
-#		g:interview_list = g:int_keys
-#		for g:int_index in range(0, len(g:interview_list) - 1)
-#			ProcessInterviewTitle(g:int_keys[g:int_index])
-#			ProcessInterviewLines(meta, report_type, search_term )
-#		endfor
-#		writefile([ getreg('u') ], g:tag_summary_file)
-#	endif
-#
-#	@t = "| No. | Interview | Blocks | Lines | Lines/Block | Annos |\n|-------:|-------|------:|------:|------:|\n"
-#	g:total_blocks      = 0
-#	g:total_lines       = 0
-#	g:total_annos       = 0
-#
-#	for g:int_index in range(0, len(g:unique_keys) - 1)
-#		CreateSummaryCountTableLine()
-#	endfor 
-#	#g:total_lines_per_block = printf("%.1f", str2float(g:total_lines) / str2float(g:total_blocks))
-#	g:total_lines_per_block = printf("%.1f", 1.0 * g:total_lines / g:total_blocks)
-#	@t = getreg('t') .. "|-------:|-------|------:|------:|------:|------:|\n"
-#	@t = getreg('t') .. "| Totals: |  | " .. g:total_blocks ..  " | " .. g:total_lines .. " | " .. g:total_lines_per_block .. " | " .. g:total_annos .. " |\n"
-#	 
-#	#  Write summary line to t register for last interview
-#	AddReportHeader(function_name, search_term)
-#
-#	# Clear old material from the buffer
-#	execute "normal! `RggVGd"
-#	
-#	# Paste the s register into the buffer. The s register has the quotes
-#	# we've been copying.
-#	execute "normal! \"tPgga\<ESC>"
-#	execute "normal! gg\"qPGo"
-#	execute "normal! \"sp"
-#	execute "normal! ggdd"
 enddef
 
 def g:Report(search_term: string, report_type = "full", function_name = "FullReport", meta = "no meta") 
