@@ -1848,7 +1848,7 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 	var tag_being_considered = "undefined"
 	# move through each line testing for tags and removing duplicate tags
 	# on each line
-	execute "normal! gg0"
+	call cursor(1,1)
 
 	g:tags_on_line = []
 
@@ -1878,7 +1878,7 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 				else
 					g:tags_on_line = g:tags_on_line + [ getreg('@') ]
 				endif
-				execute "normal! l"
+				#execute "normal! l"
 				g:tag_test = search(':\a.\{-}:', '', line("."))
 			endwhile
 		endif
