@@ -1531,8 +1531,6 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 enddef
 
 def TidyUpBlockText()
-	g:last_line
-	g:block_first_line
 	# Take out extra spaces
 	g:block = substitute(g:block_text, '\s\+', ' ', "g")
 	# Take out time stamps and speaker labels. This may be AWS Transcribe specific
