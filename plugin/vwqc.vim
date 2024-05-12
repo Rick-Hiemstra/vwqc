@@ -1529,7 +1529,8 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 			g:tag_count_dict[g:tags_list[index][0]][2] = g:tags_list[index][1]
 		endif 
 	endfor
-
+	TidyUpBlockText(index)
+	g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:block_text ]
 enddef
 
 def TidyUpBlockText(index: number)
