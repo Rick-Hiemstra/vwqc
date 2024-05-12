@@ -1505,7 +1505,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 			g:tag_count_dict[g:tags_list[index][0]][0] = g:tag_count_dict[g:tags_list[index][0]][0] + 1
 			# if tags_list row number minus row number minus the correspondent tag tracking number isn't 1, i.e. non-contiguous
 			if ((g:tags_list[index][1] - g:tag_count_dict[g:tags_list[index][0]][2]) != 1)
-				TidyUpBlockText(index)
+				TidyUpBlockText()
 				# Add the block to the block list for this interview dictionary value
 				g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:block_text ]
 				#Mark that you've entered a block 
@@ -1515,6 +1515,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 				#Record the first line number of this block
 				g:block_first_line = g:tags_list[index][3]
 				g:last_line        = g:tags_list[index][3]
+				g:last_interview   = g:tags_list[index][0]
 				# add to the quoteblocks
 				g:block_text = g:tags_list[index][5]
 				#g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
@@ -1524,16 +1525,17 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 				# Add this line to the g:block_text
 				g:block_text = g:block_text .. g:tags_list[index][5]
 				g:last_line        = g:tags_list[index][3]
+				g:last_interview   = g:tags_list[index][0]
 			endif
 			# Set the last line for this kind of tag equal to the line of the tag we've been considering in this loop.
 			g:tag_count_dict[g:tags_list[index][0]][2] = g:tags_list[index][1]
 		endif 
 	endfor
-	TidyUpBlockText(index)
+	TidyUpBlockText()
 	g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:block_text ]
 enddef
 
-def TidyUpBlockText(index: number)
+def TidyUpBlockText()
 	# Take out extra spaces
 	g:block_text = substitute(g:block_text, '\s\+', ' ', "g")
 	# Take out time stamps and speaker labels. This may be AWS Transcribe specific
@@ -1543,7 +1545,7 @@ def TidyUpBlockText(index: number)
 	g:cross_codes_string = substitute(g:cross_codes_string, "\'", ' ', "g")
 	g:cross_codes_string = substitute(g:cross_codes_string, ',', '', "g")
 	g:cross_codes_string = substitute(g:cross_codes_string, '\s\+', ' ', "g")
-	g:block_text = g:block_text .. " **" .. g:tags_list[index - 1][0] .. ": "
+	g:block_text = g:block_text .. " **" .. g:last_interview .. ": "
 	       	.. g:block_first_line .. " - " .. g:last_line .. "** " .. g:cross_codes_string .. "\n\n"
 enddef 
 # -----------------------------------------------------------------
