@@ -3485,7 +3485,7 @@ def BuildMetadataBlockFill(id: number, result: number)
 enddef
 
 def AddFillTags() 
-	for line_index in range(g:upper_fill_line + 1, str2nr(g:block_lines_nr[-1]))
+	for line_index in range(g:upper_fill_line + 1, g:block_lines_nr[-1])
 		g:block_metadata[line_index][2] = g:block_metadata[line_index][2] + [ g:fill_tag ]
 		g:block_metadata[line_index][2] = sort(g:block_metadata[line_index][2]) 
 	endfor
