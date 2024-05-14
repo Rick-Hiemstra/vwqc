@@ -3492,6 +3492,7 @@ def AddFillTags()
 enddef
 
 def FindUpperTagFillLine() 
+	g:block_lines_nr = []
 	for index in range(0, (len(g:block_lines) - 1))
 		g:block_lines_nr[index] = str2nr(g:block_lines[index])
 	endfor
