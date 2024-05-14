@@ -3456,7 +3456,7 @@ def BuildMetadataBlockFill(id: number, result: number)
 	AddFillTags()
 	CreateSubBlocksLists()
 
-	for line_index in range(str2nr(g:block_lines[0]), str2nr(g:block_lines[-1]))
+	for line_index in range(g:block_lines_nr[0], g:block_lines_nr[-1])
 		g:formatted_metadata = ""
 
 		#Find sub-block and its associated tag list
@@ -3509,7 +3509,7 @@ enddef
 
 def WriteInFormattedTagMetadata() 
 	set virtualedit=all
-	for line_index in range(str2nr(g:block_lines[0]), str2nr(g:block_lines[-1]))
+	for line_index in range(g:block_lines_nr[0], g:block_lines_nr[-1])
 		cursor(line_index, 0)
 		execute "normal! " .. g:block_metadata[line_index][1] .. "|lv$dh"
 		execute "normal! a" .. g:block_metadata[line_index][4] .. "\<ESC>"
