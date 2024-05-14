@@ -3492,14 +3492,14 @@ def AddFillTags()
 enddef
 
 def FindUpperTagFillLine() 
-	echom "Got into FindUpperFillLine\n"
-	echom "g:fill_tag: " .. g:fill_tag .. "\n"
-	echom "g:block_lines[0]: " .. g:block_lines[0] .. "\n"
-	echom "g:block_lines[-1]: " .. g:block_lines[-1] .. "\n"
+	for index in range(0, (len(g:block_lines) - 1))
+		g:block_lines_nr[index] = str2nr(g:block_lines[index])
+	endfor
+	sort(g:block_lines_nr)
 
-	for line_index in range(str2nr(g:block_lines[0]), str2nr(g:block_lines[-1]))
-		echom "line_index: " .. line_index .. "\n"
-		echom "block_medadata[line_index][2]: " .. string(g:block_metadata[line_index][2]) .. "\n"
+	for line_index in range(g:block_lines_nr[0], g:block_lines_nr[-1])
+		#echom "line_index: " .. line_index .. "\n"
+		#echom "block_medadata[line_index][2]: " .. string(g:block_metadata[line_index][2]) .. "\n"
 		if (index(g:block_metadata[line_index][2], g:fill_tag) != -1)
 			g:upper_fill_line = line_index
 		endif
