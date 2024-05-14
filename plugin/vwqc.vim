@@ -3421,7 +3421,7 @@ enddef
 def CreateSubBlocksLists() 
 	g:sub_blocks_tags_lists = []
 	var found_block = 0
-	for line_index in range(g:block_lines_nr[0]), g:block_lines_nr[-1])
+	for line_index in range(g:block_lines_nr[0], g:block_lines_nr[-1])
 		if (len(g:block_metadata[line_index][2]) != 0) && (found_block == 0)
 			g:sub_blocks_tags_lists = g:sub_blocks_tags_lists + [ [ g:block_metadata[line_index][2], [ line_index ] ] ]
 			found_block        = 1
