@@ -1460,8 +1460,127 @@ def g:Gather(search_term: string)
 enddef
 
 # -----------------------------------------------------------------
+# g:anno_tags_list is a list of tags with the following sub-elements:
+# 0) Interview name
+# 1) Line number in the annotation is attached to in the interview
+# 2) A list of tags found in the annotation
+# 3) The text of the annotation
+#
+# So all you have to do is iterate over g:anno_tags_list where
+# g:anno_tags_list[0] == interview, you don't even need to concern yourself
+# with the line number because the list should have been created in order.
+# All you have to do is determine if the tag(s) in question are in
+# g:anno_tags_list[2] and if they are add g:anno_tags_list[3] surrounded
+# by the appropriate banners to the block of anno blocks and add to the
+# anno_blocks counter in the dictionary q:anno_counts where you're keeping
+# track of the number of annos for each interview. Also add a annotation number. You can print the
+# attributes for the interview somewhere. This is in g:attr_list
+#
 # 
 # -----------------------------------------------------------------
+def g:CreateAndCountAnnoBlocks(search_term: string)
+	# g:anno_list is the list of annotation files with the .md on the end.
+	g:block_first_line      = "Undefined"
+	g:block_last_line       = "Undefined"
+	g:last_line             = "Undefined"
+	g:block_text            = "Undefined"
+	g:last_interview        = "Undefined"
+	g:list_of_tags_on_block = []
+	
+	# g:tag_count_dict
+	# The keys will be the interview names
+	# 	0 is the tag count
+	# 	1 is the block count
+	# 	2 is the space to keep track of the last tag's interview line number, 
+	# 	3 is a boolean (represented by a 0 or 1 indicating if you're tracking a tag block or not. 
+	# This will count and keep track of the tag and block counts. We'll
+	# also use it to create blocks
+	g:anno_count_dict       	= {}
+	g:initial_anno_dict     	= {}
+	g:list_of_interviews_with_annos = []
+	
+	# g:quote_blocks_dict
+	# The keys will be the interview names
+	# 	0 Each value will be a list of quote blocks.
+	# 	1 is a list of tags associated with the current block being processed
+	# 	2 is the first interview line number of the block
+	# 	3 is the last interview line number of the block
+	g:anno_blocks_dict    = {}
+
+	CreateListOfInterviewsWithAnnos()
+
+	#Create an interview dict with the values for each key being a
+	# copy of the initial_tag_dict
+	for anno in range(0, (len(g:anno_list) - 1))
+		g:interview_connected_to_this_anno = matchstr(g:anno_list, g:interview_label_regex)
+		if (index(g:list_of_interviews_with_annos, g:interview_connected_to_this_anno) == -1)
+			g:list_of_interviews_with_annos = g:list_of_interviews_with_annos + [ g:interview_connected_to_this_anno ]
+		endif
+	endfor
+
+	for anno in range(0, (len(g:anno_list) - 1))
+		g:anno_less_extension = g:anno_list[anno][ : -g:ext_len]
+		g:interview_connected_to_this_anno = matchstr(g:anno_list, g:interview_label_regex)
+		if (index(g:list_of_interviews_with_annos, g:interview_connected_to_this_anno) == -1)
+			g:list_of_interviews_with_annos = g:list_of_interviews_with_annos + [ g:interview_connected_to_this_anno ]
+		endif
+		g:anno_count_dict[g:interview_less_extension]    = [0, 0, 0, 0]
+		g:anno_blocks_dict[g:interview_less_extension] = []
+	endfor
+	
+	for index in range(0, len(g:tags_list) - 1)
+		# if the current tag we're processing equals the search term
+		if (g:tags_list[index][2] == ':' .. search_term .. ':')
+			# Increment the tag count for this tag
+			g:tag_count_dict[g:tags_list[index][0]][0] = g:tag_count_dict[g:tags_list[index][0]][0] + 1
+			# if tags_list row number minus row number minus the correspondent tag tracking number isn't 1, i.e. non-contiguous
+			if ((g:tags_list[index][1] - g:tag_count_dict[g:tags_list[index][0]][2]) != 1)
+				if g:tag_count_dict[g:tags_list[index][0]][1] != 0
+					TidyUpBlockText()
+					# Add the block to the block list for this interview dictionary value
+					g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:block_text ]
+				endif
+				#Mark that you've entered a block 
+				g:tag_count_dict[g:tags_list[index][0]][3] = 1
+				#Increment the block counter for this interview
+				g:tag_count_dict[g:tags_list[index][0]][1] = g:tag_count_dict[g:tags_list[index][0]][1] + 1
+				#Record the first line number of this block
+				g:block_first_line      = g:tags_list[index][3]
+				g:last_line             = g:tags_list[index][3]
+				g:last_interview        = g:tags_list[index][0]
+				g:list_of_tags_on_line  = g:tags_list[index][4]
+				g:list_of_tags_on_block = g:tags_list[index][4]
+				# add to the quoteblocks
+				g:block_text            = g:tags_list[index][5]
+				#g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
+			else
+				# Reset the block counter because you're inside a block now. 
+				g:tag_count_dict[g:tags_list[index][0]][3] = 0
+				# Add this line to the g:block_text
+				g:block_text            = g:block_text .. g:tags_list[index][5]
+				g:last_line             = g:tags_list[index][3]
+				g:last_interview        = g:tags_list[index][0]
+				g:list_of_tags_on_line  = g:tags_list[index][4]
+				BuildListOfTagsOnBlock()
+			endif
+			# Set the last line for this kind of tag equal to the line of the tag we've been considering in this loop.
+			g:tag_count_dict[g:tags_list[index][0]][2] = g:tags_list[index][1]
+		endif 
+	endfor
+	TidyUpBlockText()
+	g:quote_blocks_dict[g:last_interview] = g:quote_blocks_dict[g:last_interview] + [ g:block_text ]
+enddef
+
+
+def CreateListOfInterviewsWithAnnos()
+	for anno in range(0, (len(g:anno_list) - 1))
+		g:interview_connected_to_this_anno = matchstr(g:anno_list, g:interview_label_regex)
+		if (index(g:list_of_interviews_with_annos, g:interview_connected_to_this_anno) == -1)
+			g:list_of_interviews_with_annos = g:list_of_interviews_with_annos + [ g:interview_connected_to_this_anno ]
+		endif
+	endfor
+enddef
+
 # -----------------------------------------------------------------
 # g:tags_list is a list of tags with the following sub-elements:
 # 0) Interview name
@@ -1927,7 +2046,7 @@ def GenerateAnnotationTags()
 	
 enddef
 # -----------------------------------------------------------------
-# g:tags_list is a list of tags with the following sub-elements:
+# g:anno_tags_list is a list of tags with the following sub-elements:
 # 0) Interview name
 # 1) Line number in the annotation is attached to in the interview
 # 2) A list of tags found in the annotation
@@ -3373,11 +3492,13 @@ def AddFillTags()
 enddef
 
 def FindUpperTagFillLine() 
+	echom "Got into FindUpperFillLine\n"
 	for line_index in range(str2nr(g:block_lines[0]), str2nr(g:block_lines[-1]))
 		if (index(g:block_metadata[line_index][2], g:fill_tag) != -1)
 			g:upper_fill_line = line_index
 		endif
 	endfor
+	echom "upper_fill_line: " .. g:upper_fill_line
 enddef
 
 def WriteInFormattedTagMetadata() 
