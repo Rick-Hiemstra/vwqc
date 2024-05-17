@@ -1696,7 +1696,7 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 			execute "normal! i# " .. repeat("=", 80) .. "\n"
 			execute "normal! i# INTERVIEW: " .. interview_name .. "\n"
 			execute "normal! i# " .. repeat("=", 80) .. "\n"
-			attr_string = string(attr_list[1][1])
+			attr_string = string(g:attr_list[1][1])
 			attr_string = substitute(attr_string, '[\[\[\],]', '', 'g')
 			attr_string = substitute(attr_string, "'", '', 'g')
 			execute "normal! i**ATTRIBUTES: " .. attr_string .. "\n\n"
