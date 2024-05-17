@@ -1699,7 +1699,7 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 			attr_string = substitute(attr_string, "'", '', 'g')
 			execute "normal! i**ATTRIBUTES: " .. attr_string .. "\n\n"
 	
-			for quote_block in ranges(0, len(g:quote_blocks_dict[interview_name]) - 1)
+			for quote_block in range(0, len(g:quote_blocks_dict[interview_name]) - 1)
 				execute "normal! i" .. g:quote_blocks_dict[interview_name][quote_block] .. "\n\n"
 			endfor
 
