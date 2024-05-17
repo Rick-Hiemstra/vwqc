@@ -1611,7 +1611,7 @@ enddef
 #	3 is a boolean (represented by a 0 or 1 indicating if you're tracking a tag block or not. 
 def WriteReportTable(search_term: string)
 
-	var seach_term_with_colons = ":" .. search_term .. ":"
+	g:seach_term_with_colons = ":" .. search_term .. ":"
 	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
 
 	var total_tags   = 0
@@ -1628,7 +1628,7 @@ def WriteReportTable(search_term: string)
 	for interview in range(0, len(g:interview_list) - 1)
 		g:number_of_annos = 0
 		for anno_index in range(0, len(g:anno_tags_dict[g:interview_list[interview]]))
-			if (index(g:anno_tags_dict[g:interview_list[interview]][anno_index][1], search_term_with_colons) != -1)
+			if (index(g:anno_tags_dict[g:interview_list[interview]][anno_index][1], g:search_term_with_colons) != -1)
 				g:number_of_annos = g:number_of_annos + 1
 			endif
 		endfor
