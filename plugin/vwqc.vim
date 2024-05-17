@@ -1633,7 +1633,7 @@ def WriteReportTable(search_term: string)
 			endif
 		endfor
 
-		var lines_per_block = printf("%.1f", 1.0 * number_of_lines / number_of_blocks)
+		var lines_per_block = printf("%.1f", 1.0 * g:tag_dict_count[g:interview_list[interview]][0] / g:tag_dict_count[g:interview_list[interview]][1])
 
 		execute "normal! i| " .. interview ..  " | [[" .. g:interview_list[interview][ : -g:ext_len] .. "]] | " ..
 					 g:tag_dict_count[g:interview_list[interview]][1] ..  " | " ..
