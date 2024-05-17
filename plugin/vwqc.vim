@@ -1646,7 +1646,7 @@ def WriteReportTable(search_term: string)
 					 g:number_of_annos .. " |\n"
 		execute "normal! ki\<ESC>j"
 		total_tags   = total_tags   + g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][0]
-		total_blocks = total_blocks + g:tag_dict_count[g:interview_list[interview][ : -g:ext_len]][1]
+		total_blocks = total_blocks + g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][1]
 		total_annos  = total_annos  + g:number_of_annos
 		
 	endfor 
