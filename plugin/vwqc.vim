@@ -1611,7 +1611,7 @@ enddef
 #	3 is a boolean (represented by a 0 or 1 indicating if you're tracking a tag block or not. 
 def WriteReportTable(search_term: string)
 
-	g:seach_term_with_colons = ":" .. search_term .. ":"
+	g:search_term_with_colons = ":" .. search_term .. ":"
 	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
 
 	var total_tags   = 0
