@@ -1630,7 +1630,7 @@ def WriteReportTable(search_term: string)
 		interview_name = g:interview_list[interview][ : -g:ext_len]		
 	
 		g:number_of_annos = 0
-		for anno_index in range(0, len(g:anno_tags_dict[g:interview_list[interview]]))
+		for anno_index in range(0, len(g:anno_tags_dict[g:interview_list[interview][ : -g:ext_len]))
 			if (index(g:anno_tags_dict[g:interview_list[interview_name]][anno_index][1], g:search_term_with_colons) != -1)
 				g:number_of_annos = g:number_of_annos + 1
 			endif
