@@ -50,11 +50,16 @@ endif
 # Deal with the case where a wiki is configured with a path that doesn't end 
 # with a /
 #
-# Figure out why Tag Glossary items aren't being sorted properly.
-#
 # Add a popup on exit to prompt a backup, or make a backup automatic.
 #
 # Find the older :\
+#
+# Fix up the stuff with g:block_lines_nr you should be able to fix this when
+# g:block_lines is first defined and then change instances of g:block_lines_nr
+# back to g:block_lines to make the code cleaner to read.
+# 
+# Fix F2 prompt coming up twice when entering a wiki.
+# 
 
 # -----------------------------------------------------------------
 # ------------------------ FUNCTIONS ------------------------------
@@ -1498,8 +1503,9 @@ def g:CreateAndCountAnnoBlocks(search_term: string)
 	g:anno_count_dict       	= {}
 	g:initial_anno_dict     	= {}
 	g:list_of_interviews_with_annos = []
+	g:anno_blocks                   = {}
 	
-	# g:quote_blocks_dict
+	# g:anno_blocks_dict
 	# The keys will be the interview names
 	# 	0 Each value will be a list of quote blocks.
 	# 	1 is a list of tags associated with the current block being processed
@@ -1507,19 +1513,21 @@ def g:CreateAndCountAnnoBlocks(search_term: string)
 	# 	3 is the last interview line number of the block
 	g:anno_blocks_dict    = {}
 
+	# CreateListOfInterviewsWithAnnos() returns
+	# g:list_of_interviews_with_annos
 	CreateListOfInterviewsWithAnnos()
 
 	#Create an interview dict with the values for each key being a
 	# copy of the initial_tag_dict
-	for anno in range(0, (len(g:anno_list) - 1))
-		g:interview_connected_to_this_anno = matchstr(g:anno_list, g:interview_label_regex)
-		if (index(g:list_of_interviews_with_annos, g:interview_connected_to_this_anno) == -1)
-			g:list_of_interviews_with_annos = g:list_of_interviews_with_annos + [ g:interview_connected_to_this_anno ]
-		endif
+	for interview in range(0, (len(g:interview_list) - 1))
+		g:interview_less_extension = g:interview_list[interview][ : -g:ext_len]
+		g:anno_count_dict[g:interview_less_extension]    = [0, 0, 0, 0]
+		g:anno_blocks_dict[g:interview_less_extension] = []
 	endfor
 
-	for anno in range(0, (len(g:anno_list) - 1))
-		g:anno_less_extension = g:anno_list[anno][ : -g:ext_len]
+	for interview in range(0, (len(g:interview_list) - 1))
+		g:interview_less_extension = g:interview_list[interview][ : -g:ext_len]
+		for anno in range(0, (len(g
 		g:interview_connected_to_this_anno = matchstr(g:anno_list, g:interview_label_regex)
 		if (index(g:list_of_interviews_with_annos, g:interview_connected_to_this_anno) == -1)
 			g:list_of_interviews_with_annos = g:list_of_interviews_with_annos + [ g:interview_connected_to_this_anno ]
@@ -2083,7 +2091,7 @@ def CrawlAnnotationTags(anno_num: number, anno_name: string)
 		endif
 	endfor	
 	execute "normal! ggVGy"
-	g:anno_tags_list = g:anno_tags_list + [[ interview, line_num_as_string, g:tags_in_anno, getreg('@') ]]
+	g:anno_tags_dict[interview] = g:anno_tags_dict[interview] + [[ line_num_as_string, g:tags_in_anno, getreg('@') ]]
 enddef
 # -----------------------------------------------------------------
 # 
@@ -2862,7 +2870,14 @@ def g:GetTagUpdate()
 	endfor
 	
 	var anno_to_crawl = "Undefined"
-	g:anno_tags_list  = []
+	g:anno_tags_dict  = {}
+	g:initial_interview_anno_dict = []
+
+	for interview in range(0, (len(g:interview_list) - 1))
+		g:interview_less_extension = g:interview_list[interview][ : -g:ext_len]
+		g:anno_tags_dict[g:interview_less_extension]  = []
+	endfor
+
 	# Go through each annotation file building up a list of tags
 	for annotation in range(0, (len(g:anno_list) - 1))
 		# go to interview file
@@ -3450,7 +3465,13 @@ def BuildMetadataBlockFill(id: number, result: number)
 	g:sub_block_tag_list = []
 	g:fill_tag           = g:block_tags_list[result - 1]
 
-	g:block_lines        = sort(keys(g:block_metadata))
+	g:block_lines        = sort(keys(g:block_metadata), 'N')
+
+	g:block_lines_nr     = []
+
+	for index in range(0, (len(g:block_lines) - 1))
+		g:block_lines_nr[index] = str2nr(g:block_lines[index])
+	endfor
 
 	FindUpperTagFillLine()
 	AddFillTags()
@@ -3492,14 +3513,6 @@ def AddFillTags()
 enddef
 
 def FindUpperTagFillLine() 
-	g:block_lines_nr = []
-
-	for index in range(0, (len(g:block_lines) - 1))
-		g:block_lines_nr[index] = str2nr(g:block_lines[index])
-	endfor
-
-	sort(g:block_lines_nr, 'N')
-
 	for line_index in range(g:block_lines_nr[0], g:block_lines_nr[-1])
 		if (index(g:block_metadata[line_index][2], g:fill_tag) != -1)
 			g:upper_fill_line = line_index
