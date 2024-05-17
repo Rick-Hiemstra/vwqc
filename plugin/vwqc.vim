@@ -1670,8 +1670,6 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 
 	# Set a mark R in the current buffer which is the buffer where your
 	# report will appear.
-	execute "normal! :delmarks R\<CR>"
-	execute "normal! ggmR"
 	# Clear buffer contents
 	execute "normal! ggVGd"
 
@@ -1701,7 +1699,7 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 			attr_string = substitute(attr_string, "'", '', 'g')
 			execute "normal! i**ATTRIBUTES: " .. attr_string .. "\n\n"
 	
-			for quote_block in ranges(0, len(quote_blocks_dict[interview_name]) - 1)
+			for quote_block in ranges(0, len(g:quote_blocks_dict[interview_name]) - 1)
 				execute "normal! i" .. g:quote_blocks_dict[interview_name][quote_block] .. "\n\n"
 			endfor
 
@@ -1711,22 +1709,6 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 				execute "normal! i# " .. repeat("<", 40) .. "\n"
 				execute "normal! i" .. g:anno_tag_dict[interview_name][anno][2]
 				execute "normal! i# " .. repeat(">", 40) .. "\n\n"
-			endfor
-		endfor 
-	
-		# Write anno blocks
-		for anno in range(0, len(g:interview_list) - 1)
-			interview_name = g:interview_list[interview][ : -g:ext_len]
-			execute "normal! i# " .. repeat("=", 80) .. "\n"
-			execute "normal! i# INTERVIEW: " .. interview_name .. "\n"
-			execute "normal! i# " .. repeat("=", 80) .. "\n"
-			attr_string = string(attr_list[1][1])
-			attr_string = substitute(attr_string, '[\[\[\],]', '', 'g')
-			attr_string = substitute(attr_string, "'", '', 'g')
-			execute "normal! i**ATTRIBUTES: " .. attr_string .. "\n\n"
-	
-			for quote_block in ranges(0, len(quote_blocks_dict[interview_name]) - 1)
-				execute "normal! i" .. g:quote_blocks_dict[interview_name][quote_block] .. "\n\n"
 			endfor
 		endfor 
 	else
