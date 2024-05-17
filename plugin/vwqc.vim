@@ -1637,16 +1637,16 @@ def WriteReportTable(search_term: string)
 		endfor
 
 		# says tag_dict_count is underfined 
-		var lines_per_block = printf("%.1f", 1.0 * g:tag_count_dict[g:interview_list[interview][ : -g:ext_len][0] / g:tag_count_dict[g:interview_list[interview][ : -g:ext_len][1])
+		var lines_per_block = printf("%.1f", 1.0 * g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][0] / g:tag_count_dict[g:interview_list[interview][ : -g:ext_len][1])
 
 		execute "normal! i| " .. interview ..  " | [[" .. g:interview_list[interview][ : -g:ext_len] .. "]] | " ..
-					 g:tag_count_dict[g:interview_list[interview][ : -g:ext_len][1] ..  " | " ..
-					 g:tag_count_dict[g:interview_list[interview][ : -g:ext_len][0] .. " | " .. 
+					 g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][1] ..  " | " ..
+					 g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][0] .. " | " .. 
 					 lines_per_block .. " | " .. 
 					 g:number_of_annos .. " |\n"
 		execute "normal! ki\<ESC>j"
-		total_tags   = total_tags   + g:tag_count_dict[g:interview_list[interview][ : -g:ext_len][0]
-		total_blocks = total_blocks + g:tag_dict_count[g:interview_list[interview][ : -g:ext_len][1]
+		total_tags   = total_tags   + g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][0]
+		total_blocks = total_blocks + g:tag_dict_count[g:interview_list[interview][ : -g:ext_len]][1]
 		total_annos  = total_annos  + g:number_of_annos
 		
 	endfor 
