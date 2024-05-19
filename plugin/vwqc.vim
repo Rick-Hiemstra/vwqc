@@ -1708,10 +1708,10 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 			endfor
 
 			# Write anno blocks
-			for anno in range(0, len(g:anno_tag_dict[interview_name] - 1))
+			for anno in range(0, len(g:anno_tags_dict[interview_name] - 1))
 				execute "normal! i**ANNOTATION " .. anno .. ":\n"
 				execute "normal! i# " .. repeat("<", 40) .. "\n"
-				execute "normal! i" .. g:anno_tag_dict[interview_name][anno][2]
+				execute "normal! i" .. g:anno_tags_dict[interview_name][anno][2]
 				execute "normal! i# " .. repeat(">", 40) .. "\n\n"
 			endfor
 		endfor 
@@ -2659,12 +2659,12 @@ enddef
 # ------------------------------------------------------
 def ReportHeader(report_type: string, search_term: string) 
 	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
-	execute "normal! i # " .. repeat("*", 80) .. "\n# " .. repeat("*", 80) .. "\n"
+	execute "normal! i# " .. repeat("*", 80) .. "\n# " .. repeat("*", 80) .. "\n"
 	execute "normal! i**" .. report_type 
-		.. "(\"" .. search_term .. "\")**\n  Created by **" 
-	        .. g:coder_initials .. "**\n  on **" 
+		.. "(\"" .. search_term .. "\")**\nCreated by **" 
+	        .. g:coder_initials .. "**\non **" 
 		.. report_update_time .. "**\n"
-	execute "normal! i # " .. repeat("*", 80) .. "\n# " .. repeat("*", 80) .. "\n\n"
+	execute "normal! i# " .. repeat("*", 80) .. "\n# " .. repeat("*", 80) .. "\n\n"
         execute "normal! i**SUMMARY TABLE:**\n\n" 
 enddef
 
