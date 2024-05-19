@@ -1727,7 +1727,7 @@ def g:Report(search_term: string, report_type = "FullReport")
 	else
 		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
 	endif
-	# find '' and replace them with '
+	execute "normal! gg"
 enddef
 
 def g:ReportOld(search_term: string, report_type = "full", function_name = "FullReport", meta = "no meta") 
