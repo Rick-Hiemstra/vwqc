@@ -1712,12 +1712,12 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 			# Write anno blocks
 			for anno in range(0, len(g:anno_tags_dict[g:interview_name]) - 1)
 				if (index(g:anno_tags_dict[g:interview_name][anno][1], search_term_with_colons) != -1)
+					anno_counter = anno_counter + 1
 					execute "normal! i# " .. repeat("< - ", 30) .. "\n"
 					execute "normal! i**ANNOTATION " .. anno_counter .. ":**\n"
-					execute "normal! i# " .. repeat("<", 30) .. "\n"
+					execute "normal! i# " .. repeat("< - ", 30) .. "\n"
 					execute "normal! i" .. g:anno_tags_dict[g:interview_name][anno][2]
-					execute "normal! i# " .. repeat(">", 30) .. "\n\n"
-					anno_counter = anno_counter + 1
+					execute "normal! i# " .. repeat("> - ", 30) .. "\n\n"
 				endif
 			endfor
 		endfor 
