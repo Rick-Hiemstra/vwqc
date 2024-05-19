@@ -1669,6 +1669,7 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 	
 	var interview_name = "Undefined"
 	var attr_string    = "Undefined"
+	var search_term_with_colons = ":" .. search_term .. ":"
 
 	execute "normal! :cd %:p:h\<CR>"
 
@@ -1704,15 +1705,20 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 			execute "normal! i**ATTRIBUTES:** " .. attr_string .. "\n\n"
 	
 			for quote_block in range(0, len(g:quote_blocks_dict[g:interview_name]) - 1)
-				execute "normal! i" .. g:quote_blocks_dict[g:interview_name][quote_block] .. "\n\n"
+				execute "normal! i" .. g:quote_blocks_dict[g:interview_name][quote_block] 
 			endfor
 
+			var anno_counter = 0
 			# Write anno blocks
 			for anno in range(0, len(g:anno_tags_dict[g:interview_name]) - 1)
-				execute "normal! i**ANNOTATION " .. anno .. ":**\n"
-				execute "normal! i# " .. repeat("<", 40) .. "\n"
-				execute "normal! i" .. g:anno_tags_dict[g:interview_name][anno][2]
-				execute "normal! i# " .. repeat(">", 40) .. "\n\n"
+				if (index(g:anno_tags_dict[g:interview_name][anno][1], search_term_with_colons) != -1)
+					execute "normal! i# " .. repeat("< - ", 30) .. "\n"
+					execute "normal! i**ANNOTATION " .. anno_counter .. ":**\n"
+					execute "normal! i# " .. repeat("<", 30) .. "\n"
+					execute "normal! i" .. g:anno_tags_dict[g:interview_name][anno][2]
+					execute "normal! i# " .. repeat(">", 30) .. "\n\n"
+					anno_counter = anno_counter + 1
+				endif
 			endfor
 		endfor 
 	else
