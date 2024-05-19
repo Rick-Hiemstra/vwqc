@@ -1694,24 +1694,24 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 		for interview in range(0, len(g:interview_list) - 1)
 
 			# Write quote blocks
-			interview_name = g:interview_list[interview][ : -g:ext_len]
+			g:interview_name = g:interview_list[interview][ : -g:ext_len]
 			execute "normal! i# " .. repeat("=", 80) .. "\n"
-			execute "normal! i# INTERVIEW: " .. interview_name .. "\n"
+			execute "normal! i# INTERVIEW: " .. g:interview_name .. "\n"
 			execute "normal! i# " .. repeat("=", 80) .. "\n"
 			attr_string = string(g:attr_list[1][1])
 			attr_string = substitute(attr_string, '[\[\[\],]', '', 'g')
 			attr_string = substitute(attr_string, "'", '', 'g')
 			execute "normal! i**ATTRIBUTES: " .. attr_string .. "\n\n"
 	
-			for quote_block in range(0, len(g:quote_blocks_dict[interview_name]) - 1)
-				execute "normal! i" .. g:quote_blocks_dict[interview_name][quote_block] .. "\n\n"
+			for quote_block in range(0, len(g:quote_blocks_dict[g:interview_name]) - 1)
+				execute "normal! i" .. g:quote_blocks_dict[g:interview_name][quote_block] .. "\n\n"
 			endfor
 
 			# Write anno blocks
-			for anno in range(0, len(g:anno_tags_dict[interview_name] - 1))
+			for anno in range(0, len(g:anno_tags_dict[g:interview_name] - 1))
 				execute "normal! i**ANNOTATION " .. anno .. ":\n"
 				execute "normal! i# " .. repeat("<", 40) .. "\n"
-				execute "normal! i" .. g:anno_tags_dict[interview_name][anno][2]
+				execute "normal! i" .. g:anno_tags_dict[g:interview_name][anno][2]
 				execute "normal! i# " .. repeat(">", 40) .. "\n\n"
 			endfor
 		endfor 
