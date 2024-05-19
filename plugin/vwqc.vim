@@ -1621,7 +1621,7 @@ def WriteReportTable(search_term: string)
 	var ave_total_blocks_size = "Undefined"
 	var interview_name = "Undefined"
 
-	execute "normal! i|No.|Interview|Tag Count|Block Count|Average Block Size|Annotations| \n"
+	execute "normal! i|No.|Interview|Block Count|Tag Count|Tags / Blocks|Annotations| \n"
 	execute "normal! ki\<ESC>j"
 	execute "normal! i|---:|:---|---:|---:|---:|---:|\n"
 	execute "normal! ki\<ESC>j"
@@ -1714,9 +1714,9 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 				if (index(g:anno_tags_dict[g:interview_name][anno][1], search_term_with_colons) != -1)
 					anno_counter = anno_counter + 1
 					execute "normal! i**ANNOTATION " .. anno_counter .. ":**\n"
-					execute "normal! i# " .. repeat("<-", 30) .. "\n"
+					execute "normal! i# " .. repeat("<-", 40) .. "\n"
 					execute "normal! i" .. g:anno_tags_dict[g:interview_name][anno][2]
-					execute "normal! i# " .. repeat(">-", 30) .. "\n\n"
+					execute "normal! i# " .. repeat(">-", 40) .. "\n\n"
 				endif
 			endfor
 		endfor 
