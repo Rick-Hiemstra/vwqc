@@ -1621,9 +1621,9 @@ def WriteReportTable(search_term: string)
 	var ave_total_blocks_size = "Undefined"
 	var interview_name = "Undefined"
 
-	execute "normal! i|No.|Interview|Tag Count|Block Count|Average Block Size| \n"
+	execute "normal! i|No.|Interview|Tag Count|Block Count|Average Block Size|Annotations| \n"
 	execute "normal! ki\<ESC>j"
-	execute "normal! i|---:|:---|---:|---:|---:|\n"
+	execute "normal! i|---:|:---|---:|---:|---:|---:|\n"
 	execute "normal! ki\<ESC>j"
 
 	for interview in range(0, len(g:interview_list) - 1)
