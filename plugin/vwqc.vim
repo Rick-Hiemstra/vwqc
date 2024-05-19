@@ -95,7 +95,6 @@ endif
 # FullReport
 # AnnotationsReport
 # QuotesReport
-# MetaReport
 # VWSReport
 # AllSummariesFull
 # AllSummariesGenReportsFull
@@ -1380,7 +1379,7 @@ def g:AllSummariesGenReportsAnnos(id: number, result: number)
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
 		for index in range(0, len(g:summary_file_list) - 1)
 			execute "normal! :e " .. g:summary_file_list[index] .. "\<CR>"
-			g:AnnotationsReport(g:anno_list_tags_and_interviews[index])
+			g:AnnotationsReport(g:in_both_lists[index])
 		endfor
 		execute "normal! `Q"
 		put =g:summary_link_list
@@ -1639,7 +1638,7 @@ def WriteReportTable(search_term: string)
 		# says tag_dict_count is underfined 
 		var lines_per_block = printf("%.1f", 1.0 * g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][0] / g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][1])
 
-		execute "normal! i| " .. interview ..  " | [[" .. g:interview_list[interview][ : -g:ext_len] .. "]] | " ..
+		execute "normal! i| " .. interview + 1 ..  " | [[" .. g:interview_list[interview][ : -g:ext_len] .. "]] | " ..
 					 g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][1] ..  " | " ..
 					 g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][0] .. " | " .. 
 					 lines_per_block .. " | " .. 
@@ -1682,10 +1681,6 @@ def g:Report(search_term: string, report_type = "FullReport")
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
 		g:CreateAndCountInterviewBlocks(search_term)
-		# Initialize values the will be used in the for loop below. The
-		# summary is going to be aggregated in the s register.
-		@s                               = "\n"
-		@u                               = ""
 		
 		ReportHeader(report_type, search_term)
 		 
