@@ -1613,12 +1613,13 @@ def WriteReportTable(search_term: string)
 	g:search_term_with_colons = ":" .. search_term .. ":"
 	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
 
-	var total_tags   = 0
-	var total_blocks = 0
-	var total_annos  = 0
-	var ave_block_size = "Undefined"
+	var total_tags   	  = 0
+	var total_blocks 	  = 0
+	var total_annos  	  = 0
+	var ave_block_size        = "Undefined"
 	var ave_total_blocks_size = "Undefined"
-	var interview_name = "Undefined"
+	var interview_name        = "Undefined"
+	var interview_num         = 0
 
 	execute "normal! i|No.|Interview|Block Count|Tag Count|Tags / Blocks|Annotations| \n"
 	execute "normal! ki\<ESC>j"
@@ -1637,8 +1638,11 @@ def WriteReportTable(search_term: string)
 
 		# says tag_dict_count is underfined 
 		var lines_per_block = printf("%.1f", 1.0 * g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][0] / g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][1])
+		
 
-		execute "normal! i| " .. interview + 1 ..  " | [[" .. g:interview_list[interview][ : -g:ext_len] .. "]] | " ..
+		
+		interview_num = interview + 1
+		execute "normal! i| " .. interview_num ..  " | [[" .. g:interview_list[interview][ : -g:ext_len] .. "]] | " ..
 					 g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][1] ..  " | " ..
 					 g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][0] .. " | " .. 
 					 lines_per_block .. " | " .. 
