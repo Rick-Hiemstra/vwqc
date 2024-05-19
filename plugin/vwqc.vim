@@ -1701,7 +1701,7 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 			attr_string = string(g:attr_list[1][1])
 			attr_string = substitute(attr_string, '[\[\[\],]', '', 'g')
 			attr_string = substitute(attr_string, "'", '', 'g')
-			execute "normal! i**ATTRIBUTES: " .. attr_string .. "\n\n"
+			execute "normal! i**ATTRIBUTES:** " .. attr_string .. "\n\n"
 	
 			for quote_block in range(0, len(g:quote_blocks_dict[g:interview_name]) - 1)
 				execute "normal! i" .. g:quote_blocks_dict[g:interview_name][quote_block] .. "\n\n"
@@ -1709,7 +1709,7 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 
 			# Write anno blocks
 			for anno in range(0, len(g:anno_tags_dict[g:interview_name]) - 1)
-				execute "normal! i**ANNOTATION " .. anno .. ":\n"
+				execute "normal! i**ANNOTATION " .. anno .. ":**\n"
 				execute "normal! i# " .. repeat("<", 40) .. "\n"
 				execute "normal! i" .. g:anno_tags_dict[g:interview_name][anno][2]
 				execute "normal! i# " .. repeat(">", 40) .. "\n\n"
