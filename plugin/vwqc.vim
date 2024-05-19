@@ -1708,7 +1708,7 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 			endfor
 
 			# Write anno blocks
-			for anno in range(0, len(g:anno_tags_dict[g:interview_name] - 1))
+			for anno in range(0, len(g:anno_tags_dict[g:interview_name]) - 1)
 				execute "normal! i**ANNOTATION " .. anno .. ":\n"
 				execute "normal! i# " .. repeat("<", 40) .. "\n"
 				execute "normal! i" .. g:anno_tags_dict[g:interview_name][anno][2]
