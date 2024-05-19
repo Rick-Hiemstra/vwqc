@@ -1165,22 +1165,22 @@ enddef
 # -----------------------------------------------------------------
 
 def g:FullReport(search_term: string)
-	g:Report(search_term, "full", "FullReport", "no meta")
+	g:Report(search_term, "FullReport")
 	execute "normal! \<C-w>o"
 enddef
 
 def g:AnnotationsReport(search_term: string)
-	g:Report(search_term, "annotations", "AnnotationReport", "no meta") 
+	g:Report(search_term, "AnnotationsReport") 
 	execute "normal! \<C-w>o"
 enddef
 
 def g:QuotesReport(search_term: string)
-	g:Report(search_term,  "quotes", "QuotesReport", "no meta") 
+	g:Report(search_term, "QuotesReport") 
 	execute "normal! \<C-w>o"
 enddef
 
 def g:VWSReport(search_term: string)
-	g:Report(search_term, "VWS", "VWSReport", "meta") 
+	g:ReportOld(search_term, "VWS", "VWSReport", "meta") 
 	execute "normal! \<C-w>o"
 enddef
 
@@ -1664,7 +1664,7 @@ enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-def g:Query(search_term: string, report_type = "full", function_name = "FullReport", meta = "no meta") 
+def g:Report(search_term: string, report_type = "FullReport") 
 	ParmCheck()
 	
 	var interview_name = "Undefined"
@@ -1703,22 +1703,27 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 			attr_string = substitute(attr_string, '[\[\[\],]', '', 'g')
 			attr_string = substitute(attr_string, "'", '', 'g')
 			execute "normal! i**ATTRIBUTES:** " .. attr_string .. "\n\n"
-	
-			for quote_block in range(0, len(g:quote_blocks_dict[g:interview_name]) - 1)
-				execute "normal! i" .. g:quote_blocks_dict[g:interview_name][quote_block] 
-			endfor
+
+			if (report_type == "FullReport") || (report_type == "QuotesReport")
+				for quote_block in range(0, len(g:quote_blocks_dict[g:interview_name]) - 1)
+					execute "normal! i" .. g:quote_blocks_dict[g:interview_name][quote_block] 
+				endfor
+			endif
 
 			var anno_counter = 0
 			# Write anno blocks
-			for anno in range(0, len(g:anno_tags_dict[g:interview_name]) - 1)
-				if (index(g:anno_tags_dict[g:interview_name][anno][1], search_term_with_colons) != -1)
-					anno_counter = anno_counter + 1
-					execute "normal! i**" .. repeat(">-", 40) .. "**\n"
-					execute "normal! i**ANNOTATION " .. anno_counter .. ":**\n"
-					execute "normal! i**" .. repeat(">-", 40) .. "**\n"
-					execute "normal! i" .. g:anno_tags_dict[g:interview_name][anno][2] .. "\n"
-				endif
-			endfor
+			
+			if (report_type == "FullReport") || (report_type == "AnnotationsReport")
+				for anno in range(0, len(g:anno_tags_dict[g:interview_name]) - 1)
+					if (index(g:anno_tags_dict[g:interview_name][anno][1], search_term_with_colons) != -1)
+						anno_counter = anno_counter + 1
+						execute "normal! i**" .. repeat(">-", 40) .. "**\n"
+						execute "normal! i**ANNOTATION " .. anno_counter .. ":**\n"
+						execute "normal! i**" .. repeat(">-", 40) .. "**\n"
+						execute "normal! i" .. g:anno_tags_dict[g:interview_name][anno][2] .. "\n"
+					endif
+				endfor
+			endif
 		endfor 
 	else
 		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
@@ -1726,7 +1731,7 @@ def g:Query(search_term: string, report_type = "full", function_name = "FullRepo
 	# find '' and replace them with '
 enddef
 
-def g:Report(search_term: string, report_type = "full", function_name = "FullReport", meta = "no meta") 
+def g:ReportOld(search_term: string, report_type = "full", function_name = "FullReport", meta = "no meta") 
 	ParmCheck()
 	
 	g:tag_summary_file = g:tag_summaries_path .. search_term .. ".csv"
