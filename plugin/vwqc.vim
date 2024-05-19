@@ -1690,6 +1690,7 @@ def g:Report(search_term: string, report_type = "FullReport")
 		 
 		WriteReportTable(search_term)
 		
+		execute "normal! G"
 		# Write quote blocks
 		for interview in range(0, len(g:interview_list) - 1)
 
