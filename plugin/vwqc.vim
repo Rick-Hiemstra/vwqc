@@ -2577,8 +2577,8 @@ enddef
 # ------------------------------------------------------
 def CurrentTagsPopUpMenu() 
 	popup_menu(g:tag_list_output, 
-				 { minwidth: 50,
-				 maxwidth: 50,
+				 { minwidth: 70,
+				 maxwidth: 70,
 				 pos: 'center',
 				 border: [],
 				 close: 'click',
