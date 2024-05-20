@@ -26,7 +26,7 @@ endif
 # Vimwiki Qualitative Code (VWQC) - Vimscript 9 version
 # Written by Rick Hiemstra and Lindsay Callaway
 # Version Vim9 1.0 
-# 2024-04-27	
+# 2024-95-20	
 #
 # Write a function to restore a backup
 #
@@ -1178,11 +1178,6 @@ def g:QuotesReport(search_term: string)
 	execute "normal! \<C-w>o"
 enddef
 
-def g:VWSReport(search_term: string)
-	g:ReportOld(search_term, "VWS", "VWSReport", "meta") 
-	execute "normal! \<C-w>o"
-enddef
-
 # -----------------------------------------------------------------
 # This function produces summary reports for all tags defined in the 
 # tag glossary.
@@ -1676,11 +1671,8 @@ def g:Report(search_term: string, report_type = "FullReport")
 
 	execute "normal! :cd %:p:h\<CR>"
 
-	# Set a mark R in the current buffer which is the buffer where your
-	# report will appear.
 	# Clear buffer contents
 	execute "normal! ggVGd"
-
 
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
@@ -1710,9 +1702,8 @@ def g:Report(search_term: string, report_type = "FullReport")
 				endfor
 			endif
 
-			var anno_counter = 0
 			# Write anno blocks
-			
+			var anno_counter = 0
 			if (report_type == "FullReport") || (report_type == "AnnotationsReport")
 				for anno in range(0, len(g:anno_tags_dict[g:interview_name]) - 1)
 					if (index(g:anno_tags_dict[g:interview_name][anno][1], search_term_with_colons) != -1)
@@ -1729,138 +1720,6 @@ def g:Report(search_term: string, report_type = "FullReport")
 		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
 	endif
 	execute "normal! gg"
-enddef
-
-def g:ReportOld(search_term: string, report_type = "full", function_name = "FullReport", meta = "no meta") 
-	ParmCheck()
-	
-	g:tag_summary_file = g:tag_summaries_path .. search_term .. ".csv"
-	# Change the pwd to that of the current wiki.
-	execute "normal! :cd %:p:h\<CR>"
-
-	# Set a mark R in the current buffer which is the buffer where your
-	# report will appear.
-	execute "normal! :delmarks R\<CR>"
-	execute "normal! ggmR"
-
-	# Set tag summary file path
-	g:tag_summary_file      = g:tag_summaries_path .. search_term .. ".csv"
-
-	# Call VimwikiSearchTags against the a:search_term argument.
-	# Put the result in loc_list which is a list of location list
-	# dictionaries that we'll process.
-	if (report_type == "VWS")
-		g:escaped_search_term = escape(search_term, ' \')
-		execute "normal! :VimwikiSearch /" .. search_term .. "/\<CR>"
-	else
-		execute "normal! :VimwikiSearchTags " .. search_term .. "\<CR>"
-	endif
-
-	g:loc_list = getloclist(0)
-
-	g:escaped_search_term = escape(search_term, ' \')
-	execute "normal! :VimwikiSearch /" .. search_term .. "/\<CR>"
-
-	# Initialize values the will be used in the for loop below. The
-	# summary is going to be aggregated in the s register.
-	@s                               = "\n"
-	@t				 = "| No. | Interview | Blocks | Lines | Annos |\n|-------:|-------|------:|------:|------:|\n"
-	@u                               = ""
-
-	g:quote_dict =  {}
-	g:anno_dict = {}
-
-	g:last_line              = 0
-	g:last_int_line 	     = 0
-	g:last_int_name 	     = 0
-	g:last_block_num         = 0
-	g:anno_int_name          = ""
-	g:last_anno_int_name     = ""
-	g:current_anno_int_name  = ""
-	g:block_count            = 0
-	g:block_line_count       = 0
-	g:cross_codes            = []
-	
-	# Get the number of search results.
-	var search_results = len(g:loc_list)
-	
-	# Go through all the location list search results and build the
-	# interview line and annotation dictionaries. 
-	for g:ll_num in range(0, search_results - 1)
-		g:current_buf_name    = bufname(g:loc_list[g:ll_num]['bufnr'])[0 : -g:ext_len]
-		g:ll_bufnr            = g:loc_list[g:ll_num]['bufnr']
-		g:line_text           = g:loc_list[g:ll_num]['text']
-		g:line_text_less_meta = RemoveMetadata(g:line_text)
-		g:current_buf_type    = FindBufferType(g:current_buf_name)
-		if (g:current_buf_type == "Interview")
-			g:current_int_line_num = GetInterviewLineInfo(g:line_text)
-			PopulateQuoteLineList()
-			g:last_int_line_num  = g:current_int_line_num
-			g:last_int_name      = g:current_buf_name
-		elseif (g:current_buf_type == "Annotation")
-			PopulateAnnoLineList(g:current_buf_type)
-			g:last_anno_int_name  = g:current_anno_int_name
-			g:last_anno_buf_name  = g:current_buf_name
-		endif
-	endfor
-
-	g:int_keys          = sort(keys(g:quote_dict))
-	g:anno_keys         = sort(keys(g:anno_dict))
-	g:int_and_anno_keys = sort(g:int_keys + g:anno_keys)
-	
-
-	#combined_list_len = len(g:int_and_anno_keys)
-
-	g:unique_keys = filter(copy(g:int_and_anno_keys), 'index(g:int_and_anno_keys, v:val, v:key + 1) == -1')
-	
-	if (report_type == "full") || (report_type == "VWS")
-		g:interview_list = g:unique_keys
-		for g:int_index in range(0, len(g:interview_list) - 1)
-			ProcessInterviewTitle(g:interview_list[g:int_index])
-			ProcessInterviewLines(meta, report_type, search_term)
-			ProcessAnnotationLines()
-		endfor
-		writefile(split(getreg('u'), "\n", 1), g:tag_summary_file)
-	elseif (report_type == "annotations")
-		g:interview_list = g:anno_keys
-		for g:int_index in range(0, len(g:interview_list) - 1)
-			ProcessInterviewTitle(g:interview_list[g:int_index])
-			ProcessAnnotationLines()
-		endfor
-	elseif (report_type == "quotes")
-		g:interview_list = g:int_keys
-		for g:int_index in range(0, len(g:interview_list) - 1)
-			ProcessInterviewTitle(g:int_keys[g:int_index])
-			ProcessInterviewLines(meta, report_type, search_term )
-		endfor
-		writefile([ getreg('u') ], g:tag_summary_file)
-	endif
-
-	@t = "| No. | Interview | Blocks | Lines | Lines/Block | Annos |\n|-------:|-------|------:|------:|------:|\n"
-	g:total_blocks      = 0
-	g:total_lines       = 0
-	g:total_annos       = 0
-
-	for g:int_index in range(0, len(g:unique_keys) - 1)
-		CreateSummaryCountTableLine()
-	endfor 
-	#g:total_lines_per_block = printf("%.1f", str2float(g:total_lines) / str2float(g:total_blocks))
-	g:total_lines_per_block = printf("%.1f", 1.0 * g:total_lines / g:total_blocks)
-	@t = getreg('t') .. "|-------:|-------|------:|------:|------:|------:|\n"
-	@t = getreg('t') .. "| Totals: |  | " .. g:total_blocks ..  " | " .. g:total_lines .. " | " .. g:total_lines_per_block .. " | " .. g:total_annos .. " |\n"
-	 
-	#  Write summary line to t register for last interview
-	AddReportHeader(function_name, search_term)
-
-	# Clear old material from the buffer
-	execute "normal! `RggVGd"
-	
-	# Paste the s register into the buffer. The s register has the quotes
-	# we've been copying.
-	execute "normal! \"tPgga\<ESC>"
-	execute "normal! gg\"qPGo"
-	execute "normal! \"sp"
-	execute "normal! ggdd"
 enddef
 
 # -----------------------------------------------------------------
@@ -2389,209 +2248,6 @@ def g:TagStats()
 	endif
 enddef
 
-# -----------------------------------------------------------------
-# 
-# -----------------------------------------------------------------
-def PopulateQuoteLineList() 
-	g:current_line_dict   = {}
-	g:current_line_dict = { "int_name":    g:current_buf_name,
-				"bufnr":       g:ll_bufnr,
-				"text_w_meta": g:line_text,
-				"text":        g:line_text_less_meta,
-				"line_num":    g:current_int_line_num}
-	
-	if len(g:quote_dict) == 0
-
-		g:quote_dict[g:current_buf_name] = [[ g:current_line_dict ]]
-	elseif (g:current_buf_name == g:last_int_name)
-		if g:current_int_line_num - g:last_int_line_num == 1 
-			g:quote_dict[g:current_buf_name][g:block_count] = g:quote_dict[g:current_buf_name][g:block_count] + [ g:current_line_dict ]
-		else
-			g:quote_dict[g:current_buf_name]                = g:quote_dict[g:current_buf_name] + [[ g:current_line_dict ]]
-			g:block_count = g:block_count + 1 
-		endif
-	elseif (g:current_buf_name != g:last_int_name)
-		g:block_count = 0
-		g:quote_dict[g:current_buf_name] = [[ g:current_line_dict ]]
-	endif
-enddef
-
-def BuildListOfCrossCodes(text_w_meta: string) 
-	var tag_test = matchstrpos(text_w_meta, ':\a.\{-}:', 0)
-	while (tag_test[1] != -1)
-		if (index(g:cross_codes, tag_test[0]) == -1)
-			g:cross_codes = g:cross_codes + [ tag_test[0] ]
-		endif
-		tag_test = matchstrpos(text_w_meta, ':\a.\{-}:', tag_test[2])
-	endwhile
-enddef
-
-# -----------------------------------------------------------------
-# 
-# -----------------------------------------------------------------
-def ProcessInterviewLines(meta: string, report_type: string, search_term: string) 
-
-	var csv_line          = "undefined"
-	var lines             = 0
-	var last_line_num     = "undefined"
-	var first_line_num    = "undefined"
-	var line_type         = "undefined"
-	var blocks            = 0
-
-	if has_key(g:quote_dict, g:interview_list[g:int_index])
-		if report_type != "VWS"
-			@s = @s .. "**TAGGED LINES:**\n\n"
-		else
-			@s = @s .. "**MATCHED LINES:**\n\n"
-		endif
-		if meta == "meta"
-			line_type = "text_w_meta"
-		else
-			line_type = "text"
-		endif
-		blocks = len(g:quote_dict[g:interview_list[g:int_index]])
-		for block_index in range(0, blocks - 1)
-			g:csv_block = ""
-			first_line_num = printf("%04d", g:quote_dict[g:interview_list[g:int_index]][block_index][0]["line_num"])
-			#echom "Inteview: " .. g:interview_list[g:int_index] .. " search term: " .. search_term .. " line_num: " .. g:quote_dict[g:interview_list[g:int_index]][block_index][0]["line_num"] .. " and formated: " .. first_line_num .. "\n"
-			last_line_num  = printf("%04d", g:quote_dict[g:interview_list[g:int_index]][block_index][-1]["line_num"])
-			lines = len(g:quote_dict[g:interview_list[g:int_index]][block_index])
-			g:block = ""
-			g:cross_codes = []
-			for line_index in range(0, lines - 1)
-				if (meta == "meta")
-					g:block = g:block .. g:quote_dict[g:interview_list[g:int_index]][block_index][line_index]["text_w_meta"] .. "\n"
-				else
-					g:block = g:block .. g:quote_dict[g:interview_list[g:int_index]][block_index][line_index]["text"]
-					BuildListOfCrossCodes(g:quote_dict[g:interview_list[g:int_index]][block_index][line_index]["text_w_meta"])
-				endif
-				csv_line = CreateCSVRecord(search_term, block_index, line_index)
-				g:csv_block = g:csv_block .. csv_line .. "\n"
-			endfor
-			if (meta != "meta")
-				g:block = substitute(g:block, '\s\+', ' ', "g")
-				g:block = substitute(g:block, '(\d:\d\d:\d\d)\sspk_\d:\s', '', "g") 
-				g:cross_codes_string = string(g:cross_codes)
-				g:cross_codes_string = substitute(g:cross_codes_string, "\'", ' ', "g")
-				g:cross_codes_string = substitute(g:cross_codes_string, ',', '', "g")
-				g:cross_codes_string = substitute(g:cross_codes_string, '\s\+', ' ', "g")
-
-				g:block = g:block .. " **" .. g:interview_list[g:int_index] .. ": " .. first_line_num .. " - " .. last_line_num .. "** " .. g:cross_codes_string .. "\n\n"
-			endif
-
-			@s = @s .. g:block
-			@u = @u .. g:csv_block
-
-			if (meta == "meta")
-				@s = @s .. "\n"
-			endif
-		endfor
-	endif
-enddef
-
-# -----------------------------------------------------------------
-# 
-# -----------------------------------------------------------------
-def ProcessInterviewTitle(interview: string) 
-	g:attribute_line = GetAttributeLine(interview)
-
-	g:interview_title = "\n# ======================================\n# INTERVIEW: "
-					.. interview ..
-					"\n# ======================================\n**ATTRIBUTES:** "
-					.. g:attribute_line .. "\n"
-
-	@s = @s .. g:interview_title
-enddef
-
-# ------------------------------------------------------
-#
-# ------------------------------------------------------
-def GetInterviewLineInfo(line_text: string): number 
-	var interview_label_position      = match(line_text, g:tag_search_regex)
-	var interview_line_num_pos        = match(line_text, ' \d\{4}', interview_label_position)
-	var current_interview_line_number = str2nr(line_text[(interview_line_num_pos - 1) : (interview_line_num_pos + 2)])
-	return current_interview_line_number
-enddef
-
-# -----------------------------------------------------------------
-# 
-# -----------------------------------------------------------------
-def CreateSummaryCountTableLine() 
-	
-	var number_of_blocks = 0
-	var number_of_lines  = 0
-	if has_key(g:quote_dict, g:unique_keys[g:int_index])
-		number_of_blocks = len(g:quote_dict[g:unique_keys[g:int_index]])
-		for block_index in range(0, number_of_blocks - 1)
-			number_of_lines = number_of_lines + len(g:quote_dict[g:unique_keys[g:int_index]][block_index])
-		endfor
-	endif 
-
-	var lines_per_block_num = 1.0 * number_of_lines / number_of_blocks
-	var lines_per_block = printf("%.1f", lines_per_block_num)
-
-	var number_of_annos = 0
-	if has_key(g:anno_dict, g:unique_keys[g:int_index])
-		number_of_annos = len(g:anno_dict[g:unique_keys[g:int_index]])
-	endif 
-
-	g:total_blocks = g:total_blocks + number_of_blocks
-	g:total_lines  = g:total_lines  + number_of_lines
-	g:total_annos  = g:total_annos  + number_of_annos
-
-	var interview_number = g:int_index + 1
-	@t = @t ..  "| " .. interview_number ..  "| [" .. g:unique_keys[g:int_index] .. "](" ..
-				 g:unique_keys[g:int_index] .. ") | " ..
-				 number_of_blocks ..  " | " ..
-				 number_of_lines .. " | " .. 
-				 lines_per_block .. " | " .. 
-				 number_of_annos .. " |\n"
-
-enddef
-
-# -----------------------------------------------------------------
-# 
-# -----------------------------------------------------------------
-def ProcessAnnotationLines() 
-	var annos    = 0
-	var anno_num = 0
-	if has_key(g:anno_dict, g:interview_list[g:int_index])
-		annos = len(g:anno_dict[g:interview_list[g:int_index]])
-		g:int_annos = ""
-		for anno_index in range(0, annos - 1)
-			anno_num = anno_index + 1
-			g:int_annos = g:int_annos .. "**ANNOTATION " .. 
-						 anno_num ..  ":**\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n" ..
-						 g:anno_dict[g:interview_list[g:int_index]][anno_index]["text"] ..
-						 ">>>>>>>>>>>>>>>>>>>>>>>>>>>>\n\n"
-		endfor
-		@s = @s .. g:int_annos
-	endif
-enddef
-
-# -----------------------------------------------------------------
-#
-# -----------------------------------------------------------------
-def PopulateAnnoLineList(buf_type: string) 
-	g:current_anno_dict           = {}
-	g:current_anno_int_name       = GetAnnoInterview(g:current_buf_name)
-	g:anno_text                   = GetAnnoText(g:ll_bufnr)
-	g:current_anno_dict = { "int_name":        g:current_anno_int_name,
-				   "anno_name":    g:current_buf_name,
-				   "bufnr":        g:ll_bufnr,
-				   "text":         g:anno_text }
-	
-	if len(g:anno_dict) == 0
-		g:anno_dict[g:current_anno_dict.int_name] = [ g:current_anno_dict ]
-	elseif (g:current_anno_dict.int_name == g:last_anno_int_name)
-		if (g:current_buf_name != g:last_anno_buf_name)
-			g:anno_dict[g:current_anno_dict.int_name] = g:anno_dict[g:current_anno_dict.int_name] + [ g:current_anno_dict ]
-		endif
-	elseif (g:current_anno_dict.int_name != g:last_anno_int_name)
-		g:anno_dict[g:current_anno_dict.int_name] = [ g:current_anno_dict ]
-	endif
-enddef
-
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
@@ -2615,27 +2271,6 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def CreateCSVRecord(search_term: string, block_index: number, line_index: number): string
-	# -----------------------------------------------------------------
-	# Build output record
-	# -----------------------------------------------------------------
-	var attributes = substitute(g:attribute_line, '\s\+', '', "g")
-	attributes = substitute(attributes, ':\s*:', ",", "g")
-	attributes = substitute(attributes, ':', ",", "g")
-	attributes = attributes[ : -3]
-	var block = block_index + 1
-	var outline =           search_term .. "," ..
-				 g:interview_list[g:int_index] .. "," ..
-				 block .. "," ..
-				 g:quote_dict[g:interview_list[g:int_index]][block_index][line_index]["line_num"] .. "," ..
-				 "\"" .. g:quote_dict[g:interview_list[g:int_index]][block_index][line_index]["text"] .. "\"," ..
-				 g:current_buf_length .. attributes 
-	return outline
-enddef
-
-# ------------------------------------------------------
-#
-# ------------------------------------------------------
 def FindBufferType(current_buf_name: string): string
 	if match(current_buf_name, "Summary") != -1
 		return "Summary"
@@ -2647,22 +2282,6 @@ def FindBufferType(current_buf_name: string): string
 		return "Other"
 	endif
 enddef
-
-# ------------------------------------------------------
-#
-# ------------------------------------------------------
-def RemoveMetadata(line_text: string): string
-	# -----------------------------------------------------------------
-	#  There is something strange going on here. You shouldn't
-	#  have to go back 6 columns from the match. If you don't you
-	#  get <e2><94> characters at the end of the line. I can't
-	#  figure out what these are but if you chop them off the
-	#  function works.
-	# -----------------------------------------------------------------
-	g:border_location = match(line_text, g:tag_search_regex) - 6
-	return line_text[ : g:border_location]
-enddef
-
 
 # ------------------------------------------------------
 #
@@ -2679,20 +2298,6 @@ def ReportHeader(report_type: string, search_term: string)
 	execute "normal! i# " .. repeat("*", 80) .. "\n# " .. repeat("*", 80) .. "\n\n"
         execute "normal! i**SUMMARY TABLE:**\n\n" 
 enddef
-
-# ------------------------------------------------------
-#
-# ------------------------------------------------------
-def AddReportHeader(report_type: string, search_term: string) 
-	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
-	var report_header = "\n# *********************************************************************************\n"
-	report_header = report_header .. "# *********************************************************************************\n"
-	report_header = report_header .. "  **" .. report_type .. "(\"" .. search_term .. "\")**\n  Created by **" .. g:coder_initials .. "**\n  on **" .. report_update_time .. "**"
-	report_header = report_header .. "\n# *********************************************************************************"
-	report_header = report_header .. "\n# *********************************************************************************"
-	@q = report_header .. "\n\n**SUMMARY TABLE:**\n\n" 
-enddef
-
 
 # ------------------------------------------------------
 #
