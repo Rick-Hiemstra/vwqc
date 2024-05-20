@@ -126,12 +126,9 @@ The following keybindings and commands are set in the plugin.
 - `:call FullReport("<tag>")`           Create full tag summary
 - `:call AnnotationsReport("<tag>")`    Create tag annotations summary
 - `:call QuotesReport("<tag>")`         Create tag report for coded interview lines
-- `:call MetaReport("<tag>")`           Create tag report for with line metadata
-- `:call VWSReport("<string>")`         Create custom search report
 - `:call Gather("<tag>")`               Create secondary tag sub-report
 - `:call AllSummariesFull()`              Create FullReport summaries for all tags in tag glossary 
 - `:call AllSummariesQuotes()`            Create QuotesReport summaries for all tags in tag glossary 
-- `:call AllSummariesMeta()`              Create MetaReport summaries for all tags in tag glossary 
 - `:call AllSummariesAnnos()`             Create AnnnotationsReport summaries for all interviews and all tags in tag glossary 
 - `:call TagStats()`                      Create tables and graphs by tag and interview 
   
