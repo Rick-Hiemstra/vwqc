@@ -166,9 +166,8 @@ let wiki_1.ext = '.md'
 let wiki_1.vwqc = 1
 let wiki_1.name = 'Project one name'
 let wiki_1.interview_label_regex = '\d\d-\w\w-\w\w\w\w'
-let wiki_1.text_col_width = 79
+let wiki_1.text_col_width = 80
 let wiki_1.coder_initials = 'rh'
-let wiki_1.exclude_files = ['**/Summary*']
 
 " ------------------------ Project 2 Configuration ------------------------
 let wiki_2 = {}
@@ -179,9 +178,8 @@ let wiki_2.ext = '.md'
 let wiki_2.vwqc = 1
 let wiki_2.name = 'Project two name'
 let wiki_2.interview_label_regex = '\d\d-\w\w-\w\w\w\w'
-let wiki_2.text_col_width = 79
+let wiki_2.text_col_width = 80
 let wiki_2.coder_initials = 'rh'
-let wiki_2.exclude_files = ['**/Summary*']
 
 " ------------- List of your projects in the order you'll reference them -----------
 let g:vimwiki_list = [wiki_1, wiki_2]
