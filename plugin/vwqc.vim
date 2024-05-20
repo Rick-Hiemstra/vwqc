@@ -34,8 +34,6 @@ endif
 # ------------------------ TO DO ------------------------------
 # -----------------------------------------------------------------
 # Update page help
-# Could you do this with ripgrep to get more speed? Then you process the lines
-# Re-format the how attributes are handled
 # Write a function to modify the attribute lines in the old wikis.
 #
 # Change Vimwiki so g:current_tags is only deepcopied if it is an interview
@@ -2426,13 +2424,13 @@ def UpdateCurrentTagsPage()
 	execute "normal! ggVGd"
 	g:tag_update_time = strftime("%Y-%m-%d %a %H:%M:%S")
 	execute "normal! i**Tag list last updated at: " .. g:tag_update_time .. "**\n\<CR>"
-	execute "normal! i- **There are " .. len(g:in_both_lists) .. " tag(s) defined in the Tag Glossary and included in the current tags list.**\n"
+	execute "normal! i- **There are " .. len(g:in_both_lists) .. " tag(s) defined in the Tag Glossary and used in interview buffers.**\n"
 	put =g:in_both_lists
 	execute "normal! Go"
-	execute "normal! i\n- **There are " .. len(g:just_in_current_tag_list) .. " tag(s) included in the current tags list, but not defined in the Tag Glossary.**\n"
+	execute "normal! i\n- **There are " .. len(g:just_in_current_tag_list) .. " tag(s) used in interview buffers, but not defined in the Tag Glossary.**\n"
 	put =g:just_in_current_tag_list
 	execute "normal! Go"
-	execute "normal! i\n- **There are " .. len(g:just_in_dict_list) .. " tag(s) defined in the Tag Glossary but not used in coding.**\n"
+	execute "normal! i\n- **There are " .. len(g:just_in_dict_list) .. " tag(s) defined in the Tag Glossary but not used in interview buffers.**\n"
 	put =g:just_in_dict_list
 	execute "normal! Go"
 	execute "normal! i\n- **There are " .. len(g:unique_anno_tags) .. " tag(s) that appear in annotations.**\n"
@@ -2476,7 +2474,7 @@ def UpdateCurrentTagsList()
 		endif
 	endfor
 
-	g:tag_list_output = ["DEFINED:", " "] + g:in_both_lists + [" ", "UNDEFINED:", " "] + g:just_in_current_tag_list + [" ", "DEFINED BUT NOT USED:", " "] + g:just_in_dict_list 
+	g:tag_list_output = ["DEFINED IN TAG GLOSSARY AND USED IN INTERVIEW BUFFERS:", " "] + g:in_both_lists + [" ", "UNDEFINED IN TAG GLOSSARY:", " "] + g:just_in_current_tag_list + [" ", "DEFINED IN TAG GLOSSARY BUT NOT USED IN INTERVIEW BUFFERS:", " "] + g:just_in_dict_list 
 	#g:tag_list_output = sort(g:tag_list_output)
 enddef
 
