@@ -700,7 +700,7 @@ def g:PageHelp()
 			        "SUMMARY HELP PAGE", 
 				 ":call FullReport(\"<tag>\")           Create report with tagged and annotation content",
 				 ":call QuotesReport(\"<tag>\")         Create report with just tagged content",
-				 ":call VWSReport(\"<string>\")         Create custom search report", 
+				 ":call AnnotationsReport(\"<tag>\")    Create custom search report", 
 		                " ",
 		                "Quoted lines can also be recoded within a report. These re-codings",
 		                "can then be \"gathered\" into a sub-report. Add new codes to the end",
