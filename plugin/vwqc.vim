@@ -2115,14 +2115,18 @@ enddef
 # 
 # -----------------------------------------------------------------
 def CreateUniqueAnnoTagList()
+	var interview_name = "Undefined"
 	g:unique_anno_tags = []
-	for index in range(0, len(g:anno_tags_list) - 1)
-		for sub_index in range(0, len(g:anno_tags_list[index][2]) - 1)
-			if (index(g:unique_anno_tags, g:anno_tags_list[index][2][sub_index][1 : -2]) == -1)
-				g:unique_anno_tags = g:unique_anno_tags + [ g:anno_tags_list[index][2][sub_index][1 : -2] ]
-			endif
+	for interview in range(0, len(g:interview_list) - 1)
+		interview_name = g:interview_list[interview][ : -g:ext_len]		
+		for anno in range(0, len(g:anno_tags_dict[interview_name]) - 1)
+			for sub_index in range(0, len(g:anno_tags_dict[interview_name][anno][1]) - 1)
+				if (index(g:unique_anno_tags, g:anno_tags_dict[interview_name][anno][1][sub_index][1 : -2]) == -1)
+					g:unique_anno_tags = g:unique_anno_tags + [ g:anno_tags_dict[interview_name][anno][1][sub_index][1 : -2] ]
+				endif
+			endfor
 		endfor
-	endfor
+	endfor 
 enddef 
 
 # -----------------------------------------------------------------
