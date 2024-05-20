@@ -99,17 +99,22 @@ endif
 # AllSummariesGenReportsFull
 # AllSummariesQuotes
 # AllSummariesGenReportsQuotes
-# AllSummariesMeta
-# AllSummariesGenReportsMeta
 # AllSummariesAnnos
 # AllSummariesGenReportsAnnos
 # GenSummaryLists
 # GenInterviewLists
 # Gather
+# CreateListOfInterviewsWithAnnos
+# CreateAndCountInterviewBlocks
+# BuildListOfTagsOnBlock
+# TidyUpBlockText
+# WriteReportTable
 # Report
 #
 # GetInterviewFileList
+# GetAnnotationFileList
 # CrawlInterviewTags
+# CrawlAnnotationTags
 # CalcInterviewTagCrosstabs
 # FindLargestTagAndBlockCounts
 # PrintInterviewTagSummary
@@ -120,33 +125,15 @@ endif
 # FindLengthOfLongestTag
 # TagStats
 #
-# PopulateQuoteLineList
-# BuildListOfCrossCodes
-# ProcessInterviewLines
-# ProcessInterviewTitle
-# GetInterviewLineInfo
-# CreateSummaryCountTableLine
-#
-# ProcessAnnotationLines
-# PopulateAnnoLineList
-# GetAnnoInterview
-# GetAnnoText
-#
-# CreateCSVRecord
-# FindBufferType
-# RemoveMetadata
-# AddReportHeader
-# GetAttributeLine
-# 
 # ---- Trimming Quotes ----
 # TrimLeadingPartialSentence
 # TrimTrailingPartialSentence
 # TrimLeadingAndTrailingPartialSentence
 #
 # ---- Tags ----
+# augroup Has_WWQC_Config_Been_Loaded
 # TagsLoadedCheck
 # GetTagUpdate
-# GenTagsWithLocationList
 # UpdateCurrentTagsPage 
 # UpdateCurrentTagsList
 # TagsGenThisSession
@@ -1825,9 +1812,6 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 	endfor	
 enddef
 
-def GenerateAnnotationTags()
-	
-enddef
 # -----------------------------------------------------------------
 # g:anno_tags_list is a list of tags with the following sub-elements:
 # 0) Interview name
@@ -2236,41 +2220,6 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def GetAnnoInterview(buffer_name: string): string
-	var line_num_loc  = match(buffer_name, ':')
-	var cropped_name  = buffer_name[0 : line_num_loc - 1]
-	return cropped_name
-enddef
-
-# ------------------------------------------------------
-#
-# ------------------------------------------------------
-def GetAnnoText(bufnr: number): string 
-	# Go to the Location List result under the cursor.
-	execute "normal! :buffer " .. bufnr .. "\<CR>"
-	# Copy the annotation text.
-	execute "normal! G$?.\<CR>Vggy"
-	return getreg('@')
-enddef
-
-# ------------------------------------------------------
-#
-# ------------------------------------------------------
-def FindBufferType(current_buf_name: string): string
-	if match(current_buf_name, "Summary") != -1
-		return "Summary"
-	elseif match(current_buf_name, ': \d\{4}') != -1
-		return  "Annotation"
-	elseif match(current_buf_name, g:interview_label_regex) != -1
-		return "Interview"
-	else
-		return "Other"
-	endif
-enddef
-
-# ------------------------------------------------------
-#
-# ------------------------------------------------------
 def ReportHeader(report_type: string, search_term: string) 
 	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
 	execute "normal! i# " .. repeat("*", 80) .. "\n# " .. repeat("*", 80) .. "\n"
@@ -2282,24 +2231,6 @@ def ReportHeader(report_type: string, search_term: string)
 
 	execute "normal! i# " .. repeat("*", 80) .. "\n# " .. repeat("*", 80) .. "\n\n"
         execute "normal! i**SUMMARY TABLE:**\n\n" 
-enddef
-
-# ------------------------------------------------------
-#
-# ------------------------------------------------------
-def GetAttributeLine(interview: string): string
-	# -----------------------------------------------------------------
-	# Go to the Location List result under the cursor.
-	# -----------------------------------------------------------------
-	execute "normal! :e " .. interview .. "\.md\<CR>"
-	# -----------------------------------------------------------------
-	# Get the first line and the length of the buffer in lines.
-	# -----------------------------------------------------------------
-	execute "normal! ggVy"
-	g:attribute_row = getreg('@')
-	g:current_buf_length = line('$')
-	execute "normal! \<C-o>"
-	return g:attribute_row
 enddef
 
 # ------------------------------------------------------
