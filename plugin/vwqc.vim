@@ -1458,26 +1458,8 @@ def g:Gather(search_term: string)
 enddef
 
 # -----------------------------------------------------------------
-# g:anno_tags_list is a list of tags with the following sub-elements:
-# 0) Interview name
-# 1) Line number in the annotation is attached to in the interview
-# 2) A list of tags found in the annotation
-# 3) The text of the annotation
 #
-# So all you have to do is iterate over g:anno_tags_list where
-# g:anno_tags_list[0] == interview, you don't even need to concern yourself
-# with the line number because the list should have been created in order.
-# All you have to do is determine if the tag(s) in question are in
-# g:anno_tags_list[2] and if they are add g:anno_tags_list[3] surrounded
-# by the appropriate banners to the block of anno blocks and add to the
-# anno_blocks counter in the dictionary q:anno_counts where you're keeping
-# track of the number of annos for each interview. Also add a annotation number. You can print the
-# attributes for the interview somewhere. This is in g:attr_list
-# Can just use g:anno_tags_dict
-# 
 # -----------------------------------------------------------------
-
-
 def CreateListOfInterviewsWithAnnos()
 	for anno in range(0, (len(g:anno_list) - 1))
 		g:interview_connected_to_this_anno = matchstr(g:anno_list, g:interview_label_regex)
@@ -2385,6 +2367,8 @@ def g:GetTagUpdate()
 
 	ParmCheck()
 
+	g:vimwiki_wikilocal_vars[g:wiki_number]['tags_generated_this_session'] = 1
+
 	confirm("Populating tags. This may take a while.", "Got it", 1)
 
 	CreateTagDict()
@@ -2491,7 +2475,6 @@ def g:GetTagUpdate()
 	# Add an element to the current wiki's configuration dictionary that
 	# marks it as having had its tags generated in this vim session.
 	# ------------------------------------------------------
-	g:vimwiki_wikilocal_vars[g:wiki_number]['tags_generated_this_session'] = 1
 	execute "normal! `Yzz"
 enddef
 
@@ -2694,7 +2677,6 @@ def FindLastTagAddedToBuffer()
 
 	for index in range(0, len_cl - 1)
 		index_inv = len_cl - 1 - index
-		#g:line_has_tag = matchstrpos(getline(g:cl[0][index_inv]['lnum']), g:tag_regex .. '\(.*:\S\{-}:\)\@!')
 		g:line_has_tag = matchstrpos(getline(g:cl[0][index_inv]['lnum']), g:tag_regex .. '\(.*:\S\{-}:\)\@!')
 		if (g:line_has_tag[1] > -1)
 			g:most_recent_tag_in_changes = g:line_has_tag[0][1 : -2]
