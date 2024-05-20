@@ -2695,7 +2695,7 @@ def FindLastTagAddedToBuffer()
 	for index in range(0, len_cl - 1)
 		index_inv = len_cl - 1 - index
 		#g:line_has_tag = matchstrpos(getline(g:cl[0][index_inv]['lnum']), g:tag_regex .. '\(.*:\S\{-}:\)\@!')
-		g:line_has_tag = matchstrpos(getline(g:cl[0][index_inv]['lnum']), g:tag_rx .. '\(.*:\S\{-}:\)\@!')
+		g:line_has_tag = matchstrpos(getline(g:cl[0][index_inv]['lnum']), g:tag_regex .. '\(.*:\S\{-}:\)\@!')
 		if (g:line_has_tag[1] > -1)
 			g:most_recent_tag_in_changes = g:line_has_tag[0][1 : -2]
 			break
@@ -3105,7 +3105,8 @@ def GetTagUnderCursor(): string
 	execute "normal! viWy"        
 	var word_under_cursor             = getreg('@') 
 	# Want tag_test to be 0
-	var tag_test                      = matchstr(word_under_cursor, ':.\{-}:')
+	#var tag_test                      = matchstr(word_under_cursor, ':.\{-}:')
+	var tag_test                      = matchstr(word_under_cursor, g:tag_rx)
 	# -----------------------------------------------------------------
 	# Test to see if g:word_under_cursor is just white space. If not,
 	# test to see if the word_under_cursor is surrounded by colons.
