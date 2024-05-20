@@ -95,7 +95,6 @@ endif
 # FullReport
 # AnnotationsReport
 # QuotesReport
-# VWSReport
 # AllSummariesFull
 # AllSummariesGenReportsFull
 # AllSummariesQuotes
@@ -186,6 +185,8 @@ endif
 # -----------------------------------------------------------------
 
 g:tag_regex = '\(^\|\s\)\zs:\([^:''[:space:]]\+:\)\+\ze\(\s\|$\)' 
+g:tag_rx = ':\a.\{-}:' 
+g:tag_meta_rx = ':\S\{-}:'
 
 # ------------------------------------------------------
 # Displays a popup help menu
@@ -211,7 +212,6 @@ def g:HelpMenu()
 					":call FullReport(\"<tag>\")           Create full tag summary",
 					":call AnnotationsReport(\"<tag>\")    Create tag annotations summary",
 					":call QuotesReport(\"<tag>\")         Create tag report for coded interview lines",
-					":call VWSReport(\"<string>\")         Create custom search report", 
 					":call Gather(\"<tag>\")               Create secondary tag sub-report", 
 					":call AllSummariesFull()            Create FullReport summaries for all tags in tag glossary", 
 					":call AllSummariesQuotes()          Create QuotesReport summaries for all tags in tag glossary", 
@@ -834,8 +834,7 @@ def Annotation()
 		# --------------------------------------------------
 		# Search for a tag without going past the end of the file.
 		# --------------------------------------------------
-		#match_line = search(':\a.\{-}:', "W")
-		match_line = search(g:tag_regex, "W")
+		match_line = search(g:tag_rx, "W")
 		# --------------------------------------------------
 		# If we found a tag (ie. The search function doesn't
 		# return a zero) and that tag is found on the current line
@@ -1797,13 +1796,13 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 	for line in range(1, end_line)
 		#cursor(line, 0)
 		# search() returns 0 if match not found
-		g:tag_test = search(':\a.\{-}:', 'c', line("."))
+		g:tag_test = search(g:tag_rx, 'c', line("."))
 		if (g:tag_test != 0)
 			# Copy found tag
 			execute "normal! viWy"
 			g:tags_on_line = g:tags_on_line + [ getreg('@') ]
 			execute "normal! l"
-			g:tag_test = search(':\a.\{-}:', '', line("."))
+			g:tag_test = search(g:tag_rx, '', line("."))
 			while (g:tag_test != 0)
 				execute "normal! viWy"
 				tag_being_considered = getreg('@')
@@ -1818,7 +1817,7 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 					g:tags_on_line = g:tags_on_line + [ getreg('@') ]
 				endif
 				#execute "normal! l"
-				g:tag_test = search(':\a.\{-}:', '', line("."))
+				g:tag_test = search(g:tag_rx, '', line("."))
 			endwhile
 		endif
 		# Add tags found on line to g:tags_list
@@ -1866,12 +1865,12 @@ def CrawlAnnotationTags(anno_num: number, anno_name: string)
 	g:tags_in_anno = []
 	for line in range(2, line('$'))
 		# search() returns 0 if match not found
-		g:tag_test = search(':\a.\{-}:', 'W')
+		g:tag_test = search(g:tag_rx, 'W')
 		if (g:tag_test != 0)
 			# Copy found tag
 			execute "normal! viWy"
 			g:tags_in_anno = g:tags_in_anno + [ getreg('@') ]
-			g:tag_test = search(':\a.\{-}:', 'W')
+			g:tag_test = search(g:tag_rx, 'W')
 			while (g:tag_test != 0)
 				execute "normal! viWy"
 				tag_being_considered = getreg('@')
@@ -1880,7 +1879,7 @@ def CrawlAnnotationTags(anno_num: number, anno_name: string)
 				if (index(g:tags_in_anno, tag_being_considered) == -1)
 					g:tags_in_anno = g:tags_in_anno + [ tag_being_considered ]
 				endif 
-				g:tag_test = search(':\a.\{-}:', 'W')
+				g:tag_test = search(g:tag_rx, 'W')
 			endwhile
 		endif
 	endfor	
@@ -2454,7 +2453,6 @@ def g:GetTagUpdate()
 		g:current_tags = g:current_tags + [g:unique_tags[index][1 : -2]]
 	endfor
 
-	# GenTagsWithLocationList()
 	# -----------------------------------------------------------------
 	# g:current_tags is used in vimwiki's omnicomplete function. At this
 	# point this is a modifcation to ftplugin#vimwikimwiki#Complete_wikifiles
@@ -2491,113 +2489,6 @@ def g:GetTagUpdate()
 	# ------------------------------------------------------
 	g:vimwiki_wikilocal_vars[g:wiki_number]['tags_generated_this_session'] = 1
 	execute "normal! `Yzz"
-enddef
-
-# ------------------------------------------------------
-#
-# ------------------------------------------------------
-#def g:GetTagUpdate() 
-#
-#	ParmCheck()
-#
-#	confirm("Populating tags. This may take a while.", "Got it", 1)
-#
-#	CreateTagDict()
-#
-#	execute "normal! :delmarks Y\<CR>"
-#	execute "normal! mY"
-#	# -----------------------------------------------------------------
-#	# Change the pwd to that of the current wiki.
-#	# -----------------------------------------------------------------
-#	execute "normal! :cd %:p:h\<CR>"
-#	# ------------------------------------------------------
-#	# Find the vimwiki that the current buffer is in.
-#	# ------------------------------------------------------
-#	# g:wiki_number = vimwiki#vars#get_bufferlocal('wiki_nr') 
-#	# -----------------------------------------------------------------
-#	# Save the current buffer so any new tags are found by
-#	# VimwikiRebuildTags
-#	# -----------------------------------------------------------------
-#	execute "normal :w\<CR>"
-#	GenTagsWithLocationList()
-#	# -----------------------------------------------------------------
-#	# g:current_tags is used in vimwiki's omnicomplete function. At this
-#	# point this is a modifcation to ftplugin#vimwikimwiki#Complete_wikifiles
-#	# where
-#	#    tags = vimwiki#tags#get_tags()
-#	# has been replaced by
-#	#    tags = deepcopy(g:current_tags)
-#	# This was done because as the number of tags grows in a project
-#	# vimwiki#tags#get_tags() slows down.
-#	# -----------------------------------------------------------------
-#	g:current_tags = sort(g:current_tags, 'i')
-#	# ------------------------------------------------------
-#	# Set the current wiki as the wiki that g:current_tags were last
-#	# generated for. Also mark that a set of current tags has been
-#	# generated to true.
-#	# ------------------------------------------------------
-#	g:last_wiki_tags_generated_for = g:wiki_number
-#	g:current_tags_set_this_session = 1
-#	# ------------------------------------------------------
-#	# Popup menu to display the list of current tags sorted in
-#	# case-insenstive alphabetical order
-#	# ------------------------------------------------------
-#	GenDictTagList()
-#	UpdateCurrentTagsList()
-#	UpdateCurrentTagsPage()
-#	CurrentTagsPopUpMenu()
-#
-#	g:current_tags = sort(g:just_in_dict_list + g:just_in_current_tag_list + g:in_both_lists)
-#
-#	# ------------------------------------------------------
-#	# Add an element to the current wiki's configuration dictionary that
-#	# marks it as having had its tags generated in this vim session.
-#	# ------------------------------------------------------
-#	g:vimwiki_wikilocal_vars[g:wiki_number]['tags_generated_this_session'] = 1
-#	execute "normal! `Yzz"
-#enddef
-# ------------------------------------------------------
-#
-# ------------------------------------------------------
-def GenTagsWithLocationList() 
-	ParmCheck()
-	# Change the pwd to that of the current wiki.
-	execute "normal! :cd %:p:h\<CR>"
-
-	silent execute "normal! :VimwikiSearch /" .. g:tag_regex .. "/g\<CR>"
-	g:loc_list = getloclist(0)
-
-	var tag_list = []
-	var search_results = len(g:loc_list)
-	var first_col = 0 
-	var last_col  = 0 
-	var test_tag  = "undefined"
-	var buffer_type = "undefined"
-
-	for line_index in range(0, search_results - 1)
-		buffer_type = FindBufferType(bufname(g:loc_list[line_index]['bufnr']))
-	
-		if (g:loc_list[line_index]['lnum'] > 1)
-			if (buffer_type == "Interview")
-				first_col = g:loc_list[line_index]['col'] - 4 
-				last_col  = g:loc_list[line_index]['end_col'] - 7
-				test_tag  = g:loc_list[line_index]['text'][first_col : last_col]
-			#	echom "BufType: " .. buffer_type .. ", test_tag: " .. test_tag .. ", line: " .. g:loc_list[line_index]['lnum']  .. ", first_col: " .. first_col .. " last_col: " .. last_col .. ", loc_list col: " .. g:loc_list[line_index]['col'] .. ", loc_list endcol: " .. g:loc_list[line_index]['end_col'] .. "\n"
-			#	echom "text: " .. g:loc_list[line_index]['text'] .. "\n"
-			elseif (buffer_type == "Annotation")
-				first_col = g:loc_list[line_index]['col']  
-				last_col  = g:loc_list[line_index]['end_col'] - 3
-				test_tag  = g:loc_list[line_index]['text'][first_col : last_col]
-			endif 
-		
-			if ((buffer_type == "Interview") || (buffer_type == "Annotation"))
-				if (index(tag_list, test_tag) == -1)
-					tag_list = tag_list + [ test_tag ]
-				endif
-			endif
-		endif
-	endfor	
-	g:current_tags = deepcopy(tag_list)
 enddef
 
 # ------------------------------------------------------
@@ -2799,7 +2690,8 @@ def FindLastTagAddedToBuffer()
 
 	for index in range(0, len_cl - 1)
 		index_inv = len_cl - 1 - index
-		g:line_has_tag = matchstrpos(getline(g:cl[0][index_inv]['lnum']), g:tag_regex .. '\(.*:\S\{-}:\)\@!')
+		#g:line_has_tag = matchstrpos(getline(g:cl[0][index_inv]['lnum']), g:tag_regex .. '\(.*:\S\{-}:\)\@!')
+		g:line_has_tag = matchstrpos(getline(g:cl[0][index_inv]['lnum']), g:tag_rx .. '\(.*:\S\{-}:\)\@!')
 		if (g:line_has_tag[1] > -1)
 			g:most_recent_tag_in_changes = g:line_has_tag[0][1 : -2]
 			break
@@ -3106,8 +2998,7 @@ def ProcessLineMetadata()
 	# Tokenize what got copied into a list called g:line_meta_data
 	g:line_metadata = split(getreg('@'))
 	for index in range(0, len(g:line_metadata) - 1)
-		#if (match(g:line_metadata[index], ':\a.\{-}:') != -1)
-		if (match(g:line_metadata[index], ':\S\{-}:') != -1)
+		if (match(g:line_metadata[index], g:tag_meta_rx) != -1)
 			g:tags_on_line = g:tags_on_line + [ g:line_metadata[index][1 : -2] ]
 			if (index(g:block_tags_list, g:line_metadata[index][1 : -2]) == -1)
 				g:block_tags_list = g:block_tags_list + [ g:line_metadata[index][1 : -2] ]
