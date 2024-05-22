@@ -60,6 +60,8 @@ endif
 # 
 # Write a function that pops up a reminder to do a backup if the last back up
 # is more than a few days old.
+# 
+# Write a function that duplicates a file and allows you to rename it.
 
 # -----------------------------------------------------------------
 # ------------------------ FUNCTIONS ------------------------------
@@ -3173,29 +3175,28 @@ enddef
 #  Maybe write everything to a variable and then print all at once.
 
 def ExportTags()
-	var outline     = "Undefined"
+	var today              = strftime("%Y-%m-%d")
+	var time_now           = strftime("%H-%M-%S")
+	 
+	var out_file_name = g:extras_path .. g:project_name .. " tag export made at " .. today .. " " .. time_now .. ".csv"
+
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
 		for tag_index in range(0, len(g:tags_list) - 1)
 			outline = g:tags_list[tag_index][0] .. ", "
 			       .. g:tags_list[tag_index][2] .. ", "
 			       .. g:tags_list[tag_index][1] .. ", "
-			       .. g:tags_list[tag_index][3] .. ", "
-			       .. g:tags_list[tag_index][5] .. ", "
+			       .. g:tags_list[tag_index][3] .. ", \""
+			       .. g:tags_list[tag_index][5] .. "\", "
 			for sub_index in range(0, len(g:tags_list[tag_index][4] - 1))
 				outline = outline 
 					.. g:tags_list[tag_index][4][sub_index] .. ", "
 			endfor
-			outline = outline[ : -2]
-			if (tag_index == 0)
-				# write 
-				#writefile([ getreg('u') ], g:tag_summary_file)
-				#g:extras_path = 
-			else
-				# append
-			endif
+			outline = outline[ : -2] .. "\n"
 		endfor
+		writefile(split(outline, "\n", 1), out_file_name) 
 	else
 		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
 	endif
 enddef
+
