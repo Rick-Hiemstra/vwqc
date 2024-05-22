@@ -3174,7 +3174,7 @@ enddef
 # -----------------------------------------------------------------
 #  Maybe write everything to a variable and then print all at once.
 
-def ExportTags()
+def g:ExportTags()
 	var today              = strftime("%Y-%m-%d")
 	var time_now           = strftime("%H-%M-%S")
 	 
@@ -3195,6 +3195,7 @@ def ExportTags()
 			outline = outline[ : -2] .. "\n"
 		endfor
 		writefile(split(outline, "\n", 1), out_file_name) 
+		confirm("The tags list has been exported to " .. out_file_name, "OK", 1)
 	else
 		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
 	endif
