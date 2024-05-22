@@ -3189,7 +3189,7 @@ def g:ExportTags()
 			          g:tags_list[tag_index][1] .. ", " ..
 			          g:tags_list[tag_index][3] .. ", \"" ..
 			          g:tags_list[tag_index][5] .. "\", " 
-			for sub_index in range(0, len(g:tags_list[tag_index][4] - 1))
+			for sub_index in range(0, len(g:tags_list[tag_index][4]) - 1)
 				outline = outline 
 					.. g:tags_list[tag_index][4][sub_index] .. ", "
 			endfor
