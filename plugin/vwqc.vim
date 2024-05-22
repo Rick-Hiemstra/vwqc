@@ -3175,6 +3175,7 @@ enddef
 #  Maybe write everything to a variable and then print all at once.
 
 def g:ExportTags()
+	var outline            = ""
 	var today              = strftime("%Y-%m-%d")
 	var time_now           = strftime("%H-%M-%S")
 	 
