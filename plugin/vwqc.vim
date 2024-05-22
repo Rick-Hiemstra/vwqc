@@ -2495,8 +2495,8 @@ def g:TagsGenThisSession()
 		# The ! after startinsert makes it insert after (like A). If
 		# you don't have the ! it inserts before (like i)
 		# ------------------------------------------------------
-		startinsert
-		feedkeys("\<c-x>\<c-o>")
+		startinsert!
+		feedkeys("\<c-x>\<c-o>", 'i')
 	else
 		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
 	endif
