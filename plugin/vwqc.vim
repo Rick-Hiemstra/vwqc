@@ -42,6 +42,8 @@ endif
 # Change the Gather() function so that it will give you an error message if
 # you try to use it in a non-quotes report (or other kind of buffer).
 #
+# Create a backup restore function
+#
 # Remove the .swp files from backups
 # Create a restore backup function.
 #
@@ -56,8 +58,8 @@ endif
 # g:block_lines is first defined and then change instances of g:block_lines_nr
 # back to g:block_lines to make the code cleaner to read.
 # 
-# Fix F2 prompt coming up twice when entering a wiki.
-# 
+# Write a function that pops up a reminder to do a backup if the last back up
+# is more than a few days old.
 
 # -----------------------------------------------------------------
 # ------------------------ FUNCTIONS ------------------------------
@@ -1688,9 +1690,6 @@ def g:Report(search_term: string, report_type = "FullReport")
 	execute "normal! gg"
 enddef
 
-# -----------------------------------------------------------------
-# 
-# -----------------------------------------------------------------
 def GetInterviewFileList() 
 
 	var file_to_add = "undefined"
@@ -1701,13 +1700,13 @@ def GetInterviewFileList()
 	# all.
 	var file_list_all = globpath('.', '*', 0, 1)
 	# build regex we'll use just to find our interview files. 
-	var file_regex = g:interview_label_regex .. g:wiki_extension
+	var file_rx = g:interview_label_regex .. g:wiki_extension
 	#  cull the list for just those files that are interview files. the
 	#  match is at position 2 because the globpath function prefixes
-	#  filenames with/ which occupies positions 0 and 1.
+	#  filenames with ./ which occupies positions 0 and 1.
 	g:interview_list = []
 	for list_item in range(0, (len(file_list_all) - 1))
-		if (match(file_list_all[list_item], file_regex) == 2) 
+		if (match(file_list_all[list_item], file_rx) == 2) 
 			# strip off the leading/
 			file_to_add = file_list_all[list_item][2 : ]
 			g:interview_list = g:interview_list + [ file_to_add ]
@@ -1715,9 +1714,6 @@ def GetInterviewFileList()
 	endfor
 enddef
 
-# -----------------------------------------------------------------
-# 
-# -----------------------------------------------------------------
 def GetAnnotationFileList() 
 
 	var file_to_add = "undefined"
@@ -1728,13 +1724,13 @@ def GetAnnotationFileList()
 	# all.
 	var file_list_all = globpath('.', '*', 0, 1)
 	# build regex we'll use just to find our interview files. 
-	var file_regex = g:interview_label_regex .. ': \d\{4}' .. g:wiki_extension
+	var file_rx = g:interview_label_regex .. ': \d\{4}' .. g:wiki_extension
 	#  cull the list for just those files that are interview files. the
 	#  match is at position 2 because the globpath function prefixes
-	#  filenames with/ which occupies positions 0 and 1.
+	#  filenames with ./ which occupies positions 0 and 1.
 	g:anno_list = []
 	for list_item in range(0, (len(file_list_all) - 1))
-		if (match(file_list_all[list_item], file_regex) == 2) 
+		if (match(file_list_all[list_item], file_rx) == 2) 
 			# strip off the leading/
 			file_to_add = file_list_all[list_item][2 : ]
 			g:anno_list = g:anno_list + [ file_to_add ]
@@ -2499,7 +2495,7 @@ def g:TagsGenThisSession()
 		# The ! after startinsert makes it insert after (like A). If
 		# you don't have the ! it inserts before (like i)
 		# ------------------------------------------------------
-		startinsert!
+		startinsert
 		feedkeys("\<c-x>\<c-o>")
 	else
 		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
@@ -3164,4 +3160,41 @@ def UpdateSubcode()
 enddef
 
 
+# -----------------------------------------------------------------
+# g:tags_list is a list of tags with the following sub-elements:
+# 0) Interview name
+# 1) Buffer line number the tag is on
+# 2) The tag
+# 3) Interview line number the tag is on
+# 4) All the tags on the line
+# 5) The line text less metadata.
+# -----------------------------------------------------------------
+#  Maybe write everything to a variable and then print all at once.
 
+def ExportTags()
+	var outline     = "Undefined"
+	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
+	if (g:tags_generated == 1)
+		for tag_index in range(0, len(g:tags_list) - 1)
+			outline = g:tags_list[tag_index][0] .. ", "
+			       .. g:tags_list[tag_index][2] .. ", "
+			       .. g:tags_list[tag_index][1] .. ", "
+			       .. g:tags_list[tag_index][3] .. ", "
+			       .. g:tags_list[tag_index][5] .. ", "
+			for sub_index in range(0, len(g:tags_list[tag_index][4] - 1))
+				outline = outline 
+					.. g:tags_list[tag_index][4][sub_index] .. ", "
+			endfor
+			outline = outline[ : -2]
+			if (tag_index == 0)
+				# write 
+				#writefile([ getreg('u') ], g:tag_summary_file)
+				#g:extras_path = 
+			else
+				# append
+			endif
+		endfor
+	else
+		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
+	endif
+enddef
