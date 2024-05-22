@@ -216,6 +216,7 @@ def g:HelpMenu()
 					":call FormatInterview(\"<label>\")    Format interview page",
 					"<leader>rs                          Resize windows",
 					"<leader>bk                          Create project backup",
+					"<leader>tl                          Current tags popup",
 					"<leader>hm                          Help menu",
 					"<leader>ph                          Page help",
 				        "<leader>lp                          List project parameters"]
@@ -2392,7 +2393,7 @@ def g:GetTagUpdate()
 	UpdateCurrentTagsList()
 	UpdateCurrentTagsPage()
 	g:Attributes()
-	CurrentTagsPopUpMenu()
+	g:CurrentTagsPopUpMenu()
 
 	g:current_tags = sort(g:just_in_dict_list + g:just_in_current_tag_list + g:in_both_lists)
 
@@ -2571,7 +2572,7 @@ enddef
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-def CurrentTagsPopUpMenu() 
+def g:CurrentTagsPopUpMenu() 
 	popup_menu(g:tag_list_output, 
 				 { minwidth: 70,
 				 maxwidth: 70,

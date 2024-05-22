@@ -87,6 +87,9 @@ nnoremap <leader>tt :call TrimTrailingPartialSentence()<CR>
 nnoremap <leader>ta :call TrimLeadingAndTrailingPartialSentence()<CR>
 "nnoremap <leader>ta :call TrimTrailingPartialSentence()<CR>:callTrimLeadingPartialSentence()<CR>
 
+" ---------------- Fill Tag Block ---------------------
+nnoremap <leader>tl :call CurrentTagsPopUpMenu()<CR>	
+
 " -----------------------------------------------------------------
 " ------------------ VWQC Settings ---------------------
 " -----------------------------------------------------------------
