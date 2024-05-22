@@ -3176,6 +3176,7 @@ enddef
 
 def g:ExportTags()
 	var outline            = ""
+	var outfile            = ""
 	var today              = strftime("%Y-%m-%d")
 	var time_now           = strftime("%H-%M-%S")
 	 
@@ -3194,8 +3195,9 @@ def g:ExportTags()
 					.. g:tags_list[tag_index][4][sub_index] .. ", "
 			endfor
 			outline = outline[ : -2] .. "\n"
+			outfile = outfile .. outline
 		endfor
-		writefile(split(outline, "\n", 1), out_file_name) 
+		writefile(split(outfile, "\n", 1), out_file_name) 
 		confirm("The tags list has been exported to " .. out_file_name, "OK", 1)
 	else
 		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
