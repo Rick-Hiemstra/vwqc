@@ -3183,11 +3183,11 @@ def g:ExportTags()
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
 		for tag_index in range(0, len(g:tags_list) - 1)
-			outline = g:tags_list[tag_index][0] .. ", "
-			       .. g:tags_list[tag_index][2] .. ", "
-			       .. g:tags_list[tag_index][1] .. ", "
-			       .. g:tags_list[tag_index][3] .. ", \""
-			       .. g:tags_list[tag_index][5] .. "\", "
+			outline = g:tags_list[tag_index][0] .. ", " ..
+			          g:tags_list[tag_index][2] .. ", " ..
+			          g:tags_list[tag_index][1] .. ", " ..
+			          g:tags_list[tag_index][3] .. ", \"" ..
+			          g:tags_list[tag_index][5] .. "\", " ..
 			for sub_index in range(0, len(g:tags_list[tag_index][4] - 1))
 				outline = outline 
 					.. g:tags_list[tag_index][4][sub_index] .. ", "
