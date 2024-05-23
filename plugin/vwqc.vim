@@ -1554,6 +1554,9 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 	endfor
 	TidyUpBlockText()
 	g:quote_blocks_dict[g:last_interview] = g:quote_blocks_dict[g:last_interview] + [ g:block_text ]
+	if (search_term == "bible_interp")
+		echom g:quote_blocks_dict
+	endif
 enddef
 
 def BuildListOfTagsOnBlock()
