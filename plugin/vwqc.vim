@@ -216,6 +216,7 @@ def g:HelpMenu()
 					":call Attributes(<sort col number>) Create attribute table and sort by column number",
 					":call SortTagDefs()                 Sort tag definition list inside Tag Glossary page",
 					":call FormatInterview(\"<label>\")    Format interview page",
+					":call ExportTags()                  Export tags to CSV file",
 					"<leader>rs                          Resize windows",
 					"<leader>bk                          Create project backup",
 					"<leader>tl                          Current tags popup",
