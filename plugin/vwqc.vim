@@ -1549,7 +1549,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 				#g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
 			elseif (g:tags_list[index][0] != g:last_interview)
 				# if the block count isn't 0 i.e. there are blocks
-				if g:tag_count_dict[g:tags_list[index][0]][1] != 0
+				if g:tag_count_dict[g:last_interview][1] != 0
 					TidyUpBlockText()
 					# Add the block to the block list for this interview dictionary value
 					g:quote_blocks_dict[g:last_interview] = g:quote_blocks_dict[g:last_interview] + [ g:block_text ]
