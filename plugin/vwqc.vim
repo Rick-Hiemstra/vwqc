@@ -1503,10 +1503,20 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 		g:tag_count_dict[g:interview_less_extension]    = [0, 0, 0, 0]
 		g:quote_blocks_dict[g:interview_less_extension] = []
 	endfor
-	
+	# somehow I haven't accounted for interview changes.
+# -----------------------------------------------------------------
+# g:tags_list is a list of tags with the following sub-elements:
+# 0) Interview name
+# 1) Buffer line number the tag is on
+# 2) The tag
+# 3) Interview line number the tag is on
+# 4) All the tags on the line
+# 5) The line text less metadata.
+# -----------------------------------------------------------------
 	for index in range(0, len(g:tags_list) - 1)
 		# if the current tag we're processing equals the search term
-		if (g:tags_list[index][2] == ':' .. search_term .. ':')
+		#if (g:tags_list[index][2] == ':' .. search_term .. ':')
+		if (g:tags_list[index][2] == ':' .. search_term .. ':') && (g:tags_list[index][0] == '01-F-D-MaRa')
 			# Increment the tag count for this tag
 			g:tag_count_dict[g:tags_list[index][0]][0] = g:tag_count_dict[g:tags_list[index][0]][0] + 1
 			# if tags_list row number minus row number minus the correspondent tag tracking number isn't 1, i.e. non-contiguous
