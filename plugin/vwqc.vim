@@ -3174,22 +3174,25 @@ enddef
 # -----------------------------------------------------------------
 #  Maybe write everything to a variable and then print all at once.
 
+# Need to trim trailing whitespace off of the linetext value [5]
 def g:ExportTags()
 	var outline            = ""
 	var outfile            = ""
 	var today              = strftime("%Y-%m-%d")
 	var time_now           = strftime("%H-%M-%S")
+	var trimmed_line_text  = ""
 	 
 	var out_file_name = g:extras_path .. g:project_name .. " tag export made at " .. today .. " " .. time_now .. ".csv"
 
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
 		for tag_index in range(0, len(g:tags_list) - 1)
+			trimmed_line_text = substitute(g:tags_list[tag_index][5], '\s*$', '', "")
 			outline = g:tags_list[tag_index][0] .. ", " ..
 			          g:tags_list[tag_index][2] .. ", " ..
 			          g:tags_list[tag_index][1] .. ", " ..
 			          g:tags_list[tag_index][3] .. ", \"" ..
-			          g:tags_list[tag_index][5] .. "\", " 
+			          trimmed_line_text         .. "\", " 
 			for sub_index in range(0, len(g:tags_list[tag_index][4]) - 1)
 				outline = outline 
 					.. g:tags_list[tag_index][4][sub_index] .. ", "
