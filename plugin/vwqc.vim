@@ -1515,8 +1515,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 # -----------------------------------------------------------------
 	for index in range(0, len(g:tags_list) - 1)
 		# if the current tag we're processing equals the search term
-		#if (g:tags_list[index][2] == ':' .. search_term .. ':')
-		if (g:tags_list[index][2] == ':' .. search_term .. ':') && (g:tags_list[index][0] == '01-F-D-MaRa')
+		if (g:tags_list[index][2] == ':' .. search_term .. ':')
 			# Increment the tag count for this tag
 			g:tag_count_dict[g:tags_list[index][0]][0] = g:tag_count_dict[g:tags_list[index][0]][0] + 1
 			# if tags_list row number minus row number minus the correspondent tag tracking number isn't 1, i.e. non-contiguous
