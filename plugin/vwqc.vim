@@ -495,7 +495,7 @@ def FormatInterviewB(interview_label: string)
 	# and finally the cursor is reset to the top of the buffer (gg).
 	# see http://vimcasts.org/episodes/formatting-text-with-par/ for how par works with vim.		
 	# -----------------------------------------------------------------
-	execute g:text_col_width_expression
+	execute "normal! :set formatprg=fmt -" .. g:text_col_width .. "\<CR>"
 	execute "normal! ggVGgqgg"
 	# -----------------------------------------------------------------
 	# This next section reformats the AWS Transcribe time stamps to change square 
