@@ -95,7 +95,7 @@ nnoremap <leader>tl :call CurrentTagsPopUpMenu()<CR>
 " -----------------------------------------------------------------
 
 " ----------- Required to make use of the par utility -----
-set formatprg=par\ w80
+"set formatprg=par\ w80
 
 " ----------- Sets some vimwiki behaviors -----
 let g:vimwiki_global_ext = 0

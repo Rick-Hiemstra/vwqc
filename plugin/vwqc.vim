@@ -313,7 +313,8 @@ def GetVWQCProjectParameters()
 
 	# Get interview column width
 	g:text_col_width                     = g:vimwiki_wikilocal_vars[g:wiki_number]['text_col_width']
-	g:text_col_width_expression          = "set formatprg=par\\ w" .. g:text_col_width
+	#g:text_col_width_expression          = "set formatprg=par\\ w" .. g:text_col_width
+	g:text_col_width_expression          = "set formatprg=fmt\\ -w " .. g:text_col_width
 	
 	g:border_offset                      = g:text_col_width + 3
 	g:border_offset_less_one	     = g:border_offset - 1
@@ -1521,6 +1522,19 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 #  We need to track the interview of the last tag. If the interview changes we
 #  need to write. If the line numbers are non-contiguous we need to write.
 #  Need to do something with g:last_interview variable.
+#
+#	elseif (g:current_buf_name == g:last_int_name)
+#		if g:current_int_line_num - g:last_int_line_num == 1 
+#			let g:quote_dict[g:current_buf_name][g:block_count] = g:quote_dict[g:current_buf_name][g:block_count] + [ g:current_line_dict ]
+#		else
+#			let g:quote_dict[g:current_buf_name]                = g:quote_dict[g:current_buf_name] + [[ g:current_line_dict ]]
+#			let g:block_count = g:block_count + 1 
+#		endif
+#	elseif (g:current_buf_name != g:last_int_name)
+#		let g:block_count = 0
+#		let g:quote_dict[g:current_buf_name] = [[ g:current_line_dict ]]
+#	endif
+#
 	for index in range(0, len(g:tags_list) - 1)
 		# if the current tag we're processing equals the search term
 		if (g:tags_list[index][2] == ':' .. search_term .. ':')
@@ -1583,9 +1597,6 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 	endfor
 	TidyUpBlockText()
 	g:quote_blocks_dict[g:last_interview] = g:quote_blocks_dict[g:last_interview] + [ g:block_text ]
-	if (search_term == "bible_interp")
-		echom g:quote_blocks_dict
-	endif
 enddef
 
 def BuildListOfTagsOnBlock()
