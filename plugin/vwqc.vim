@@ -313,6 +313,7 @@ def GetVWQCProjectParameters()
 
 	# Get interview column width
 	g:text_col_width                     = g:vimwiki_wikilocal_vars[g:wiki_number]['text_col_width']
+	
 	#g:text_col_width_expression          = "set formatprg=par\\ w" .. g:text_col_width
 	g:text_col_width_expression          = "set formatprg=fmt\\ -" .. g:text_col_width
 	
