@@ -1477,6 +1477,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 	g:last_line             = "Undefined"
 	g:block_text            = "Undefined"
 	g:last_interview        = "Undefined"
+	var has_key             = "False"
 	g:list_of_tags_on_block = []
 	
 	# g:tag_count_dict
@@ -1538,6 +1539,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 #
 	for index in range(0, len(g:tags_list) - 1)
 		# if the current tag we're processing equals the search term
+
 		if (g:tags_list[index][2] == ':' .. search_term .. ':')
 			if (g:tags_list[index][0] == g:last_interview)
 				# Increment the tag count for this tag
@@ -1563,26 +1565,6 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 					# add to the quoteblocks
 					g:block_text            = g:tags_list[index][5]
 					#g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
-			#	elseif (g:tags_list[index][0] != g:last_interview)
-			#		# if the block count isn't 0 i.e. there are blocks
-			#		if g:tag_count_dict[g:last_interview][1] != 0
-			#			TidyUpBlockText()
-			#			# Add the block to the block list for this interview dictionary value
-			#			g:quote_blocks_dict[g:last_interview] = g:quote_blocks_dict[g:last_interview] + [ g:block_text ]
-			#		endif
-			#		#Mark that you've entered a block 
-			#		g:tag_count_dict[g:tags_list[index][0]][3] = 1
-			#		#Increment the block counter for this interview
-			#		g:tag_count_dict[g:tags_list[index][0]][1] = g:tag_count_dict[g:tags_list[index][0]][1] + 1
-			#		#Record the first line number of this block
-			#		g:block_first_line      = g:tags_list[index][3]
-			#		g:last_line             = g:tags_list[index][3]
-			#		g:last_interview        = g:tags_list[index][0]
-			#		g:list_of_tags_on_line  = g:tags_list[index][4]
-			#		g:list_of_tags_on_block = g:tags_list[index][4]
-			#		# add to the quoteblocks
-			#		g:block_text            = g:tags_list[index][5]
-			#		#g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
 				else
 					# Reset the block counter because you're inside a block now. 
 					g:tag_count_dict[g:tags_list[index][0]][3] = 0
@@ -1621,6 +1603,26 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 	TidyUpBlockText()
 	g:quote_blocks_dict[g:last_interview] = g:quote_blocks_dict[g:last_interview] + [ g:block_text ]
 enddef
+			#	elseif (g:tags_list[index][0] != g:last_interview)
+			#		# if the block count isn't 0 i.e. there are blocks
+			#		if g:tag_count_dict[g:last_interview][1] != 0
+			#			TidyUpBlockText()
+			#			# Add the block to the block list for this interview dictionary value
+			#			g:quote_blocks_dict[g:last_interview] = g:quote_blocks_dict[g:last_interview] + [ g:block_text ]
+			#		endif
+			#		#Mark that you've entered a block 
+			#		g:tag_count_dict[g:tags_list[index][0]][3] = 1
+			#		#Increment the block counter for this interview
+			#		g:tag_count_dict[g:tags_list[index][0]][1] = g:tag_count_dict[g:tags_list[index][0]][1] + 1
+			#		#Record the first line number of this block
+			#		g:block_first_line      = g:tags_list[index][3]
+			#		g:last_line             = g:tags_list[index][3]
+			#		g:last_interview        = g:tags_list[index][0]
+			#		g:list_of_tags_on_line  = g:tags_list[index][4]
+			#		g:list_of_tags_on_block = g:tags_list[index][4]
+			#		# add to the quoteblocks
+			#		g:block_text            = g:tags_list[index][5]
+			#		#g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
 
 def BuildListOfTagsOnBlock()
 	for tag_index in range(0, len(g:list_of_tags_on_line) - 1)
@@ -1866,7 +1868,6 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 		var line_text           = getline(".")
 		var interview_line_num  = matchstr(line_text, ': \d\{4}')[2 : ]
 		line_text = line_text[0 : (g:text_col_width + 1)]
-		#echom "First tag on line: " .. line .. " is " .. g:tags_on_line[0]
 
 		var processed_line_1 = 0
 		for tag_index in range(0, len(g:tags_on_line) - 1)
