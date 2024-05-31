@@ -55,6 +55,7 @@ nnoremap <leader>tc :call ToggleDoubleColonOmniComplete()<CR>
 " ---------------- Call omni-complete tags -----------------------------
 inoremap <F3> <ESC>:call OmniCompleteFileName()<CR>
 
+
 xnoremap <leader>t y:call TagFill()<CR>
 inoremap <C-S-h> <C-x><C-o>
 
