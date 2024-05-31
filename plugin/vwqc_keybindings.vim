@@ -43,6 +43,8 @@ nnoremap <leader>lp :call ListProjectParameters()<CR>
 " ---------------- Get Tag Definition  -------------------------------
 nnoremap <leader>df :call GetTagDef()<CR>
 
+" ---------------- Call omni-complete file name -----------------------------
+inoremap <F6> <ESC>:call OmniCompleteFileName()<CR>
 " ---------------- Call omni-complete tags -----------------------------
 "inoremap <F8> <C-x><C-o>
 "inoremap <F9> <C-x><C-o>
@@ -51,9 +53,6 @@ inoremap <F8> <ESC>:call TagsGenThisSession()<CR>
 inoremap <F9> <ESC>:call TagsGenThisSession()<CR>
 "inoremap <nowait> :: <ESC>a:<ESC>:call TagsGenThisSession()<CR>
 nnoremap <leader>tc :call ToggleDoubleColonOmniComplete()<CR>
-
-" ---------------- Call omni-complete tags -----------------------------
-inoremap <F6> <ESC>:call OmniCompleteFileName()<CR>
 
 
 xnoremap <leader>t y:call TagFill()<CR>
