@@ -3261,3 +3261,27 @@ def g:ExportTags()
 	endif
 enddef
 
+def g:OmniCompleteFileName() 
+	
+	ParmCheck()
+
+	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
+	if (g:tags_generated == 1)
+
+		# -----------------------------------------------------------------
+		# Change the pwd to that of the current wiki.
+		# -----------------------------------------------------------------
+		execute "normal! :cd %:p:h\<CR>"
+		# ------------------------------------------------------
+		# See if the wiki config dictionary has had a
+		# tags_generated_this_session key added.
+		# ------------------------------------------------------
+		# The ! after startinsert makes it insert after (like A). If
+		# you don't have the ! it inserts before (like i)
+		# ------------------------------------------------------
+		startinsert!
+		feedkeys("\<c-x>\<c-f>", 'i')
+	else
+		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
+	endif
+enddef
