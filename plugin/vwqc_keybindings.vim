@@ -48,12 +48,12 @@ nnoremap <leader>df :call GetTagDef()<CR>
 "inoremap <F9> <C-x><C-o>
 "nnoremap <F8> :execute "normal! a<C-x><C-o><CR>"
 inoremap <F8> <ESC>:call TagsGenThisSession()<CR>
-inoremap <F9> <ESC>:call TagsGenThisSession()<CR>
+"inoremap <F9> <ESC>:call TagsGenThisSession()<CR>
 "inoremap <nowait> :: <ESC>a:<ESC>:call TagsGenThisSession()<CR>
 nnoremap <leader>tc :call ToggleDoubleColonOmniComplete()<CR>
 
 " ---------------- Call omni-complete tags -----------------------------
-inoremap <F3> <ESC>:call OmniCompleteFileName()<CR>
+inoremap <F9> <ESC>:call OmniCompleteFileName()<CR>
 
 
 xnoremap <leader>t y:call TagFill()<CR>
