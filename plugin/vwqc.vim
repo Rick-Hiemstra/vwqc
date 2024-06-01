@@ -1474,7 +1474,7 @@ enddef
 def g:CreateAndCountInterviewBlocks(search_term: string)
 	g:block_first_line      = "Undefined"
 	g:block_last_line       = "Undefined"
-	g:last_line             = "Undefined"
+	g:last_line             = -1
 	g:block_text            = "Undefined"
 	g:last_interview        = "Undefined"
 	var has_key             = "False"
