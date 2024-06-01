@@ -25,15 +25,14 @@ endif
 # -----------------------------------------------------------------
 # Vimwiki Qualitative Code (VWQC) - Vimscript 9 version
 # Written by Rick Hiemstra and Lindsay Callaway
-# Version Vim9 1.0 
-# 2024-95-20	
-#
-# Write a function to restore a backup
+# Version Vim9_1.0 
+# 2024-06-01	
 #
 # -----------------------------------------------------------------
 # ------------------------ TO DO ------------------------------
 # -----------------------------------------------------------------
 # Update page help
+#
 # Write a function to modify the attribute lines in the old wikis.
 #
 # Change Vimwiki so g:current_tags is only deepcopied if it is an interview
@@ -45,7 +44,6 @@ endif
 # Create a backup restore function
 #
 # Remove the .swp files from backups
-# Create a restore backup function.
 #
 # Deal with the case where a wiki is configured with a path that doesn't end 
 # with a /
@@ -167,6 +165,7 @@ endif
 #
 # ---- Other ----
 # UpdateSubcode
+# OmniCompleteFileName() 
 
 
 # -----------------------------------------------------------------
@@ -188,8 +187,8 @@ def g:HelpMenu()
 				        " ", 
 				     	"CODING", 
 					"<F2>                                Update tags", 
-					"<F8>                                Tag omni-complete, same as <F9>",
-					"<F9>                                Tag omni-complete, same as <F8>",
+					"<F8>                                Omni-complete (tags and files), same as <F9>",
+					"<F9>                                Omni-complete (tags and files), same as <F8>",
 					"<F5>                                Complete tag block",
 					"<F4>                                Toggle tag block completion mode",
 					"<leader>tf                          Tag fill",

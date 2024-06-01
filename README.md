@@ -33,8 +33,6 @@ __     ___                   _ _    _
 - [License](#vwqc-license)
 
 
-**!!! This documentation is a work in progress !!!**
-
 ## Introduction ##
 
 Vimwiki Qualitative Code (VWQC), a fork of Vimwiki, is a linewise qualitative coding plugin for working with text. VWQC allows you to code, annotate and generate reports for interviews. It adds functionality to VIM and Vimwiki. See https://github.com/vimwiki/vimwiki for documentation on Vimwiki.
@@ -43,11 +41,13 @@ Linewise means the basic coding units are lines of text rather that exact text b
 
 VWQC uses popup windows which are best displayed in a GUI implementation of Vim or Neovim.
 
+The development branch for vwqc is vim9.
+
 ## Installation ##
 
 ### Prerequisites ###
 
-VWQC requires Vim 9.1 or higher. Although Vimwiki which VWQC is built on is written in legacy Vimscript, VWQC is written in Vim9script. VWQC cannot be run in Neovim as Neovim does not support Vim9script.
+VWQC requires **Vim 9.1 or higher**. Although Vimwiki, which VWQC is built on, is written in legacy Vimscript, VWQC is written in Vim9script. VWQC cannot be run in Neovim because Neovim does not support Vim9script.
 
 Make sure you have the following settings in your .vimrc file:
 
@@ -113,8 +113,8 @@ The following keybindings and commands are set in the plugin.
 
 **CODING**
 - `<F2>`                               Update tags
-- `<F8>`                               Tag omni-complete, same as <F9>
-- `<F9>`                               Tag omni-complete, same as <F8>
+- `<F8>`                               Omni-complete (tags and files), same as <F9>
+- `<F9>`                               Omni-complete (tags and files), same as <F8>
 - `<F5>`                               Complete tag block
 - `<F4>`                               Toggle tag block completion mode
 - `<leader>tf`                         Tag fill
@@ -293,7 +293,7 @@ Audio Recording: [[file:]]
 
 ```
 
-Tags in Vimwiki, and by extension VWQC, are delimited by colons containing contiguous characters. The `<attribute_x>` in angle brackets is merely placeholder text. Prior to formatting interviews these should be edited to reflect the attributes you'll want to do your analysis on. For example, you may change the default header to:
+Tags in Vimwiki, and by extension VWQC, are delimited by colons containing contiguous characters. The `<attribute_x>` in angle brackets are merely placeholder text. Prior to formatting interviews these should be edited to reflect the attributes you'll want to do your analysis on. For example, you may change the default header to:
 
 ```
  :gender: :province: :generation:
