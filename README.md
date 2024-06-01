@@ -57,16 +57,15 @@ filetype plugin on
 syntax on
 ```
 
-The following packages are used by VWQC: git, par, and ripgrep. 
+The following packages are used by VWQC: git and ripgrep. 
 
 - `git` facilitates the installation of Vim plugins. 
-- `par` is used by VWQC for interview text formatting, and 
 - `ripgrep` is used for searching projects.
 
 For Debian and Debian-based Linux distributions these packages can be installed with the following command:
 
 ```
-$ sudo apt install git par ripgrep
+$ sudo apt install git ripgrep
 ```
 On Linux systems with `snapd` installed `ripgrep` can alternatively be installed with:
 
@@ -79,7 +78,7 @@ For MacOS these packages can be installed with the following command:
 (Note if you haven't installed brew yet you can find instructions at https://docs.brew.sh/Installation.)
 
 ```
-$ brew install git par ripgrep
+$ brew install git ripgrep
 ```
 
 ### VIM Packages ###
