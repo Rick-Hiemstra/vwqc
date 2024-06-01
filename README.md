@@ -94,7 +94,7 @@ call plug#begin('~/.vim/plugged')
  
 Plug 'junegunn/fzf', {'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'Rick-Hiemstra/vwqc.vim'
+Plug 'Rick-Hiemstra/vwqc.vim', { 'branch': 'vim9' }
  
 call plug#end()
 ```
