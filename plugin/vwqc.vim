@@ -1548,7 +1548,6 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 				# Set the last line for this kind of tag equal to the line of the tag we've been considering in this loop.
 				g:tag_count_dict[g:tags_list[index][0]][2] = g:tags_list[index][1]
 			elseif (g:last_interview != "Undefined") && (g:tags_list[index][0] != g:last_interview)
-				g:tag_count_dict[g:tags_list[index][0]][0] = g:tag_count_dict[g:tags_list[index][0]][0] + 1
 				# if the block count isn't 0 i.e. there are blocks
 				# Check to see if the interview exists
 				if g:tag_count_dict[g:last_interview][1] != 0
@@ -1557,6 +1556,8 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 					g:quote_blocks_dict[g:last_interview] = g:quote_blocks_dict[g:last_interview] + [ g:block_text ]
 				endif
 				#Mark that you've entered a block 
+				# Increment the tag counter
+				g:tag_count_dict[g:tags_list[index][0]][0] = g:tag_count_dict[g:tags_list[index][0]][0] + 1
 				g:tag_count_dict[g:tags_list[index][0]][3] = 1
 				#Increment the block counter for this interview
 				g:tag_count_dict[g:tags_list[index][0]][1] = g:tag_count_dict[g:tags_list[index][0]][1] + 1
@@ -1570,11 +1571,12 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 				g:block_text            = g:tags_list[index][5]
 				#g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
 			else
+				# Increment the tag counter
 				g:tag_count_dict[g:tags_list[index][0]][0] = g:tag_count_dict[g:tags_list[index][0]][0] + 1
-				#Mark that you've entered a block 
-				g:tag_count_dict[g:tags_list[index][0]][3] = 1
 				#Increment the block counter for this interview
 				g:tag_count_dict[g:tags_list[index][0]][1] = g:tag_count_dict[g:tags_list[index][0]][1] + 1
+				#Mark that you've entered a block 
+				g:tag_count_dict[g:tags_list[index][0]][3] = 1
 				#Record the first line number of this block
 				g:block_first_line      = g:tags_list[index][3]
 				g:last_line             = g:tags_list[index][3]
