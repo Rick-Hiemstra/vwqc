@@ -113,8 +113,8 @@ The following keybindings and commands are set in the plugin.
 
 **CODING**
 - `<F2>`                               Update tags
-- `<F8>`                               Omni-complete (tags and files), same as <F9>
-- `<F9>`                               Omni-complete (tags and files), same as <F8>
+- `<F8>`                               Omni-complete (tags and files), same as `<F9>`
+- `<F9>`                               Omni-complete (tags and files), same as `<F8>`
 - `<F5>`                               Complete tag block
 - `<F4>`                               Toggle tag block completion mode
 - `<leader>tf`                         Tag fill
