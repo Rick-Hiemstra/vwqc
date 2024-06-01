@@ -41,7 +41,7 @@ Linewise means the basic coding units are lines of text rather that exact text b
 
 VWQC uses popup windows which are best displayed in a GUI implementation of Vim or Neovim.
 
-The development branch for vwqc is vim9.
+**The development branch for vwqc is vim9.**
 
 ## Installation ##
 
