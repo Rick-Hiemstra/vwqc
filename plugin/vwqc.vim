@@ -1487,8 +1487,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 	# 	2 is the space to keep track of the last tag's interview line number, 
 	# 	3 is a boolean (represented by a 0 or 1 indicating if you're tracking a tag block or not. 
 	# 	4 is a space to keep track of the last tag's interview name 
-	# This will count and keep track of the tag and block counts. We'll
-	# also use it to create blocks
+	# This will count and keep track of the tag and block counts. We'll also use it to create blocks
 	g:tag_count_dict       = {}
 	g:initial_tag_dict     = {}
 	
@@ -1507,36 +1506,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 		g:tag_count_dict[g:interview_less_extension]    = [0, 0, 0, 0]
 		g:quote_blocks_dict[g:interview_less_extension] = []
 	endfor
-	# somehow I haven't accounted for interview changes.
-# -----------------------------------------------------------------
-# g:tags_list is a list of tags with the following sub-elements:
-# 0) Interview name
-# 1) Buffer line number the tag is on
-# 2) The tag
-# 3) Interview line number the tag is on
-# 4) All the tags on the line
-# 5) The line text less metadata.
-# -----------------------------------------------------------------
-#  So the issue here is that for the last quote block for interview isn't
-#  getting recorded. The very last quote block gets recorded.
-#  A record is triggered by the end of the report but not by the change in
-#  interview. 
-#  We need to track the interview of the last tag. If the interview changes we
-#  need to write. If the line numbers are non-contiguous we need to write.
-#  Need to do something with g:last_interview variable.
-#
-#	elseif (g:current_buf_name == g:last_int_name)
-#		if g:current_int_line_num - g:last_int_line_num == 1 
-#			let g:quote_dict[g:current_buf_name][g:block_count] = g:quote_dict[g:current_buf_name][g:block_count] + [ g:current_line_dict ]
-#		else
-#			let g:quote_dict[g:current_buf_name]                = g:quote_dict[g:current_buf_name] + [[ g:current_line_dict ]]
-#			let g:block_count = g:block_count + 1 
-#		endif
-#	elseif (g:current_buf_name != g:last_int_name)
-#		let g:block_count = 0
-#		let g:quote_dict[g:current_buf_name] = [[ g:current_line_dict ]]
-#	endif
-#
+
 	for index in range(0, len(g:tags_list) - 1)
 		# if the current tag we're processing equals the search term
 
@@ -1577,17 +1547,28 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 				endif
 				# Set the last line for this kind of tag equal to the line of the tag we've been considering in this loop.
 				g:tag_count_dict[g:tags_list[index][0]][2] = g:tags_list[index][1]
-			else 
+			elseif (g:last_interview != "Undefined")
 				# if the block count isn't 0 i.e. there are blocks
 				# Check to see if the interview exists
-				if (has_key(g:tag_count_dict, g:last_interview) != 0)
-					if g:tag_count_dict[g:last_interview][1] != 0
-						TidyUpBlockText()
-						# Add the block to the block list for this interview dictionary value
-						g:quote_blocks_dict[g:last_interview] = g:quote_blocks_dict[g:last_interview] + [ g:block_text ]
-					endif
+				if g:tag_count_dict[g:last_interview][1] != 0
+					TidyUpBlockText()
+					# Add the block to the block list for this interview dictionary value
+					g:quote_blocks_dict[g:last_interview] = g:quote_blocks_dict[g:last_interview] + [ g:block_text ]
 				endif
 				#Mark that you've entered a block 
+				g:tag_count_dict[g:tags_list[index][0]][3] = 1
+				#Increment the block counter for this interview
+				g:tag_count_dict[g:tags_list[index][0]][1] = g:tag_count_dict[g:tags_list[index][0]][1] + 1
+				#Record the first line number of this block
+				g:block_first_line      = g:tags_list[index][3]
+				g:last_line             = g:tags_list[index][3]
+				g:last_interview        = g:tags_list[index][0]
+				g:list_of_tags_on_line  = g:tags_list[index][4]
+				g:list_of_tags_on_block = g:tags_list[index][4]
+				# add to the quoteblocks
+				g:block_text            = g:tags_list[index][5]
+				#g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
+			else
 				g:tag_count_dict[g:tags_list[index][0]][3] = 1
 				#Increment the block counter for this interview
 				g:tag_count_dict[g:tags_list[index][0]][1] = g:tag_count_dict[g:tags_list[index][0]][1] + 1
@@ -1606,26 +1587,6 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 	TidyUpBlockText()
 	g:quote_blocks_dict[g:last_interview] = g:quote_blocks_dict[g:last_interview] + [ g:block_text ]
 enddef
-			#	elseif (g:tags_list[index][0] != g:last_interview)
-			#		# if the block count isn't 0 i.e. there are blocks
-			#		if g:tag_count_dict[g:last_interview][1] != 0
-			#			TidyUpBlockText()
-			#			# Add the block to the block list for this interview dictionary value
-			#			g:quote_blocks_dict[g:last_interview] = g:quote_blocks_dict[g:last_interview] + [ g:block_text ]
-			#		endif
-			#		#Mark that you've entered a block 
-			#		g:tag_count_dict[g:tags_list[index][0]][3] = 1
-			#		#Increment the block counter for this interview
-			#		g:tag_count_dict[g:tags_list[index][0]][1] = g:tag_count_dict[g:tags_list[index][0]][1] + 1
-			#		#Record the first line number of this block
-			#		g:block_first_line      = g:tags_list[index][3]
-			#		g:last_line             = g:tags_list[index][3]
-			#		g:last_interview        = g:tags_list[index][0]
-			#		g:list_of_tags_on_line  = g:tags_list[index][4]
-			#		g:list_of_tags_on_block = g:tags_list[index][4]
-			#		# add to the quoteblocks
-			#		g:block_text            = g:tags_list[index][5]
-			#		#g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
 
 def BuildListOfTagsOnBlock()
 	for tag_index in range(0, len(g:list_of_tags_on_line) - 1)
