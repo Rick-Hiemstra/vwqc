@@ -1713,7 +1713,7 @@ def g:Report(search_term: string, report_type = "FullReport")
 			execute "normal! i# " .. repeat("=", 80) .. "\n"
 			execute "normal! i# INTERVIEW: " .. g:interview_name .. "\n"
 			execute "normal! i# " .. repeat("=", 80) .. "\n"
-			attr_string = string(g:attr_list[1][1])
+			attr_string = string(g:attr_list[interview][1])
 			attr_string = substitute(attr_string, '[\[\[\],]', '', 'g')
 			attr_string = substitute(attr_string, "'", '', 'g')
 			execute "normal! i**ATTRIBUTES:** " .. attr_string .. "\n\n"
