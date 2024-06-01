@@ -1558,30 +1558,19 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 				# Increment the tag count for this tag
 				g:tag_count_dict[g:tags_list[index][0]][0] = g:tag_count_dict[g:tags_list[index][0]][0] + 1
 				# if tags_list row number minus row number minus the correspondent tag tracking number isn't 1, i.e. non-contiguous
-				if ((g:tags_list[index][1] - g:tag_count_dict[g:tags_list[index][0]][2]) != 1)
 					#Mark that you've entered a block 
-					g:tag_count_dict[g:tags_list[index][0]][3] = 1
-					#Increment the block counter for this interview
-					g:tag_count_dict[g:tags_list[index][0]][1] = g:tag_count_dict[g:tags_list[index][0]][1] + 1
-					#Record the first line number of this block
-					g:block_first_line      = g:tags_list[index][3]
-					g:last_line             = g:tags_list[index][3]
-					g:last_interview        = g:tags_list[index][0]
-					g:list_of_tags_on_line  = g:tags_list[index][4]
-					g:list_of_tags_on_block = g:tags_list[index][4]
-					# add to the quoteblocks
-					g:block_text            = g:tags_list[index][5]
-					#g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
-				else
-					# Reset the block counter because you're inside a block now. 
-					g:tag_count_dict[g:tags_list[index][0]][3] = 0
-					# Add this line to the g:block_text
-					g:block_text            = g:block_text .. g:tags_list[index][5]
-					g:last_line             = g:tags_list[index][3]
-					g:last_interview        = g:tags_list[index][0]
-					g:list_of_tags_on_line  = g:tags_list[index][4]
-					BuildListOfTagsOnBlock()
-				endif
+				g:tag_count_dict[g:tags_list[index][0]][3] = 1
+				#Increment the block counter for this interview
+				g:tag_count_dict[g:tags_list[index][0]][1] = g:tag_count_dict[g:tags_list[index][0]][1] + 1
+				#Record the first line number of this block
+				g:block_first_line      = g:tags_list[index][3]
+				g:last_line             = g:tags_list[index][3]
+				g:last_interview        = g:tags_list[index][0]
+				g:list_of_tags_on_line  = g:tags_list[index][4]
+				g:list_of_tags_on_block = g:tags_list[index][4]
+				# add to the quoteblocks
+				g:block_text            = g:tags_list[index][5]
+				#g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
 				# Set the last line for this kind of tag equal to the line of the tag we've been considering in this loop.
 				g:tag_count_dict[g:tags_list[index][0]][2] = g:tags_list[index][1]
 			else
@@ -1600,6 +1589,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 				# add to the quoteblocks
 				g:block_text            = g:tags_list[index][5]
 				#g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
+				g:tag_count_dict[g:tags_list[index][0]][2] = g:tags_list[index][1]
 			endif
 		endif 
 	endfor
