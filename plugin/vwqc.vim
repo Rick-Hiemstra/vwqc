@@ -1580,7 +1580,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 			else 
 				# if the block count isn't 0 i.e. there are blocks
 				# Check to see if the interview exists
-				if has_key(g:tag_count_dict, g:last_interview) != 0)
+				if (has_key(g:tag_count_dict, g:last_interview) != 0)
 					if g:tag_count_dict[g:last_interview][1] != 0
 						TidyUpBlockText()
 						# Add the block to the block list for this interview dictionary value
