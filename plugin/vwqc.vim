@@ -1731,7 +1731,7 @@ def g:Report(search_term: string, report_type = "FullReport")
 					if (index(g:anno_tags_dict[g:interview_name][anno][1], search_term_with_colons) != -1)
 						anno_counter = anno_counter + 1
 						execute "normal! i**" .. repeat(">-", 40) .. "**\n"
-						execute "normal! i**" .. g:interview_name" .. " ANNOTATION " .. anno_counter .. ":**\n"
+						execute "normal! i**" .. g:interview_name .. " ANNOTATION " .. anno_counter .. ":**\n"
 						execute "normal! i**" .. repeat(">-", 40) .. "**\n"
 						execute "normal! i" .. g:anno_tags_dict[g:interview_name][anno][2] .. "\n"
 					endif
