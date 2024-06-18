@@ -1449,9 +1449,6 @@ def g:Gather(search_term: string)
 	execute "normal! `R\"sp"
 enddef
 
-# -----------------------------------------------------------------
-#
-# -----------------------------------------------------------------
 def CreateListOfInterviewsWithAnnos()
 	for anno in range(0, (len(g:anno_list) - 1))
 		g:interview_connected_to_this_anno = matchstr(g:anno_list, g:interview_label_regex)
@@ -1533,7 +1530,6 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 					g:list_of_tags_on_block = g:tags_list[index][4]
 					# add to the quoteblocks
 					g:block_text            = g:tags_list[index][5]
-					#g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
 				else
 					# Reset the block counter because you're inside a block now. 
 					g:tag_count_dict[g:tags_list[index][0]][3] = 0
@@ -1557,7 +1553,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 				# Increment the tag count for this tag
 				g:tag_count_dict[g:tags_list[index][0]][0] = g:tag_count_dict[g:tags_list[index][0]][0] + 1
 				# if tags_list row number minus row number minus the correspondent tag tracking number isn't 1, i.e. non-contiguous
-					#Mark that you've entered a block 
+				#Mark that you've entered a block 
 				g:tag_count_dict[g:tags_list[index][0]][3] = 1
 				#Increment the block counter for this interview
 				g:tag_count_dict[g:tags_list[index][0]][1] = g:tag_count_dict[g:tags_list[index][0]][1] + 1
@@ -1569,7 +1565,6 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 				g:list_of_tags_on_block = g:tags_list[index][4]
 				# add to the quoteblocks
 				g:block_text            = g:tags_list[index][5]
-				#g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
 				# Set the last line for this kind of tag equal to the line of the tag we've been considering in this loop.
 				g:tag_count_dict[g:tags_list[index][0]][2] = g:tags_list[index][1]
 			else
@@ -1587,7 +1582,6 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 				g:list_of_tags_on_block = g:tags_list[index][4]
 				# add to the quoteblocks
 				g:block_text            = g:tags_list[index][5]
-				#g:quote_blocks_dict[g:tags_list[index][0]] = g:quote_blocks_dict[g:tags_list[index][0]] + [ g:tags_list[index][5] ]
 				g:tag_count_dict[g:tags_list[index][0]][2] = g:tags_list[index][1]
 			endif
 		endif 
@@ -2194,24 +2188,24 @@ def g:TagStats()
 		g:tag_cross   = CalcInterviewTagCrosstabs(g:unique_tags, g:interview_list, ext_length)
 		
 		# Find the longest tag in terms of the number of characters in the tag.
-		var len_longest_tag = FindLengthOfLongestTag(g:unique_tags)
+		g:len_longest_tag = FindLengthOfLongestTag(g:unique_tags)
 
-		var window_width = winwidth(win_getid())
+		g:window_width = winwidth(win_getid())
 
 		# Find the largest tag and block tallies. This will be used in the scale calculation for graphs.
 		# Multiplying by 1.0 is done to coerce integers to floats.
-		var largest_tag_and_block_counts = FindLargestTagAndBlockCounts(g:tag_cross, g:unique_tags, g:interview_list, ext_length)
-		var largest_tag_count            = largest_tag_and_block_counts[0] * 1.0
-		var largest_block_count          = largest_tag_and_block_counts[1] * 1.0
+		g:largest_tag_and_block_counts = FindLargestTagAndBlockCounts(g:tag_cross, g:unique_tags, g:interview_list, ext_length)
+		g:largest_tag_count            = g:largest_tag_and_block_counts[0] * 1.0
+		g:largest_block_count          = g:largest_tag_and_block_counts[1] * 1.0
 
 		# find the number of digits in the following counts. Used for
 		# calculating the graph scale. The nested functions are mostly to
 		# convert the float to an int. Vimscript doesn't have a direct way to do this.
-		var largest_tag_count_digits    = str2nr(string(trunc(log10(largest_tag_count) + 1)))
-		var largest_block_count_digits  = str2nr(string(trunc(log10(largest_block_count) + 1)))
+		g:largest_tag_count_digits    = str2nr(string(trunc(log10(g:largest_tag_count) + 1)))
+		g:largest_block_count_digits  = str2nr(string(trunc(log10(g:largest_block_count) + 1)))
 
-		var max_bar_width = window_width - len_longest_tag - largest_tag_count - largest_tag_count_digits - largest_block_count_digits - 8
-		var bar_scale     = max_bar_width / largest_tag_count
+		g:max_bar_width = g:window_width - g:len_longest_tag - g:largest_tag_count - g:largest_tag_count_digits - g:largest_block_count_digits - 8
+		g:bar_scale     = g:max_bar_width / g:largest_tag_count
 
 		# Return to the buffer where these charts and graphs are going to be
 		# produced and clear out the buffer.
@@ -2240,7 +2234,7 @@ def g:TagStats()
 
 		# Print interview tag summary graphs
 		for interview in range(0, (len(g:interview_list) - 1))
-			GraphInterviewTagSummary(g:interview_list[interview], len_longest_tag, bar_scale)	
+			GraphInterviewTagSummary(g:interview_list[interview], g:len_longest_tag, g:bar_scale)	
 		endfor
 
 		execute "normal! :e Summary Tag Stats - Charts - By Tag" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
@@ -2248,7 +2242,7 @@ def g:TagStats()
 
 		# Print interview tag summary graphs
 		for tag_index in range(0, (len(g:unique_tags) - 1))
-			GraphTagInterviewSummary(g:unique_tags[tag_index], len_longest_tag, bar_scale)	
+			GraphTagInterviewSummary(g:unique_tags[tag_index], g:len_longest_tag, g:bar_scale)	
 		endfor
 		
 		set nolazyredraw
