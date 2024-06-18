@@ -2064,7 +2064,7 @@ def GraphInterviewTagSummary(interview: string, longest_tag_length: number, bar_
 		tag_amount   = g:tag_cross[interview][g:unique_tags[tag_index]][0] - block_amount
 		if g:tag_cross[interview][g:unique_tags[tag_index]][0] != 0
 			execute "normal! i" .. g:unique_tags[tag_index] .. " " .. repeat(" ", offset) ..
-							"|" repeat('□', str2nr(string(round(block_amount * bar_scale)))) .. 
+							"|" .. repeat('□', str2nr(string(round(block_amount * bar_scale)))) .. 
 							repeat('▤', str2nr(string(round(tag_amount * bar_scale)))) ..
 						 	" " .. g:tag_cross[interview][g:unique_tags[tag_index]][0] .. 
 							"(" .. g:tag_cross[interview][g:unique_tags[tag_index]][1] .. ")\n"
