@@ -2188,7 +2188,8 @@ def g:TagStats()
 		g:tag_cross   = CalcInterviewTagCrosstabs(g:unique_tags, g:interview_list, ext_length)
 		
 		# Find the longest tag in terms of the number of characters in the tag.
-		g:len_longest_tag = FindLengthOfLongestTag(g:unique_tags)
+		g:len_longest_tag           = FindLengthOfLongestTag(g:unique_tags)
+		g:len_longest_interview_tag = len(g:interview_list[0]) 
 
 		g:window_width = winwidth(win_getid())
 
@@ -2204,7 +2205,7 @@ def g:TagStats()
 		g:largest_tag_count_digits    = str2nr(string(trunc(log10(g:largest_tag_count) + 1)))
 		g:largest_block_count_digits  = str2nr(string(trunc(log10(g:largest_block_count) + 1)))
 
-		g:max_bar_width = g:window_width - g:len_longest_tag - g:largest_tag_count_digits - g:largest_block_count_digits - 8
+		g:max_bar_width = g:window_width - g:len_longest_tag - g:largest_tag_count_digits - g:largest_block_count_digits - 10
 		g:bar_scale     = g:max_bar_width / g:largest_tag_count
 
 		# Return to the buffer where these charts and graphs are going to be
@@ -2234,7 +2235,7 @@ def g:TagStats()
 
 		# Print interview tag summary graphs
 		for interview in range(0, (len(g:interview_list) - 1))
-			GraphInterviewTagSummary(g:interview_list[interview], g:len_longest_tag, g:bar_scale)	
+			GraphInterviewTagSummary(g:interview_list[interview], g:len_longest_interview_tag, g:bar_scale)	
 		endfor
 
 		execute "normal! :e Summary Tag Stats - Charts - By Tag" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
