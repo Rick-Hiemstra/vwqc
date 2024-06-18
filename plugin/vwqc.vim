@@ -2204,7 +2204,7 @@ def g:TagStats()
 		g:largest_tag_count_digits    = str2nr(string(trunc(log10(g:largest_tag_count) + 1)))
 		g:largest_block_count_digits  = str2nr(string(trunc(log10(g:largest_block_count) + 1)))
 
-		g:max_bar_width = g:window_width - g:len_longest_tag - g:largest_tag_count - g:largest_tag_count_digits - g:largest_block_count_digits - 8
+		g:max_bar_width = g:window_width - g:len_longest_tag - g:largest_tag_count_digits - g:largest_block_count_digits - 8
 		g:bar_scale     = g:max_bar_width / g:largest_tag_count
 
 		# Return to the buffer where these charts and graphs are going to be
