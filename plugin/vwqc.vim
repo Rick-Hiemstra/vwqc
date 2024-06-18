@@ -2235,7 +2235,7 @@ def g:TagStats()
 
 		# Print interview tag summary graphs
 		for interview in range(0, (len(g:interview_list) - 1))
-			GraphInterviewTagSummary(g:interview_list[interview], g:len_longest_interview_tag, g:bar_scale)	
+			GraphInterviewTagSummary(g:interview_list[interview], g:len_longest_tag, g:bar_scale)	
 		endfor
 
 		execute "normal! :e Summary Tag Stats - Charts - By Tag" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
@@ -2243,7 +2243,7 @@ def g:TagStats()
 
 		# Print interview tag summary graphs
 		for tag_index in range(0, (len(g:unique_tags) - 1))
-			GraphTagInterviewSummary(g:unique_tags[tag_index], g:len_longest_tag, g:bar_scale)	
+			GraphTagInterviewSummary(g:unique_tags[tag_index], g:len_longest_interview_tag, g:bar_scale)	
 		endfor
 		
 		set nolazyredraw
