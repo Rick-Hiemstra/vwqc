@@ -1685,6 +1685,7 @@ enddef
 def g:Report(search_term: string, report_type = "FullReport") 
 	ParmCheck()
 	
+	echom "Search Term: " .. search_term .. "\n"
 	var interview_name = "Undefined"
 	var attr_string    = "Undefined"
 	var search_term_with_colons = ":" .. search_term .. ":"
