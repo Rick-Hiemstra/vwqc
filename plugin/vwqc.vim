@@ -1404,7 +1404,7 @@ def GenInterviewLists(summary_type: string)
 	g:interview_link_list = []
 	for interview_index in range(0, (len(g:interview_list) - 1))
 		file_name = "Summary " .. g:interview_list_without_ext[interview_index] .. " " .. summary_type .. " batch" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-		link_name = "[Summary " .. g:interview_list_without_ext[interview_index] .. " " .. summary_type .. " batch](Summary " .. g:interview_list[interview_index] .. " " .. summary_type .. " batch)"
+		link_name = "[Summary " .. g:interview_list_without_ext[interview_index] .. " " .. summary_type .. " batch](Summary " .. g:interview_list_without_ext[interview_index] .. " " .. summary_type .. " batch)"
 		g:interview_file_list = g:interview_file_list + [file_name]
 		g:interview_link_list = g:interview_link_list + [link_name]
 	endfor
