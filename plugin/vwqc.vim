@@ -1327,11 +1327,15 @@ def g:AllSummariesAnnos()
 			GenInterviewLists("Annotations")
 		endif
 
-		g:summary_file_list = g:summary_file_list + g:interview_file_list
-		g:summary_link_list = g:summary_link_list + g:interview_link_list
+		g:summary_file_list = g:summary_file_list 
+		g:summary_link_list = g:summary_link_list
 		g:anno_list_tags_and_interviews = g:in_both_lists + g:interview_list_without_ext
+		#g:summary_file_list = g:summary_file_list + g:interview_file_list
+		#g:summary_link_list = g:summary_link_list + g:interview_link_list
+		#g:anno_list_tags_and_interviews = g:in_both_lists + g:interview_list_without_ext
 
-		g:tags_list_length = len(g:summary_file_list)
+		#g:tags_list_length = len(g:summary_file_list)
+		g:tags_list_length = len(g:in_both_lists)
 
 		if (g:tags_generated == 1) && (g:tags_list_length > 0)
 			popup_menu(["No, abort", "Yes, generate summary reports"], {
@@ -1366,7 +1370,7 @@ def g:AllSummariesGenReportsAnnos(id: number, result: number)
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
 		for index in range(0, len(g:tags_list_length) - 1)
 			execute "normal! :e " .. g:summary_file_list[index] .. "\<CR>"
-			g:AnnotationsReport(g:anno_list_tags_and_interviews[index])
+			g:AnnotationsReport(g:in_both_lists[index])
 		endfor
 		execute "normal! `Q"
 		put =g:summary_link_list
