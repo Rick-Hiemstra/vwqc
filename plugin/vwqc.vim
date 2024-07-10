@@ -1368,7 +1368,7 @@ def g:AllSummariesGenReportsAnnos(id: number, result: number)
 	if result == 2
 		execute "normal! :delmarks Q\<CR>mQ"
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
-		for index in range(0, g:tag_list_length - 1)
+		for index in range(0, g:tags_list_length - 1)
 			execute "normal! :e " .. g:summary_file_list[index] .. "\<CR>"
 			g:AnnotationsReport(g:in_both_lists[index])
 		endfor
