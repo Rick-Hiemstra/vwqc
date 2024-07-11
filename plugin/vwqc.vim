@@ -1723,7 +1723,7 @@ enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-def g:Report(search_term: string, report_type = "FullReport", attr_filter: string) 
+def g:Report(search_term: string, report_type = "FullReport", attr_filter = "none") 
 
 	ParmCheck()
 	
