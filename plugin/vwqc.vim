@@ -3185,7 +3185,7 @@ def g:Attributes(sort_col = 1)
 	endif
 enddef
 
-def AttrFilterValueCheck(attr_filter: string)
+def AttrFilterValueCheck(attr_filter: string): number
 	var has_attr_filter = 0
 	for interview in range(0, (len(g:attr_list) - 1))
 		if (index(g:attr_list[interview][1], attr_filter) > -1)
