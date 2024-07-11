@@ -1590,7 +1590,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string, attr_filter = "none")
 			g:filter_check = 1
 		endif
 
-		echom string(g:tags_list[index][6]) .. " " .. g:attr_filter_as_tag .. " filter check: " .. g:filter_check .. "\n"
+		#echom string(g:tags_list[index][6]) .. " " .. g:attr_filter_as_tag .. " filter check: " .. g:filter_check .. "\n"
 		#echom "filter check value: " .. g:filter_check .. " current interview: " .. g:current_interview .. "\n"
 		if (g:tags_list[index][2] == ':' .. search_term .. ':') && 
 				(index(g:filtered_interview_list, g:current_interview) > -1) && (g:filter_check == 1)
