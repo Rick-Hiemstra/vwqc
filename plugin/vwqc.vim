@@ -1163,12 +1163,12 @@ def g:FullReport(search_term: string, attr_filter = "none")
 enddef
 
 def g:AnnotationsReport(search_term: string, attr_filter = "none")
-	g:Report(search_term, "AnnotationsReport") 
+	g:Report(search_term, "AnnotationsReport", attr_filter) 
 	execute "normal! \<C-w>o"
 enddef
 
 def g:QuotesReport(search_term: string, attr_filter = "none")
-	g:Report(search_term, "QuotesReport") 
+	g:Report(search_term, "QuotesReport", attr_filter) 
 	execute "normal! \<C-w>o"
 enddef
 
@@ -1318,6 +1318,7 @@ def g:AllSummariesGenReportsQuotes(id: number, result: number)
 	execute "normal! \<C-w>o"
 	set nolazyredraw
 	redraw
+	execute "normal! :e index" .. g:wiki_extension .. "\<CR>G"
 enddef
 
 # -----------------------------------------------------------------
@@ -1415,6 +1416,7 @@ def g:AllSummariesGenReportsAnnos(id: number, result: number)
 	execute "normal! \<C-w>o"
 	set nolazyredraw
 	redraw
+	execute "normal! :e index" .. g:wiki_extension .. "\<CR>G"
 enddef
 
 # -----------------------------------------------------------------
