@@ -1586,7 +1586,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string, attr_filter = "none")
 		g:filter_check = 0
 		if (attr_filter == "none")
 			g:filter_check = 1
-		elseif (index(g:tags_list[index][6], g:attr_filter_as_tag) > 1)
+		elseif (index(g:tags_list[index][6], g:attr_filter_as_tag) > -1)
 			g:filter_check = 1
 		endif
 
