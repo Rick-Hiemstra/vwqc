@@ -1489,7 +1489,7 @@ enddef
 def FilterAttrList(attr_filter: string): list<any>
 	var filtered_attr_list = []
 	for interview in range(0, (len(g:attr_list) - 1))
-		if (index(g:attr_list[interview][1], attr_list) > -1)
+		if (index(g:attr_list[interview][1], attr_filter) > -1)
 			filtered_attr_list = filtered_attr_list + [ g:attr_list[interview] ]
 		endif
 	endfor
