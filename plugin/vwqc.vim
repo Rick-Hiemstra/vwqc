@@ -1531,7 +1531,7 @@ enddef
 # 4) All the tags on the line
 # 5) The line text less metadata.
 # -----------------------------------------------------------------
-def g:CreateAndCountInterviewBlocks(search_term: string, attr_filter: string)
+def g:CreateAndCountInterviewBlocks(search_term: string, attr_filter = "none")
 	g:block_first_line      = "Undefined"
 	g:block_last_line       = "Undefined"
 	g:last_line             = -1
@@ -1559,6 +1559,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string, attr_filter: string)
 	# 	3 is the last interview line number of the block
 	g:quote_blocks_dict    = {}
 
+	echom "check2: " .. attr_filter .. "\n"
 	if (attr_filter != "none")
 		g:filtered_interview_list = FilterInterviewList(attr_filter)
 		g:filtered_attr_list      = FilterAttrList(attr_filter)
@@ -1783,12 +1784,12 @@ def g:Report(search_term: string, report_type = "FullReport", attr_filter = "non
 
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
+		echom "check1 " .. attr_filter .. "\n"
 		g:CreateAndCountInterviewBlocks(search_term, attr_filter)
 		
 		ReportHeader(report_type, search_term)
 		 
 		WriteReportTable(search_term)
-		# NEED to filter g:anno_tags_list:
 		execute "normal! G"
 		# Write quote blocks
 		for interview in range(0, len(g:filtered_interview_list) - 1)
