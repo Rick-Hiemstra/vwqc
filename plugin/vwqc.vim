@@ -1474,7 +1474,7 @@ def CreateListOfInterviewsWithAnnos()
 	endfor
 enddef
 
-def FilterInterviewList(attr_filter: string): list
+def FilterInterviewList(attr_filter: string): list<string>
 	var filtered_interview_list = []
 	var interview_with_ext      = "undefined"
 	for interview in range(0, (len(g:attr_list) - 1))
@@ -1486,7 +1486,7 @@ def FilterInterviewList(attr_filter: string): list
 	return filtered_interview_list
 enddef
 
-def FilterAttrList(attr_filter: string): list
+def FilterAttrList(attr_filter: string): list<any>
 	var filtered_attr_list = []
 	for interview in range(0, (len(g:attr_list) - 1))
 		if (index(g:attr_list[interview][1], attr_list) > -1)
