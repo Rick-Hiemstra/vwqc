@@ -107,6 +107,7 @@ endif
 # GenInterviewLists
 # Gather
 # CreateListOfInterviewsWithAnnos
+# FilterInterviewList
 # CreateAndCountInterviewBlocks
 # BuildListOfTagsOnBlock
 # TidyUpBlockText
@@ -1156,8 +1157,8 @@ enddef
 # ---------------------------- REPORTS ----------------------------
 # -----------------------------------------------------------------
 
-def g:FullReport(search_term: string)
-	g:Report(search_term, "FullReport")
+def g:FullReport(search_term: string, attr_filter = "none")
+	g:Report(search_term, "FullReport", attr_filter)
 	execute "normal! \<C-w>o"
 enddef
 
@@ -1175,13 +1176,20 @@ enddef
 # This function produces summary reports for all tags defined in the 
 # tag glossary.
 # -----------------------------------------------------------------
-def g:AllSummariesFull() 
+def g:AllSummariesFull(attr_filter = "none") 
 
 	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
 
+	g:attr_filter       = attr_filter
+	g:attr_filter_check = 0
+
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
+
+		if (attr_filter != "none")
+			g:attr_filter_check = AttrFilterValueCheck(attr_filter)
+		endif
 
 		g:tags_list_length = len(g:in_both_lists)
 	
@@ -1207,6 +1215,7 @@ def g:AllSummariesFull()
 	
 enddef
 
+
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
@@ -1222,7 +1231,7 @@ def g:AllSummariesGenReportsFull(id: number, result: number)
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
 		for index in range(0, g:tags_list_length - 1)
 			execute "normal! :e " .. g:summary_file_list[index] .. "\<CR>"
-			g:FullReport(g:in_both_lists[index])
+			g:FullReport(g:in_both_lists[index], g:attr_filter)
 		endfor
 		execute "normal! `Q"
 		put =g:summary_link_list
@@ -1465,6 +1474,28 @@ def CreateListOfInterviewsWithAnnos()
 	endfor
 enddef
 
+def FilterInterviewList(attr_filter: string): list
+	var filtered_interview_list = []
+	var interview_with_ext      = "undefined"
+	for interview in range(0, (len(g:attr_list) - 1))
+		if (index(g:attr_list[interview][1], attr_list) > -1)
+			interview_with_ext      = g:attr_list[interview][0] .. g:wiki_extension
+			filtered_interview_list = filtered_interview_list + [ interview_with_ext ]
+		endif
+	endfor
+	return filtered_interview_list
+enddef
+
+def FilterAttrList(attr_filter: string): list
+	var filtered_attr_list = []
+	for interview in range(0, (len(g:attr_list) - 1))
+		if (index(g:attr_list[interview][1], attr_list) > -1)
+			filtered_attr_list = filtered_attr_list + [ g:attr_list[interview] ]
+		endif
+	endfor
+	return filtered_attr_list
+enddef
+
 # -----------------------------------------------------------------
 # g:tags_list is a list of tags with the following sub-elements:
 # 0) Interview name
@@ -1474,7 +1505,7 @@ enddef
 # 4) All the tags on the line
 # 5) The line text less metadata.
 # -----------------------------------------------------------------
-def g:CreateAndCountInterviewBlocks(search_term: string)
+def g:CreateAndCountInterviewBlocks(search_term: string, attr_filter: string)
 	g:block_first_line      = "Undefined"
 	g:block_last_line       = "Undefined"
 	g:last_line             = -1
@@ -1502,10 +1533,18 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 	# 	3 is the last interview line number of the block
 	g:quote_blocks_dict    = {}
 
+	if (attr_filter != "none")
+		g:filtered_interview_list = FilterInterviewList(attr_filter)
+		g:filtered_attr_list      = FilterAttrList(attr_filter)
+	else
+		g:filtered_interview_list = g:interview_list
+		g:filtered_attr_list      = g:attr_list
+	endif
+
 	#Create an interview dict with the values for each key being a
 	# copy of the initial_tag_dict
-	for interview in range(0, (len(g:interview_list) - 1))
-		g:interview_less_extension = g:interview_list[interview][ : -g:ext_len]
+	for interview in range(0, (len(g:filtered_interview_list) - 1))
+		g:interview_less_extension = g:filtered_interview_list[interview][ : -g:ext_len]
 		g:tag_count_dict[g:interview_less_extension]    = [0, 0, 0, 0]
 		g:quote_blocks_dict[g:interview_less_extension] = []
 	endfor
@@ -1513,7 +1552,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string)
 	for index in range(0, len(g:tags_list) - 1)
 		# if the current tag we're processing equals the search term
 
-		if (g:tags_list[index][2] == ':' .. search_term .. ':')
+		if (g:tags_list[index][2] == ':' .. search_term .. ':') && (index(g:filtered_interview_list, g:tags_list[index][0] .. g:wiki_extension) > -1)
 			if (g:tags_list[index][0] == g:last_interview)
 				# Increment the tag count for this tag
 				g:tag_count_dict[g:tags_list[index][0]][0] = g:tag_count_dict[g:tags_list[index][0]][0] + 1
@@ -1643,30 +1682,30 @@ def WriteReportTable(search_term: string)
 	execute "normal! i|---:|:---|---:|---:|---:|---:|\n"
 	execute "normal! ki\<ESC>j"
 
-	for interview in range(0, len(g:interview_list) - 1)
-		interview_name = g:interview_list[interview][ : -g:ext_len]		
+	for interview in range(0, len(g:filtered_interview_list) - 1)
+		interview_name = g:filtered_interview_list[interview][ : -g:ext_len]		
 	
 		g:number_of_annos = 0
-		for anno_index in range(0, len(g:anno_tags_dict[g:interview_list[interview][ : -g:ext_len]]) - 1)
-			if (index(g:anno_tags_dict[g:interview_list[interview][ : -g:ext_len]][anno_index][1], g:search_term_with_colons) != -1)
+		for anno_index in range(0, len(g:anno_tags_dict[g:filtered_interview_list[interview][ : -g:ext_len]]) - 1)
+			if (index(g:anno_tags_dict[g:filtered_interview_list[interview][ : -g:ext_len]][anno_index][1], g:search_term_with_colons) != -1)
 				g:number_of_annos = g:number_of_annos + 1
 			endif
 		endfor
 
 		# says tag_dict_count is underfined 
-		var lines_per_block = printf("%.1f", 1.0 * g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][0] / g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][1])
+		var lines_per_block = printf("%.1f", 1.0 * g:tag_count_dict[g:filtered_interview_list[interview][ : -g:ext_len]][0] / g:tag_count_dict[g:filtered_interview_list[interview][ : -g:ext_len]][1])
 		
 
 		
 		interview_num = interview + 1
-		execute "normal! i| " .. interview_num ..  " | [[" .. g:interview_list[interview][ : -g:ext_len] .. "]] | " ..
-					 g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][1] ..  " | " ..
-					 g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][0] .. " | " .. 
+		execute "normal! i| " .. interview_num ..  " | [[" .. g:filtered_interview_list[interview][ : -g:ext_len] .. "]] | " ..
+					 g:tag_count_dict[g:filtered_interview_list[interview][ : -g:ext_len]][1] ..  " | " ..
+					 g:tag_count_dict[g:filtered_interview_list[interview][ : -g:ext_len]][0] .. " | " .. 
 					 lines_per_block .. " | " .. 
 					 g:number_of_annos .. " |\n"
 		execute "normal! ki\<ESC>j"
-		total_tags   = total_tags   + g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][0]
-		total_blocks = total_blocks + g:tag_count_dict[g:interview_list[interview][ : -g:ext_len]][1]
+		total_tags   = total_tags   + g:tag_count_dict[g:filtered_interview_list[interview][ : -g:ext_len]][0]
+		total_blocks = total_blocks + g:tag_count_dict[g:filtered_interview_list[interview][ : -g:ext_len]][1]
 		total_annos  = total_annos  + g:number_of_annos
 		
 	endfor 
@@ -1684,7 +1723,8 @@ enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-def g:Report(search_term: string, report_type = "FullReport") 
+def g:Report(search_term: string, report_type = "FullReport", attr_filter) 
+
 	ParmCheck()
 	
 	echom "Search Term: " .. search_term .. "\n"
@@ -1699,23 +1739,23 @@ def g:Report(search_term: string, report_type = "FullReport")
 
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
-		g:CreateAndCountInterviewBlocks(search_term)
+		g:CreateAndCountInterviewBlocks(search_term, attr_filter)
 		
 		ReportHeader(report_type, search_term)
 		 
 		WriteReportTable(search_term)
-		
+		# NEED to filter g:anno_tags_list:
 		execute "normal! G"
 		# Write quote blocks
-		for interview in range(0, len(g:interview_list) - 1)
+		for interview in range(0, len(g:filtered_interview_list) - 1)
 
 			# Write quote blocks
-			g:interview_name = g:interview_list[interview][ : -g:ext_len]
+			g:interview_name = g:filtered_interview_list[interview][ : -g:ext_len]
 			execute "normal! i# " .. repeat("=", 80) .. "\n"
 			execute "normal! i# INTERVIEW: " .. g:interview_name .. "\n"
 			execute "normal! i# " .. repeat("=", 80) .. "\n"
 			#echom interview .. " " .. string(g:attr_list[interview]) .. "\n"
-			attr_string = string(g:attr_list[interview][1])
+			attr_string = string(g:filtered_attr_list[interview][1])
 			attr_string = substitute(attr_string, '[\[\[\],]', '', 'g')
 			attr_string = substitute(attr_string, "'", '', 'g')
 			execute "normal! i**ATTRIBUTES:** " .. attr_string .. "\n\n"
@@ -3113,7 +3153,6 @@ enddef
 #
 # ------------------------------------------------------
 def g:Attributes(sort_col = 1) 
-	
 	g:attr_line = ""
 	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
@@ -3146,6 +3185,16 @@ def g:Attributes(sort_col = 1)
 	endif
 enddef
 
+def AttrFilterValueCheck(attr_filter: string)
+	var has_attr_filter = 0
+	for interview in range(0, (len(g:attr_list) - 1))
+		if (index(g:attr_list[interview][1], attr_filter) > -1)
+			has_attr_filter = 1
+			break
+		endif
+	endfor
+	return has_attr_filter
+enddef
 
 # ------------------------------------------------------
 
