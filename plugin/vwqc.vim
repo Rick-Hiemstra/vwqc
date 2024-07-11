@@ -1478,7 +1478,7 @@ def FilterInterviewList(attr_filter: string): list<string>
 	var filtered_interview_list = []
 	var interview_with_ext      = "undefined"
 	for interview in range(0, (len(g:attr_list) - 1))
-		if (index(g:attr_list[interview][1], attr_filter) > -1)
+		if (index(g:attr_list[interview][1], ':' .. attr_filter .. ':') > -1)
 			interview_with_ext      = g:attr_list[interview][0] .. g:wiki_extension
 			filtered_interview_list = filtered_interview_list + [ interview_with_ext ]
 		endif
@@ -1489,7 +1489,7 @@ enddef
 def FilterAttrList(attr_filter: string): list<any>
 	var filtered_attr_list = []
 	for interview in range(0, (len(g:attr_list) - 1))
-		if (index(g:attr_list[interview][1], attr_filter) > -1)
+		if (index(g:attr_list[interview][1], ':' .. attr_filter .. ':') > -1)
 			filtered_attr_list = filtered_attr_list + [ g:attr_list[interview] ]
 		endif
 	endfor
