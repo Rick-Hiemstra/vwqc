@@ -1555,10 +1555,16 @@ def g:CreateAndCountInterviewBlocks(search_term: string, attr_filter: string)
 		g:current_interview  = g:tags_list[index][0] .. g:wiki_extension
 		g:attr_filter_as_tag = ':' .. attr_filter .. ':'
 		#echom "current interview: " .. g:current_interview .. " and index number " .. index .. " Attn_filter: " .. g:attr_filter_as_tag .. "\n"
+		
+		g:filter_check = 0
+		if (attr_filter == "none")
+			g:filter_check = 1
+		elseif (index(g:tags_list[index][6], g:attr_filter_as_tag) > 1)
+			g:filter_check = 1
+		endif
 
 		if (g:tags_list[index][2] == ':' .. search_term .. ':') && 
-				(index(g:filtered_interview_list, g:current_interview) > -1) &&
-				(index(g:tags_list[index][6], g:attr_filter_as_tag) > -1)
+				(index(g:filtered_interview_list, g:current_interview) > -1) && (g:filter_check == 1)
 			if (g:tags_list[index][0] == g:last_interview)
 				#echom "index1: " .. index .. " interview: " .. g:current_interview .. "\n"
 				# Increment the tag count for this tag
