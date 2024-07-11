@@ -1581,7 +1581,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string, attr_filter = "none")
 	
 		g:current_interview  = g:tags_list[index][0] .. g:wiki_extension
 		g:attr_filter_as_tag = ':' .. attr_filter .. ':'
-		#echom "current interview: " .. g:current_interview .. " and index number " .. index .. " Attn_filter: " .. g:attr_filter_as_tag .. "\n"
+		echom "current interview: " .. g:current_interview .. " and index number " .. index .. " Attn_filter: " .. g:attr_filter_as_tag .. "\n"
 		
 		g:filter_check = 0
 		if (attr_filter == "none")
