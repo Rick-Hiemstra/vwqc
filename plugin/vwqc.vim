@@ -1222,7 +1222,10 @@ enddef
 def g:AllSummariesGenReportsFull(id: number, result: number)
 	set lazyredraw
 	
-	execute "normal! :e Summary Interviews - Full Reports" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+	execute "normal! :e index" .. g:wiki_extension .. "\<CR>"
+	execute "normal! Go[Summary Interviews - Full Reports - Filter - " .. g:attr_filter .. "](Summary Interviews - Full Reports - Filter - " .. g:attr_filter .. ")"
+
+	execute "normal! :e Summary Interviews - Full Reports - Filter - " .. g:attr_filter .. g:wiki_extension .. "\<CR>"
 	# Delete what is there
 	execute "normal! ggVGd"
 
@@ -1402,8 +1405,8 @@ def GenSummaryLists(summary_type: string)
 	g:summary_file_list = []
 	g:summary_link_list = []
 	for tag_index in range(0, (len(g:in_both_lists) - 1))
-		file_name = "Summary " .. g:in_both_lists[tag_index] .. " " .. summary_type .. " batch" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext']
-		link_name = "[Summary " .. g:in_both_lists[tag_index] .. " " .. summary_type .. " batch](Summary " .. g:in_both_lists[tag_index] .. " " .. summary_type .. " batch)"
+		file_name = "Summary " .. g:in_both_lists[tag_index] .. " " .. summary_type .. " batch - filter - " .. g:attr_filter .. g:wiki_extension
+		link_name = "[Summary " .. g:in_both_lists[tag_index] .. " " .. summary_type .. " batch - filter - " .. g:attr_filter .. "](Summary " .. g:in_both_lists[tag_index] .. " " .. summary_type .. " batch - filter - " .. g:attr_filter .. ")"
 		g:summary_file_list = g:summary_file_list + [file_name]
 		g:summary_link_list = g:summary_link_list + [link_name]
 	endfor
