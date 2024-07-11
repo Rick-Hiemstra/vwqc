@@ -1558,7 +1558,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string, attr_filter: string)
 
 		if (g:tags_list[index][2] == ':' .. search_term .. ':') && 
 				(index(g:filtered_interview_list, g:current_interview) > -1) &&
-				(index(g:tags_list[index][4], g:attr_filter_as_tag) > -1)
+				(index(g:tags_list[index][6], g:attr_filter_as_tag) > -1)
 			if (g:tags_list[index][0] == g:last_interview)
 				# Increment the tag count for this tag
 				g:tag_count_dict[g:tags_list[index][0]][0] = g:tag_count_dict[g:tags_list[index][0]][0] + 1
