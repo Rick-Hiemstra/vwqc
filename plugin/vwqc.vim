@@ -1162,12 +1162,12 @@ def g:FullReport(search_term: string, attr_filter = "none")
 	execute "normal! \<C-w>o"
 enddef
 
-def g:AnnotationsReport(search_term: string)
+def g:AnnotationsReport(search_term: string, attr_filter = "none")
 	g:Report(search_term, "AnnotationsReport") 
 	execute "normal! \<C-w>o"
 enddef
 
-def g:QuotesReport(search_term: string)
+def g:QuotesReport(search_term: string, attr_filter = "none")
 	g:Report(search_term, "QuotesReport") 
 	execute "normal! \<C-w>o"
 enddef
@@ -1251,13 +1251,20 @@ enddef
 # This function produces summary reports for all tags defined in the 
 # tag glossary.
 # -----------------------------------------------------------------
-def g:AllSummariesQuotes() 
+def g:AllSummariesQuotes(attr_filter = "none") 
 
 	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
 	
+	g:attr_filter       = attr_filter
+	g:attr_filter_check = 0
+
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
+
+		if (attr_filter != "none")
+			g:attr_filter_check = AttrFilterValueCheck(attr_filter)
+		endif
 
 		g:tags_list_length = len(g:in_both_lists)
 
@@ -1289,7 +1296,10 @@ enddef
 def g:AllSummariesGenReportsQuotes(id: number, result: number)
 	set lazyredraw
 
-	execute "normal! :e Summary Interviews - Quotes Reports" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+	execute "normal! :e index" .. g:wiki_extension .. "\<CR>"
+	execute "normal! Go[Summary Interviews - Quotes Reports - Filter - " .. g:attr_filter .. "](Summary Interviews - Quotes Reports - Filter - " .. g:attr_filter .. ")"
+
+	execute "normal! :e Summary Interviews - Quotes Reports - Filter - " .. g:attr_filter .. g:wiki_extension .. "\<CR>"
 	# Delete what is there
 	execute "normal! ggVGd"
 
@@ -1298,7 +1308,7 @@ def g:AllSummariesGenReportsQuotes(id: number, result: number)
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
 		for index in range(0, g:tags_list_length - 1)
 			execute "normal! :e " g:summary_file_list[index] .. "\<CR>"
-			g:QuotesReport(g:in_both_lists[index])
+			g:QuotesReport(g:in_both_lists[index], g:attr_filter)
 		endfor
 		execute "normal! `Q"
 		put =g:summary_link_list
@@ -1314,13 +1324,20 @@ enddef
 # This function produces summary reports for all tags defined in the 
 # tag glossary.
 # -----------------------------------------------------------------
-def g:AllSummariesAnnos() 
+def g:AllSummariesAnnos(attr_filter = "none") 
 
 	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
 
+	g:attr_filter       = attr_filter
+	g:attr_filter_check = 0
+
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
+
+		if (attr_filter != "none")
+			g:attr_filter_check = AttrFilterValueCheck(attr_filter)
+		endif
 
 		g:interview_list = []
 		g:interview_list_without_ext = []
@@ -1376,7 +1393,10 @@ enddef
 def g:AllSummariesGenReportsAnnos(id: number, result: number)
 	set lazyredraw
 
-	execute "normal! :e Summary Interviews - Annotations Reports" .. g:vimwiki_wikilocal_vars[g:wiki_number]['ext'] .. "\<CR>"
+	execute "normal! :e index" .. g:wiki_extension .. "\<CR>"
+	execute "normal! Go[Summary Interviews - Annotations Reports - Filter - " .. g:attr_filter .. "](Summary Interviews - Annotations Reports - Filter - " .. g:attr_filter .. ")"
+
+	execute "normal! :e Summary Interviews - Annotations Reports - Filter - " .. g:attr_filter .. g:wiki_extension .. "\<CR>"
 	# Delete what is there
 	execute "normal! ggVGd"
 	
@@ -1385,7 +1405,7 @@ def g:AllSummariesGenReportsAnnos(id: number, result: number)
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
 		for index in range(0, g:tags_list_length - 1)
 			execute "normal! :e " .. g:summary_file_list[index] .. "\<CR>"
-			g:AnnotationsReport(g:in_both_lists[index])
+			g:AnnotationsReport(g:in_both_lists[index], g:attr_filter)
 		endfor
 		execute "normal! `Q"
 		put =g:summary_link_list
@@ -1406,8 +1426,8 @@ def GenSummaryLists(summary_type: string)
 	g:summary_file_list = []
 	g:summary_link_list = []
 	for tag_index in range(0, (len(g:in_both_lists) - 1))
-		file_name = "Summary " .. g:in_both_lists[tag_index] .. " " .. summary_type .. " batch - filter - " .. g:attr_filter .. g:wiki_extension
-		link_name = "[Summary " .. g:in_both_lists[tag_index] .. " " .. summary_type .. " batch - filter - " .. g:attr_filter .. "](Summary " .. g:in_both_lists[tag_index] .. " " .. summary_type .. " batch - filter - " .. g:attr_filter .. ")"
+		file_name = "Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filter - " .. g:attr_filter .. g:wiki_extension
+		link_name = "[Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filter - " .. g:attr_filter .. "](Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filter - " .. g:attr_filter .. ")"
 		g:summary_file_list = g:summary_file_list + [file_name]
 		g:summary_link_list = g:summary_link_list + [link_name]
 	endfor
