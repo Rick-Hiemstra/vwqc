@@ -1563,7 +1563,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string, attr_filter: string)
 				echom "index1: " .. index .. " interview: " .. g:current_interview .. "\n"
 				# Increment the tag count for this tag
 				g:tag_count_dict[g:tags_list[index][0]][0] = g:tag_count_dict[g:tags_list[index][0]][0] + 1
-				echom g:tag_count_dict[g:tags_list[index][0]][0] .. "\n"
+				echom g:tag_count_dict[g:tags_list[index][0]][0] .. " last interview: " .. g:last_interview .. "\n"
 				# if tags_list row number minus row number minus the correspondent tag tracking number isn't 1, i.e. non-contiguous
 				if ((g:tags_list[index][1] - g:tag_count_dict[g:tags_list[index][0]][2]) != 1)
 					# if the block count isn't 0 i.e. there are blocks
