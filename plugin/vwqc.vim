@@ -2360,7 +2360,8 @@ def ReportHeader(report_type: string, search_term: string)
 	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
 	execute "normal! i# " .. repeat("*", 80) .. "\n# " .. repeat("*", 80) .. "\n"
 	execute "normal! i**" .. report_type 
-		.. "(\"" .. search_term .. "\")**\nCreated by **" 
+		.. "(\"" .. search_term .. "\") with filter: " .. g:attr_filter .. "**\n"
+		.. "Created by **" 
 	        .. g:coder_initials .. "**\non **" 
 		.. report_update_time .. "**\n"
 		.. "using tag list generated at " .. g:tag_update_time .. "\n"
