@@ -26,7 +26,7 @@ endif
 # Vimwiki Qualitative Code (VWQC) - Vimscript 9 version
 # Written by Rick Hiemstra and Lindsay Callaway
 # Version Vim9_1.0 
-# 2024-06-01	
+# 2024-07-11 
 #
 # -----------------------------------------------------------------
 # ------------------------ TO DO ------------------------------
@@ -60,6 +60,8 @@ endif
 # is more than a few days old.
 # 
 # Write a function that duplicates a file and allows you to rename it.
+#
+# Add ability to sift reports by attribute.
 
 # -----------------------------------------------------------------
 # ------------------------ FUNCTIONS ------------------------------
@@ -1802,8 +1804,9 @@ enddef
 # 5) The line text less metadata.
 # -----------------------------------------------------------------
 def CrawlInterviewTags(interview: number, interview_name: string) 
-	var end_line   = line('$')
+	var end_line             = line('$')
 	var tag_being_considered = "undefined"
+	var interview_attrs      = []
 	# move through each line testing for tags and removing duplicate tags
 	# on each line
 	call cursor(1, 1)
@@ -1847,10 +1850,11 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 			if (line == 1)
 				if (processed_line_1 == 0)
 					g:attr_list = g:attr_list + [[interview_name, g:tags_on_line]]
+					interview_attrs = g:tags_on_line
 					processed_line_1 = 1
 				endif
 			else
-				g:tags_list = g:tags_list + [[interview_name, line, g:tags_on_line[tag_index], interview_line_num, g:tags_on_line, line_text]]
+				g:tags_list = g:tags_list + [[interview_name, line, g:tags_on_line[tag_index], interview_line_num, g:tags_on_line, line_text, interview_attrs]]
 			endif
 		endfor
 		# Go to start of next line
