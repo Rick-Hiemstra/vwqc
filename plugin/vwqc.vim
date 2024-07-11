@@ -1643,7 +1643,9 @@ def g:CreateAndCountInterviewBlocks(search_term: string, attr_filter: string)
 	TidyUpBlockText()
 	#echom g:tag_count_dict[0][0] .. "\n"
 	echom "very last interview" .. g:last_interview .. "\n\n"
-	g:quote_blocks_dict[g:last_interview] = g:quote_blocks_dict[g:last_interview] + [ g:block_text ]
+	if (g:last_interview != "Undefined")
+		g:quote_blocks_dict[g:last_interview] = g:quote_blocks_dict[g:last_interview] + [ g:block_text ]
+	endif
 enddef
 
 def BuildListOfTagsOnBlock()
