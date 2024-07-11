@@ -1244,6 +1244,7 @@ def g:AllSummariesGenReportsFull(id: number, result: number)
 	execute "normal! \<C-w>o"
 	set nolazyredraw
 	redraw
+	execute "normal! :e index" .. g:wiki_extension .. "\<CR>G"
 enddef
 
 # -----------------------------------------------------------------
