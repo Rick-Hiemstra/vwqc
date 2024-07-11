@@ -1590,6 +1590,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string, attr_filter = "none")
 			g:filter_check = 1
 		endif
 
+		echom "filter check value: " .. g:filter_check .. " current interview: " .. g:current_interview .. "\n"
 		if (g:tags_list[index][2] == ':' .. search_term .. ':') && 
 				(index(g:filtered_interview_list, g:current_interview) > -1) && (g:filter_check == 1)
 			if (g:tags_list[index][0] == g:last_interview)
