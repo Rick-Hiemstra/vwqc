@@ -3384,3 +3384,10 @@ def g:OmniCompleteFileName()
 		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
 	endif
 enddef
+
+def g:AttrTest(required_arg: "string", ...)
+	echom "This is the required argument: " .. required_arg .. "/n"
+	for index in range(0, a:0 - 1)
+		echom "This is extra argument " .. index .. ": " .. a:000[index]
+	endfor
+enddef
