@@ -3385,7 +3385,7 @@ def g:OmniCompleteFileName()
 	endif
 enddef
 
-def g:AttrTest(required_arg: string, ...)
+def g:AttrTest(required_arg: string, ...: string)
 	echom "This is the required argument: " .. required_arg .. "/n"
 	for index in range(0, a:0 - 1)
 		echom "This is extra argument " .. index .. ": " .. a:000[index]
