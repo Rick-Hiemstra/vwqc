@@ -1772,6 +1772,7 @@ enddef
 # -----------------------------------------------------------------
 def g:Report(search_term: string, report_type = "FullReport", attr_filter = "none") 
 
+	g:attr_filter = attr_filter
 	ParmCheck()
 	
 	echom "Search Term: " .. search_term .. "\n"
