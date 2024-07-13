@@ -1531,7 +1531,7 @@ def g:FilterInterviewList(...attr_filter_list: list<string>)
 		endfor
 		if (keep_interview_in_list == 1)
 			interview_with_ext      = g:attr_list[interview][0] .. g:wiki_extension
-			filtered_interview_list = filtered_interview_list + [ interview_with_ext ]
+			g:filtered_interview_list = g:filtered_interview_list + [ interview_with_ext ]
 		endif
 	endfor
 
@@ -1548,7 +1548,7 @@ def g:FilterAttrList(...attr_filter_list: list<string>)
 			endif
 		endfor
 		if (keep_interview_in_list == 1)
-			filtered_attr_list = filtered_attr_list + [ g:attr_list[interview] ]
+			g:filtered_attr_list = g:filtered_attr_list + [ g:attr_list[interview] ]
 		endif
 	endfor
 enddef
