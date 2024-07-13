@@ -1194,7 +1194,7 @@ def g:AllSummariesFull(...attr_filter_list: list<string>)
 	if (g:tags_generated == 1)
 
 		if (len(attr_filter_list) > 0)
-			execute "normal! :call AttrFilterValueCheck(" .. attr_filter_list_as_string .. ")\<CR>"
+			execute "normal! :call g:AttrFilterValuesCheck(" .. attr_filter_list_as_string .. ")\<CR>"
 		endif
 
 		g:tags_list_length = len(g:in_both_lists)
@@ -3267,7 +3267,7 @@ def g:Attributes(sort_col = 1)
 	endif
 enddef
 
-def AttrFilterValueCheck(...attr_filter_list: list<string>)
+def g:AttrFilterValuesCheck(...attr_filter_list: list<string>)
 	var has_attr_filter           = 0
 	g:attr_filter_check           = 1
 	 
