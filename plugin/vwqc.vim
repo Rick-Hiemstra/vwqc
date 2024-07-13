@@ -1182,6 +1182,8 @@ enddef
 def g:AllSummariesFull(...attr_filter_list: list<string>) 
 
 	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
+	g:attr_filter_list_as_string   = attr_filter_list_as_string
+	g:attr_filter_list             = attr_filter_list
 
 	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
@@ -1192,8 +1194,8 @@ def g:AllSummariesFull(...attr_filter_list: list<string>)
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
 
-		if (attr_filter != "none")
-			g:attr_filter_check = AttrFilterValueCheck(attr_filter)
+		if (len(attr_filter_list) > 0)
+			g:attr_filter_check = AttrFilterValueCheck(attr_filter_list_as_string)
 		endif
 
 		g:tags_list_length = len(g:in_both_lists)
@@ -1202,7 +1204,7 @@ def g:AllSummariesFull(...attr_filter_list: list<string>)
 			GenSummaryLists("full")
 		endif
 		
-		if (g:tags_generated == 1) && (g:tags_list_length > 0)
+		if (g:tags_generated == 1) && (g:tags_list_length > 0) && (g:attr_filter_check == 1)
 			popup_menu(["No, abort", "Yes, generate summary reports"], {
 				 title:    "Running this function will erase older \"Full\" versions of these reports. Do you want to continue?",
 				 callback: 'AllSummariesGenReportsFull', 
@@ -1211,7 +1213,7 @@ def g:AllSummariesFull(...attr_filter_list: list<string>)
 				 close:      'click', 
 				 padding:    [0, 1, 0, 1], })
 		else
-			confirm("Either tags have not been generate for this session or there are no tags to create reports for.",  "OK", 1)
+			confirm("Either tags have not been generate for this session, or there are no tags to create reports for, or an attribute filter argument is not in the attribute list.",  "OK", 1)
 	
 		endif
 	else
@@ -1226,11 +1228,23 @@ enddef
 # -----------------------------------------------------------------
 def g:AllSummariesGenReportsFull(id: number, result: number)
 	set lazyredraw
+
+	g:attr_filter_list_string = ""
+	for item in range(0, len(g:attr_filter_list) - 1)
+		if (item == len(g:attr_filter_list) - 1)
+			g:attr_filter_list_string = g:attr_filter_list_string .. g:attr_filter_list[item]
+		else
+			g:attr_filter_list_string = g:attr_filter_list_string .. g:attr_filter_list[item] .. " and "
+		endif
+
+	endfor
+
+	var attr_filter_list = string(g:attr_filter_list)[1 : -2]
 	
 	execute "normal! :e index" .. g:wiki_extension .. "\<CR>"
-	execute "normal! Go[Summary Interviews - Full Reports - Filter - " .. g:attr_filter .. "](Summary Interviews - Full Reports - Filter - " .. g:attr_filter .. ")"
+	execute "normal! Go[Summary Interviews - Full Reports - Filter - " .. g:attr_filter_list_string .. "](Summary Interviews - Full Reports - Filter - " .. g:attr_filter .. ")"
 
-	execute "normal! :e Summary Interviews - Full Reports - Filter - " .. g:attr_filter .. g:wiki_extension .. "\<CR>"
+	execute "normal! :e Summary Interviews - Full Reports - Filter - " .. g:attr_filter_list_string .. g:wiki_extension .. "\<CR>"
 	# Delete what is there
 	execute "normal! ggVGd"
 
@@ -1239,7 +1253,7 @@ def g:AllSummariesGenReportsFull(id: number, result: number)
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
 		for index in range(0, g:tags_list_length - 1)
 			execute "normal! :e " .. g:summary_file_list[index] .. "\<CR>"
-			g:FullReport(g:in_both_lists[index], g:attr_filter)
+			execute "normal! :call g:FullReport(g:in_both_lists[index], " .. attr_filter_list .. ")\<CR>"
 		endfor
 		execute "normal! `Q"
 		put =g:summary_link_list
@@ -1505,11 +1519,18 @@ def CreateListOfInterviewsWithAnnos()
 	endfor
 enddef
 
-def FilterInterviewList(attr_filter: string): list<string>
+def FilterInterviewList(...attr_filter_list: list<string>): list<string>
 	var filtered_interview_list = []
 	var interview_with_ext      = "undefined"
+	var keep_interview_in_list  = 1
 	for interview in range(0, (len(g:attr_list) - 1))
-		if (index(g:attr_list[interview][1], ':' .. attr_filter .. ':') > -1)
+		keep_interview_in_list = 1
+		for item in range(0, len(attr_filter_list) - 1)
+			if (index(g:attr_list[interview][1], ':' .. attr_filter_list[item] .. ':') > -1)
+				keep_interview_in_list  = 0
+			endif
+		endfor
+		if (keep_interview_in_list == 1)
 			interview_with_ext      = g:attr_list[interview][0] .. g:wiki_extension
 			filtered_interview_list = filtered_interview_list + [ interview_with_ext ]
 		endif
@@ -1517,10 +1538,17 @@ def FilterInterviewList(attr_filter: string): list<string>
 	return filtered_interview_list
 enddef
 
-def FilterAttrList(attr_filter: string): list<any>
+def FilterAttrList(...attr_filter_list: list<string>): list<any>
 	var filtered_attr_list = []
+	var keep_interview_in_list  = 1
 	for interview in range(0, (len(g:attr_list) - 1))
-		if (index(g:attr_list[interview][1], ':' .. attr_filter .. ':') > -1)
+		keep_interview_in_list = 1
+		for item in range(0, len(attr_filter_list) - 1)
+			if (index(g:attr_list[interview][1], ':' .. attr_filter .. ':') > -1)
+				keep_interview_in_list = 0
+			endif
+		endfor
+		if (keep_interview_in_list == 1)
 			filtered_attr_list = filtered_attr_list + [ g:attr_list[interview] ]
 		endif
 	endfor
@@ -1536,7 +1564,7 @@ enddef
 # 4) All the tags on the line
 # 5) The line text less metadata.
 # -----------------------------------------------------------------
-def g:CreateAndCountInterviewBlocks(search_term: string, attr_filter = "none")
+def g:CreateAndCountInterviewBlocks(search_term: string, ...attr_filter_list: list<string>)
 	g:block_first_line      = "Undefined"
 	g:block_last_line       = "Undefined"
 	g:last_line             = -1
@@ -1545,6 +1573,8 @@ def g:CreateAndCountInterviewBlocks(search_term: string, attr_filter = "none")
 	var has_key             = "False"
 	g:list_of_tags_on_block = []
 	
+	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
+
 	# g:tag_count_dict
 	# The keys will be the interview names
 	# 	0 is the tag count
@@ -1565,9 +1595,9 @@ def g:CreateAndCountInterviewBlocks(search_term: string, attr_filter = "none")
 	g:quote_blocks_dict    = {}
 
 	#echom "check2: " .. attr_filter .. "\n"
-	if (attr_filter != "none")
-		g:filtered_interview_list = FilterInterviewList(attr_filter)
-		g:filtered_attr_list      = FilterAttrList(attr_filter)
+	if (len(attr_filter_list) > 0)
+		g:filtered_interview_list = FilterInterviewList(...attr_filter_list_as_string)
+		g:filtered_attr_list      = FilterAttrList(...attr_filter_list_as_string)
 	else
 		g:filtered_interview_list = g:interview_list
 		g:filtered_attr_list      = g:attr_list
@@ -1775,9 +1805,10 @@ enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-def g:Report(search_term: string, report_type = "FullReport", attr_filter = "none") 
+def g:Report(search_term: string, report_type = "FullReport", attr_filter_list: list<string>) 
 
-	g:attr_filter = attr_filter
+	g:attr_filter_list = attr_filter_list
+	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
 	ParmCheck()
 	
 	echom "Search Term: " .. search_term .. "\n"
@@ -1792,8 +1823,7 @@ def g:Report(search_term: string, report_type = "FullReport", attr_filter = "non
 
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
-		echom "check1 " .. attr_filter .. "\n"
-		g:CreateAndCountInterviewBlocks(search_term, attr_filter)
+		g:CreateAndCountInterviewBlocks(search_term, attr_filter_list_as_string)
 		
 		ReportHeader(report_type, search_term)
 		 
@@ -3239,13 +3269,16 @@ def g:Attributes(sort_col = 1)
 	endif
 enddef
 
-def AttrFilterValueCheck(attr_filter: string): number
-	var has_attr_filter = 0
-	for interview in range(0, (len(g:attr_list) - 1))
-		if (index(g:attr_list[interview][1], attr_filter) > -1)
-			has_attr_filter = 1
-			break
-		endif
+def AttrFilterValueCheck(...attr_filter_list: list<string>): number
+	var has_attr_filter = 1
+	for filter_item in range(0, len(attr_filter_list) - 1)
+		for interview in range(0, (len(g:attr_list) - 1))
+			if (index(g:attr_list[interview][1], attr_filter_list[filter_item]) = -1)
+				has_attr_filter = 0
+				confirm(attr_filter_list[filter_item] .. " is not in the attributes list. Report will abort.", "OK", 1)
+				break
+			endif
+		endfor
 	endfor
 	return has_attr_filter
 enddef
