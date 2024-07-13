@@ -1157,18 +1157,21 @@ enddef
 # ---------------------------- REPORTS ----------------------------
 # -----------------------------------------------------------------
 
-def g:FullReport(search_term: string, attr_filter = "none")
-	g:Report(search_term, "FullReport", attr_filter)
+def g:FullReport(search_term: string, ...attr_filter_list: list<string>)
+	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
+	execute "normal! :call g:Report(search_term, \"FullReport\", " .. attr_filter_list_as_string .. ")\<CR>"
 	execute "normal! \<C-w>o"
 enddef
 
-def g:AnnotationsReport(search_term: string, attr_filter = "none")
-	g:Report(search_term, "AnnotationsReport", attr_filter) 
+def g:AnnotationsReport(search_term: string, ...attr_filter_list: list<string>)
+	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
+	execute "normal! :call g:Report(search_term, \"AnnotationsReport\", " .. attr_filter_list_as_string .. ")\<CR>"
 	execute "normal! \<C-w>o"
 enddef
 
-def g:QuotesReport(search_term: string, attr_filter = "none")
-	g:Report(search_term, "QuotesReport", attr_filter) 
+def g:QuotesReport(search_term: string, ...attr_filter_list: list<string>)
+	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
+	execute "normal! :call g:Report(search_term, \"QuotesReport\", " .. attr_filter_list_as_string .. ")\<CR>"
 	execute "normal! \<C-w>o"
 enddef
 
@@ -1176,7 +1179,9 @@ enddef
 # This function produces summary reports for all tags defined in the 
 # tag glossary.
 # -----------------------------------------------------------------
-def g:AllSummariesFull(attr_filter = "none") 
+def g:AllSummariesFull(...attr_filter_list: list<string>) 
+
+	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
 
 	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
@@ -3400,4 +3405,21 @@ def g:AttrTest2(tag_item: string, ...attr_filter_list: list<string> )
 	for index in range(0, len(attr_filter_list) - 1)
 		echom "This is extra argument " .. index .. ": " .. attr_filter_list[index] .. " in second function\n"
 	endfor
+enddef
+
+
+def g:CallbackTest() 
+
+			
+	popup_menu(["Yes", "No"], {
+		 title:    g:backup_message,
+		 callback: 'g:CallBackTest2("blah")', 
+		 highlight: 'Question',
+		 border:     [],
+		 close:      'click', 
+		 padding:    [0, 1, 0, 1] })
+enddef
+
+def g:CallbackTest2() 
+	echom a:000[2]
 enddef
