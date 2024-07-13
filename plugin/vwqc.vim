@@ -1821,7 +1821,7 @@ def g:Report(search_term: string, report_type = "FullReport", ...attr_filter_lis
 
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
-		execute "normal! :call g:CreateAndCountInterviewBlocks(" .. search_term .. "," .. attr_filter_list_as_string .. ")\<CR>"
+		execute "normal! :call g:CreateAndCountInterviewBlocks(\'" .. search_term .. "\'," .. attr_filter_list_as_string .. ")\<CR>"
 		
 		ReportHeader(report_type, search_term)
 		 
