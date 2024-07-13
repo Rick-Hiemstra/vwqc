@@ -3269,17 +3269,27 @@ def g:Attributes(sort_col = 1)
 enddef
 
 def AttrFilterValueCheck(...attr_filter_list: list<string>): number
-	var has_attr_filter = 1
+	var has_attr_filter           = 0
+	var has_all_attr_filter_items = 1
+
 	for filter_item in range(0, len(attr_filter_list) - 1)
+		has_attr_filer = 0
 		for interview in range(0, len(g:attr_list) - 1)
-			if (index(g:attr_list[interview][1], attr_filter_list[filter_item]) == -1)
-				has_attr_filter = 0
-				confirm(attr_filter_list[filter_item] .. " is not in the attributes list. Report will abort.", "OK", 1)
+			if (index(g:attr_list[interview][1], attr_filter_list[filter_item]) > -1)
+				has_attr_filter = 1
 				break
 			endif
 		endfor
+		if (has_attr_filter == 0)
+			has_all_attr_filter_items = 0
+		endif
 	endfor
-	return has_attr_filter
+
+#	if (has_all_attr_filter_items == 0)
+#		confirm(attr_filter_list[filter_item] .. " is not in the attributes list. Report will abort.", "OK", 1)
+#	endif
+
+	return has_all_attr_filter_items
 enddef
 
 # ------------------------------------------------------
