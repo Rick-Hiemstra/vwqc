@@ -3272,7 +3272,8 @@ def AttrFilterValueCheck(...attr_filter_list: list<string>): number
 	var has_attr_filter           = 0
 	var has_all_attr_filter_items = 1
 	 
-	echom string(attr_filter_list) .. "\n"
+	echom attr_filter_list[0] .. "\n"
+	echom attr_filter_list[1] .. "\n"
 
 	for filter_item in range(0, len(attr_filter_list) - 1)
 		has_attr_filter = 0
