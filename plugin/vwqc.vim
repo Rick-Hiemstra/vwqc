@@ -3297,8 +3297,8 @@ def g:AttrFilterValuesCheckForTag(tag_attr_list: list<string>)
 	#echom attr_filter_list[0] .. "\n"
 	#echom attr_filter_list[1] .. "\n"
 
-	for filter_item in range(0, len(attr_filter_list) - 1)
-		if (index(tag_attr_list, ':' .. attr_filter_list[filter_item] .. ':') == -1)
+	for filter_item in range(0, len(g:attr_filter_list) - 1)
+		if (index(tag_attr_list, ':' .. g:attr_filter_list[filter_item] .. ':') == -1)
 			g:tag_filter_check = 0
 			break
 		endif
