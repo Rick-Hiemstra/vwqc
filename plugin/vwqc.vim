@@ -1610,6 +1610,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string, ...attr_filter_list: li
 		g:quote_blocks_dict[g:interview_less_extension] = []
 	endfor
 
+	# dasdfas
 	for index in range(0, len(g:tags_list) - 1)
 		# if the current tag we're processing equals the search term
 	
