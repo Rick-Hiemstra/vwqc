@@ -3385,9 +3385,9 @@ def g:OmniCompleteFileName()
 	endif
 enddef
 
-#def g:AttrTest(required_arg: string, ...: string)
-#	echom "This is the required argument: " .. required_arg .. "/n"
-#	for index in range(0, a:0 - 1)
-#		echom "This is extra argument " .. index .. ": " .. a:000[index]
-#	endfor
-#enddef
+def g:AttrTest(tag_item: string, ...attr_filter_list: list<string> )
+	echom "This is the required argument: " .. tag_item .. "/n"
+	for index in range(0, len(attr_filter_list) - 1)
+		echom "This is extra argument " .. index .. ": " .. attr_filter_list[index] .. "\n"
+	endfor
+enddef
