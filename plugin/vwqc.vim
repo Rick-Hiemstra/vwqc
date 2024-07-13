@@ -1518,7 +1518,7 @@ def CreateListOfInterviewsWithAnnos()
 	endfor
 enddef
 
-def FilterInterviewList(...attr_filter_list: list<string>)
+def g:FilterInterviewList(...attr_filter_list: list<string>)
 	g:filtered_interview_list = []
 	var interview_with_ext      = "undefined"
 	var keep_interview_in_list  = 1
@@ -1537,7 +1537,7 @@ def FilterInterviewList(...attr_filter_list: list<string>)
 
 enddef
 
-def FilterAttrList(...attr_filter_list: list<string>)
+def g:FilterAttrList(...attr_filter_list: list<string>)
 	g:filtered_attr_list = []
 	var keep_interview_in_list  = 1
 	for interview in range(0, (len(g:attr_list) - 1))
@@ -1595,8 +1595,8 @@ def g:CreateAndCountInterviewBlocks(search_term: string, ...attr_filter_list: li
 
 	#echom "check2: " .. attr_filter .. "\n"
 	if (len(attr_filter_list) > 0)
-		execute "normal! :call FilterInterviewList(" .. attr_filter_list_as_string .. ")\<CR>"
-		execute "normal! :call FilterAttrList(" .. attr_filter_list_as_string .. ")\<CR>"
+		execute "normal! :call g:FilterInterviewList(" .. attr_filter_list_as_string .. ")\<CR>"
+		execute "normal! :call g:FilterAttrList(" .. attr_filter_list_as_string .. ")\<CR>"
 	else
 		g:filtered_interview_list = g:interview_list
 		g:filtered_attr_list      = g:attr_list
