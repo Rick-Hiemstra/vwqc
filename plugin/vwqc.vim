@@ -1805,7 +1805,7 @@ enddef
 # -----------------------------------------------------------------
 # 
 # -----------------------------------------------------------------
-def g:Report(search_term: string, report_type = "FullReport", attr_filter_list: list<string>) 
+def g:Report(search_term: string, report_type = "FullReport", ...attr_filter_list: list<string>) 
 
 	g:attr_filter_list = attr_filter_list
 	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
