@@ -3413,13 +3413,13 @@ def g:CallbackTest()
 			
 	popup_menu(["Yes", "No"], {
 		 title:    "TEST TITLE",
-		 callback: 'g:CallbackTest2', 
+		 callback: 'g:CallbackTest2("blah")', 
 		 highlight: 'Question',
 		 border:     [],
 		 close:      'click', 
 		 padding:    [0, 1, 0, 1] })
 enddef
 
-def g:CallbackTest2(id: number, result: number) 
-	echom a:000[1]
+def g:CallbackTest2(id: number, result: number, other: string) 
+	echom other .. "\n"
 enddef
