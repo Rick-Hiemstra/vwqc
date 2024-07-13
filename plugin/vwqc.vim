@@ -1252,7 +1252,7 @@ def g:AllSummariesGenReportsFull(id: number, result: number)
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
 		for index in range(0, g:tags_list_length - 1)
 			execute "normal! :e " .. g:summary_file_list[index] .. "\<CR>"
-			execute "normal! :call g:FullReport(" .. g:in_both_lists .. "[" .. index .. "], " .. attr_filter_list_as_string .. ")\<CR>"
+			execute "normal! :call g:FullReport(" .. g:in_both_lists[index] ", " .. attr_filter_list_as_string .. ")\<CR>"
 		endfor
 		execute "normal! `Q"
 		put =g:summary_link_list
