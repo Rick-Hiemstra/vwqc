@@ -1572,6 +1572,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string, ...attr_filter_list: li
 	g:list_of_tags_on_block = []
 	
 	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
+	g:attr_filter_list = attr_filter_list
 
 	# g:tag_count_dict
 	# The keys will be the interview names
@@ -1614,17 +1615,15 @@ def g:CreateAndCountInterviewBlocks(search_term: string, ...attr_filter_list: li
 	
 		g:current_interview  = g:tags_list[index][0] .. g:wiki_extension
 		g:attr_filter_as_tag = ':' .. attr_filter .. ':'
-		#echom "current interview: " .. g:current_interview .. " and index number " .. index .. " Attn_filter: " .. g:attr_filter_as_tag .. "\n"
 		
 		g:filter_check = 0
-		if (attr_filter == "none")
-			g:filter_check = 1
+		if (len(attr_filter_list) == 0)
+			g:tag_filter_check = 1
 		elseif (index(g:tags_list[index][6], g:attr_filter_as_tag) > -1)
-			g:filter_check = 1
+			g:AttrFilterValuesCheckForTag(g:tags_list[index][6])
+			g:tag_filter_check = 1
 		endif
 
-		#echom string(g:tags_list[index][6]) .. " " .. g:attr_filter_as_tag .. " filter check: " .. g:filter_check .. "\n"
-		#echom "filter check value: " .. g:filter_check .. " current interview: " .. g:current_interview .. "\n"
 		if (g:tags_list[index][2] == ':' .. search_term .. ':') && 
 				(index(g:filtered_interview_list, g:current_interview) > -1) && (g:filter_check == 1)
 			if (g:tags_list[index][0] == g:last_interview)
@@ -3271,8 +3270,8 @@ def g:AttrFilterValuesCheck(...attr_filter_list: list<string>)
 	var has_attr_filter           = 0
 	g:attr_filter_check           = 1
 	 
-	echom attr_filter_list[0] .. "\n"
-	echom attr_filter_list[1] .. "\n"
+	#echom attr_filter_list[0] .. "\n"
+	#echom attr_filter_list[1] .. "\n"
 
 	for filter_item in range(0, len(attr_filter_list) - 1)
 		has_attr_filter = 0
@@ -3292,6 +3291,19 @@ def g:AttrFilterValuesCheck(...attr_filter_list: list<string>)
 #	endif
 enddef
 
+def g:AttrFilterValuesCheckForTag(tag_attr_list: list<string>)
+	g:tag_filter_check            = 1
+	 
+	#echom attr_filter_list[0] .. "\n"
+	#echom attr_filter_list[1] .. "\n"
+
+	for filter_item in range(0, len(attr_filter_list) - 1)
+		if (index(tag_attr_list, ':' .. attr_filter_list[filter_item] .. ':') == -1)
+			g:tag_filter_check = 0
+			break
+		endif
+	endfor
+enddef
 # ------------------------------------------------------
 
 # ------------------------------------------------------
