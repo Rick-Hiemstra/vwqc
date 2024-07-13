@@ -3392,7 +3392,7 @@ def g:AttrTest(tag_item: string, ...attr_filter_list: list<string> )
 	endfor
 	g:test = string(attr_filter_list)[1 : -2]
 
-	execute "normal! g:AttrTest2(\"tag3\", " .. g:test .. ")\<CR>"
+	execute "normal! call g:AttrTest2(\"tag3\", " .. g:test .. ")\<CR>"
 enddef
 
 def g:AttrTest2(tag_item: string, ...attr_filter_list: list<string> )
