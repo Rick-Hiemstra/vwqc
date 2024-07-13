@@ -3272,7 +3272,7 @@ def AttrFilterValueCheck(...attr_filter_list: list<string>): number
 	var has_attr_filter = 1
 	for filter_item in range(0, len(attr_filter_list) - 1)
 		for interview in range(0, len(g:attr_list) - 1)
-			if (index(g:attr_list[interview][1], attr_filter_list[filter_item]) = -1)
+			if (index(g:attr_list[interview][1], attr_filter_list[filter_item]) == -1)
 				has_attr_filter = 0
 				confirm(attr_filter_list[filter_item] .. " is not in the attributes list. Report will abort.", "OK", 1)
 				break
