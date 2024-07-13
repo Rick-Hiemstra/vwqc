@@ -1615,14 +1615,13 @@ def g:CreateAndCountInterviewBlocks(search_term: string, ...attr_filter_list: li
 		# if the current tag we're processing equals the search term
 	
 		g:current_interview  = g:tags_list[index][0] .. g:wiki_extension
-		g:attr_filter_as_tag = ':' .. attr_filter .. ':'
+		#g:attr_filter_as_tag = ':' .. attr_filter .. ':'
 		
 		g:filter_check = 0
 		if (len(attr_filter_list) == 0)
 			g:tag_filter_check = 1
-		elseif (index(g:tags_list[index][6], g:attr_filter_as_tag) > -1)
+		else
 			g:AttrFilterValuesCheckForTag(g:tags_list[index][6])
-			g:tag_filter_check = 1
 		endif
 
 		if (g:tags_list[index][2] == ':' .. search_term .. ':') && 
