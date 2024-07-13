@@ -3413,7 +3413,7 @@ def g:CallbackTest()
 			
 	popup_menu(["Yes", "No"], {
 		 title:    "TEST TITLE",
-		 callback: 'g:CallBackTest2', 
+		 callback: 'g:CallbackTest2', 
 		 highlight: 'Question',
 		 border:     [],
 		 close:      'click', 
