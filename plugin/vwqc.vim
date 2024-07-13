@@ -3420,6 +3420,6 @@ def g:CallbackTest()
 		 padding:    [0, 1, 0, 1] })
 enddef
 
-def g:CallbackTest2() 
+def g:CallbackTest2(id: number, result: number) 
 	echom a:000[1]
 enddef
