@@ -3390,7 +3390,8 @@ def g:AttrTest(tag_item: string, ...attr_filter_list: list<string> )
 	for index in range(0, len(attr_filter_list) - 1)
 		echom "This is extra argument " .. index .. ": " .. attr_filter_list[index] .. "\n"
 	endfor
-	g:AttrTest2("tag3", attr_filter_list)
+	g:test = string(attr_filter_list)
+	g:AttrTest2("tag3", g:test)
 enddef
 
 def g:AttrTest2(tag_item: string, ...attr_filter_list: list<string> )
