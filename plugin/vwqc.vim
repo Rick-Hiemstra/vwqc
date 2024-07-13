@@ -1188,7 +1188,6 @@ def g:AllSummariesFull(...attr_filter_list: list<string>)
 	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
 
-	g:attr_filter       = attr_filter
 	g:attr_filter_check = 0
 
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
