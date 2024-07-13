@@ -1194,7 +1194,7 @@ def g:AllSummariesFull(...attr_filter_list: list<string>)
 	if (g:tags_generated == 1)
 
 		if (len(attr_filter_list) > 0)
-			g:attr_filter_check = AttrFilterValueCheck(attr_filter_list_as_string)
+			execute "normal! :call AttrFilterValueCheck(" .. attr_filter_list_as_string .. ")\<CR>"
 		endif
 
 		g:tags_list_length = len(g:in_both_lists)
@@ -1518,8 +1518,8 @@ def CreateListOfInterviewsWithAnnos()
 	endfor
 enddef
 
-def FilterInterviewList(...attr_filter_list: list<string>): list<string>
-	var filtered_interview_list = []
+def FilterInterviewList(...attr_filter_list: list<string>)
+	g:filtered_interview_list = []
 	var interview_with_ext      = "undefined"
 	var keep_interview_in_list  = 1
 	for interview in range(0, (len(g:attr_list) - 1))
@@ -1534,11 +1534,11 @@ def FilterInterviewList(...attr_filter_list: list<string>): list<string>
 			filtered_interview_list = filtered_interview_list + [ interview_with_ext ]
 		endif
 	endfor
-	return filtered_interview_list
+
 enddef
 
-def FilterAttrList(...attr_filter_list: list<string>): list<any>
-	var filtered_attr_list = []
+def FilterAttrList(...attr_filter_list: list<string>)
+	g:filtered_attr_list = []
 	var keep_interview_in_list  = 1
 	for interview in range(0, (len(g:attr_list) - 1))
 		keep_interview_in_list = 1
@@ -1551,7 +1551,6 @@ def FilterAttrList(...attr_filter_list: list<string>): list<any>
 			filtered_attr_list = filtered_attr_list + [ g:attr_list[interview] ]
 		endif
 	endfor
-	return filtered_attr_list
 enddef
 
 # -----------------------------------------------------------------
@@ -1595,8 +1594,8 @@ def g:CreateAndCountInterviewBlocks(search_term: string, ...attr_filter_list: li
 
 	#echom "check2: " .. attr_filter .. "\n"
 	if (len(attr_filter_list) > 0)
-		g:filtered_interview_list = FilterInterviewList(...attr_filter_list_as_string)
-		g:filtered_attr_list      = FilterAttrList(...attr_filter_list_as_string)
+		execute "normal! :call FilterInterviewList(" .. attr_filter_list_as_string .. ")\<CR>"
+		execute "normal! :call FilterAttrList(" .. attr_filter_list_as_string .. ")\<CR>"
 	else
 		g:filtered_interview_list = g:interview_list
 		g:filtered_attr_list      = g:attr_list
@@ -1822,7 +1821,7 @@ def g:Report(search_term: string, report_type = "FullReport", ...attr_filter_lis
 
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
-		g:CreateAndCountInterviewBlocks(search_term, attr_filter_list_as_string)
+		execute "normal! :call g:CreateAndCountInterviewBlocks(" .. search_term .. "," .. attr_filter_list_as_string .. ")\<CR>"
 		
 		ReportHeader(report_type, search_term)
 		 
@@ -3268,9 +3267,9 @@ def g:Attributes(sort_col = 1)
 	endif
 enddef
 
-def AttrFilterValueCheck(...attr_filter_list: list<string>): number
+def AttrFilterValueCheck(...attr_filter_list: list<string>)
 	var has_attr_filter           = 0
-	var has_all_attr_filter_items = 1
+	g:attr_filter_check           = 1
 	 
 	echom attr_filter_list[0] .. "\n"
 	echom attr_filter_list[1] .. "\n"
@@ -3284,15 +3283,13 @@ def AttrFilterValueCheck(...attr_filter_list: list<string>): number
 			endif
 		endfor
 		if (has_attr_filter == 0)
-			has_all_attr_filter_items = 0
+			g:attr_filter_check = 0
 		endif
 	endfor
 
 #	if (has_all_attr_filter_items == 0)
 #		confirm(attr_filter_list[filter_item] .. " is not in the attributes list. Report will abort.", "OK", 1)
 #	endif
-
-	return has_all_attr_filter_items
 enddef
 
 # ------------------------------------------------------
