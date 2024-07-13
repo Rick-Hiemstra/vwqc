@@ -1159,7 +1159,7 @@ enddef
 
 def g:FullReport(search_term: string, ...attr_filter_list: list<string>)
 	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
-	execute "normal! :call g:Report(" .. search_term .. ", \"FullReport\", " .. attr_filter_list_as_string .. ")\<CR>"
+	execute "normal! :call g:Report(\'" .. search_term .. "\', \"FullReport\", " .. attr_filter_list_as_string .. ")\<CR>"
 	execute "normal! \<C-w>o"
 enddef
 
