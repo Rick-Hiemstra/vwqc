@@ -1524,7 +1524,7 @@ def g:FilterInterviewList(...attr_filter_list: list<string>)
 	var keep_interview_in_list  = 1
 	for interview in range(0, (len(g:attr_list) - 1))
 		keep_interview_in_list = 1
-		echom "interview no: " .. interview .. " attr_list[interview]: " .. string(g:attr_list[interview]) .. " attr_filter_list: " .. string(attr_filter_list) .. "\n"
+		#echom "interview no: " .. interview .. " attr_list[interview]: " .. string(g:attr_list[interview]) .. " attr_filter_list: " .. string(attr_filter_list) .. "\n"
 		for item in range(0, len(attr_filter_list) - 1)
 			if (index(g:attr_list[interview][1], ':' .. attr_filter_list[item] .. ':') == -1)
 				keep_interview_in_list  = 0
@@ -2397,7 +2397,7 @@ def ReportHeader(report_type: string, search_term: string)
 	var report_update_time = strftime("%Y-%m-%d %H:%M:%S (%a)")
 	execute "normal! i# " .. repeat("*", 80) .. "\n# " .. repeat("*", 80) .. "\n"
 	execute "normal! i**" .. report_type 
-		.. "(\"" .. search_term .. "\") with filter: " .. g:attr_filter .. "**\n"
+		.. "(\"" .. search_term .. "\") with filter(s): " .. string(g:attr_filter_list) .. "**\n"
 		.. "Created by **" 
 	        .. g:coder_initials .. "**\non **" 
 		.. report_update_time .. "**\n"
