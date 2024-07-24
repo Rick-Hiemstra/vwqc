@@ -1442,7 +1442,7 @@ enddef
 # Generated list of file names from the g:in_both_lists list.
 # -----------------------------------------------------------------
 def GenSummaryLists(summary_type: string) 
-	var attr_filter_list_as_string = substitute(g:attr_filter_list_as_string, '\'', '', "g")
+	var attr_filter_list_as_string = substitute(g:attr_filter_list_as_string, "'", '', "g")
 	var file_name = "undefined"
 	var link_name = "undefined"
 	g:summary_file_list = []
