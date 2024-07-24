@@ -1242,7 +1242,7 @@ def g:AllSummariesGenReportsFull(id: number, result: number)
 	g:attr_filter_list_as_string = string(g:attr_filter_list)[1 : -2]
 	
 	execute "normal! :e index" .. g:wiki_extension .. "\<CR>"
-	execute "normal! Go[Summary Interviews - Full Reports - Filter - " .. g:attr_filter_list_string .. "](Summary Interviews - Full Reports - Filter - " .. g:attr_filter .. ")"
+	execute "normal! Go[Summary Interviews - Full Reports - Filter - " .. g:attr_filter_list_string .. "](Summary Interviews - Full Reports - Filter - " .. g:attr_filter_list_string .. ")"
 
 	execute "normal! :e Summary Interviews - Full Reports - Filter - " .. g:attr_filter_list_string .. g:wiki_extension .. "\<CR>"
 	# Delete what is there
