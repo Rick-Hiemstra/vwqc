@@ -1270,7 +1270,7 @@ enddef
 # This function produces summary reports for all tags defined in the 
 # tag glossary.
 # -----------------------------------------------------------------
-def g:AllSummariesQuotes(attr_filter = "none") 
+def g:AllSummariesQuotes(...attr_filter_list: list<string>) 
 
 	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
 	g:attr_filter_list_as_string   = attr_filter_list_as_string
@@ -1360,7 +1360,7 @@ enddef
 # This function produces summary reports for all tags defined in the 
 # tag glossary.
 # -----------------------------------------------------------------
-def g:AllSummariesAnnos(attr_filter = "none") 
+def g:AllSummariesAnnos(...attr_filter_list: list<string>) 
 
 	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
 	g:attr_filter_list_as_string   = attr_filter_list_as_string
