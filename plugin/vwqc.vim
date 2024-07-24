@@ -1272,17 +1272,22 @@ enddef
 # -----------------------------------------------------------------
 def g:AllSummariesQuotes(attr_filter = "none") 
 
+	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
+	g:attr_filter_list_as_string   = attr_filter_list_as_string
+	g:attr_filter_list             = attr_filter_list
+
 	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
 	
-	g:attr_filter       = attr_filter
 	g:attr_filter_check = 0
 
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
 
-		if (attr_filter != "none")
-			g:attr_filter_check = AttrFilterValueCheck(attr_filter)
+		if (len(attr_filter_list) > 0)
+			execute "normal! :call g:AttrFilterValuesCheck(" .. attr_filter_list_as_string .. ")\<CR>"
+		else
+			g:attr_filter_check = 1
 		endif
 
 		g:tags_list_length = len(g:in_both_lists)
@@ -1291,7 +1296,7 @@ def g:AllSummariesQuotes(attr_filter = "none")
 			GenSummaryLists("quotes")
 		endif
 		
-		if (g:tags_generated == 1) && (g:tags_list_length > 0)
+		if (g:tags_generated == 1) && (g:tags_list_length > 0) && (g:attr_filter_check == 1)
 			popup_menu(["No, abort", "Yes, generate summary reports"], {
 				 title:    "Running this function will erase older \"Quotes\" versions of these reports. Do you want to continue?",
 				 callback: 'AllSummariesGenReportsQuotes', 
@@ -1300,7 +1305,7 @@ def g:AllSummariesQuotes(attr_filter = "none")
 				 close:      'click', 
 				 padding:    [0, 1, 0, 1], })
 		else
-			confirm("Either tags have not been generate for this session or there are no tags to create reports for.",  "OK", 1)
+			confirm("Either tags have not been generate for this session, or there are no tags to create reports for, or an attribute filter argument is not in the attribute list.",  "OK", 1)
 
 		endif
 	else
@@ -1315,10 +1320,21 @@ enddef
 def g:AllSummariesGenReportsQuotes(id: number, result: number)
 	set lazyredraw
 
-	execute "normal! :e index" .. g:wiki_extension .. "\<CR>"
-	execute "normal! Go[Summary Interviews - Quotes Reports - Filter - " .. g:attr_filter .. "](Summary Interviews - Quotes Reports - Filter - " .. g:attr_filter .. ")"
+	g:attr_filter_list_string = ""
+	for item in range(0, len(g:attr_filter_list) - 1)
+		if (item == len(g:attr_filter_list) - 1)
+			g:attr_filter_list_string = g:attr_filter_list_string .. g:attr_filter_list[item]
+		else
+			g:attr_filter_list_string = g:attr_filter_list_string .. g:attr_filter_list[item] .. " and "
+		endif
+	endfor
 
-	execute "normal! :e Summary Interviews - Quotes Reports - Filter - " .. g:attr_filter .. g:wiki_extension .. "\<CR>"
+	g:attr_filter_list_as_string = string(g:attr_filter_list)[1 : -2]
+
+	execute "normal! :e index" .. g:wiki_extension .. "\<CR>"
+	execute "normal! Go[Summary Interviews - Quotes Reports - Filter - " .. g:attr_filter_list_string .. "](Summary Interviews - Quotes Reports - Filter - " .. g:attr_filter_list_string .. ")"
+
+	execute "normal! :e Summary Interviews - Quotes Reports - Filter - " .. g:attr_filter_list_string .. g:wiki_extension .. "\<CR>"
 	# Delete what is there
 	execute "normal! ggVGd"
 
@@ -1327,7 +1343,7 @@ def g:AllSummariesGenReportsQuotes(id: number, result: number)
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
 		for index in range(0, g:tags_list_length - 1)
 			execute "normal! :e " g:summary_file_list[index] .. "\<CR>"
-			g:QuotesReport(g:in_both_lists[index], g:attr_filter)
+			g:QuotesReport(g:in_both_lists[index], g:attr_filter_list_as_string)
 		endfor
 		execute "normal! `Q"
 		put =g:summary_link_list
@@ -1346,17 +1362,22 @@ enddef
 # -----------------------------------------------------------------
 def g:AllSummariesAnnos(attr_filter = "none") 
 
+	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
+	g:attr_filter_list_as_string   = attr_filter_list_as_string
+	g:attr_filter_list             = attr_filter_list
+
 	ParmCheck()
 	execute "normal! :cd %:p:h\<CR>"
 
-	g:attr_filter       = attr_filter
 	g:attr_filter_check = 0
 
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
 
-		if (attr_filter != "none")
-			g:attr_filter_check = AttrFilterValueCheck(attr_filter)
+		if (len(attr_filter_list) > 0)
+			execute "normal! :call g:AttrFilterValuesCheck(" .. attr_filter_list_as_string .. ")\<CR>"
+		else
+			g:attr_filter_check = 1
 		endif
 
 		g:interview_list = []
@@ -1382,14 +1403,11 @@ def g:AllSummariesAnnos(attr_filter = "none")
 		g:summary_file_list = g:summary_file_list 
 		g:summary_link_list = g:summary_link_list
 		g:anno_list_tags_and_interviews = g:in_both_lists + g:interview_list_without_ext
-		#g:summary_file_list = g:summary_file_list + g:interview_file_list
-		#g:summary_link_list = g:summary_link_list + g:interview_link_list
-		#g:anno_list_tags_and_interviews = g:in_both_lists + g:interview_list_without_ext
 
 		#g:tags_list_length = len(g:summary_file_list)
 		g:tags_list_length = len(g:in_both_lists)
 
-		if (g:tags_generated == 1) && (g:tags_list_length > 0)
+		if (g:tags_generated == 1) && (g:tags_list_length > 0) && (g:attr_filter_check == 1)
 			popup_menu(["No, abort", "Yes, generate summary reports"], {
 				 title:    "Running this function will erase older \"Annotation\" versions of these reports. Do you want to continue?",
 				 callback: 'AllSummariesGenReportsAnnos', 
@@ -1398,7 +1416,7 @@ def g:AllSummariesAnnos(attr_filter = "none")
 				 close:      'click', 
 				 padding:    [0, 1, 0, 1], })
 		else
-			confirm("Either tags have not been generate for this session or there are no tags to create reports for.",  "OK", 1)
+			confirm("Either tags have not been generate for this session, or there are no tags to create reports for, or an attribute filter argument is not in the attribute list.",  "OK", 1)
 
 		endif
 	else
@@ -1413,10 +1431,21 @@ enddef
 def g:AllSummariesGenReportsAnnos(id: number, result: number)
 	set lazyredraw
 
-	execute "normal! :e index" .. g:wiki_extension .. "\<CR>"
-	execute "normal! Go[Summary Interviews - Annotations Reports - Filter - " .. g:attr_filter .. "](Summary Interviews - Annotations Reports - Filter - " .. g:attr_filter .. ")"
+	g:attr_filter_list_string = ""
+	for item in range(0, len(g:attr_filter_list) - 1)
+		if (item == len(g:attr_filter_list) - 1)
+			g:attr_filter_list_string = g:attr_filter_list_string .. g:attr_filter_list[item]
+		else
+			g:attr_filter_list_string = g:attr_filter_list_string .. g:attr_filter_list[item] .. " and "
+		endif
+	endfor
 
-	execute "normal! :e Summary Interviews - Annotations Reports - Filter - " .. g:attr_filter .. g:wiki_extension .. "\<CR>"
+	g:attr_filter_list_as_string = string(g:attr_filter_list)[1 : -2]
+
+	execute "normal! :e index" .. g:wiki_extension .. "\<CR>"
+	execute "normal! Go[Summary Interviews - Annotations Reports - Filter - " .. g:attr_filter_list_string .. "](Summary Interviews - Annotations Reports - Filter - " .. g:attr_filter_list_string .. ")"
+
+	execute "normal! :e Summary Interviews - Annotations Reports - Filter - " .. g:attr_filter_list_string .. g:wiki_extension .. "\<CR>"
 	# Delete what is there
 	execute "normal! ggVGd"
 	
@@ -1425,7 +1454,7 @@ def g:AllSummariesGenReportsAnnos(id: number, result: number)
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
 		for index in range(0, g:tags_list_length - 1)
 			execute "normal! :e " .. g:summary_file_list[index] .. "\<CR>"
-			g:AnnotationsReport(g:in_both_lists[index], g:attr_filter)
+			g:AnnotationsReport(g:in_both_lists[index], g:attr_filter_list_as_string)
 		endfor
 		execute "normal! `Q"
 		put =g:summary_link_list
