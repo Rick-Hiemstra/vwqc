@@ -1454,7 +1454,7 @@ def g:AllSummariesGenReportsAnnos(id: number, result: number)
 		confirm("Generating these summary reports will likely take a long time.",  "OK", 1)
 		for index in range(0, g:tags_list_length - 1)
 			execute "normal! :e " .. g:summary_file_list[index] .. "\<CR>"
-			execute "normal! :call g:FullReport(\'" .. g:in_both_lists[index] .. "\', " .. g:attr_filter_list_as_string .. ")\<CR>"
+			execute "normal! :call g:AnnotationsReport(\'" .. g:in_both_lists[index] .. "\', " .. g:attr_filter_list_as_string .. ")\<CR>"
 			#g:AnnotationsReport(g:in_both_lists[index], g:attr_filter_list_as_string)
 		endfor
 		execute "normal! `Q"
