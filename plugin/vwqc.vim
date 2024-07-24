@@ -1832,8 +1832,8 @@ def WriteReportTable(search_term: string)
 	execute "normal! ki\<ESC>j"
 	ave_total_blocks_size = printf("%.1f", 1.0 * total_tags / total_blocks)
 	execute "normal! i| Totals | | " ..
-				 total_tags            .. "|" .. 
-				 total_blocks          .. "|" ..
+				 total_blocks          .. "|" .. 
+				 total_tags            .. "|" ..
 				 ave_total_blocks_size .. "|" ..
 				 total_annos           .. "|\n\n"
 	execute "normal! 2ki\<ESC>2j"
