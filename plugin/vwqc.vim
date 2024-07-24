@@ -1619,7 +1619,6 @@ def g:CreateAndCountInterviewBlocks(search_term: string, ...attr_filter_list: li
 		g:quote_blocks_dict[g:interview_less_extension] = []
 	endfor
 
-	# dasdfas
 	for index in range(0, len(g:tags_list) - 1)
 		# if the current tag we're processing equals the search term
 	
@@ -3276,21 +3275,21 @@ def g:Attributes(sort_col = 1)
 enddef
 
 def g:AttrFilterValuesCheck(...attr_filter_list: list<string>)
-	var has_attr_filter           = 0
+	var has_attr_filters           = 0
 	g:attr_filter_check           = 1
 	 
 	#echom attr_filter_list[0] .. "\n"
 	#echom attr_filter_list[1] .. "\n"
 
 	for filter_item in range(0, len(attr_filter_list) - 1)
-		has_attr_filter = 0
+		has_attr_filter = 1
 		for interview in range(0, len(g:attr_list) - 1)
-			if (index(g:attr_list[interview][1], ':' .. attr_filter_list[filter_item] .. ':') > -1)
-				has_attr_filter = 1
+			if (index(g:attr_list[interview][1], ':' .. attr_filter_list[filter_item] .. ':') == -1)
+				has_attr_filters = 0
 				break
 			endif
 		endfor
-		if (has_attr_filter == 0)
+		if (has_attr_filters == 0)
 			g:attr_filter_check = 0
 		endif
 	endfor
