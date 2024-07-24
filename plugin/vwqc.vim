@@ -1524,7 +1524,7 @@ def g:FilterInterviewList(...attr_filter_list: list<string>)
 	var keep_interview_in_list  = 1
 	for interview in range(0, (len(g:attr_list) - 1))
 		keep_interview_in_list = 1
-		echom "interview no: " .. interview .. " attr_list[interview]: " .. g:attr_list[interview] .. " attr_filter_list: " .. attr_filter_list .. "\n"
+		echom "interview no: " .. interview .. " attr_list[interview]: " .. string(g:attr_list[interview]) .. " attr_filter_list: " .. attr_filter_list .. "\n"
 		for item in range(0, len(attr_filter_list) - 1)
 			if (index(g:attr_list[interview][1], ':' .. attr_filter_list[item] .. ':') == -1)
 				keep_interview_in_list  = 0
