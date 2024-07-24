@@ -1195,6 +1195,8 @@ def g:AllSummariesFull(...attr_filter_list: list<string>)
 
 		if (len(attr_filter_list) > 0)
 			execute "normal! :call g:AttrFilterValuesCheck(" .. attr_filter_list_as_string .. ")\<CR>"
+		else
+			g:attr_filter_check = 1
 		endif
 
 		g:tags_list_length = len(g:in_both_lists)
@@ -1235,10 +1237,9 @@ def g:AllSummariesGenReportsFull(id: number, result: number)
 		else
 			g:attr_filter_list_string = g:attr_filter_list_string .. g:attr_filter_list[item] .. " and "
 		endif
-
 	endfor
 
-	var attr_filter_list_as_string = string(g:attr_filter_list)[1 : -2]
+	g:attr_filter_list_as_string = string(g:attr_filter_list)[1 : -2]
 	
 	execute "normal! :e index" .. g:wiki_extension .. "\<CR>"
 	execute "normal! Go[Summary Interviews - Full Reports - Filter - " .. g:attr_filter_list_string .. "](Summary Interviews - Full Reports - Filter - " .. g:attr_filter .. ")"
@@ -1446,8 +1447,8 @@ def GenSummaryLists(summary_type: string)
 	g:summary_file_list = []
 	g:summary_link_list = []
 	for tag_index in range(0, (len(g:in_both_lists) - 1))
-		file_name = "Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filter - " .. g:attr_filter .. g:wiki_extension
-		link_name = "[Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filter - " .. g:attr_filter .. "](Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filter - " .. g:attr_filter .. ")"
+		file_name = "Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filter - " .. g:attr_filter_list_as_string .. g:wiki_extension
+		link_name = "[Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filter - " .. g:attr_filter_list_as_string .. "](Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filter - " .. g:attr_filter .. ")"
 		g:summary_file_list = g:summary_file_list + [file_name]
 		g:summary_link_list = g:summary_link_list + [link_name]
 	endfor
