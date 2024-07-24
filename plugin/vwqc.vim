@@ -1830,7 +1830,7 @@ def WriteReportTable(search_term: string)
 	# add total block, line and anno counters here.	
 	execute "normal! i|:---|---|---:|---:|---:|---:|\n"
 	execute "normal! ki\<ESC>j"
-	ave_total_blocks_size = printf("%.2f", 1.0 * total_tags / total_blocks)
+	ave_total_blocks_size = printf("%.1f", 1.0 * total_tags / total_blocks)
 	execute "normal! i| Totals | | " ..
 				 total_blocks          .. "|" .. 
 				 total_tags            .. "|" ..
