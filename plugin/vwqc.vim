@@ -1442,6 +1442,7 @@ enddef
 # Generated list of file names from the g:in_both_lists list.
 # -----------------------------------------------------------------
 def GenSummaryLists(summary_type: string) 
+	var attr_filter_list_as_string = substitute(g:attr_filter_list_as_string, '\'', '', "g")
 	var file_name = "undefined"
 	var link_name = "undefined"
 	g:summary_file_list = []
@@ -1453,8 +1454,8 @@ def GenSummaryLists(summary_type: string)
 			g:summary_file_list = g:summary_file_list + [file_name]
 			g:summary_link_list = g:summary_link_list + [link_name]
 		else
-			file_name = "Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filter - " .. g:attr_filter_list_as_string .. g:wiki_extension
-			link_name = "[Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filter - " .. g:attr_filter_list_as_string .. "](Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filter - " .. g:attr_filter_list_as_string .. ")"
+			file_name = "Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filter(s) - " .. attr_filter_list_as_string .. g:wiki_extension
+			link_name = "[Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filter(s) - " .. attr_filter_list_as_string .. "](Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filter(s) - " .. attr_filter_list_as_string .. ")"
 			g:summary_file_list = g:summary_file_list + [file_name]
 			g:summary_link_list = g:summary_link_list + [link_name]
 		endif
