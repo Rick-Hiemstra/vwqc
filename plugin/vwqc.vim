@@ -1625,7 +1625,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string, ...attr_filter_list: li
 		g:current_interview  = g:tags_list[index][0] .. g:wiki_extension
 		#g:attr_filter_as_tag = ':' .. attr_filter .. ':'
 		
-		g:filter_check = 0
+		g:tag_filter_check = 0
 		if (len(attr_filter_list) == 0)
 			g:tag_filter_check = 1
 		else
@@ -1633,7 +1633,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string, ...attr_filter_list: li
 		endif
 
 		if (g:tags_list[index][2] == ':' .. search_term .. ':') && 
-				(index(g:filtered_interview_list, g:current_interview) > -1) && (g:filter_check == 1)
+				(index(g:filtered_interview_list, g:current_interview) > -1) && (g:tag_filter_check == 1)
 			if (g:tags_list[index][0] == g:last_interview)
 				#echom "index1: " .. index .. " interview: " .. g:current_interview .. "\n"
 				# Increment the tag count for this tag
@@ -3275,21 +3275,21 @@ def g:Attributes(sort_col = 1)
 enddef
 
 def g:AttrFilterValuesCheck(...attr_filter_list: list<string>)
-	var has_attr_filters           = 0
+	var has_attr_filter           = 0
 	g:attr_filter_check           = 1
 	 
 	#echom attr_filter_list[0] .. "\n"
 	#echom attr_filter_list[1] .. "\n"
 
 	for filter_item in range(0, len(attr_filter_list) - 1)
-		has_attr_filters = 1
+		has_attr_filter = 0
 		for interview in range(0, len(g:attr_list) - 1)
-			if (index(g:attr_list[interview][1], ':' .. attr_filter_list[filter_item] .. ':') == -1)
-				has_attr_filters = 0
+			if (index(g:attr_list[interview][1], ':' .. attr_filter_list[filter_item] .. ':') > -1)
+				has_attr_filter = 1
 				break
 			endif
 		endfor
-		if (has_attr_filters == 0)
+		if (has_attr_filter == 0)
 			g:attr_filter_check = 0
 		endif
 	endfor
