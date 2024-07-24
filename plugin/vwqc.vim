@@ -1165,13 +1165,13 @@ enddef
 
 def g:AnnotationsReport(search_term: string, ...attr_filter_list: list<string>)
 	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
-	execute "normal! :call g:Report(search_term, \"AnnotationsReport\", " .. attr_filter_list_as_string .. ")\<CR>"
+	execute "normal! :call g:Report(\'" .. search_term .. "\', \"AnnotationsReport\", " .. attr_filter_list_as_string .. ")\<CR>"
 	execute "normal! \<C-w>o"
 enddef
 
 def g:QuotesReport(search_term: string, ...attr_filter_list: list<string>)
 	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
-	execute "normal! :call g:Report(search_term, \"QuotesReport\", " .. attr_filter_list_as_string .. ")\<CR>"
+	execute "normal! :call g:Report(\'" .. search_term .. "\', \"QuotesReport\", " .. attr_filter_list_as_string .. ")\<CR>"
 	execute "normal! \<C-w>o"
 enddef
 
