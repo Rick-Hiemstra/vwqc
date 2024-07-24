@@ -1525,7 +1525,7 @@ def g:FilterInterviewList(...attr_filter_list: list<string>)
 	for interview in range(0, (len(g:attr_list) - 1))
 		keep_interview_in_list = 1
 		for item in range(0, len(attr_filter_list) - 1)
-			if (index(g:attr_list[interview][1], ':' .. attr_filter_list[item] .. ':') > -1)
+			if (index(g:attr_list[interview][1], ':' .. attr_filter_list[item] .. ':') == -1)
 				keep_interview_in_list  = 0
 			endif
 		endfor
