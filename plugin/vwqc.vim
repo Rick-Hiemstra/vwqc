@@ -1480,7 +1480,7 @@ def GenSummaryLists(summary_type: string)
 	for tag_index in range(0, (len(g:in_both_lists) - 1))
 		if (len(g:attr_filter_list) == 0)
 			file_name = "Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filters - none" .. g:wiki_extension
-			link_name = "[Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filters - none](Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filter - none)"
+			link_name = "[Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filters - none](Summary " .. g:in_both_lists[tag_index] .. " - " .. summary_type .. " batch - filters - none)"
 			g:summary_file_list = g:summary_file_list + [file_name]
 			g:summary_link_list = g:summary_link_list + [link_name]
 		else
