@@ -2740,11 +2740,6 @@ def g:VWQCTagOmniCompletion()
 	endif
 enddef
 
-augroup VWQCTagOmni
-	autocmd!
-	autocmd InsertCharPre * call VWQCTagOmniCompletion()
-augroup END
-
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
