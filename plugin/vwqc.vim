@@ -62,6 +62,9 @@ endif
 # Write a function that duplicates a file and allows you to rename it.
 #
 # Add ability to sift reports by attribute.
+# 
+# When pressing F5 it throws an error if there are no changes registered for
+# the buffer. Change this so there is a popup explaining the error.
 
 # -----------------------------------------------------------------
 # ------------------------ FUNCTIONS ------------------------------
@@ -2719,6 +2722,28 @@ def g:TagsGenThisSession()
 		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
 	endif
 enddef
+
+# ------------------------------------------------------
+# Auto popup when typing a tag
+# ------------------------------------------------------
+def g:VWQCTagOmniCompletion()
+	ParmCheck()
+
+	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
+	if (g:tags_generated == 1)
+		execute "normal! :cd %:p:h\<CR>"
+		if !pumvisible() && (v:char == ':')
+			call feedkeys("\<C-x>\<C-o>", "n")
+		endif
+	else
+		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
+	endif
+enddef
+
+augroup VWQCTagOmni
+	autocmd!
+	autocmd InsertCharPre * call VWQCTagOmniCompletion()
+augroup END
 
 # ------------------------------------------------------
 #

@@ -103,3 +103,11 @@ nnoremap <leader>tl :call CurrentTagsPopUpMenu()<CR>
 let g:vimwiki_global_ext = 0
 let g:vimwiki_url_maxsave = 0
 let g:vimwiki_auto_update_tags = 0
+
+
+
+augroup VWQCTagOmni
+	autocmd!
+	autocmd InsertCharPre * call VWQCTagOmniCompletion()
+augroup END
+
