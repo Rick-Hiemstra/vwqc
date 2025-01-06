@@ -2743,18 +2743,6 @@ def g:VWQCTagOmniCompletion()
 	endif
 enddef
 
-# ------------------------------------------------------
-#
-# ------------------------------------------------------
-def g:ToggleDoubleColonOmniComplete() 
-	if maparg("::", "i") == ""
-		inoremap :: <ESC>a:<ESC>:call TagsGenThisSession()<CR>
-		confirm("Double colon (::) omni-completion on.", "Got it", 1)
-	else
-		iunmap ::
-		confirm("Double colon (::) omni-completion off.", "Got it", 1)
-	endif
-enddef
 
 # ------------------------------------------------------
 #
