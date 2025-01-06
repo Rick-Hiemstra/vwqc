@@ -107,8 +107,11 @@ let g:vimwiki_auto_update_tags = 0
 set completeopt=longest,menuone
 "inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-augroup VWQCTagOmni
-	autocmd!
-	autocmd InsertCharPre * call VWQCTagOmniCompletion()
-augroup END
+if (has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'vwqc') == 1)
+if !has_key(g:vimwiki_wikilocal_vars[wiki], key)
+	augroup VWQCTagOmni
+		autocmd!
+		autocmd InsertCharPre * call VWQCTagOmniCompletion()
+	augroup END
+endif
 
