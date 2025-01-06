@@ -2728,13 +2728,16 @@ enddef
 # ------------------------------------------------------
 def g:VWQCTagOmniCompletion()
 
+	g:wiki_number     = vimwiki#vars#get_bufferlocal('wiki_nr') + 1
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
-	if (g:tags_generated == 1)
+	g:is_vwqc         = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'vwqc')
+
+	if (g:tags_generated == 1) && (g:is_vwqc == 1)
 		execute "normal! :cd %:p:h\<CR>"
 		if !pumvisible() && (v:char == ':')
-			call feedkeys("\<C-x>\<C-o>", "n")
+			call feedkeys("\<C-x>\<C-o>", "i")
 		endif
-	else
+	elseif (g:tags_generated != 1) && (g:is_vwqc == 1)
 		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
 	endif
 enddef
