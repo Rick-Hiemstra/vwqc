@@ -491,6 +491,7 @@ def FormatInterviewB(interview_label: string)
 
 	ParmCheck()
 
+	g:tag_popup = 0
 	# -----------------------------------------------------------------
 	# Add interview header template
 	# In this next session the first line resets the formatprg option to match what
@@ -550,6 +551,8 @@ def FormatInterviewB(interview_label: string)
 	# -----------------------------------------------------------------
 	execute "normal! gg"
 	execute "normal! :.-1read " .. g:int_header_template .. "\<CR>gg"
+
+	g:tag_popup = 1
 enddef
 
 # ------------------------------------------------------------------------------
@@ -2733,7 +2736,6 @@ def g:VWQCTagOmniCompletion()
 	if (g:tags_generated == 1) 
 
 		if !pumvisible() && (v:char == ':')
-			echom "got in"
 			call feedkeys("\<C-x>\<C-o>", "i")
 		endif
 	else
