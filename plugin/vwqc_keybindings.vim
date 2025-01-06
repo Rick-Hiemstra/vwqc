@@ -110,6 +110,6 @@ set completeopt=longest,menuone
 
 augroup VWQCTagOmni
 	autocmd!
-	autocmd InsertCharPre *.vimwiki call VWQCTagOmniCompletion()
+	autocmd FileType vimwiki, InsertCharPre *.vimwiki call VWQCTagOmniCompletion()
 augroup END
 
