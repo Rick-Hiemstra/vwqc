@@ -108,10 +108,11 @@ set completeopt=longest,menuone
 "inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 
-if (has_key(g:vimwiki_list[vimwiki#vars#get_bufferlocal('wiki_nr')], 'vwqc') == 1)
-	augroup VWQCTagOmni
-		autocmd!
-		autocmd InsertCharPre * call VWQCTagOmniCompletion()
-	augroup END
-endif
+augroup VWQCTagOmni
+	autocmd!
+	autocmd InsertCharPre * 
+		if (has_key(g:vimwiki_list[vimwiki#var#get_bufferlocal('wiki_nr')], 'vwqc') == 1)
+					\ call VWQCTagOmniCompletion()
+		\endif 
+augroup END
 
