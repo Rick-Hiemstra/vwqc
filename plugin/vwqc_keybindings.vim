@@ -105,7 +105,7 @@ let g:vimwiki_url_maxsave = 0
 let g:vimwiki_auto_update_tags = 0
 
 set completeopt=longest,menuone
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+"inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 augroup VWQCTagOmni
 	autocmd!
