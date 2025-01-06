@@ -112,7 +112,7 @@ augroup VWQCTagOmni
 	autocmd!
 	autocmd InsertCharPre * 
 		if (has_key(g:vimwiki_list[vimwiki#var#get_bufferlocal('wiki_nr')], 'vwqc') == 1)
-					\ call VWQCTagOmniCompletion()
-		\endif 
+					\ | call VWQCTagOmniCompletion()
+		\ | endif 
 augroup END
 
