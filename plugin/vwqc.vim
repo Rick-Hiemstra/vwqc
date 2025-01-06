@@ -2852,6 +2852,11 @@ def FindLastTagAddedToBuffer()
 enddef
 
 def g:TagFillWithChoice() 
+	# ---------------------------------------------
+	# Turn the VWQCTTagOmni augroup off. Otherwise as you fill tags it is
+	# pausing for every inserted colon. This gets turned back on in the 
+	# WriteInFormattedTagMetadata function.
+	# ---------------------------------------------
 	g:tag_popup = 0
 	# ---------------------------------------------
 	# Set tag fill mode
@@ -3130,6 +3135,10 @@ def WriteInFormattedTagMetadata()
 
 	cursor(g:bottom_line, g:bottom_col)
 	execute "normal! zzA "
+	# ---------------------------------------------
+	#  Turn the VWQCTagOmni autocmd back on. It gets turned of in the
+	#  TagFillWithChoice function. 
+	# ---------------------------------------------
 	g:tag_popup = 1
 enddef
 
