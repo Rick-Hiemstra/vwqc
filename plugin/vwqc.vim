@@ -2728,13 +2728,10 @@ enddef
 # ------------------------------------------------------
 def g:VWQCTagOmniCompletion()
 
-	# g:wiki_number     = vimwiki#vars#get_bufferlocal('wiki_nr') 
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
-#	g:is_vwqc         = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'vwqc')
 
 	if (g:tags_generated == 1) 
 
-#		execute "normal! :cd %:p:h\<CR>"
 		if !pumvisible() && (v:char == ':')
 			echom "got in"
 			call feedkeys("\<C-x>\<C-o>", "i")
@@ -2855,6 +2852,7 @@ def FindLastTagAddedToBuffer()
 enddef
 
 def g:TagFillWithChoice() 
+	g:tag_popup = 0
 	# ---------------------------------------------
 	# Set tag fill mode
 	# ---------------------------------------------
@@ -3132,6 +3130,7 @@ def WriteInFormattedTagMetadata()
 
 	cursor(g:bottom_line, g:bottom_col)
 	execute "normal! zzA "
+	g:tag_popup = 1
 enddef
 
 def ProcessLineMetadata() 

@@ -1,7 +1,7 @@
 " -----------------------------------------------------------------
 " ------------------ VWQC PLUG-IN KEYBINDINGS ---------------------
 " -----------------------------------------------------------------
-
+let g:tag_popup = 1
 " --------------- Go To Interview Line ----------------------------
 nnoremap <leader>gt :call g:GoToReference()<CR>
 
@@ -110,6 +110,6 @@ set completeopt=longest,menuone
 
 augroup VWQCTagOmni
 	autocmd!
-	autocmd InsertCharPre * if ((&ft == 'vimwiki') && (has_key(g:vimwiki_list[vimwiki#vars#get_bufferlocal('wiki_nr')], 'vwqc') == 1)) | call VWQCTagOmniCompletion() | endif
+	autocmd InsertCharPre * if ((&ft == 'vimwiki') && (has_key(g:vimwiki_list[vimwiki#vars#get_bufferlocal('wiki_nr')], 'vwqc') == 1) && (g:tag_popup == 1)) | call VWQCTagOmniCompletion() | endif
 augroup END
 
