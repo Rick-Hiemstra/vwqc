@@ -2727,7 +2727,6 @@ enddef
 # Auto popup when typing a tag
 # ------------------------------------------------------
 def g:VWQCTagOmniCompletion()
-	ParmCheck()
 
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
