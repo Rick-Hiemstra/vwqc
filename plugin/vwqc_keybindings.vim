@@ -23,7 +23,8 @@ nnoremap <leader>rs <C-W>h<C-W>h:vertical resize 60<CR><C-W>l
 
 " --------------- Copy block quote within VWQC ----------------------
 "vnoremap <leader>cv f\|hy<ESC>:cd %:p:h<CR>:sp new<CR>pggVGJ:s/\s\{2,}/ /g<CR>Vy:q!<CR>
-vnoremap <leader>cv f│hy<ESC>:cd %:p:h<CR>:sp new<CR>pggVGJ:s/\s\{2,}/ /g<CR>Vy:q!<CR>
+"vnoremap <leader>cv f│hy<ESC>:cd %:p:h<CR>:sp new<CR>pggVGJ:s/\s\{2,}/ /g<CR>Vy:q!<CR>
+vnoremap <leader>cv :call CopyQuote()<CR>
 
 " ---------------- Call TagLinter() -------------------------------
 nnoremap <leader>tl :call TagLinter()<CR>
@@ -52,8 +53,6 @@ inoremap <F6> <ESC>:call OmniCompleteFileName()<CR>
 inoremap <F8> <ESC>:call TagsGenThisSession()<CR>
 inoremap <F9> <ESC>:call TagsGenThisSession()<CR>
 "inoremap <nowait> :: <ESC>a:<ESC>:call TagsGenThisSession()<CR>
-nnoremap <leader>tc :call ToggleDoubleColonOmniComplete()<CR>
-
 
 xnoremap <leader>t y:call TagFill()<CR>
 inoremap <C-S-h> <C-x><C-o>

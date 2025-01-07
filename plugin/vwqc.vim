@@ -35,6 +35,10 @@ endif
 #
 # Write a function to modify the attribute lines in the old wikis.
 #
+# Re-write the <leader>cv function to work with shift-v instead of C-v.
+# Currrently this is just a keybinding but it will need to be re-written as a
+# function.
+#
 # Change Vimwiki so g:current_tags is only deepcopied if it is an interview
 # wiki. 
 #
@@ -143,13 +147,14 @@ endif
 # UpdateCurrentTagsPage 
 # UpdateCurrentTagsList
 # TagsGenThisSession
+# VWQCTagOmniCompletion
 # ToggleDoubleColonOmniComplete
 # GenDictTagList
 # CreateTagDict
 # CurrentTagsPopUpMenu
 # FindLastTagAddedToBuffer
 # TagFillWithChoice
-# FillTagBlock
+# FillTagBlock - may not be used any more
 # CreateFillLine
 # FindFirstInterviewLine
 # CreateBlockMetadataDict
@@ -194,7 +199,6 @@ def g:HelpMenu()
 				     	"CODING", 
 					"<F2>                                Update tags", 
 					"<F8>                                Omni-complete (tags and files), same as <F9>",
-					"<F9>                                Omni-complete (tags and files), same as <F8>",
 					"<F5>                                Complete tag block",
 					"<F4>                                Toggle tag block completion mode",
 					"<leader>tf                          Tag fill",
@@ -1521,6 +1525,8 @@ def g:Gather(search_term: string)
 	
 	ParmCheck()
 
+	g:tag_popup = 0
+
 	# -----------------------------------------------------------------
 	# Change the pwd to that of the current wiki.
 	# -----------------------------------------------------------------
@@ -1552,6 +1558,8 @@ def g:Gather(search_term: string)
 
 	@s = getreg('s') .. "# END THEME: " .. search_term ..  "\n\n"
 	execute "normal! `R\"sp"
+
+	g:tag_popup = 1
 enddef
 
 def CreateListOfInterviewsWithAnnos()
@@ -1848,6 +1856,8 @@ enddef
 # 
 # -----------------------------------------------------------------
 def g:Report(search_term: string, report_type = "FullReport", ...attr_filter_list: list<string>) 
+	
+	g:tag_popup = 0
 
 	g:attr_filter_list = attr_filter_list
 	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
@@ -1909,6 +1919,8 @@ def g:Report(search_term: string, report_type = "FullReport", ...attr_filter_lis
 		confirm("Tags have not been generated for this wiki yet this session. Press <F2> to generate tags.", "OK", 1)
 	endif
 	execute "normal! gg"
+
+	g:tag_popup = 1
 enddef
 
 def GetInterviewFileList() 
@@ -2514,6 +2526,8 @@ enddef
 # ------------------------------------------------------
 def g:GetTagUpdate() 
 
+	g:tag_popup = 0
+
 	ParmCheck()
 
 	g:vimwiki_wikilocal_vars[g:wiki_number]['tags_generated_this_session'] = 1
@@ -2625,12 +2639,13 @@ def g:GetTagUpdate()
 	# marks it as having had its tags generated in this vim session.
 	# ------------------------------------------------------
 	execute "normal! `Yzz"
+
+	g:tag_popup = 1
 enddef
 
 # ------------------------------------------------------
 #
 # ------------------------------------------------------
-
 def UpdateCurrentTagsPage() 
 	# -----------------------------------------------------------------
 	# Use R mark to know how to get back
@@ -3538,3 +3553,17 @@ enddef
 def g:CallbackTest2(id: number, result: number, other: string) 
 	echom other .. "\n"
 enddef
+
+def g:CopyQuote()
+	g:excerpted_string = ""
+	execute "normal! gvy"
+	g:quote_list = []
+	g:excerpt = @@
+	g:quote_list = split(g:excerpt, '\n')
+	for line in range(0, (len(g:quote_list) - 1))
+		g:excerpted_string = g:excerpted_string .. g:quote_list[line][0 : 80]
+	endfor
+	@* = substitute(g:excerpted_string, '\s\{2,}', ' ', "g")
+enddef
+
+
