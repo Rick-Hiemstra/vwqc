@@ -3558,7 +3558,7 @@ def g:CopyQuote()
 	g:excerpted_string = ""
 	execute "normal! gvy"
 	g:quote_list = []
-	g:excerpt = @@
+	g:excerpt = @"
 	g:quote_list = split(g:excerpt, '\n')
 	for line in range(0, (len(g:quote_list) - 1))
 		g:excerpted_string = g:excerpted_string .. g:quote_list[line][0 : 80]
