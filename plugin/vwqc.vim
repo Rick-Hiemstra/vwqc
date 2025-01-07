@@ -3561,10 +3561,10 @@ def g:CopyQuote()
 	g:excerpt = getreg('@')
 	g:quote_list = split(g:excerpt, '\n')
 	for line in range(0, (len(g:quote_list) - 1))
-		g:excerpted_string = g:excerpted_string .. g:quote_list[line][0 : 80]
+		g:excerpted_string = g:excerpted_string .. g:quote_list[line][0 : g:border_offset_less_one]
 	endfor
 	@* = substitute(g:excerpted_string, '\s\{2,}', ' ', "g")
-	echo @* .. "copied to register."
+	echo "COPIED TO REGISTER: " .. @* .. 
 enddef
 
 
