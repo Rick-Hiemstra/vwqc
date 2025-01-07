@@ -3564,7 +3564,7 @@ def g:CopyQuote()
 		g:excerpted_string = g:excerpted_string .. g:quote_list[line][0 : g:border_offset_less_one]
 	endfor
 	@* = substitute(g:excerpted_string, '\s\{2,}', ' ', "g")
-	echo "COPIED TO REGISTER: " .. @* .. 
+	echo "COPIED TO REGISTER: " .. @*
 enddef
 
 
