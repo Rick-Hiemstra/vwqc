@@ -177,6 +177,7 @@ endif
 # ---- Other ----
 # UpdateSubcode
 # OmniCompleteFileName() 
+# CopyQuote
 
 
 # -----------------------------------------------------------------
@@ -204,7 +205,7 @@ def g:HelpMenu()
 					"<leader>tf                          Tag fill",
 					"<leader>da                          Delete annotation",
 					"<leader>df                          Get/define tag definition",
-					"<leader>tc                          Double-colon omni-complete toggle",
+					"<leader>cv                          Copy interview material after linewise visual selection",
 				        " ",
 					"REPORTS (<attr filter> arguments optional)",
 					":call FullReport(\"<tag>\", \"<attr filter>\")           Create full tag summary",
@@ -292,7 +293,7 @@ def CreateDefaultInterviewHeader()
 	if (filereadable(g:int_header_template) == 0) 
                 # leave a space at the beginning of the list of attributes. It
 		# affects how the first attribute tag is found.
-		var template_content = " :<attribute_1>: :<attribute_2>: :<attribute_3>:\n" ..
+		var template_content = " :attribute_1: :attribute_2: :attribute_3:\n" ..
 					 "\n" ..
 					 "First pass:  \n" ..
        				         "Second pass: \n" ..
@@ -3537,23 +3538,11 @@ def g:AttrTest2(tag_item: string, ...attr_filter_list: list<string> )
 	endfor
 enddef
 
-
-def g:CallbackTest() 
-
-			
-	popup_menu(["Yes", "No"], {
-		 title:    "TEST TITLE",
-		 callback: 'g:CallbackTest2("blah")', 
-		 highlight: 'Question',
-		 border:     [],
-		 close:      'click', 
-		 padding:    [0, 1, 0, 1] })
-enddef
-
-def g:CallbackTest2(id: number, result: number, other: string) 
-	echom other .. "\n"
-enddef
-
+# -----------------------------------------------------------------
+#  Takes lines in interview pages and allows you to visually select by lines.
+#  It will strip off everything from the label gutter right. Workes with
+#  <leader>cv.
+# -----------------------------------------------------------------
 def g:CopyQuote()
 	g:excerpted_string = ""
 	execute "normal! gvy"

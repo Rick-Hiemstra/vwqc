@@ -112,14 +112,13 @@ The following keybindings and commands are set in the plugin.
 
 **CODING**
 - `<F2>`                               Update tags
-- `<F8>`                               Omni-complete (tags and files), same as `<F9>`
-- `<F9>`                               Omni-complete (tags and files), same as `<F8>`
+- `<F8>`                               Omni-complete (tags and files)
 - `<F5>`                               Complete tag block
 - `<F4>`                               Toggle tag block completion mode
 - `<leader>tf`                         Tag fill
 - `<leader>da`                         Delete annotation
 - `<leader>df`                         Get/define tag definition
-- `<leader>tc`                         Double-colon omni-complete toggle
+- `<leader>cv`                         Copy interview material visually selected linewise
 
 **REPORTS**
 - `:call FullReport("<tag>")`           Create full tag summary
@@ -292,7 +291,7 @@ Audio Recording: [[file:]]
 
 ```
 
-Tags in Vimwiki, and by extension VWQC, are delimited by colons containing contiguous characters. The `<attribute_x>` in angle brackets are merely placeholder text. Prior to formatting interviews these should be edited to reflect the attributes you'll want to do your analysis on. For example, you may change the default header to:
+Tags in Vimwiki, and by extension VWQC, are delimited by colons containing contiguous characters. The `attribute_x` tag values are merely placeholder texts. Prior to formatting interviews these should be edited to reflect the attributes you'll want to do your analysis on. For example, you may change the default header to:
 
 ```
  :gender: :province: :generation:
