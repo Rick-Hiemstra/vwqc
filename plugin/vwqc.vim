@@ -819,6 +819,7 @@ enddef
 # called, adds a title label and the coders initials.
 # -----------------------------------------------------------------
 def Annotation() 
+	g:tag_popup = 0
 	
 	ParmCheck()
 
@@ -946,13 +947,15 @@ def Annotation()
 		echo "No match found on this line"
 		cursor(current_line, 0)
 	endif
+	
+	g:tag_popup = 1
 enddef
 
 # -----------------------------------------------------------------
 # This function exits an annotation window and resizes remaining windows
 # -----------------------------------------------------------------
 def ExitAnnotation() 
-	
+
 	ParmCheck()
 
 	# -----------------------------------------------------------------
@@ -981,6 +984,7 @@ def ExitAnnotation()
 	# -----------------------------------------------------------------
 	execute "normal! :wq\<CR>\<C-W>h\<C-W>h:vertical resize 60\<CR>\<C-W>l"
 	execute "normal! " .. ':s/\s*$//' .. "\<CR>A \<ESC>"
+
 enddef
 
 # -----------------------------------------------------------------
