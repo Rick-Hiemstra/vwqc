@@ -33,11 +33,12 @@ endif
 # -----------------------------------------------------------------
 # Update page help
 #
-# Write a function to modify the attribute lines in the old wikis.
+# If you press F7 without having pressed F2 it puts you in an endless loop
+# asking you to press F2.
 #
-# Re-write the <leader>cv function to work with shift-v instead of C-v.
-# Currrently this is just a keybinding but it will need to be re-written as a
-# function.
+#I also plan to write a function to restore a page from a backup. As I think about it, you'd be on the page that got messed up, you'd press something like <leader>br (backup restore) and a dialogue would bring up a list of backups to choose from. On choosing the back up, it would replace the contents of the page with the version from the back up.
+#
+# Write a function to modify the attribute lines in the old wikis.
 #
 # Change Vimwiki so g:current_tags is only deepcopied if it is an interview
 # wiki. 
@@ -3557,7 +3558,7 @@ def g:CopyQuote()
 		g:excerpted_string = g:excerpted_string .. g:quote_list[line][0 : g:vimwiki_wikilocal_vars[vimwiki#vars#get_bufferlocal('wiki_nr')]['text_col_width']]
 	endfor
 	@* = substitute(g:excerpted_string, '\s\{2,}', ' ', "g")
-	echo "COPIED TO REGISTER: " .. @*
+	# echo "COPIED TO REGISTER: " .. @*
 enddef
 
 
