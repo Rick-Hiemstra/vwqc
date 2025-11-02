@@ -1059,7 +1059,7 @@ def g:DeleteAnnotation()
 	# character of match we found. So because we started in column 1
 	# if the column remains at 1 we know we didn't find a match.
 	# -----------------------------------------------------------------
-	var tag_search_regex = g:interview_label_regex .. '\: \d\{4}'
+	var tag_search_regex = g:interview_label_regex .. ' \d\{4}'
 	var tag_search = searchpos(g:tag_search_regex)
 	match_line = tag_search[0]
 	match_col  = virtcol('.')
@@ -1538,7 +1538,7 @@ def g:Gather(search_term: string)
 	# Change the pwd to that of the current wiki.
 	# -----------------------------------------------------------------
 	execute "normal! :cd %:p:h\<CR>"
-	g:tag_search_regex      = g:interview_label_regex .. '\: \d\{4}'
+	g:tag_search_regex      = g:interview_label_regex .. ' \d\{4}'
 	# -----------------------------------------------------------------
 	# Change the pwd to that of the current wiki.
 	# -----------------------------------------------------------------
