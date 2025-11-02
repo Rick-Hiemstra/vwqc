@@ -335,7 +335,7 @@ def GetVWQCProjectParameters()
 
 	# Get the label regular expression for this wiki
 	g:interview_label_regex  = g:vimwiki_wikilocal_vars[g:wiki_number]['interview_label_regex']
-	g:tag_search_regex       = g:interview_label_regex .. '\: \d\{4}'
+	g:tag_search_regex       = g:interview_label_regex .. ' \d\{4}'
 	
 	g:project_name           = g:vimwiki_wikilocal_vars[g:wiki_number]['name']
 
@@ -543,7 +543,7 @@ def FormatInterviewB(interview_label: string)
 	# -----------------------------------------------------------------
 	for line in range(1, line('$'))
 		cursor(line, 0)
-		execute "normal! A " .. interview_label .. "\: \<ESC>"
+		execute "normal! A " .. interview_label .. " \<ESC>"
 	endfor
 	# -----------------------------------------------------------------
 	# Add line numbers to the end of each line and the second
@@ -598,7 +598,7 @@ def g:PageHelp()
 	
 	var current_buffer_name = expand('%:t')
 	var is_interview        = match(current_buffer_name, g:interview_label_regex)
-	var is_annotation       = match(current_buffer_name, g:interview_label_regex .. ': \d\d\d\d')
+	var is_annotation       = match(current_buffer_name, g:interview_label_regex .. ' \d\d\d\d')
 	var is_summary          = match(current_buffer_name, 'Summary ')
 	var page_help_list      = []
 
@@ -883,7 +883,7 @@ def Annotation()
 	# character of match we found. So because we started in column 1
 	# if the column remains at 1 we know we didn't find a match.
 	# -----------------------------------------------------------------
-	var tag_search_regex = g:interview_label_regex .. '\: \d\{4}'
+	var tag_search_regex = g:interview_label_regex .. ' \d\{4}'
 	var tag_search       = searchpos(g:tag_search_regex)
 	match_line           = tag_search[0]
 	match_col            = virtcol('.')
@@ -922,7 +922,7 @@ def Annotation()
 			# -----------------------------------------------------------------
 			# If its the first annotation in this annotation window
 			# -----------------------------------------------------------------
-			execute "normal! " .. '0/' .. g:interview_label_regex .. '\:\s\{1}\d\{4}' .. "\<CR>" .. 'vf│hhy'
+			execute "normal! " .. '0/' .. g:interview_label_regex .. '\s\{1}\d\{4}' .. "\<CR>" .. 'vf│hhy'
 			execute "normal! gvc[]\<ESC>F[plli()\<ESC>\"\"P\<ESC>" 
 			execute "normal \<Plug>VimwikiVSplitLink\<CR>"
 			execute "normal! \<C-W>x\<C-W>l:vertical resize " .. annotation_window_width .. "\<CR>"
@@ -936,7 +936,7 @@ def Annotation()
 			# -----------------------------------------------------------------
 			# For subsequent annotations in this annotation window
 			# -----------------------------------------------------------------
-			execute "normal! " .. '0/' .. g:interview_label_regex .. '\:\s\{1}\d\{4}' .. "\<CR>"
+			execute "normal! " .. '0/' .. g:interview_label_regex .. '\s\{1}\d\{4}' .. "\<CR>"
 			execute "normal \<Plug>VimwikiVSplitLink\<CR>"
 			execute "normal! \<C-W>x\<C-W>l:vertical resize " .. annotation_window_width .. " \<CR>"
 			execute "normal! Go\<ESC>V" .. '?.' .. "\<CR>jd2o\<ESC>"
