@@ -1964,7 +1964,7 @@ def GetAnnotationFileList()
 	# all.
 	var file_list_all = globpath('.', '*', 0, 1)
 	# build regex we'll use just to find our interview files. 
-	var file_rx = g:interview_label_regex .. ': \d\{4}' .. g:wiki_extension
+	var file_rx = g:interview_label_regex .. ' \d\{4}' .. g:wiki_extension
 	#  cull the list for just those files that are interview files. the
 	#  match is at position 2 because the globpath function prefixes
 	#  filenames with ./ which occupies positions 0 and 1.
