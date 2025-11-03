@@ -1091,7 +1091,7 @@ def g:DeleteAnnotation()
 			# cursor on the first character of the match. The next
 			# line follows the link to the page.
 			# -----------------------------------------------------------------
-			execute "normal! " .. '0/' .. g:interview_label_regex .. '\:\s\{1}\d\{4}' .. "\<CR>"
+			execute "normal! " .. '0/' .. g:interview_label_regex .. '\s\{1}\d\{4}' .. "\<CR>"
 			execute "normal \<Plug>VimwikiVSplitLink"
 			execute "normal! :vertical resize " .. annotation_window_width .. "\<CR>"
 			candidate_delete_buffer = bufnr("%")
@@ -1137,7 +1137,7 @@ def g:GoToReference()
 	# -----------------------------------------------------------------
 	# Find target file name.
 	# -----------------------------------------------------------------
-	execute "normal! 0/" .. g:interview_label_regex .. ':\s\d\{4}' .. "\<CR>" .. 'vf:hy'
+	execute "normal! 0/" .. g:interview_label_regex .. '\s\d\{4}' .. "\<CR>" .. 'vf:hy'
 	target_file = getreg('@') .. g:wiki_extension
 	# -----------------------------------------------------------------
 	# Find target line number "
