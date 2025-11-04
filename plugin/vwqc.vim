@@ -1793,7 +1793,8 @@ def TidyUpBlockText()
 	g:cross_codes_string = substitute(g:cross_codes_string, "\'", ' ', "g")
 	g:cross_codes_string = substitute(g:cross_codes_string, ',', '', "g")
 	g:cross_codes_string = substitute(g:cross_codes_string, '\s\+', ' ', "g")
-	g:block_text = g:block_text .. " **" .. g:last_interview .. ": "
+	#g:block_text = g:block_text .. " **" .. g:last_interview .. ": "
+	g:block_text = g:block_text .. " **" .. g:last_interview .. " "
 	       	.. g:block_first_line .. " - " .. g:last_line .. "** " .. g:cross_codes_string .. "\n\n"
 enddef 
 
