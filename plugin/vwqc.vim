@@ -1135,17 +1135,33 @@ def g:GoToReference()
 	# -----------------------------------------------------------------
 	execute "normal! :cd %:p:h\<CR>"
 	# -----------------------------------------------------------------
-	# Find target file name.
+	# Find target file name if it is not wrapped in colons
 	# -----------------------------------------------------------------
 	execute "normal! 0/" .. g:interview_label_regex .. '\s\d\{4}' .. "\<CR>" .. 'vf hy'
-	target_file = getreg('@') .. g:wiki_extension
+	target_file1 = getreg('@') .. g:wiki_extension
 	# -----------------------------------------------------------------
-	# Find target line number "
+	# Find target line number 1"
 	# -----------------------------------------------------------------
 	execute "normal! `<"
 	execute "normal! " .. '/\d\{4}' .. "\<CR>"
 	execute "normal! viwy"
 	target_line = getreg('@')
+	# -----------------------------------------------------------------
+	# Find target file name if it is wrapped in colons
+	# -----------------------------------------------------------------
+	execute "normal! 0/" .. g:interview_label_regex .. '\:\s\d\{4}' .. "\<CR>" .. 'vf:hy'
+	target_file2 = getreg('@') .. g:wiki_extension
+	# -----------------------------------------------------------------
+	# See which of target_file1 or target_file2 is in the list of files
+	# -----------------------------------------------------------------
+	if (index(g:filtered_interview_list, target_file1 .. g:wiki_extension) != -1)
+		target_file = target_file1
+	elseif (index(g:filtered_interview_list, target_file2 .. g:wiki_extension) != -1)
+		target_file = target_file2
+	else
+		confirm("No target found on line",  "OK", 1)
+	endif
+
 	# -----------------------------------------------------------------
 	# Use Z mark to know how to get back
 	# -----------------------------------------------------------------
