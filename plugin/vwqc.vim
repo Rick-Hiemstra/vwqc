@@ -1129,6 +1129,8 @@ def g:GoToReference()
 	ParmCheck()
 
 	var target_file = "Undefined"
+	var target_file1 = "Undefined"
+	var target_file2 = "Undefined"
 	var target_line = "Undefined"
 	# -----------------------------------------------------------------
 	# Change the pwd to that of the current wiki.
@@ -1154,9 +1156,9 @@ def g:GoToReference()
 	# -----------------------------------------------------------------
 	# See which of target_file1 or target_file2 is in the list of files
 	# -----------------------------------------------------------------
-	if (index(g:filtered_interview_list, target_file1 .. g:wiki_extension) != -1)
+	if (index(g:filtered_interview_list, target_file1) != -1)
 		target_file = target_file1
-	elseif (index(g:filtered_interview_list, target_file2 .. g:wiki_extension) != -1)
+	elseif (index(g:filtered_interview_list, target_file2) != -1)
 		target_file = target_file2
 	else
 		confirm("No target found on line",  "OK", 1)
