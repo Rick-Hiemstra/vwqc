@@ -1128,10 +1128,12 @@ def g:GoToReference()
 	
 	ParmCheck()
 
-	var target_file = "Undefined"
+	var target_file  = "Undefined"
 	var target_file1 = "Undefined"
 	var target_file2 = "Undefined"
-	var target_line = "Undefined"
+	var target_line  = "Undefined"
+	var target_line1 = "Undefined"
+	var target_line2 = "Undefined"
 	# -----------------------------------------------------------------
 	# Change the pwd to that of the current wiki.
 	# -----------------------------------------------------------------
@@ -1147,19 +1149,28 @@ def g:GoToReference()
 	execute "normal! `<"
 	execute "normal! " .. '/\d\{4}' .. "\<CR>"
 	execute "normal! viwy"
-	target_line = getreg('@')
+	target_line1 = getreg('@')
 	# -----------------------------------------------------------------
 	# Find target file name if it is wrapped in colons
 	# -----------------------------------------------------------------
 	execute "normal! 0/" .. g:interview_label_regex .. '\:\s\d\{4}' .. "\<CR>" .. 'vf:hy'
 	target_file2 = getreg('@') .. g:wiki_extension
 	# -----------------------------------------------------------------
+	# Find target line number 2"
+	# -----------------------------------------------------------------
+	execute "normal! `<\<ESC>"
+	execute "normal! " .. '/\d\{4}' .. "\<CR>"
+	execute "normal! viwy"
+	target_line2 = getreg('@')
+	# -----------------------------------------------------------------
 	# See which of target_file1 or target_file2 is in the list of files
 	# -----------------------------------------------------------------
 	if (index(g:filtered_interview_list, target_file1) != -1)
 		target_file = target_file1
+		target_line = target_line1
 	elseif (index(g:filtered_interview_list, target_file2) != -1)
 		target_file = target_file2
+		target_line = target_line2
 	else
 		confirm("No target found on line",  "OK", 1)
 	endif
