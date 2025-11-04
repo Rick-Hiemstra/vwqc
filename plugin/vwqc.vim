@@ -1197,6 +1197,7 @@ enddef
 # -----------------------------------------------------------------
 def g:GoBackFromReference() 
 	execute "normal! `Zzz`Z"
+	execute "normal! :delmark Z\<CR>"
 enddef
 
 # -----------------------------------------------------------------
