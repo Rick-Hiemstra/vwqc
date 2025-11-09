@@ -3629,7 +3629,7 @@ def g:RemoveColonAfterBaseName()
 		# Use :substitute across the whole buffer (%s) to remove the colon
 		# \( \) capture the colon so we can remove it
 		# We use 'g' to replace all occurrences
-		execute '%s/' .. basename .. '\:\(\s\d\{4}\)/' .. basename .. '\1/g'
+		execute 'normal :%s/' .. basename .. '\:\(\s\d\{4}\)/' .. basename .. '\1/g'
 
 		echo "Removed colon after '" .. basename .. "' wherever it matched"
 	endfor
