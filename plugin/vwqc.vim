@@ -3631,4 +3631,4 @@ def g:RemoveColonAfterBaseName()
 
 		echo "Removed colon after '" . l:basename . "' wherever it matched"
 	endfor
-endfunction
+enddef
