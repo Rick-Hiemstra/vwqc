@@ -3609,7 +3609,7 @@ enddef
 
 def g:RemoveColonAfterBaseName()
 	for interview in range(0, (len(g:interview_list) - 1))
-		execute "normal :e " .. g:interveiw_list[interview] .. "\<CR>"
+		execute "normal :e " .. g:interview_list[interview] .. "\<CR>"
 		execute "normal gg"
 		# Get the current file name without path or extension
 		var basename = expand('%:t:r')
