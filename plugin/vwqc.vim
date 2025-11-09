@@ -3607,4 +3607,28 @@ def g:ConvertAnnotationTopLine()
 	endfor		
 enddef
 
-:test: :test2:
+def g:RemoveColonAfterBaseName()
+	for interview in range(0, (len(g:interview_list) - 1))
+		" Get the current file name without path or extension
+		let l:basename = expand('%:t:r')
+
+		" If there’s no file name, do nothing
+		if empty(l:basename)
+			echo "No file name found for this buffer"
+			return
+		endif
+
+		" Build the regex pattern:
+		"   \V   → 'very nomagic' mode (treat most characters literally)
+		"   l:basename followed by :<space> and exactly 4 digits
+		" Example pattern: myfile: 2025
+		let l:pattern = '\V' . l:basename . ':\s\d\{4}'
+
+		" Use :substitute across the whole buffer (%s) to remove the colon
+		" \( \) capture the colon so we can remove it
+		" We use 'g' to replace all occurrences
+		execute '%s/' . l:basename . ':\(\s\d\{4}\)/' . l:basename . '\1/g'
+
+		echo "Removed colon after '" . l:basename . "' wherever it matched"
+	endfor
+endfunction
