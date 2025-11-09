@@ -1139,14 +1139,14 @@ def g:GoToReference()
 	# -----------------------------------------------------------------
 	execute "normal! :cd %:p:h\<CR>"
 	# -----------------------------------------------------------------
-	# Find target file name if it is not wrapped in colons
+	# Find target file name
 	# -----------------------------------------------------------------
 	execute "normal! 0/" .. g:interview_label_regex .. '\s\d\{4}' .. "\<CR>" .. 'vf hy'
 	target_file = getreg('@') .. g:wiki_extension
 	# -----------------------------------------------------------------
 	# Find target line number"
 	# -----------------------------------------------------------------
-	execute "normal! gv"
+	execute "normal! `<"
 	execute "normal! " .. '/\d\{4}' .. "\<CR>"
 	execute "normal! viwy"
 	target_line = getreg('@')
