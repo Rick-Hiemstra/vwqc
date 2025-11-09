@@ -924,13 +924,11 @@ def Annotation()
 			# -----------------------------------------------------------------
 			execute "normal! " .. '0/' .. g:interview_label_regex .. '\s\{1}\d\{4}' .. "\<CR>" .. 'vf│hhy'
 			execute "normal! gvc[]\<ESC>F[plli()\<ESC>\"\"P\<ESC>" 
-			#execute "normal \<Plug>VimwikiVSplitLink\<CR>"
 			execute "VimwikiVSplitLink"
 			execute "normal! \<C-W>x\<C-W>l:vertical resize " .. annotation_window_width .. "\<CR>"
 			put =expand('%:t')
 			execute "normal! 0kddgg" 
 			search(g:wiki_extension)
-			#execute "normal! d$I:\<ESC>f i:\<ESC>2o\<ESC>"
 			execute "normal! d$2o\<ESC>"
 		        execute "normal! i[" .. current_time .. "] " .. list_of_tags_on_line .. "// \:" .. g:coder_initials .. "\:  \<ESC>"
 			startinsert 
@@ -939,7 +937,6 @@ def Annotation()
 			# For subsequent annotations in this annotation window
 			# -----------------------------------------------------------------
 			execute "normal! " .. '0/' .. g:interview_label_regex .. '\s\{1}\d\{4}' .. "\<CR>"
-			#execute "normal \<Plug>VimwikiVSplitLink\<CR>"
 			execute "VimwikiVSplitLink"
 			execute "normal! \<C-W>x\<C-W>l:vertical resize " .. annotation_window_width .. " \<CR>"
 			execute "normal! Go\<ESC>V" .. '?.' .. "\<CR>jd2o\<ESC>"
@@ -3606,7 +3603,7 @@ def g:ConvertAnnotationTopLine()
 		# go to interview file
 		execute "normal :e " .. g:anno_list[annotation] .. "\<CR>"
 		execute "normal gg"
-		execute 's/\://g'
+		execute ':s/\://g'
 	endfor		
 enddef
 
@@ -3617,11 +3614,6 @@ def g:RemoveColonAfterBaseName()
 		# Get the current file name without path or extension
 		var basename = expand('%:t:r')
 
-		# Use :substitute across the whole buffer (%s) to remove the colon
-		# \( \) capture the colon so we can remove it
-		# We use 'g' to replace all occurrences
 		execute ':%s/' .. basename .. '\:\(\s\d\{4}\)/' .. basename .. '\1/g'
-
-		echo "Removed colon after '" .. basename .. "' wherever it matched"
 	endfor
 enddef
