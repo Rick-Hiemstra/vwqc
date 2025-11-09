@@ -3601,7 +3601,7 @@ def g:ConvertAnnotationTopLine()
 		execute "normal :e " .. g:anno_list[annotation] .. "\<CR>"
 		execute "normal gg"
 		silent! execute 's/\://g'
-		silent! "normal I**\<ESC>A**\<ESC>"
+		silent! execute "normal I**\<ESC>A**\<ESC>"
 	endfor		
 enddef
 
