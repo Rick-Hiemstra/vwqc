@@ -930,7 +930,8 @@ def Annotation()
 			put =expand('%:t')
 			execute "normal! 0kddgg" 
 			search(g:wiki_extension)
-			execute "normal! d$I:\<ESC>f i:\<ESC>2o\<ESC>"
+			#execute "normal! d$I:\<ESC>f i:\<ESC>2o\<ESC>"
+			execute "normal! d$2o\<ESC>"
 		        execute "normal! i[" .. current_time .. "] " .. list_of_tags_on_line .. "// \:" .. g:coder_initials .. "\:  \<ESC>"
 			startinsert 
 		elseif (match_col == (g:label_offset + 1))
