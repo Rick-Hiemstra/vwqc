@@ -3594,3 +3594,17 @@ def g:CopyQuote()
 enddef
 
 
+# -----------------------------------------------------------------
+# Change the top line of an attribute file so that it doesn't have colons
+# turning the interview label into a tag. 
+
+def g:ConvertAnnotationTopLine() 
+	for annotation in range(0, (len(g:anno_list) - 1))
+		# go to interview file
+		execute "normal :e " .. g:anno_list[annotation] .. "\<CR>"
+		execute "normal gg"
+		execute "normal :s/\://g
+	endfor		
+enddef
+
+:test: :test2:
