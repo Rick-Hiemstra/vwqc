@@ -3614,22 +3614,10 @@ def g:RemoveColonAfterBaseName()
 		# Get the current file name without path or extension
 		var basename = expand('%:t:r')
 
-		# If there’s no file name, do nothing
-		if empty(basename)
-			echo "No file name found for this buffer"
-			return
-		endif
-
-		# Build the regex pattern:
-		#   \V   → 'very nomagic' mode (treat most characters literally)
-		#   l:basename followed by :<space> and exactly 4 digits
-		# Example pattern: myfile: 2025
-		var pattern = '\V' .. basename .. ':\s\d\{4}'
-
 		# Use :substitute across the whole buffer (%s) to remove the colon
 		# \( \) capture the colon so we can remove it
 		# We use 'g' to replace all occurrences
-		execute 'normal :%s/' .. basename .. '\:\(\s\d\{4}\)/' .. basename .. '\1/g'
+		execute "normal :%s/" .. basename .. '\:\(\s\d\{4}\)/' .. basename .. '\1/g\<CR>'
 
 		echo "Removed colon after '" .. basename .. "' wherever it matched"
 	endfor
