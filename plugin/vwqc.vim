@@ -3603,7 +3603,7 @@ def g:ConvertAnnotationTopLine()
 		# go to interview file
 		execute "normal :e " .. g:anno_list[annotation] .. "\<CR>"
 		execute "normal gg"
-		execute "normal :s/\://g
+		execute "normal :s/\://g\<CR>"
 	endfor		
 enddef
 
