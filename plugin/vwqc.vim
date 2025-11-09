@@ -1144,9 +1144,9 @@ def g:GoToReference()
 	execute "normal! 0/" .. g:interview_label_regex .. '\s\d\{4}' .. "\<CR>" .. 'vf hy'
 	target_file = getreg('@') .. g:wiki_extension
 	# -----------------------------------------------------------------
-	# Find target line number 1"
+	# Find target line number"
 	# -----------------------------------------------------------------
-	execute "normal! `<"
+	execute "normal! gv"
 	execute "normal! " .. '/\d\{4}' .. "\<CR>"
 	execute "normal! viwy"
 	target_line = getreg('@')
