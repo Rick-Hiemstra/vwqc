@@ -2055,6 +2055,15 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 		endif
 		# Add tags found on line to g:tags_list
 		var line_text           = getline(".")
+		#var interview_line_num  = matchstr(line_text, ' \d\{4} │')[1 : -3]
+		# Deal with the cases where the match ends with a │ (it found
+		# the gutter boundary, or ] it found the boundary of a link
+		var m = matchstr(line_text, ' \d\{4}\%( │\|]\)')
+		if m =~ '│'
+			var interview_line_num = m[1 : -3]
+		else
+			var interview_line_num = m[1 : -2]
+		endif
 		var interview_line_num  = matchstr(line_text, ' \d\{4} │')[1 : -3]
 		line_text = line_text[0 : (g:text_col_width + 1)]
 
