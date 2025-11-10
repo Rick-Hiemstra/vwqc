@@ -2064,7 +2064,7 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 		else
 			var interview_line_num = m[1 : -2]
 		endif
-		var interview_line_num  = matchstr(line_text, ' \d\{4} │')[1 : -3]
+		#var interview_line_num  = matchstr(line_text, ' \d\{4} │')[1 : -3]
 		line_text = line_text[0 : (g:text_col_width + 1)]
 
 		var processed_line_1 = 0
