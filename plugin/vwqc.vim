@@ -2020,6 +2020,7 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 	var end_line             = line('$')
 	var tag_being_considered = "undefined"
 	var interview_attrs      = []
+	var interview_line_num   = ""
 	# move through each line testing for tags and removing duplicate tags
 	# on each line
 	call cursor(1, 1)
@@ -2060,9 +2061,9 @@ def CrawlInterviewTags(interview: number, interview_name: string)
 		# the gutter boundary, or ] it found the boundary of a link
 		var m = matchstr(line_text, ' \d\{4}\%( │\|]\)')
 		if m =~ '│'
-			var interview_line_num = m[1 : -3]
+			interview_line_num = m[1 : -3]
 		else
-			var interview_line_num = m[1 : -2]
+			interview_line_num = m[1 : -2]
 		endif
 		#var interview_line_num  = matchstr(line_text, ' \d\{4} │')[1 : -3]
 		line_text = line_text[0 : (g:text_col_width + 1)]
