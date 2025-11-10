@@ -156,7 +156,6 @@ endif
 # CurrentTagsPopUpMenu
 # FindLastTagAddedToBuffer
 # TagFillWithChoice
-# FillTagBlock - may not be used any more
 # CreateFillLine
 # FindFirstInterviewLine
 # CreateBlockMetadataDict
@@ -180,6 +179,8 @@ endif
 # UpdateSubcode
 # OmniCompleteFileName() 
 # CopyQuote
+# ConvertAnnotationTopLine() 
+# RemoveColonAfterBaseName()
 
 
 # -----------------------------------------------------------------
@@ -2954,40 +2955,6 @@ def g:TagFillWithChoice()
 
 	cursor(g:bottom_line, g:bottom_col)
 	execute "normal! zzA "
-enddef
-
-def FillTagBlock(id: number, result: number) 
-	# ------------------------------------------------------------
-	# When ESC is press the a:result value will be -1. So take no action.
-	# ------------------------------------------------------------
-	if (result > 0)
-
-		g:block_range_as_char = keys(g:tag_block_dict)
-		g:block_range         = []
-
-		for index in range(0, len(g:block_range_as_char) - 1)
-			g:block_range = g:block_range + [ str2nr(g:block_range_as_char[index]) ]
-		endfor
-
-		g:block_range     = sort(g:block_range)
-		
-		g:block_range_max = g:bottom_line
-		g:block_range_min = min(g:block_range)
-
-		for index_2 in range(g:block_range_min, g:block_range_max)
-			if has_key(g:tag_block_dict, index_2)
-				if (index(g:tag_block_dict[index_2][0], g:tag_list_to_present[result - 1]) != -1)
-					g:top_fill_line = index_2
-				endif
-			endif
-		endfor
-
-		for index_3 in range(g:block_range_min, g:block_range_max)
-			CreateFillLine(index_3)
-			cursor(index_3, g:tag_block_dict[index_3][2])
-			execute "normal! i" g:meta_fill_line .. "\<CR>"
-		endfor
-	endif
 enddef
 
 def CreateFillLine(line: number) 
