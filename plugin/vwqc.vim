@@ -1893,13 +1893,13 @@ enddef
 # 
 # -----------------------------------------------------------------
 def g:Report(search_term: string, report_type = "FullReport", ...attr_filter_list: list<string>) 
-	
+
 	g:tag_popup = 0
 
 	g:attr_filter_list = attr_filter_list
 	var attr_filter_list_as_string = string(attr_filter_list)[1 : -2]
 	ParmCheck()
-	
+
 	echom "Search Term: " .. search_term .. "\n"
 	var interview_name = "Undefined"
 	var attr_string    = "Undefined"
@@ -1913,43 +1913,53 @@ def g:Report(search_term: string, report_type = "FullReport", ...attr_filter_lis
 	g:tags_generated  = has_key(g:vimwiki_wikilocal_vars[g:wiki_number], 'tags_generated_this_session')
 	if (g:tags_generated == 1)
 		execute "normal! :call g:CreateAndCountInterviewBlocks(\'" .. search_term .. "\'," .. attr_filter_list_as_string .. ")\<CR>"
-		
+
 		ReportHeader(report_type, search_term)
-		 
+
 		WriteReportTable(search_term)
 		execute "normal! G"
 		# Write quote blocks
 		for interview in range(0, len(g:filtered_interview_list) - 1)
 
-			# Write quote blocks
-			g:interview_name = g:filtered_interview_list[interview][ : -g:ext_len]
-			execute "normal! i# " .. repeat("=", 80) .. "\n"
-			execute "normal! i# INTERVIEW: " .. g:interview_name .. "\n"
-			execute "normal! i# " .. repeat("=", 80) .. "\n"
-			#echom interview .. " " .. string(g:attr_list[interview]) .. "\n"
-			attr_string = string(g:filtered_attr_list[interview][1])
-			attr_string = substitute(attr_string, '[\[\[\],]', '', 'g')
-			attr_string = substitute(attr_string, "'", '', 'g')
-			execute "normal! i**ATTRIBUTES:** " .. attr_string .. "\n\n"
+			g:number_of_annos = 0
+			for anno_index in range(0, len(g:anno_tags_dict[g:filtered_interview_list[interview][ : -g:ext_len]]) - 1)
+				if (index(g:anno_tags_dict[g:filtered_interview_list[interview][ : -g:ext_len]][anno_index][1], g:search_term_with_colons) != -1)
+					g:number_of_annos = g:number_of_annos + 1
+				endif
+			endfor
 
-			if (report_type == "FullReport") || (report_type == "QuotesReport")
-				for quote_block in range(0, len(g:quote_blocks_dict[g:interview_name]) - 1)
-					execute "normal! i" .. g:quote_blocks_dict[g:interview_name][quote_block] 
-				endfor
-			endif
+			if (g:tag_count_dict[interview][1] != 0) && (g:number_of_annos != 0)
 
-			# Write anno blocks
-			var anno_counter = 0
-			if (report_type == "FullReport") || (report_type == "AnnotationsReport")
-				for anno in range(0, len(g:anno_tags_dict[g:interview_name]) - 1)
-					if (index(g:anno_tags_dict[g:interview_name][anno][1], search_term_with_colons) != -1)
-						anno_counter = anno_counter + 1
-						execute "normal! i**" .. repeat(">-", 40) .. "**\n"
-						execute "normal! i**" .. g:interview_name .. " ANNOTATION " .. anno_counter .. ":**\n"
-						execute "normal! i**" .. repeat(">-", 40) .. "**\n"
-						execute "normal! i" .. g:anno_tags_dict[g:interview_name][anno][2] .. "\n"
-					endif
-				endfor
+				# Write quote blocks
+				g:interview_name = g:filtered_interview_list[interview][ : -g:ext_len]
+				execute "normal! i# " .. repeat("=", 80) .. "\n"
+				execute "normal! i# INTERVIEW: " .. g:interview_name .. "\n"
+				execute "normal! i# " .. repeat("=", 80) .. "\n"
+				#echom interview .. " " .. string(g:attr_list[interview]) .. "\n"
+				attr_string = string(g:filtered_attr_list[interview][1])
+				attr_string = substitute(attr_string, '[\[\[\],]', '', 'g')
+				attr_string = substitute(attr_string, "'", '', 'g')
+				execute "normal! i**ATTRIBUTES:** " .. attr_string .. "\n\n"
+
+				if (report_type == "FullReport") || (report_type == "QuotesReport")
+					for quote_block in range(0, len(g:quote_blocks_dict[g:interview_name]) - 1)
+						execute "normal! i" .. g:quote_blocks_dict[g:interview_name][quote_block] 
+					endfor
+				endif
+
+				# Write anno blocks
+				var anno_counter = 0
+				if (report_type == "FullReport") || (report_type == "AnnotationsReport")
+					for anno in range(0, len(g:anno_tags_dict[g:interview_name]) - 1)
+						if (index(g:anno_tags_dict[g:interview_name][anno][1], search_term_with_colons) != -1)
+							anno_counter = anno_counter + 1
+							execute "normal! i**" .. repeat(">-", 40) .. "**\n"
+							execute "normal! i**" .. g:interview_name .. " ANNOTATION " .. anno_counter .. " of " .. g:number_of_annos ..**\n"
+							execute "normal! i**" .. repeat(">-", 40) .. "**\n"
+							execute "normal! i" .. g:anno_tags_dict[g:interview_name][anno][2] .. "\n"
+						endif
+					endfor
+				endif
 			endif
 		endfor 
 	else
