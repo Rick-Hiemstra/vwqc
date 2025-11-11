@@ -1922,8 +1922,8 @@ def g:Report(search_term: string, report_type = "FullReport", ...attr_filter_lis
 		for interview in range(0, len(g:filtered_interview_list) - 1)
 
 			g:number_of_annos = 0
-			for anno_index in range(0, len(g:anno_tags_dict[g:filtered_interview_list[interview][ : -g:ext_len]]) - 1)
-				if (index(g:anno_tags_dict[g:filtered_interview_list[interview][ : -g:ext_len]][anno_index][1], g:search_term_with_colons) != -1)
+			for anno_index in range(0, len(g:anno_tags_dict[interview][ : -g:ext_len]]) - 1)
+				if (index(g:anno_tags_dict[interview][ : -g:ext_len]][anno_index][1], g:search_term_with_colons) != -1)
 					g:number_of_annos = g:number_of_annos + 1
 				endif
 			endfor
