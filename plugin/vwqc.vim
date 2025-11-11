@@ -1921,45 +1921,45 @@ def g:Report(search_term: string, report_type = "FullReport", ...attr_filter_lis
 		# Write quote blocks
 		for interview in range(0, len(g:filtered_interview_list) - 1)
 
-			g:number_of_annos = 0
-			for anno_index in range(0, len(g:anno_tags_dict[interview][ : -g:ext_len]]) - 1)
-				if (index(g:anno_tags_dict[interview][ : -g:ext_len]][anno_index][1], g:search_term_with_colons) != -1)
-					g:number_of_annos = g:number_of_annos + 1
-				endif
-			endfor
+			#g:number_of_annos = 0
+			#for anno_index in range(0, len(g:anno_tags_dict[interview][ : -g:ext_len]]) - 1)
+			#	if (index(g:anno_tags_dict[interview][ : -g:ext_len]][anno_index][1], g:search_term_with_colons) != -1)
+			#		g:number_of_annos = g:number_of_annos + 1
+			#	endif
+			#endfor
 
 			#if (g:tag_count_dict[interview][1] != 0) && (g:number_of_annos != 0)
 
-				# Write quote blocks
-				g:interview_name = g:filtered_interview_list[interview][ : -g:ext_len]
-				execute "normal! i# " .. repeat("=", 80) .. "\n"
-				execute "normal! i# INTERVIEW: " .. g:interview_name .. "\n"
-				execute "normal! i# " .. repeat("=", 80) .. "\n"
-				#echom interview .. " " .. string(g:attr_list[interview]) .. "\n"
-				attr_string = string(g:filtered_attr_list[interview][1])
-				attr_string = substitute(attr_string, '[\[\[\],]', '', 'g')
-				attr_string = substitute(attr_string, "'", '', 'g')
-				execute "normal! i**ATTRIBUTES:** " .. attr_string .. "\n\n"
+			# Write quote blocks
+			g:interview_name = g:filtered_interview_list[interview][ : -g:ext_len]
+			execute "normal! i# " .. repeat("=", 80) .. "\n"
+			execute "normal! i# INTERVIEW: " .. g:interview_name .. "\n"
+			execute "normal! i# " .. repeat("=", 80) .. "\n"
+			#echom interview .. " " .. string(g:attr_list[interview]) .. "\n"
+			attr_string = string(g:filtered_attr_list[interview][1])
+			attr_string = substitute(attr_string, '[\[\[\],]', '', 'g')
+			attr_string = substitute(attr_string, "'", '', 'g')
+			execute "normal! i**ATTRIBUTES:** " .. attr_string .. "\n\n"
 
-				if (report_type == "FullReport") || (report_type == "QuotesReport")
-					for quote_block in range(0, len(g:quote_blocks_dict[g:interview_name]) - 1)
-						execute "normal! i" .. g:quote_blocks_dict[g:interview_name][quote_block] 
-					endfor
-				endif
+			if (report_type == "FullReport") || (report_type == "QuotesReport")
+				for quote_block in range(0, len(g:quote_blocks_dict[g:interview_name]) - 1)
+					execute "normal! i" .. g:quote_blocks_dict[g:interview_name][quote_block] 
+				endfor
+			endif
 
-				# Write anno blocks
-				var anno_counter = 0
-				if (report_type == "FullReport") || (report_type == "AnnotationsReport")
-					for anno in range(0, len(g:anno_tags_dict[g:interview_name]) - 1)
-						if (index(g:anno_tags_dict[g:interview_name][anno][1], search_term_with_colons) != -1)
-							anno_counter = anno_counter + 1
-							execute "normal! i**" .. repeat(">-", 40) .. "**\n"
-							execute "normal! i**" .. g:interview_name .. " ANNOTATION " .. anno_counter ..  "**\n"
-							execute "normal! i**" .. repeat(">-", 40) .. "**\n"
-							execute "normal! i" .. g:anno_tags_dict[g:interview_name][anno][2] .. "\n"
-						endif
-					endfor
-				endif
+			# Write anno blocks
+			var anno_counter = 0
+			if (report_type == "FullReport") || (report_type == "AnnotationsReport")
+				for anno in range(0, len(g:anno_tags_dict[g:interview_name]) - 1)
+					if (index(g:anno_tags_dict[g:interview_name][anno][1], search_term_with_colons) != -1)
+						anno_counter = anno_counter + 1
+						execute "normal! i**" .. repeat(">-", 40) .. "**\n"
+						execute "normal! i**" .. g:interview_name .. " ANNOTATION " .. anno_counter ..  "**\n"
+						execute "normal! i**" .. repeat(">-", 40) .. "**\n"
+						execute "normal! i" .. g:anno_tags_dict[g:interview_name][anno][2] .. "\n"
+					endif
+				endfor
+			endif
 			#endif
 		endfor 
 	else
