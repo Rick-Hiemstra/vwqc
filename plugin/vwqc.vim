@@ -1143,6 +1143,13 @@ def g:GoToReference()
 	# -----------------------------------------------------------------
 	# Find target file name
 	# -----------------------------------------------------------------
+  #  So we need to record the line that we're on and then find two kinds of 
+  #  matches. The first kind of match is if we find the
+  #  g:interview_label_regex followed by a 4 digit number. WE have to find
+  #  this, however, on the current line. Next we have to put the cursor back
+  #  to the line we were just on and look for g:interview_label_regex when its 
+  #  wrapped in colons and followed by a 4 digit number. Don't forget in each
+  #  case to set a mark, in this case Z.
 	execute "normal! 0/" .. g:interview_label_regex .. '\s\d\{4}' .. "\<CR>" .. 'vf hy'
 	target_file = getreg('@') .. g:wiki_extension
 	# -----------------------------------------------------------------
@@ -1167,7 +1174,9 @@ def g:GoToReference()
 	# -----------------------------------------------------------------
 	# See which of target_file1 or target_file2 is in the list of files
 	# -----------------------------------------------------------------
-	if (index(g:filtered_interview_list, target_file) != -1)
+	#if (index(g:filtered_interview_list, target_file) != -1)
+  # The error here is that this should have been looking 
+	if (index(g:interview_list, target_file) != -1)
 		target_file = target_file
 		target_line = target_line
 	else
@@ -1607,6 +1616,9 @@ def CreateListOfInterviewsWithAnnos()
 	endfor
 enddef
 
+# Reports can be generated for interview attributes. If you feed this a list
+# of attributes, then it will reduce the list of interviews to work on to
+# those with those attributes.
 def g:FilterInterviewList(...attr_filter_list: list<string>)
 	g:filtered_interview_list = []
 	var interview_with_ext      = "undefined"
@@ -1684,7 +1696,7 @@ def g:CreateAndCountInterviewBlocks(search_term: string, ...attr_filter_list: li
 	g:quote_blocks_dict    = {}
 
 	#echom "check2: " .. attr_filter .. "\n"
-	if (len(attr_filter_list) > 0)
+	if (len(g:attr_filter_list) > 0)
 		execute "normal! :call g:FilterInterviewList(" .. attr_filter_list_as_string .. ")\<CR>"
 		execute "normal! :call g:FilterAttrList(" .. attr_filter_list_as_string .. ")\<CR>"
 	else
@@ -3586,7 +3598,7 @@ enddef
 
 def g:ConvertAnnotationTopLine() 
 	for annotation in range(0, (len(g:anno_list) - 1))
-		# go to interview file
+		# go to annotation file
 		execute "normal :e " .. g:anno_list[annotation] .. "\<CR>"
 		execute "normal gg"
 		silent! execute 's/\://g'
